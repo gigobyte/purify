@@ -1,0 +1,23 @@
+{
+    "compilerOptions": {
+        "target": "es5",
+        "module": "commonjs",
+        "lib": [
+            "es2017"
+        ],
+        "declaration": true,
+        "outDir": "./lib",
+        "rootDir": "./src",
+        "removeComments": true,
+        "strictNullChecks": true,
+        "noImplicitThis": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "noImplicitReturns": true,
+        "alwaysStrict": true,
+        "noFallthroughCasesInSwitch": true,
+        "baseUrl": "./src/",
+        "experimentalDecorators": true,
+        "emitDecoratorMetadata": true
+    }
+}

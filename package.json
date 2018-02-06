@@ -1,0 +1,14 @@
+{
+  "name": "adt.ts",
+  "version": "0.0.1",
+  "description": "Algebraic data types in Typescript with minimal runtime footprint ",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "repository": "https://github.com/gigobyte/ADT.ts.git",
+  "author": "gigobyte <gigobest2@gmail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "ts-node": "^4.1.0",
+    "typescript": "^2.7.1"
+  }
+}
