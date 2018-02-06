@@ -7,7 +7,7 @@ export const Just = <T>(value: T): Maybe<T> =>
     value
 
 export const Nothing =
-    null
+    null as Nothing
 
 export const isNothing = <T>(maybe: Maybe<T>): maybe is Nothing =>
     maybe == null
