@@ -3,7 +3,8 @@
         "target": "es5",
         "module": "commonjs",
         "lib": [
-            "es2017"
+            "es2017",
+            "dom"
         ],
         "declaration": true,
         "outDir": "./lib",
