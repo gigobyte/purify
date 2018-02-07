@@ -4,7 +4,7 @@ export type Just<T> = T
 export type Maybe<T> = Just<T> | Nothing
 export type MaybePatterns<T, U> = {Just: (value: T) => U, Nothing: () => U}
 
-export const Just = <T>(value: T): Maybe<T> =>
+export const Just = <T>(value: T): Just<T> =>
     value
 
 export const Nothing =
