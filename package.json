@@ -7,8 +7,12 @@
   "repository": "https://github.com/gigobyte/ADT.ts.git",
   "author": "gigobyte <gigobest2@gmail.com>",
   "license": "MIT",
+  "scripts": {
+    "docs": "typedoc --out documentation/ src/ --theme minimal"
+  },
   "devDependencies": {
     "ts-node": "^4.1.0",
+    "typedoc": "^0.10.0",
     "typescript": "^2.7.1"
   }
 }
