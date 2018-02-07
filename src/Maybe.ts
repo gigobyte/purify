@@ -1,3 +1,4 @@
+       type NonNullable<T> = T & {}
 export type Nothing = void | null | undefined
 export type Just<T> = T
 export type Maybe<T> = Just<T> | Nothing
@@ -27,7 +28,7 @@ export const chain = <T, U>(mapper: (value: T) => Maybe<U>, maybe: Maybe<T>): Ma
 export const caseOf = <T, U>(maybe: Maybe<T>, patterns: MaybePatterns<T, U>): Maybe<U> =>
     isNothing(maybe) ? patterns.Nothing() : patterns.Just(maybe)
 
-export const of = <T>(nullableValue: T): Maybe<T> =>
+export const of = <T>(nullableValue: T): Maybe<NonNullable<T>> =>
     nullableValue == null ? Nothing : Just(nullableValue)
 
 export const alt = <T>(maybe1: Maybe<T>, maybe2: Maybe<T>): Maybe<T> =>
