@@ -1,6 +1,6 @@
        type NonNullable<T> = T & {}
-export type Nothing = void | null | undefined
-export type Just<T> = T
+export type Nothing = null | undefined
+export type Just<T> = T & {}
 export type Maybe<T> = Just<T> | Nothing
 export type MaybePatterns<T, U> = {Just: (value: T) => U, Nothing: () => U}
 
