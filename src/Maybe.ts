@@ -13,7 +13,7 @@ export const Nothing =
 export const of = <T>(nullableValue: T): Maybe<NonNullable<T>> =>
     nullableValue == null ? Nothing : Just(nullableValue)
 
-export const ofFalsy = <T>(value: T): Maybe<NonNullable<T>> =>
+export const weakOf = <T>(value: T): Maybe<NonNullable<T>> =>
     value ? Just(value) : Nothing
 
 export const isNothing = <T>(maybe: Maybe<T>): maybe is Nothing =>
