@@ -10,6 +10,9 @@ export const Just = <T>(value: T): Maybe<T> =>
 export const Nothing =
     null as Nothing
 
+export const of = <T>(nullableValue: T): Maybe<NonNullable<T>> =>
+    nullableValue == null ? Nothing : Just(nullableValue)
+
 export const isNothing = <T>(maybe: Maybe<T>): maybe is Nothing =>
     maybe == null
 
@@ -25,16 +28,13 @@ export const map2 = <T, U, I>(mapper: (a: T, b: U) => I, maybeA: Maybe<T>, maybe
 export const chain = <T, U>(mapper: (value: T) => Maybe<U>, maybe: Maybe<T>): Maybe<U> =>
     isNothing(maybe) ? Nothing : mapper(maybe)
 
-export const caseOf = <T, U>(maybe: Maybe<T>, patterns: MaybePatterns<T, U>): Maybe<U> =>
+export const caseOf = <T, U>(maybe: Maybe<T>, patterns: MaybePatterns<T, U>): U =>
     isNothing(maybe) ? patterns.Nothing() : patterns.Just(maybe)
-
-export const of = <T>(nullableValue: T): Maybe<NonNullable<T>> =>
-    nullableValue == null ? Nothing : Just(nullableValue)
 
 export const alt = <T>(maybe1: Maybe<T>, maybe2: Maybe<T>): Maybe<T> =>
     isNothing(maybe1) ? isNothing(maybe2) ? Nothing : maybe2 : maybe1
 
-export const ap = <T, U>(maybeF: Maybe<(value: T) => U>, maybe: Maybe<T>): Maybe<U> =>
+export const apply = <T, U>(maybeF: Maybe<(value: T) => U>, maybe: Maybe<T>): Maybe<U> =>
     isNothing(maybeF) ? Nothing : map(maybeF, maybe)
 
 export const withDefault = <T>(defaultValue: T, maybe: Maybe<T>): T =>
