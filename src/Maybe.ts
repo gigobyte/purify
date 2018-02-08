@@ -25,7 +25,7 @@ export const isJust = <T>(maybe: Maybe<T>): maybe is Just<T> =>
 export const map = <T, U>(mapper: (value: T) => U, maybe: Maybe<T>): Maybe<U> =>
     isNothing(maybe) ? Nothing : Just(mapper(maybe))
 
-export const map2 = <T, U, I>(mapper: (a: T, b: U) => I, maybeA: Maybe<T>, maybeB: Maybe<U>): Maybe<I> =>
+export const liftA2 = <T, U, I>(mapper: (a: T, b: U) => I, maybeA: Maybe<T>, maybeB: Maybe<U>): Maybe<I> =>
     (isNothing(maybeA) || isNothing(maybeB)) ? Nothing : Just(mapper(maybeA, maybeB))
 
 export const chain = <T, U>(mapper: (value: T) => Maybe<U>, maybe: Maybe<T>): Maybe<U> =>
@@ -57,3 +57,6 @@ export const catMaybes = <T>(list: Maybe<T>[]): T[] =>
 
 export const mapMaybe = <T, U>(mapper: (value: T) => Maybe<U>, list: T[]): U[] =>
     catMaybes(list.map(mapper))
+
+export const mapWithDefault = <T, U>(defaultValue: U, mapper: (value: T) => Maybe<U>, maybe: Maybe<T>): U =>
+    withDefault(defaultValue, map(mapper, maybe))
