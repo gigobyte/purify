@@ -1,11 +1,11 @@
-       type NonNullable<T> = T & {}
+type NonNullable<T> = T & {}
 export type Nothing = null | undefined
-export type Just<T> = T & {}
+export type Just<T> = T & {kind: 'Just'} & {}
 export type Maybe<T> = Just<T> | Nothing
 export type MaybePatterns<T, U> = {Just: (value: T) => U, Nothing: () => U}
 
 export const Just = <T>(value: T): Just<T> =>
-    value
+    value as Just<T>
 
 export const Nothing =
     null as Nothing
