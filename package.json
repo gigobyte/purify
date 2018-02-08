@@ -8,9 +8,26 @@
   "author": "gigobyte <gigobest2@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "docs": "typedoc --out documentation/ src/ --theme minimal"
+    "docs": "typedoc --out documentation/ src/ --theme minimal",
+    "test": "jest"
+  },
+  "jest": {
+    "transform": {
+      ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    },
+    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js"
+    ]
   },
   "devDependencies": {
+    "@types/jest": "^22.1.1",
+    "@types/ramda": "^0.25.17",
+    "jest": "^22.2.1",
+    "ramda": "^0.25.0",
+    "ts-jest": "^22.0.3",
     "ts-node": "^4.1.0",
     "typedoc": "^0.10.0",
     "typescript": "^2.7.1"
