@@ -29,6 +29,12 @@ export const mapLeft = <L, R, T>(mapper: (value: L) => T, either: Either<L, R>):
 export const mapRight = <L, R, T>(mapper: (value: R) => T, either: Either<L, R>): Either<L, T> =>
     bimap(x => x, mapper, either)
 
+export const liftLeft = <L, R, T>(mapper: (value: L) => T) => (either: Either<L, R>): Either<T, R> =>
+    mapLeft(mapper, either)
+
+export const liftRight = <L, R, T>(mapper: (value: R) => T) => (either: Either<L, R>): Either<L, T> =>
+    mapRight(mapper, either)
+
 export const caseOf = <L, R, T>(either: Either<L, R>, patterns: EitherPatterns<L, R, T>): T =>
     isLeft(either) ? patterns.Left(either.value) : patterns.Right(either.value)
 
