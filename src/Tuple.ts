@@ -24,8 +24,11 @@ export const equals = <F, S>([fst1, snd1]: Tuple<F, S>, [fst2, snd2]: Tuple<F, S
 export const toArray = <F, S>(tuple: Tuple<F, S>): [F, S] =>
     tuple as [F, S]
 
-export const liftFirst = <F, S, T>(mapper: (fst: F) => T) => (tuple: Tuple<F, S>): Tuple<T, S> =>
+export const liftFirst = <F, T>(mapper: (fst: F) => T) => <S>(tuple: Tuple<F, S>): Tuple<T, S> =>
     mapFirst(mapper, tuple)
 
-export const liftSecond = <F, S, T>(mapper: (snd: S) => T) =>  (tuple: Tuple<F, S>): Tuple<F, T> =>
+export const liftSecond = <S, T>(mapper: (snd: S) => T) => <F>(tuple: Tuple<F, S>): Tuple<F, T> =>
     mapSecond(mapper, tuple)
+
+export const lift = <F, S, T, U>(fstMapper: (fst: F) => T, sndMapper: (snd: S) => U) => (tuple: Tuple<F, S>): Tuple<T, U> =>
+    bimap(fstMapper, sndMapper, tuple)
