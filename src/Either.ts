@@ -64,3 +64,6 @@ export const lefts = <L, R>(list: Either<L, R>[]): L[] =>
 
 export const rights = <L, R>(list: Either<L, R>[]): R[] =>
     list.filter(isRight).map(x => x.value)
+
+export const either = <L, R, T>(ifLeft:  (value: L) => T, ifRight: (value: R) => T, either: Either<L, R>): T =>
+    isLeft(either) ? ifLeft(either.value) : ifRight(either.value)
