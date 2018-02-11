@@ -1,14 +1,18 @@
+import { Either, Right, Left } from './Either'
+
 type NonNullable<T> = T & {}
+type Semigroup<T={}> = {concat: (...args: T[]) => T}
+
 export type Nothing = null | undefined
-export type Just<T> = T & {kind: 'Just'}
+export type Just<T> = T
 export type Maybe<T> = Just<T> | Nothing
 export type MaybePatterns<T, U> = {Just: (value: T) => U, Nothing: () => U}
 
-export const Just = <T>(value: T): Just<T> =>
-    value as Just<T>
+export const Just = <T>(value: T): Maybe<T> =>
+    value as Maybe<T>
 
 export const Nothing =
-    null as Nothing
+    null as Maybe<never>
 
 export const of = <T>(nullableValue: T): Maybe<NonNullable<T>> =>
     nullableValue == null ? Nothing : Just(nullableValue)
@@ -35,9 +39,9 @@ export const caseOf = <T, U>(maybe: Maybe<T>, patterns: MaybePatterns<T, U>): U 
     isNothing(maybe) ? patterns.Nothing() : patterns.Just(maybe)
 
 export const alt = <T>(maybe1: Maybe<T>, maybe2: Maybe<T>): Maybe<T> =>
-    isNothing(maybe1) ? isNothing(maybe2) ? Nothing : maybe2 : maybe1
+    isNothing(maybe1) ? maybe1 : maybe2
 
-export const apply = <T, U>(maybeF: Maybe<(value: T) => U>, maybe: Maybe<T>): Maybe<U> =>
+export const ap = <T, U>(maybeF: Maybe<(value: T) => U>, maybe: Maybe<T>): Maybe<U> =>
     isNothing(maybeF) ? Nothing : map(maybeF, maybe)
 
 export const withDefault = <T>(defaultValue: T, maybe: Maybe<T>): T =>
@@ -49,7 +53,7 @@ export const lift = <T, U>(mapper: (value: T) => U) => (maybe: Maybe<T>): Maybe<
 export const liftM = <T, U>(mapper: (value: T) => Maybe<U>) => (maybe: Maybe<T>): Maybe<U> =>
     chain(mapper, maybe)
 
-export const toList = <T>(maybe: Maybe<T>): never[] | [T] =>
+export const toList = <T>(maybe: Maybe<T>): T[] =>
     isNothing(maybe) ? [] : [maybe]
 
 export const catMaybes = <T>(list: Maybe<T>[]): T[] =>
@@ -60,3 +64,19 @@ export const mapMaybe = <T, U>(mapper: (value: T) => Maybe<U>, list: T[]): U[] =
 
 export const mapWithDefault = <T, U>(defaultValue: U, mapper: (value: T) => Maybe<U>, maybe: Maybe<T>): U =>
     withDefault(defaultValue, map(mapper, maybe))
+
+export const concat = <T extends Semigroup>(maybe1: Maybe<T>, maybe2: Maybe<T>) => 
+    isNothing(alt(maybe1, maybe2)) ? Nothing : (isJust(maybe1) && isJust(maybe2)) ? maybe1.concat(maybe2) : isJust(maybe1) ? maybe1 : maybe2
+
+export const reduce = <T, U>(reducer: (value: T) => U, initialValue: T, maybe: Maybe<T>): U  =>
+    reducer(withDefault(initialValue, maybe))
+
+export const toNullable = <T>(maybe: Maybe<T>): T | null =>
+    isNothing(maybe) ? null : maybe
+
+export const encase = <T, U>(throwsF: (value: T) => U, value: T): Maybe<U> =>
+   { try { return throwsF(value) } catch { return Nothing } }
+
+export const toEither = <T, U>(left: T, maybe: Maybe<U>): Either<T, U> =>
+    isNothing(maybe) ? Left(left) : Right(maybe)
+
