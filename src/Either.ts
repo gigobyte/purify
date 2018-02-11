@@ -67,3 +67,15 @@ export const rights = <L, R>(list: Either<L, R>[]): R[] =>
 
 export const either = <L, R, T>(ifLeft:  (value: L) => T, ifRight: (value: R) => T, either: Either<L, R>): T =>
     isLeft(either) ? ifLeft(either.value) : ifRight(either.value)
+
+export const equals = <L, R>(eitherA: Either<L, R>, eitherB: Either<L, R>): boolean =>
+    (isLeft(eitherA) && isLeft(eitherB) && eitherA.value === eitherB.value) || (isRight(eitherA) && isRight(eitherB) && eitherA.value === eitherB.value)
+
+export const alt = <L, R>(eitherA: Either<L, R>, eitherB: Either<L, R>): Either<L, R> =>
+    isLeft(eitherA) ? eitherB : eitherA
+
+export const ap = <L, R, T>(eitherF: Either<L, (value: R) => T>, either: Either<L, R>): Either<L, T> =>
+    isLeft(eitherF) ? eitherF : mapRight(eitherF.value, either)
+
+export const chain = <L, R, R2>(mapper: (value: R) => Either<L, R2>, either: Either<L, R>): Either<L, R2> =>
+    isLeft(either) ? either : mapper(either.value)

@@ -39,7 +39,7 @@ export const caseOf = <T, U>(maybe: Maybe<T>, patterns: MaybePatterns<T, U>): U 
     isNothing(maybe) ? patterns.Nothing() : patterns.Just(maybe)
 
 export const alt = <T>(maybe1: Maybe<T>, maybe2: Maybe<T>): Maybe<T> =>
-    isNothing(maybe1) ? maybe1 : maybe2
+    isNothing(maybe1) ? maybe2 : maybe1
 
 export const ap = <T, U>(maybeF: Maybe<(value: T) => U>, maybe: Maybe<T>): Maybe<U> =>
     isNothing(maybeF) ? Nothing : map(maybeF, maybe)
@@ -65,8 +65,8 @@ export const mapMaybe = <T, U>(mapper: (value: T) => Maybe<U>, list: T[]): U[] =
 export const mapWithDefault = <T, U>(defaultValue: U, mapper: (value: T) => Maybe<U>, maybe: Maybe<T>): U =>
     withDefault(defaultValue, map(mapper, maybe))
 
-export const concat = <T extends Semigroup>(maybe1: Maybe<T>, maybe2: Maybe<T>) => 
-    isNothing(alt(maybe1, maybe2)) ? Nothing : (isJust(maybe1) && isJust(maybe2)) ? maybe1.concat(maybe2) : isJust(maybe1) ? maybe1 : maybe2
+export const concat = <T extends Semigroup<T>>(maybe1: Maybe<T>, maybe2: Maybe<T>): Maybe<T> => 
+    isNothing(alt(maybe1, maybe2)) ? Nothing : (isJust(maybe1) && isJust(maybe2)) ? Just(maybe1.concat(maybe2)) : isJust(maybe1) ? maybe1 : maybe2
 
 export const reduce = <T, U>(reducer: (value: T) => U, initialValue: T, maybe: Maybe<T>): U  =>
     reducer(withDefault(initialValue, maybe))
@@ -80,3 +80,9 @@ export const encase = <T, U>(throwsF: (value: T) => U, value: T): Maybe<U> =>
 export const toEither = <T, U>(left: T, maybe: Maybe<U>): Either<T, U> =>
     isNothing(maybe) ? Left(left) : Right(maybe)
 
+const b = Nothing
+const a = Just([3,4])
+
+const c = concat(a,b)
+
+console.log(c)
