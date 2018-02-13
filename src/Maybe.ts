@@ -4,7 +4,7 @@ type NonNullable<T> = T & {}
 type Semigroup<T={}> = {concat: (...args: T[]) => T}
 
 export type Nothing = null | undefined
-export type Just<T> = T
+export type Just<T> = T & {kind: 'Just'}
 export type Maybe<T> = Just<T> | Nothing
 export type MaybePatterns<T, U> = {Just: (value: T) => U, Nothing: () => U}
 
@@ -75,14 +75,7 @@ export const toNullable = <T>(maybe: Maybe<T>): T | null =>
     isNothing(maybe) ? null : maybe
 
 export const encase = <T, U>(throwsF: (value: T) => U, value: T): Maybe<U> =>
-   { try { return throwsF(value) } catch { return Nothing } }
+   { try { return Just(throwsF(value)) } catch { return Nothing } }
 
 export const toEither = <T, U>(left: T, maybe: Maybe<U>): Either<T, U> =>
     isNothing(maybe) ? Left(left) : Right(maybe)
-
-const b = Nothing
-const a = Just([3,4])
-
-const c = concat(a,b)
-
-console.log(c)
