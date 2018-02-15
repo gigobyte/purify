@@ -12,7 +12,6 @@
         "removeComments": true,
         "strictNullChecks": true,
         "noImplicitThis": true,
-        "noUnusedLocals": true,
         "noUnusedParameters": true,
         "noImplicitReturns": true,
         "alwaysStrict": true,

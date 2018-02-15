@@ -9,13 +9,14 @@
   "license": "MIT",
   "scripts": {
     "docs": "typedoc --out documentation/ src/ --theme minimal",
+    "pretest": "node ./node_modules/tsst-tycho/dist/build.js -b \"**/*.test.ts\" -d ../ADT.ts",
     "test": "jest"
   },
   "jest": {
     "transform": {
       ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
     },
-    "testRegex": "(/__tests__/.*|\\.(test|spec))\\.(ts|tsx|js)$",
+    "testRegex": "lib\/__test__js\/.+\\.test\\.js$",
     "moduleFileExtensions": [
       "ts",
       "tsx",
@@ -31,5 +32,8 @@
     "ts-node": "^4.1.0",
     "typedoc": "^0.10.0",
     "typescript": "^2.7.1"
+  },
+  "dependencies": {
+    "tsst-tycho": "^0.3.9"
   }
 }
