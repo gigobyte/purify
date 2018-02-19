@@ -1,4 +1,6 @@
+import { tsst } from 'tsst-tycho';
 import * as Maybe from '../src/Maybe'
+import * as Either from '../src/Either'
 
 describe('Maybe', () => {
     it('Just', () => {
@@ -47,6 +49,7 @@ describe('Maybe', () => {
     it('chain', () => {
         expect(Maybe.chain(x => Maybe.Just(x + 1), Maybe.Just(1))).toBe(Maybe.Just(2))
         expect(Maybe.chain(x => Maybe.Just(x + 1), Maybe.Nothing)).toBe(Maybe.Nothing)
+        tsst(() => { Maybe.chain(x => x + 1, Maybe.Nothing) }).expectToFailWith('is not assignable to parameter of type')
     })
 
     it('caseOf', () => {
@@ -62,9 +65,73 @@ describe('Maybe', () => {
     })
 
     it('ap', () => {
-        expect(Maybe.ap(Maybe.Just(x => x + 1), Maybe.Just(5))).toBe(Maybe.Just(6))
+        expect(Maybe.ap(Maybe.Just((x: number) => x + 1), Maybe.Just(5))).toBe(Maybe.Just(6))
         expect(Maybe.ap(Maybe.Nothing, Maybe.Just(5))).toBe(Maybe.Nothing)
-        expect(Maybe.ap(Maybe.Just(x => x + 1), Maybe.Nothing)).toBe(Maybe.Nothing)
+        expect(Maybe.ap(Maybe.Just((x: number) => x + 1), Maybe.Nothing)).toBe(Maybe.Nothing)
         expect(Maybe.ap(Maybe.Nothing, Maybe.Nothing)).toBe(Maybe.Nothing)
+    })
+
+    it('withDefault', () => {
+        expect(Maybe.withDefault(5, Maybe.Just(6))).toBe(6)
+        expect(Maybe.withDefault(5, Maybe.Nothing)).toBe(5)
+    })
+
+    it('lift', () => {
+        expect(Maybe.lift((x: number) => x + 1)(Maybe.Just(1))).toBe(Maybe.Just(2))
+        expect(Maybe.lift((x: number) => x + 1)(Maybe.Nothing)).toBe(Maybe.Nothing)
+    })
+
+    it('liftM', () => {
+        expect(Maybe.liftM((x: number) => Maybe.Just(x + 1))(Maybe.Just(1))).toBe(Maybe.Just(2))
+        expect(Maybe.liftM((x: number) => Maybe.Just(x + 1))(Maybe.Nothing)).toBe(Maybe.Nothing)
+        tsst(() => { Maybe.chain((x: number) => x + 1, Maybe.Nothing) }).expectToFailWith('is not assignable to parameter of type')
+    })
+
+    it('toList', () => {
+        expect(Maybe.toList(Maybe.Nothing)).toEqual([])
+        expect(Maybe.toList(Maybe.Just(5))).toEqual([5])
+    })
+
+    it('catMaybes', () => {
+        expect(Maybe.catMaybes([Maybe.Just(6), Maybe.Just(5), Maybe.Nothing])).toEqual([6, 5])
+    })
+
+    it('mapMaybe', () => {
+        expect(Maybe.mapMaybe(x => x < 5 ? Maybe.Just(x) : Maybe.Nothing, [1,2,3,7,8,9])).toEqual([1,2,3])
+    })
+
+    it('mapWithDefault', () => {
+        expect(Maybe.mapWithDefault(10, x => x < 5 ? Maybe.Just(x) : Maybe.Nothing, Maybe.Just(2))).toBe(Maybe.Just(2))
+        expect(Maybe.mapWithDefault(10, x => x < 5 ? Maybe.Just(x) : Maybe.Nothing, Maybe.Just(8))).toBe(Maybe.Just(10))
+    })
+
+    it('concat', () => {
+        expect(Maybe.concat(Maybe.Just([7, 8, 9]), Maybe.Just([1,2,3]))).toEqual(Maybe.Just([7,8,9,1,2,3]))
+        expect(Maybe.concat(Maybe.Just([1,2,3]), Maybe.Nothing)).toEqual(Maybe.Just([1,2,3]))
+        expect(Maybe.concat(Maybe.Nothing, Maybe.Just([1,2,3]))).toEqual(Maybe.Just([1,2,3]))
+        expect(Maybe.concat(Maybe.Nothing, Maybe.Nothing)).toEqual(Maybe.Nothing)
+        tsst(() => { Maybe.concat(Maybe.Just(5), Maybe.Nothing) }).expectToFailWith('is not assignable to parameter of type')
+    })
+
+    it('reduce', () => {
+        expect(Maybe.reduce(x => x + 1, 2, Maybe.Just(5))).toBe(6)
+        expect(Maybe.reduce(x => x + 1, 2, Maybe.Nothing)).toBe(3)
+    })
+
+    it('toNullable', () => {
+        tsst(() => {
+            const a: number | null = Maybe.toNullable(Maybe.Just(5))
+            const b: number | null = Maybe.toNullable(Maybe.Nothing)
+        }).expectToCompile()
+    })
+
+    it('encase', () => {
+        expect(Maybe.encase(_ => { throw new Error('a') }, Maybe.Just(5))).toBe(Maybe.Nothing)
+        expect(Maybe.encase(_ => 10, Maybe.Just(5))).toBe(Maybe.Just(10))
+    })
+
+    it('toEither', () => {
+        expect(Maybe.toEither(5, Maybe.Just(10))).toEqual(Either.Right(10))
+        expect(Maybe.toEither(5, Maybe.Nothing)).toEqual(Either.Left(5))
     })
 })
