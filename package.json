@@ -21,7 +21,8 @@
       "ts",
       "tsx",
       "js"
-    ]
+    ],
+    "collectCoverage": true
   },
   "devDependencies": {
     "@types/jest": "^22.1.1",

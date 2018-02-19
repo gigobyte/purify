@@ -2,5 +2,6 @@ node_modules
 lib
 yarn-error.log
 documentation
+coverage
 **/*.js
 **/*.d.ts
