@@ -1,4 +1,5 @@
-import { NonEmptyList, isNonEmpty } from '../src/NonEmptyList'
+import { Just, Nothing } from '../src/Maybe';
+import { NonEmptyList, isNonEmpty, fromArray } from '../src/NonEmptyList'
 import { tsst } from 'tsst-tycho'
 
 describe('NonEmptyList: constructor and typecasts', () => {
@@ -29,7 +30,6 @@ describe('NonEmptyList: constructor and typecasts', () => {
             const arr = NonEmptyList(a)
 
             arr.a
-            arr.b
         }).expectToFailWith(`does not exist on type`)
     })
 
@@ -89,9 +89,19 @@ describe('NonEmptyList: constructor and typecasts', () => {
             const a11: NonEmptyList<number> = NonEmptyList([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11])
         }).expectToCompile()
     })
+
+    it('NonEmptyList should be usable with functions that require normal arrays', () => {
+        tsst(() => {
+            const f = <T>(_: T[]): void => {}
+    
+            const arr = NonEmptyList([5])
+    
+            f(arr)
+        }).expectToCompile()
+    })
 })
 
-describe('NonEmptyList: type predicate', () => {
+describe('NonEmptyList: isNonEmpty', () => {
     it('Should return true for arrays with elements', () => {
         expect(isNonEmpty([1])).toBe(true)
     })
@@ -102,5 +112,15 @@ describe('NonEmptyList: type predicate', () => {
 
     it('Should return true for NonEmptyList', () => {
         expect(isNonEmpty(NonEmptyList([5]))).toBe(true)
+    })
+})
+
+describe('NonEmptyList: fromArray', () => {
+    it('Should return Just<NonEmptyList> for native arrays with elements', () => {
+        expect(fromArray([1])).toEqual(Just(NonEmptyList([1])))
+    })
+
+    it('Should return nothing when empty array is passed to it', () => {
+        expect(fromArray([])).toEqual(Nothing)
     })
 })

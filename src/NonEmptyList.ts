@@ -1,3 +1,5 @@
+import { Maybe, Just, Nothing } from './Maybe'
+
 export type NonEmptyList<T>
     = [T]
     | [T, T]
@@ -17,3 +19,6 @@ export const NonEmptyList = <T extends ArrayWithOneElement<T>>(arr: T): NonEmpty
 
 export const isNonEmpty = <T>(arr: T[]): arr is NonEmptyList<T> =>
     arr.length > 0
+
+export const fromArray = <T>(arr: T[]): Maybe<NonEmptyList<T>> =>
+    isNonEmpty(arr) ? Just(arr) : Nothing
