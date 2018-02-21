@@ -57,7 +57,7 @@ export const rightToMaybe = <L, R>(either: Either<L, R>): Maybe<R> =>
     isLeft(either) ? Nothing : Just(either.value)
 
 export const liftA2 = <L, R, R2, R3>(mapper: (a: R, b: R2) => R3, eitherA: Either<L, R>, eitherB: Either<L, R2>): Either<L, R3> =>
-    (isLeft(eitherA) || isLeft(eitherB)) ? eitherA as Either<L, R3> : Right(mapper(eitherA.value, eitherB.value))
+    isLeft(eitherA) ? eitherA : isLeft(eitherB) ? eitherB : Right(mapper(eitherA.value, eitherB.value))
 
 export const lefts = <L, R>(list: Either<L, R>[]): L[] =>
     list.filter(isLeft).map(x => x.value)
