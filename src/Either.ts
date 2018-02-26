@@ -18,6 +18,7 @@ export const Right = <T>(value: T): Right<T> =>
 export const isLeft = <L, R>(either: Either<L, R>): either is Left<L> =>
     either.kind === _left
 
+/** Returns true if the arguemnt is Right */
 export const isRight = <L, R>(either: Either<L, R>): either is Right<R> =>
     either.kind === _right
 
