@@ -16,7 +16,7 @@
     "transform": {
       ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
     },
-    "testRegex": "__test__\/.+\\.test\\.js$",
+    "testRegex": "__test__/.+\\.test\\.js$",
     "moduleFileExtensions": [
       "ts",
       "tsx",
@@ -31,10 +31,9 @@
     "ramda": "^0.25.0",
     "ts-jest": "^22.0.3",
     "ts-node": "^4.1.0",
+    "tsst-tycho": "^0.4.0",
     "typedoc": "^0.10.0",
     "typescript": "^2.7.1"
   },
-  "dependencies": {
-    "tsst-tycho": "^0.3.9"
-  }
+  "dependencies": {}
 }

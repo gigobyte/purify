@@ -2813,9 +2813,9 @@ tsconfig@^7.0.0:
     strip-bom "^3.0.0"
     strip-json-comments "^2.0.0"
 
-tsst-tycho@^0.3.9:
-  version "0.3.9"
-  resolved "https://registry.yarnpkg.com/tsst-tycho/-/tsst-tycho-0.3.9.tgz#611c23e31f0ddb3b83bf8621f5b701bf5894d2df"
+tsst-tycho@^0.4.0:
+  version "0.4.0"
+  resolved "https://registry.yarnpkg.com/tsst-tycho/-/tsst-tycho-0.4.0.tgz#37130ed81e2ec73510a74abac817763ef363bb20"
   dependencies:
     commandpost "^1.2.0"
     minimatch "^3.0.4"
