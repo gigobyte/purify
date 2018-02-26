@@ -91,7 +91,7 @@ export const reduce = <T, U>(reducer: (value: T) => U, initialValue: T, maybe: M
     reducer(withDefault(initialValue, maybe))
 
 /** Type casts a Maybe into a nullable type */
-export const toNullable = <T>(maybe: Maybe<T>): T | null =>
+export const extract = <T>(maybe: Maybe<T>): T | null =>
     isNothing(maybe) ? null : maybe
 
 /** Calls a function that may throw and wraps the result in a Just if successful or Nothing if an error is caught */

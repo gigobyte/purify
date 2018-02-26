@@ -118,10 +118,10 @@ describe('Maybe', () => {
         expect(Maybe.reduce(x => x + 1, 2, Maybe.Nothing)).toBe(3)
     })
 
-    it('toNullable', () => {
+    it('extract', () => {
         tsst(() => {
-            const a: number | null = Maybe.toNullable(Maybe.Just(5))
-            const b: number | null = Maybe.toNullable(Maybe.Nothing)
+            const a: number | null = Maybe.extract(Maybe.Just(5))
+            const b: number | null = Maybe.extract(Maybe.Nothing)
         }).expectToCompile()
     })
 
