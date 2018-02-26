@@ -143,4 +143,10 @@ describe('Either', () => {
         expect(Either.chain(x => Either.Right(x + 1), Either.Left('Error'))).toEqual(Either.Left('Error'))
         expect(Either.chain(x => Either.Right(x + 1), Either.Right(5))).toEqual(Either.Right(6))
     })
+
+    it('extract', () => {
+        expect(Either.extract(Either.Left(5))).toEqual(5)
+        expect(Either.extract(Either.Right(5))).toEqual(5)
+        tsst(() => { const a: number | string = Either.extract(Either.Left(5)) }).expectToCompile
+    })
 })

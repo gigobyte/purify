@@ -134,4 +134,10 @@ describe('Maybe', () => {
         expect(Maybe.toEither(5, Maybe.Just(10))).toEqual(Either.Right(10))
         expect(Maybe.toEither(5, Maybe.Nothing)).toEqual(Either.Left(5))
     })
+
+    it('unsafeCoerce', () => {
+        expect(Maybe.unsafeCoerce(Maybe.Just(5))).toEqual(5)
+        expect(() => Maybe.unsafeCoerce(Maybe.Nothing)).toThrow()
+        tsst(() => { const a: number = Maybe.unsafeCoerce(Maybe.Just(5)) }).expectToCompile
+    })
 })
