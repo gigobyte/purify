@@ -101,8 +101,8 @@ describe('Maybe', () => {
     })
 
     it('mapWithDefault', () => {
-        expect(Maybe.mapWithDefault(10, x => x < 5 ? Maybe.Just(x) : Maybe.Nothing, Maybe.Just(2))).toBe(Maybe.Just(2))
-        expect(Maybe.mapWithDefault(10, x => x < 5 ? Maybe.Just(x) : Maybe.Nothing, Maybe.Just(8))).toBe(Maybe.Just(10))
+        expect(Maybe.mapWithDefault(10, x => x + 1, Maybe.Just(2))).toBe(3)
+        expect(Maybe.mapWithDefault(10, x => x + 1, Maybe.Nothing)).toBe(10)
     })
 
     it('concat', () => {
@@ -126,8 +126,8 @@ describe('Maybe', () => {
     })
 
     it('encase', () => {
-        expect(Maybe.encase(_ => { throw new Error('a') }, Maybe.Just(5))).toBe(Maybe.Nothing)
-        expect(Maybe.encase(_ => 10, Maybe.Just(5))).toBe(Maybe.Just(10))
+        expect(Maybe.encase(() => { throw new Error('a') })).toBe(Maybe.Nothing)
+        expect(Maybe.encase(() => 10)).toBe(Maybe.Just(10))
     })
 
     it('toEither', () => {
