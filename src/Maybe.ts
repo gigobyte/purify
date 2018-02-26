@@ -101,3 +101,7 @@ export const encase = <T>(throwsF: () => T): Maybe<T> =>
 /** Constructs a Right from a Just or a Left with a provided value if the value is Nothing */
 export const toEither = <T, U>(left: T, maybe: Maybe<U>): Either<T, U> =>
     isNothing(maybe) ? Left(left) : Right(maybe)
+
+/** Extracts the value out of a Maybe, throws if the value is null */
+export const unsafeCoerce = <T>(maybe: Maybe<T>): T =>
+    isNothing(maybe) ? (() => { throw new Error('Maybe got coerced to a null') })() : maybe

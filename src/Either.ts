@@ -83,3 +83,6 @@ export const ap = <L, R, T>(eitherF: Either<L, (value: R) => T>, either: Either<
 
 export const chain = <L, R, R2>(mapper: (value: R) => Either<L, R2>, either: Either<L, R>): Either<L, R2> =>
     isLeft(either) ? either : mapper(either.value)
+
+export const extract = <L, R>(either: Either<L,R>): L | R =>
+    either.value
