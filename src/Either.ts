@@ -22,7 +22,8 @@ export const isLeft = <L, R>(either: Either<L, R>): either is Left<L> =>
 export const isRight = <L, R>(either: Either<L, R>): either is Right<R> =>
     either.kind === _right
 
-export const bimap = <L, R, T, U>(leftMapper: (value: L) => T, rightMapper: (value: R) => U, either: Either<L, R>): Either<T, U> =>
+// Given two map functions, maps using the first if the value is Left or using the second one if the value is Right
+export const bimap = <L, R, L2, R2>(leftMapper: (value: L) => L2, rightMapper: (value: R) => R2, either: Either<L, R>): Either<L2, R2> =>
     isLeft(either) ? Left(leftMapper(either.value)) : Right(rightMapper(either.value))
 
 export const mapLeft = <L, R, T>(mapper: (value: L) => T, either: Either<L, R>): Either<T, R> =>
