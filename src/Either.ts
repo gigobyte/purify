@@ -26,6 +26,7 @@ export const isRight = <L, R>(either: Either<L, R>): either is Right<R> =>
 export const bimap = <L, R, L2, R2>(leftMapper: (value: L) => L2, rightMapper: (value: R) => R2, either: Either<L, R>): Either<L2, R2> =>
     isLeft(either) ? Left(leftMapper(either.value)) : Right(rightMapper(either.value))
 
+// Maps over the Left value of an Either, acts like an identity if the value is Right
 export const mapLeft = <L, R, T>(mapper: (value: L) => T, either: Either<L, R>): Either<T, R> =>
     bimap(mapper, x => x, either)
 
