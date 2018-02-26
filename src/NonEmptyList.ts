@@ -22,3 +22,6 @@ export const isNonEmpty = <T>(arr: T[]): arr is NonEmptyList<T> =>
 
 export const fromArray = <T>(arr: T[]): Maybe<NonEmptyList<T>> =>
     isNonEmpty(arr) ? Just(arr) : Nothing
+
+export const unsafeCoerce = <T>(arr: T[]): NonEmptyList<T> =>
+    isNonEmpty(arr) ? NonEmptyList(arr) : (() => { throw new Error('Unexpected empty array') })()

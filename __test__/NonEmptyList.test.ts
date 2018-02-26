@@ -1,5 +1,5 @@
 import { Just, Nothing } from '../src/Maybe';
-import { NonEmptyList, isNonEmpty, fromArray } from '../src/NonEmptyList'
+import { NonEmptyList, isNonEmpty, fromArray, unsafeCoerce } from '../src/NonEmptyList'
 import { tsst } from 'tsst-tycho'
 
 describe('NonEmptyList: constructor and typecasts', () => {
@@ -122,5 +122,15 @@ describe('NonEmptyList: fromArray', () => {
 
     it('Should return nothing when empty array is passed to it', () => {
         expect(fromArray([])).toEqual(Nothing)
+    })
+})
+
+describe('NonEmptyList: unsafeCoerce', () => {
+    it('Should return NonEmptyList for native arrays with elements', () => {
+        expect(unsafeCoerce([1])).toEqual(NonEmptyList([1]))
+    })
+
+    it('Should throw when empty array is passed to it', () => {
+        expect(() => unsafeCoerce([])).toThrow()
     })
 })

@@ -7,6 +7,7 @@
   "repository": "https://github.com/gigobyte/ADT.ts.git",
   "author": "gigobyte <gigobest2@gmail.com>",
   "license": "MIT",
+  "sideEffects": false,
   "scripts": {
     "docs": "typedoc --out documentation/ src/ --theme minimal",
     "pretest": "node ./node_modules/tsst-tycho/dist/build.js -b \"**/*.test.ts\" -d ../ADT.ts",
