@@ -138,6 +138,6 @@ describe('Maybe', () => {
     it('unsafeCoerce', () => {
         expect(Maybe.unsafeCoerce(Maybe.Just(5))).toEqual(5)
         expect(() => Maybe.unsafeCoerce(Maybe.Nothing)).toThrow()
-        tsst(() => { const a: number = Maybe.unsafeCoerce(Maybe.Just(5)) }).expectToCompile
+        tsst(() => { const a: number = Maybe.unsafeCoerce(Maybe.Just(5)) }).expectToCompile()
     })
 })

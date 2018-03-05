@@ -149,4 +149,9 @@ describe('Either', () => {
         expect(Either.extract(Either.Right(5))).toEqual(5)
         tsst(() => { const a: number | string = Either.extract(Either.Left(5)) }).expectToCompile
     })
+
+    it('encase', () => {
+        expect(Either.encase(() => { throw new Error('a') })).toEqual(Either.Left(new Error('a')))
+        expect(Either.encase(() => 10)).toEqual(Either.Right(10))
+    })
 })
