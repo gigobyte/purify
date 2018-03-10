@@ -58,11 +58,11 @@ export const rightOrDefault = <L, R>(defaultValue: R, either: Either<L, R>): R =
     isLeft(either) ? defaultValue : either.value
 
 /** Runs an effect if the either is `Left`, returns its argument for easier composiblity */
-export const whenLeft = <L, R>(effect: (value: L) => void | undefined, either: Either<L, R>): Either<L, R> =>
+export const whenLeft = <L, R>(effect: (value: L) => any, either: Either<L, R>): Either<L, R> =>
     isLeft(either) ? (effect(either.value), either) : either
 
 /** Runs an effect if the either is `Right`, returns its argument for easier composiblity */
-export const whenRight = <L, R>(effect: (value: R) => void | undefined, either: Either<L, R>): Either<L, R> =>
+export const whenRight = <L, R>(effect: (value: R) => any, either: Either<L, R>): Either<L, R> =>
     isLeft(either) ? either : (effect(either.value), either)
 
 /** Constructs a `Just` with the value of the either if it's `Right` or a `Nothing` if the either is `Left` */
