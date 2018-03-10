@@ -57,4 +57,8 @@ describe('Tuple', () => {
     it('swap', () => {
         expect(Tuple.swap(Tuple.swap(Tuple.Tuple('Message', 1)))).toEqual(Tuple.Tuple('Message', 1))
     })
+
+    it('fanout', () => {
+        expect(Tuple.fanout((x: string) => x[0], (x: string) => x.length)('sss')).toEqual(Tuple.Tuple('s', 3))
+    })
 })

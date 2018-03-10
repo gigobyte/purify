@@ -50,3 +50,7 @@ export const fromArray = <F, S>([fst, snd]: [F, S]): Tuple<F, S> =>
 /** Swaps the values inside a `Tuple` */ 
 export const swap = <F, S>([fst, snd]: Tuple<F, S>): Tuple<S, F> =>
     Tuple(snd, fst)
+
+/** Given two functions, apply both to a value and construct a `Tuple` from the results */
+export const fanout = <F, S, T>(firstMapper: (value: T) => F, secondMapper: (value: T) => S) => (value: T): Tuple<F, S> =>
+    Tuple(firstMapper(value), secondMapper(value))
