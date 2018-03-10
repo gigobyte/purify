@@ -8,10 +8,10 @@ export type Right<T> = {kind: typeof _right, value: T}
 export type Either<L, R> = Left<L> | Right<R>
 export type EitherPatterns<L, R, T> = { Left: (l: L) => T, Right: (r: R) => T }
 
-export const Left = <T>(value: T): Left<T> =>
+export const Left = <T>(value: T): Either<T, never> =>
     ({kind: _left, value})
 
-export const Right = <T>(value: T): Right<T> =>
+export const Right = <T>(value: T): Either<never, T> =>
     ({kind: _right, value})
 
 /** Returns true if the arguemnt is `Left` */
@@ -115,3 +115,5 @@ export const extract = <L, R>(either: Either<L,R>): L | R =>
 /** Calls a function and returns a `Right` if successful or the exception wrapped in `Left` in case of failure */
 export const encase = <L extends Error, R>(throwsF: () => R): Either<L, R> =>
     { try { return Right(throwsF()) } catch(e) { return Left(e) } }
+
+const t = mapLeft(x => x + 1, Left(5))

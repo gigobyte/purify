@@ -2,9 +2,6 @@ import { tsst } from 'tsst-tycho';
 import * as Maybe from '../src/Maybe'
 import * as Either from '../src/Either'
 
-// Used to mask Lefts or Rights as Either
-type FakeEither = Either.Either<string, number>;
-
 describe('Either', () => {
     it('Left', () => {
         expect(Either.Left(5).value).toBe(5)
@@ -97,7 +94,7 @@ describe('Either', () => {
     it('liftA2', () => {
         expect(Either.liftA2((x, y) => x + y, Either.Right(5), Either.Right(1))).toEqual(Either.Right(6))
         expect(Either.liftA2((x, y) => x + y, Either.Left('Error'), Either.Right(1))).toEqual(Either.Left('Error'))
-        expect(Either.liftA2((x, y) => x + y, Either.Right(1) as FakeEither, Either.Left('Error') as FakeEither)).toEqual(Either.Left('Error'))
+        expect(Either.liftA2((x, y) => x + y, Either.Right(1), Either.Left('Error'))).toEqual(Either.Left('Error'))
         expect(Either.liftA2((x, y) => x + y, Either.Left('Error'), Either.Left('Error'))).toEqual(Either.Left('Error'))
     })
 
@@ -125,18 +122,16 @@ describe('Either', () => {
 
     it('alt', () => {
         expect(Either.alt(Either.Left('Err'), Either.Left('Error'))).toEqual(Either.Left('Error'))
-        expect(Either.alt(Either.Left('Err') as FakeEither, Either.Right(5))).toEqual(Either.Right(5))
-        expect(Either.alt(Either.Right(5) as FakeEither, Either.Left('Error'))).toEqual(Either.Right(5))
+        expect(Either.alt(Either.Left('Err'), Either.Right(5))).toEqual(Either.Right(5))
+        expect(Either.alt(Either.Right(5), Either.Left('Error'))).toEqual(Either.Right(5))
         expect(Either.alt(Either.Right(5), Either.Right(6))).toEqual(Either.Right(5))
     })
 
     it('ap', () => {
-        type FakeEitherFn = Either.Either <string, (_: number) => number>
-
-        expect(Either.ap(Either.Right((x: number) => x + 1) as FakeEitherFn, Either.Right(5))).toEqual(Either.Right(6))
-        expect(Either.ap(Either.Right((x: number) => x + 1) as FakeEitherFn, Either.Left('Error') as FakeEither)).toEqual(Either.Left('Error'))
-        expect(Either.ap(Either.Left('Error') as FakeEitherFn, Either.Right(5))).toEqual(Either.Left('Error'))
-        expect(Either.ap(Either.Left('Error') as FakeEitherFn, Either.Left('Error!') as FakeEither)).toEqual(Either.Left('Error'))
+        expect(Either.ap(Either.Right((x: number) => x + 1), Either.Right(5))).toEqual(Either.Right(6))
+        expect(Either.ap(Either.Right((x: number) => x + 1), Either.Left('Error'))).toEqual(Either.Left('Error'))
+        expect(Either.ap(Either.Left('Error'), Either.Right(5))).toEqual(Either.Left('Error'))
+        expect(Either.ap(Either.Left('Error'), Either.Left('Error!'))).toEqual(Either.Left('Error'))
     })
 
     it('chain', () => {
