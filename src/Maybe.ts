@@ -140,7 +140,7 @@ export default class Maybe<T> implements Show, Setoid<T>, Ord<T>, Semigroup<T>, 
         return this.isNothing() ? patterns.Nothing() : patterns.Just(this.value)
     }
 
-    or(defaultValue: T): T {
+    orDefault(defaultValue: T): T {
         return this.isNothing() ? defaultValue : this.value
     }
 
@@ -149,7 +149,7 @@ export default class Maybe<T> implements Show, Setoid<T>, Ord<T>, Semigroup<T>, 
     }
 
     mapOrDefault<U>(f: (value: T) => U, defaultValue: U): U {
-        return this.map(f).or(defaultValue)
+        return this.map(f).orDefault(defaultValue)
     }
 
     extract(): T | null {
