@@ -10,14 +10,13 @@
   "sideEffects": false,
   "scripts": {
     "docs": "typedoc --out documentation/ src/ --theme minimal",
-    "pretest": "node ./node_modules/tsst-tycho/dist/build.js -b \"**/*.test.ts\" -d ../ADT.ts",
     "test": "jest"
   },
   "jest": {
     "transform": {
       ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
     },
-    "testRegex": "__test__/.+\\.test\\.js$",
+    "testRegex": "__test__/.+\\.test\\.ts$",
     "moduleFileExtensions": [
       "ts",
       "tsx",
@@ -27,13 +26,9 @@
   },
   "devDependencies": {
     "@types/jest": "^22.1.1",
-    "@types/ramda": "^0.25.17",
     "jest": "^22.2.1",
-    "ramda": "^0.25.0",
     "ts-jest": "^22.0.3",
     "ts-node": "^4.1.0",
-    "tsst-tycho": "^0.4.0",
-    "typedoc": "^0.10.0",
     "typescript": "^2.7.1"
   },
   "dependencies": {}
