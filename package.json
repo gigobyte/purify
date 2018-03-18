@@ -29,7 +29,7 @@
     "jest": "^22.2.1",
     "ts-jest": "^22.0.3",
     "ts-node": "^4.1.0",
-    "typescript": "^2.7.1"
+    "typescript": "2.8.0-rc"
   },
   "dependencies": {}
 }
