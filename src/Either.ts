@@ -13,15 +13,19 @@ import Chain from 'typeclasses/Chain'
 import Monad from 'typeclasses/Monad'
 import Foldable from 'typeclasses/Foldable'
 import Extend from 'typeclasses/Extend'
+import Bifunctor from 'typeclasses/Bifunctor'
 import Unsafe from 'typeclasses/Unsafe'
+
+import { Maybe, Just, Nothing } from './Maybe'
 
 const _left: unique symbol = Symbol('Left')
 const _right: unique symbol = Symbol('Right')
 
 export type Left<L> = Either<L, never>
 export type Right<R> = Either<never, R>
+export type EitherPatterns<L, R, T> = { Left: (l: L) => T, Right: (r: R) => T }
 
-export class Either<L, R> implements Show, Setoid<L | R>, Ord<L | R>, Semigroup<L | R>, Functor<R>, Apply<R>, Applicative<R>, Alt<L | R>, Chain<R>, Monad<R>, Foldable<L | R>, Extend<L | R>, Unsafe {
+export class Either<L, R> implements Show, Setoid<L | R>, Ord<L | R>, Semigroup<L | R>, Functor<R>, Apply<R>, Applicative<R>, Alt<L | R>, Chain<R>, Monad<R>, Foldable<L | R>, Extend<L | R>, Bifunctor<L, R>, Unsafe {
     constructor(private value: L | R, private tag: symbol) {}
 
     of = Either.of
@@ -35,6 +39,7 @@ export class Either<L, R> implements Show, Setoid<L | R>, Ord<L | R>, Semigroup<
     'fantasy-land/extend' = this.extend
     'fantasy-land/concat' = this.concat
     'fantasy-land/equals' = this.equals
+    'fantasy-land/bimap' = this.bimap
 
     private asLeft(): Left<L> {
         return this as any as Left<L>
@@ -46,6 +51,22 @@ export class Either<L, R> implements Show, Setoid<L | R>, Ord<L | R>, Semigroup<
 
     static of<R>(value: R ): Either<never, R> {
         return Right(value)
+    }
+
+    static lefts<L, R>(list: Either<L,R>[]): L[] {
+        return list.filter(x => x.isLeft()).map(x => x.asLeft().value)
+    }
+
+    static rights<L, R>(list: Either<L, R>[]): R[] {
+        return list.filter(x => x.isRight()).map(x => x.asRight().value)
+    }
+
+    static encase<L extends Error, R>(throwsF: () => R): Either<L, R> {
+        try {
+            return Right(throwsF())
+        } catch(e) {
+            return Left(e)
+        }
     }
 
     isLeft(): boolean {
@@ -74,6 +95,10 @@ export class Either<L, R> implements Show, Setoid<L | R>, Ord<L | R>, Semigroup<
 
     map<T>(f: (value: R) => T): Either<L, T> {
         return this.bimap(x => x, f)
+    }
+
+    mapLeft<T>(f: (value: L) => T): Either<T, R> {
+        return this.bimap(f, x => x)
     }
 
     ap<T>(other: Either<L, (value: R) => T>): Either<L, T> {
@@ -142,6 +167,42 @@ export class Either<L, R> implements Show, Setoid<L | R>, Ord<L | R>, Semigroup<
 
     unsafeCoerce(): R {
         return this.isLeft() ? (() => { throw new Error('Either got coerced to a Left') })() : this.asRight().value;
+    }
+
+    caseOf<T>(patterns: EitherPatterns<L, R, T>): T {
+        return this.isLeft() ? patterns.Left(this.asLeft().value) : patterns.Right(this.asRight().value)
+    }
+
+    leftOrDefault(defaultValue: L): L {
+        return this.isLeft() ? this.asLeft().value : defaultValue
+    }
+
+    rightOrDefault(defaultValue: R): R {
+        return this.isRight() ? this.asRight().value : defaultValue
+    }
+    
+    whenLeft(effect: (value: L) => any): this {
+        return this.isLeft() ? (effect(this.asLeft().value), this) : this
+    }
+
+    whenRight(effect: (value: R) => any): this {
+        return this.isLeft() ? this : (effect(this.asRight().value), this)
+    }
+
+    toMaybe(): Maybe<R> {
+        return this.isLeft() ? Nothing : Just(this.asRight().value)
+    }
+
+    leftToMaybe(): Maybe<L> {
+        return this.isLeft() ? Just(this.asLeft().value) : Nothing
+    }
+
+    either<T>(ifLeft: (value: L) => T, ifRight: (value: R) => T): T {
+        return this.isLeft() ? ifLeft(this.asLeft().value) : ifRight(this.asRight().value)
+    }
+
+    extract(): L | R {
+        return this.value
     }
 }
 
