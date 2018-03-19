@@ -48,11 +48,11 @@ export default class Maybe<T> implements Show, Setoid<T>, Ord<T>, Semigroup<T>, 
         return value ? Just(value) : Nothing
     }
 
-    static empty(): Maybe<never> {
+    static empty(): typeof Nothing {
         return Nothing
     }
 
-    static zero(): Maybe<never>  {
+    static zero(): typeof Nothing  {
         return Nothing
     }
 
