@@ -1,5 +1,6 @@
 export default interface Semigroup<T> {
     concat(other: Semigroup<T>): Semigroup<T>
+    'fantasy-land/concat': Semigroup<T>['concat']
 }
 
 function concat<T>(a: T, b: T): T

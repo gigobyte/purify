@@ -20,6 +20,22 @@ export type MaybePatterns<T, U> = {Just: (value: T) => U, Nothing: () => U}
 export default class Maybe<T> implements Show, Setoid<T>, Ord<T>, Semigroup<T>, Monoid<T>, Functor<T>, Apply<T>, Applicative<T>, Alt<T>, Plus<T>, Alternative<T>, Chain<T>, Monad<T>, Foldable<T>, Extend<T>, Unsafe {
     constructor(public value: T) {}
 
+    of = Maybe.of
+    zero = Maybe.zero
+    empty = Maybe.empty
+    'fantasy-land/alt' = this.alt
+    'fantasy-land/of' = this.of
+    'fantasy-land/ap' = this.ap
+    'fantasy-land/chain' = this.chain
+    'fantasy-land/reduce' = this.reduce
+    'fantasy-land/map' = this.map
+    'fantasy-land/lte' = this.lte
+    'fantasy-land/zero' = this.zero
+    'fantasy-land/extend' = this.extend
+    'fantasy-land/concat' = this.concat
+    'fantasy-land/empty' = this.empty
+    'fantasy-land/equals' = this.equals
+
     static of<T>(value: T): Maybe<T> {
         return Just(value)
     }
@@ -54,18 +70,6 @@ export default class Maybe<T> implements Show, Setoid<T>, Ord<T>, Semigroup<T>, 
         } catch {
             return Nothing
         }
-    }
-
-    of<T>(value: T): Maybe<T> {
-        return Maybe.of(value)
-    }
-
-    empty(): Maybe<never> {
-        return Maybe.empty()
-    }
-
-    zero(): Maybe<never> {
-        return Maybe.zero()
     }
 
     isJust(): this is T {
