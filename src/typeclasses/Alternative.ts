@@ -1,4 +1,4 @@
-import Plus from 'typeclasses/Plus'
-import Applicative from 'typeclasses/Applicative'
+import Plus from './Plus'
+import Applicative from './Applicative'
 
 export default interface Alternative<T> extends Applicative<T>, Plus<T> {}

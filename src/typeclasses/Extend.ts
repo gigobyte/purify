@@ -1,4 +1,4 @@
-import Functor from 'typeclasses/Functor'
+import Functor from './Functor'
 
 export default interface Extend<T> extends Functor<T> {
     extend<U>(f: (value: Extend<T>) => U): Extend<U>

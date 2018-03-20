@@ -1,4 +1,4 @@
-import Apply from 'typeclasses/Apply'
+import Apply from './Apply'
 
 export default interface Chain<T> extends Apply<T> {
     chain<U>(f: (value: T) => Chain<U>): Chain<U>

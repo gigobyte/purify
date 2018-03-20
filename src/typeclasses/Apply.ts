@@ -1,4 +1,4 @@
-import Functor from 'typeclasses/Functor'
+import Functor from './Functor'
 
 export default interface Apply<T> extends Functor<T> {
     ap<U>(other: Apply<(value: T) => U>): Apply<U>
