@@ -14,3 +14,9 @@ export type Multiply<X extends number, Y extends number, TAcc extends number = 0
 
 export type Range<TStart extends number, TEnd extends number> =
     { true: TStart, false: TStart | Range<Inc<TStart>, TEnd> }[BoolToString<Extends<TStart, TEnd>>]
+
+export type Gte<X extends number, Y extends number> =
+    { true: true, false: X extends 0 ? false : Gte<Dec<X>, Dec<Y>> }[BoolToString<Extends<Y, 0>>]
+
+export type Lte<X extends number, Y extends number> =
+    { true: true, false: Y extends 0 ? false : Lte<Dec<X>, Dec<Y>> }[BoolToString<Extends<X, 0>>]
