@@ -26,20 +26,20 @@ export type Right<R> = Either<never, R>
 export type EitherPatterns<L, R, T> = { Left: (l: L) => T, Right: (r: R) => T }
 
 export class Either<L, R> implements Show, Setoid<L | R>, Ord<L | R>, Semigroup<L | R>, Functor<R>, Apply<R>, Applicative<R>, Alt<L | R>, Chain<R>, Monad<R>, Foldable<L | R>, Extend<L | R>, Bifunctor<L, R>, Unsafe {
-    constructor(private value: L | R, private tag: symbol) {}
+    constructor(private readonly value: L | R, private readonly tag: symbol) {}
 
-    of = Either.of
-    'fantasy-land/alt' = this.alt
-    'fantasy-land/of' = this.of
-    'fantasy-land/ap' = this.ap
-    'fantasy-land/chain' = this.chain
-    'fantasy-land/reduce' = this.reduce
-    'fantasy-land/map' = this.map
-    'fantasy-land/lte' = this.lte
-    'fantasy-land/extend' = this.extend
-    'fantasy-land/concat' = this.concat
-    'fantasy-land/equals' = this.equals
-    'fantasy-land/bimap' = this.bimap
+    readonly of = Either.of
+    readonly 'fantasy-land/alt' = this.alt
+    readonly 'fantasy-land/of' = this.of
+    readonly 'fantasy-land/ap' = this.ap
+    readonly 'fantasy-land/chain' = this.chain
+    readonly 'fantasy-land/reduce' = this.reduce
+    readonly 'fantasy-land/map' = this.map
+    readonly 'fantasy-land/lte' = this.lte
+    readonly 'fantasy-land/extend' = this.extend
+    readonly 'fantasy-land/concat' = this.concat
+    readonly 'fantasy-land/equals' = this.equals
+    readonly 'fantasy-land/bimap' = this.bimap
 
     private asLeft(): Left<L> {
         return this as any as Left<L>

@@ -18,23 +18,23 @@ import Unsafe from 'typeclasses/Unsafe'
 export type MaybePatterns<T, U> = {Just: (value: T) => U, Nothing: () => U}
 
 export class Maybe<T> implements Show, Setoid<T>, Ord<T>, Semigroup<T>, Monoid<T>, Functor<T>, Apply<T>, Applicative<T>, Alt<T>, Plus<T>, Alternative<T>, Chain<T>, Monad<T>, Foldable<T>, Extend<T>, Unsafe {
-    constructor(public value: T) {}
+    constructor(public readonly value: T) {}
 
-    of = Maybe.of
-    zero = Maybe.zero
-    empty = Maybe.empty
-    'fantasy-land/alt' = this.alt
-    'fantasy-land/of' = this.of
-    'fantasy-land/ap' = this.ap
-    'fantasy-land/chain' = this.chain
-    'fantasy-land/reduce' = this.reduce
-    'fantasy-land/map' = this.map
-    'fantasy-land/lte' = this.lte
-    'fantasy-land/zero' = this.zero
-    'fantasy-land/extend' = this.extend
-    'fantasy-land/concat' = this.concat
-    'fantasy-land/empty' = this.empty
-    'fantasy-land/equals' = this.equals
+    readonly of = Maybe.of
+    readonly zero = Maybe.zero
+    readonly empty = Maybe.empty
+    readonly 'fantasy-land/alt' = this.alt
+    readonly 'fantasy-land/of' = this.of
+    readonly 'fantasy-land/ap' = this.ap
+    readonly 'fantasy-land/chain' = this.chain
+    readonly 'fantasy-land/reduce' = this.reduce
+    readonly 'fantasy-land/map' = this.map
+    readonly 'fantasy-land/lte' = this.lte
+    readonly 'fantasy-land/zero' = this.zero
+    readonly 'fantasy-land/extend' = this.extend
+    readonly 'fantasy-land/concat' = this.concat
+    readonly 'fantasy-land/empty' = this.empty
+    readonly 'fantasy-land/equals' = this.equals
 
     static of<T>(value: T): Maybe<T> {
         return Just(value)
@@ -92,7 +92,7 @@ export class Maybe<T> implements Show, Setoid<T>, Ord<T>, Semigroup<T>, Monoid<T
         return this.value
     }
 
-    equals(other: Maybe<T>): boolean {
+    equals(other: Maybe<T>): other is this {
         return this.value === other.value
     }
 
