@@ -17,7 +17,7 @@ import Unsafe from 'typeclasses/Unsafe'
 
 export type MaybePatterns<T, U> = {Just: (value: T) => U, Nothing: () => U}
 
-export class Maybe<T> implements Show, Setoid<T>, Ord<T>, Semigroup<T>, Monoid<T>, Functor<T>, Apply<T>, Applicative<T>, Alt<T>, Plus<T>, Alternative<T>, Chain<T>, Monad<T>, Foldable<T>, Extend<T>, Unsafe {
+export class Maybe<T> implements Show, Setoid<Maybe<T>>, Ord<Maybe<T>>, Semigroup<Maybe<T>>, Monoid<Maybe<T>>, Functor<T>, Apply<T>, Applicative<T>, Alt<T>, Plus<T>, Alternative<T>, Chain<T>, Monad<T>, Foldable<T>, Extend<T>, Unsafe {
     constructor(public readonly value: T) {}
 
     readonly of = Maybe.of
@@ -92,7 +92,7 @@ export class Maybe<T> implements Show, Setoid<T>, Ord<T>, Semigroup<T>, Monoid<T
         return this.value
     }
 
-    equals(other: Maybe<T>): other is this {
+    equals(other: Maybe<T>): boolean {
         return this.value === other.value
     }
 

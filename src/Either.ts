@@ -25,7 +25,7 @@ export type Left<L> = Either<L, never>
 export type Right<R> = Either<never, R>
 export type EitherPatterns<L, R, T> = { Left: (l: L) => T, Right: (r: R) => T }
 
-export class Either<L, R> implements Show, Setoid<L | R>, Ord<L | R>, Semigroup<L | R>, Functor<R>, Apply<R>, Applicative<R>, Alt<L | R>, Chain<R>, Monad<R>, Foldable<L | R>, Extend<L | R>, Bifunctor<L, R>, Unsafe {
+export class Either<L, R> implements Show, Setoid<Either<L, R>>, Ord<Either<L, R>>, Semigroup<Either<L, R>>, Functor<R>, Apply<R>, Applicative<R>, Alt<L | R>, Chain<R>, Monad<R>, Foldable<L | R>, Extend<L | R>, Bifunctor<L, R>, Unsafe {
     constructor(private readonly value: L | R, private readonly tag: symbol) {}
 
     readonly of = Either.of
@@ -105,7 +105,7 @@ export class Either<L, R> implements Show, Setoid<L | R>, Ord<L | R>, Semigroup<
         return other.isLeft() ? other.asLeft() : this.map(other.asRight().value)
     }
 
-    equals(other: Either<L, R>): other is this {
+    equals(other: Either<L, R>): boolean {
         if (this.isLeft() && other.isLeft()) {
             return this.value === other.value
         }
