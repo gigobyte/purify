@@ -6,9 +6,9 @@ import Semigroup, { concat } from 'typeclasses/Semigroup'
 import Bifunctor from 'typeclasses/Bifunctor'
 import Functor from 'typeclasses/Functor';
 
-interface Tuple<F, S> extends Tuple_<F, S> {}
+export interface Tuple<F, S> extends Tuple_<F, S> {}
 
-class Tuple_<F, S> implements Show, Setoid<Tuple<F, S>>, Ord<Tuple<F, S>>, Semigroup<Tuple<F, S>>, Bifunctor<F, S>, Functor<S> {
+export class Tuple_<F, S> implements Show, Setoid<Tuple<F, S>>, Ord<Tuple<F, S>>, Semigroup<Tuple<F, S>>, Bifunctor<F, S>, Functor<S> {
     constructor(private readonly first: F, private readonly second: S) {}
 
     map = this.mapSecond
@@ -79,5 +79,5 @@ class Tuple_<F, S> implements Show, Setoid<Tuple<F, S>>, Ord<Tuple<F, S>>, Semig
     }
 }
 
-const Tuple = <F, S>(fst: F, snd: S): Tuple<F, S> =>
+export const Tuple = <F, S>(fst: F, snd: S): Tuple<F, S> =>
     new Tuple_(fst, snd)
