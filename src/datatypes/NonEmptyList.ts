@@ -1,9 +1,20 @@
+import { Maybe, Just, Nothing } from './Maybe'
+
 export interface NonEmptyList<T> extends NonEmptyList_<T> {}
+
 export type ArrayWithMultipleElements<T extends Array<any> & {0: T[number]}> = Array<any> & {0: T[number]}
 
 export class NonEmptyList_<T> extends Array<T> {
     constructor(xs: T) {
         super(xs)
+    }
+
+    static fromArray<T>(xs: T[]): Maybe<NonEmptyList<T>> {
+        return NonEmptyList_.isNonEmpty(xs) ? Just(xs) : Nothing
+    }
+
+    static isNonEmpty<T>(xs: T[]): xs is NonEmptyList<T> {
+        return xs.length > 0
     }
 
     concat(...items: ConcatArray<T>[]): NonEmptyList<T>
