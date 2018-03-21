@@ -18,10 +18,6 @@ export class Tuple_<F, S> implements Show, Setoid<Tuple<F, S>>, Ord<Tuple<F, S>>
     readonly 'fantasy-land/bimap' = this.bimap
     readonly 'fantasy-land/map' = this.map
 
-    static fanout<F, S, T>(f: (value: T) => F, g: (value: T) => S) {
-        return (value: T): Tuple<F, S> => Tuple(f(value), g(value))
-    }
-
     toJSON(): [F, S] {
         return this.toArray()
     }
