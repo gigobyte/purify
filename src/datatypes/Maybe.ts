@@ -81,7 +81,7 @@ export class Maybe<T> implements Show, Setoid<Maybe<T>>, Ord<Maybe<T>>, Semigrou
     }
 
     inspect(): string {
-        return this.value ? this.value.toString() : JSON.stringify(this.value)
+        return this.value != null ? this.value.toString() : JSON.stringify(this.value)
     }
 
     toString(): string {
