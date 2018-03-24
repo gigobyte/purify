@@ -18,6 +18,16 @@ export class Tuple_<F, S> implements Show, Setoid<Tuple<F, S>>, Ord<Tuple<F, S>>
     readonly 'fantasy-land/bimap' = this.bimap
     readonly 'fantasy-land/map' = this.map
 
+    static fanout<F, S, T>(f: (value: T) => F, g: (value: T) => S): (value: T) => Tuple<F, S>
+    static fanout<F, S, T>(f: (value: T) => F, g: (value: T) => S, value: T): Tuple<F, S>
+    static fanout<F, S, T>(f: (value: T) => F, g: (value: T) => S, value?: T) : any {
+        if (value) {
+            return Tuple(f(value), g(value))
+        }
+
+        return (value: T): Tuple<F, S> => Tuple(f(value), g(value))
+    }
+
     toJSON(): [F, S] {
         return this.toArray()
     }
@@ -75,5 +85,12 @@ export class Tuple_<F, S> implements Show, Setoid<Tuple<F, S>>, Ord<Tuple<F, S>>
     }
 }
 
-export const Tuple = <F, S>(fst: F, snd: S): Tuple<F, S> =>
+export interface ITuple {
+    <F, S>(fst: F, snd: S): Tuple<F, S>
+    fanout: typeof Tuple_.fanout
+}
+
+const TupleConstructor = <F, S>(fst: F, snd: S): Tuple<F, S> =>
     new Tuple_(fst, snd)
+
+export const Tuple: ITuple = Object.assign(TupleConstructor, {fanout: Tuple_.fanout})
