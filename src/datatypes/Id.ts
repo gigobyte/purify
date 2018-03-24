@@ -2,15 +2,23 @@ import Show from '../typeclasses/Show'
 import Functor from '../typeclasses/Functor'
 import Chain from '../typeclasses/Chain'
 import Apply from '../typeclasses/Apply'
+import Monad from '../typeclasses/Monad';
+import Applicative from '../typeclasses/Applicative';
 
 export interface Id<T> extends Id_<T> { }
 
-export class Id_<T> implements Show, Functor<T>, Chain<T>, Apply<T> {
+export class Id_<T> implements Show, Functor<T>, Chain<T>, Apply<T>, Applicative<T>, Monad<T> {
     constructor(private readonly value: T) {}
 
+    of = Id_.of
     readonly 'fantasy-land/map' = this.map
     readonly 'fantasy-land/chain' = this.chain
     readonly 'fantasy-land/ap' = this.ap
+    readonly 'fantasy-land/of' = this.of
+
+    static of<T>(value: T): Id<T> {
+        return Id(value)
+    }
 
     unwrap(): T {
         return this.value
