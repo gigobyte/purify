@@ -49,5 +49,12 @@ export class Id_<T> implements Show, Functor<T>, Chain<T>, Apply<T>, Applicative
     }
 }
 
-export const Id = <T>(value: T): Id<T> =>
+export interface IId {
+    <T>(value: T): Id<T>
+    of: typeof Id_.of
+}
+
+const IdConstructor = <T>(value: T): Id<T> =>
     new Id_(value)
+
+export const Id: IId = Object.assign(IdConstructor, {of: Id_.of})
