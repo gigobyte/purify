@@ -5,10 +5,11 @@ import Ord from '../typeclasses/Ord'
 import Semigroup, { concat } from '../typeclasses/Semigroup'
 import Bifunctor from '../typeclasses/Bifunctor'
 import Functor from '../typeclasses/Functor'
+import Apply from '../typeclasses/Apply'
 
 export interface Tuple<F, S> extends Tuple_<F, S> {}
 
-export class Tuple_<F, S> implements Show, Setoid<Tuple<F, S>>, Ord<Tuple<F, S>>, Semigroup<Tuple<F, S>>, Bifunctor<F, S>, Functor<S> {
+export class Tuple_<F, S> implements Show, Setoid<Tuple<F, S>>, Ord<Tuple<F, S>>, Semigroup<Tuple<F, S>>, Bifunctor<F, S>, Functor<S>, Apply<S> {
     constructor(private readonly first: F, private readonly second: S) {}
 
     map = this.mapSecond
@@ -17,6 +18,7 @@ export class Tuple_<F, S> implements Show, Setoid<Tuple<F, S>>, Ord<Tuple<F, S>>
     readonly 'fantasy-land/concat' = this.concat
     readonly 'fantasy-land/bimap' = this.bimap
     readonly 'fantasy-land/map' = this.map
+    readonly 'fantasy-land/ap' = this.ap
 
     static fanout<F, S, T>(f: (value: T) => F, g: (value: T) => S): (value: T) => Tuple<F, S>
     static fanout<F, S, T>(f: (value: T) => F, g: (value: T) => S, value: T): Tuple<F, S>
@@ -82,6 +84,10 @@ export class Tuple_<F, S> implements Show, Setoid<Tuple<F, S>>, Ord<Tuple<F, S>>
 
     concat(other: Tuple<F, S>): Tuple<F, S> {
         return Tuple(concat(this.first, other.first), concat(this.second, other.second))
+    }
+
+    ap<T>(f: Tuple<F, (value: S) => T>): Tuple<F, T> {
+        return Tuple(this.first, f.second(this.second))
     }
 }
 

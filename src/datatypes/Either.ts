@@ -49,7 +49,7 @@ export class Either<L, R> implements Show, Setoid<Either<L, R>>, Ord<Either<L, R
         return this as any as Right<R>
     }
 
-    static of<R>(value: R ): Either<never, R> {
+    static of<R>(value: R): Either<never, R> {
         return Right(value)
     }
 
