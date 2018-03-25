@@ -72,11 +72,11 @@ export class Maybe<T> implements Show, Setoid<Maybe<T>>, Ord<Maybe<T>>, Semigrou
         }
     }
 
-    isJust(): this is T {
+    isJust(): this is Maybe<T> {
         return this.value !== null
     }
 
-    isNothing(): this is null {
+    isNothing(): this is Maybe<never> {
         return this.value == null
     }
 
