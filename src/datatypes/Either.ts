@@ -118,10 +118,6 @@ export class Either<L, R> implements Show, Setoid<Either<L, R>>, Ord<Either<L, R
     }
 
     lte(other: Either<L, R>): boolean {
-        if (this.isLeft() && other.isRight()) {
-            return true
-        }
-
         if (this.isLeft() && other.isLeft()) {
             return this.value <= other.value
         }
@@ -177,15 +173,15 @@ export class Either<L, R> implements Show, Setoid<Either<L, R>>, Ord<Either<L, R
         return this.isLeft() ? this.asLeft().value : defaultValue
     }
 
-    rightOrDefault(defaultValue: R): R {
+    orDefault(defaultValue: R): R {
         return this.isRight() ? this.asRight().value : defaultValue
     }
     
-    whenLeft(effect: (value: L) => any): this {
+    ifLeft(effect: (value: L) => any): this {
         return this.isLeft() ? (effect(this.asLeft().value), this) : this
     }
 
-    whenRight(effect: (value: R) => any): this {
+    ifRight(effect: (value: R) => any): this {
         return this.isLeft() ? this : (effect(this.asRight().value), this)
     }
 

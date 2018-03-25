@@ -11,6 +11,10 @@ function concat(a: boolean, b: boolean): boolean
 function concat<T extends Semigroup<any>>(a: T, b: T): T
 function concat<T extends object, U extends object>(a: T, b: U): T & U
 function concat(a: any, b: any): any {
+    if ('concat' in a && 'concat' in b) {
+        return a.concat(b)
+    }
+
     if (typeof a === 'number' && typeof b === 'number') {
         return a + b
     }
@@ -25,10 +29,6 @@ function concat(a: any, b: any): any {
 
     if (typeof a === 'boolean' && typeof b === 'boolean') {
         return a || b
-    }
-
-    if ('concat' in a && 'concat' in b) {
-        return a.concat(b)
     }
 }
 
