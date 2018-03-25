@@ -12,7 +12,6 @@ export interface Tuple<F, S> extends Tuple_<F, S> {}
 export class Tuple_<F, S> implements Show, Setoid<Tuple<F, S>>, Ord<Tuple<F, S>>, Semigroup<Tuple<F, S>>, Bifunctor<F, S>, Functor<S>, Apply<S> {
     constructor(private readonly first: F, private readonly second: S) {}
 
-    map = this.mapSecond
     readonly 'fantasy-land/equals' = this.equals
     readonly 'fantasy-land/lte' = this.lte
     readonly 'fantasy-land/concat' = this.concat
@@ -66,7 +65,7 @@ export class Tuple_<F, S> implements Show, Setoid<Tuple<F, S>>, Ord<Tuple<F, S>>
         return Tuple(f(this.first), this.second)
     }
 
-    mapSecond<S2>(f: (snd: S) => S2): Tuple<F, S2> {
+    map<S2>(f: (snd: S) => S2): Tuple<F, S2> {
         return Tuple(this.first, f(this.second))
     }
 
