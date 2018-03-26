@@ -23,10 +23,6 @@ function concat(a: any, b: any): any {
         return a + b
     }
 
-    if (typeof a === 'object' && typeof b === 'object') {
-        return {...a, ...b}
-    }
-
     if (typeof a === 'boolean' && typeof b === 'boolean') {
         return a || b
     }

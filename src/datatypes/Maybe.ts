@@ -44,7 +44,7 @@ export class Maybe<T> implements Show, Setoid<Maybe<T>>, Ord<Maybe<T>>, Semigrou
         return value == null ? Nothing : Just(value)
     }
 
-    static falsyToMaybe<T>(value: T): Maybe<T> {
+    static toMaybeWeak<T>(value: T): Maybe<T> {
         return value ? Just(value) : Nothing
     }
 
@@ -97,7 +97,7 @@ export class Maybe<T> implements Show, Setoid<Maybe<T>>, Ord<Maybe<T>>, Semigrou
     }
 
     lte(other: Maybe<T>): boolean {
-        return this.isNothing() || this.value > other.value
+        return this.isNothing() || this.value <= other.value
     }
 
     concat(other: Maybe<T>): Maybe<T> {
