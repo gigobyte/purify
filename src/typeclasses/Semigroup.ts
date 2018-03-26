@@ -11,7 +11,7 @@ function concat(a: boolean, b: boolean): boolean
 function concat<T extends Semigroup<any>>(a: T, b: T): T
 function concat<T extends object, U extends object>(a: T, b: U): T & U
 function concat(a: any, b: any): any {
-    if ('concat' in a && 'concat' in b) {
+    if (typeof a.concat === 'function' && typeof b.concat === 'function') {
         return a.concat(b)
     }
 

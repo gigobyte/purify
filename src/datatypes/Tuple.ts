@@ -29,6 +29,10 @@ export class Tuple_<F, S> implements Show, Setoid<Tuple<F, S>>, Ord<Tuple<F, S>>
         return (value: T): Tuple<F, S> => Tuple(f(value), g(value))
     }
 
+    static fromArray<F, S>([fst, snd]: [F, S]): Tuple<F, S> {
+        return Tuple(fst, snd)
+    }
+
     toJSON(): [F, S] {
         return this.toArray()
     }
@@ -54,7 +58,7 @@ export class Tuple_<F, S> implements Show, Setoid<Tuple<F, S>>, Ord<Tuple<F, S>>
     }
 
     lte(other: Tuple<F, S>): boolean {
-        return this.first > other.first && this.second > other.second
+        return this.first <= other.first && this.second <= other.second
     }
 
     bimap<F2, S2>(f: (fst: F) => F2, g: (snd: S) => S2): Tuple<F2, S2> {
@@ -73,10 +77,6 @@ export class Tuple_<F, S> implements Show, Setoid<Tuple<F, S>>, Ord<Tuple<F, S>>
         return [this.first, this.second]
     }
 
-    fromArray<F, S>([fst, snd]: [F, S]): Tuple<F, S> {
-        return Tuple(fst, snd)
-    }
-
     swap(): Tuple<S, F> {
         return Tuple(this.second, this.first)
     }
@@ -92,10 +92,11 @@ export class Tuple_<F, S> implements Show, Setoid<Tuple<F, S>>, Ord<Tuple<F, S>>
 
 export interface ITuple {
     <F, S>(fst: F, snd: S): Tuple<F, S>
-    fanout: typeof Tuple_.fanout
+    fanout: typeof Tuple_.fanout,
+    fromArray: typeof Tuple_.fromArray
 }
 
 const TupleConstructor = <F, S>(fst: F, snd: S): Tuple<F, S> =>
     new Tuple_(fst, snd)
 
-export const Tuple: ITuple = Object.assign(TupleConstructor, {fanout: Tuple_.fanout})
+export const Tuple: ITuple = Object.assign(TupleConstructor, {fanout: Tuple_.fanout, fromArray: Tuple_.fromArray})
