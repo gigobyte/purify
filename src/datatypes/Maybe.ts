@@ -1,3 +1,4 @@
+import { Either, Left, Right } from './Either'
 import Show from '../typeclasses/Show'
 import Setoid from '../typeclasses/Setoid'
 import Ord from '../typeclasses/Ord'
@@ -158,6 +159,10 @@ export class Maybe<T> implements Show, Setoid<Maybe<T>>, Ord<Maybe<T>>, Semigrou
 
     extract(): T | null {
         return this.value
+    }
+
+    toEither<L>(left: L): Either<L, T> {
+        return this.isNothing() ? Left(left) : Right(this.value)
     }
 }
 

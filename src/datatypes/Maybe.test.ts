@@ -1,4 +1,5 @@
 import { Maybe, Just, Nothing } from './Maybe'
+import { Left, Right } from './Either'
 
 describe('Maybe', () => {
     test('of', () => {
@@ -134,5 +135,10 @@ describe('Maybe', () => {
     test('extract', () => {
         expect(Just(5).extract()).toEqual(5)
         expect(Nothing.extract()).toEqual(null)
+    })
+
+    test('toEither', () => {
+        expect(Just(5).toEither('Error')).toEqual(Right(5))
+        expect(Nothing.toEither('Error')).toEqual(Left('Error'))
     })
 })
