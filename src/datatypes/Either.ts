@@ -1,7 +1,7 @@
 import Show from '../typeclasses/Show'
 import Setoid from '../typeclasses/Setoid'
 import Ord from '../typeclasses/Ord'
-import Semigroup, { concat } from '../typeclasses/Semigroup'
+import Semigroup from '../typeclasses/Semigroup'
 import Monoid from '../typeclasses/Monoid'
 import Functor from '../typeclasses/Functor'
 import Apply from '../typeclasses/Apply'
@@ -15,6 +15,7 @@ import Foldable from '../typeclasses/Foldable'
 import Extend from '../typeclasses/Extend'
 import Bifunctor from '../typeclasses/Bifunctor'
 import Unsafe from '../typeclasses/Unsafe'
+import concat from '../utils/concat'
 
 import { Maybe, Just, Nothing } from './Maybe'
 
