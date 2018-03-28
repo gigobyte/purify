@@ -164,6 +164,14 @@ export class Maybe<T> implements Show, Setoid<Maybe<T>>, Ord<Maybe<T>>, Semigrou
     toEither<L>(left: L): Either<L, T> {
         return this.isNothing() ? Left(left) : Right(this.value)
     }
+
+    ifJust(effect: (value: T) => any): this {
+        return this.isJust() ? (effect(this.value), this) : this
+    }
+
+    ifNothing(effect: () => any): this {
+        return this.isNothing() ? (effect(), this) : this
+    }
 }
 
 export const Just = <T>(value: T): Maybe<T> =>

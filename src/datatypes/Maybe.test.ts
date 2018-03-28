@@ -141,4 +141,24 @@ describe('Maybe', () => {
         expect(Just(5).toEither('Error')).toEqual(Right(5))
         expect(Nothing.toEither('Error')).toEqual(Left('Error'))
     })
+
+    test('ifJust', () => {
+        let a = 0
+        Just(5).ifJust(() => { a = 5 })
+        expect(a).toEqual(5)
+
+        let b = 0
+        Nothing.ifJust(() => { b = 5 })
+        expect(b).toEqual(0)
+    })
+
+    test('ifNothing', () => {
+        let a = 0
+        Just(5).ifNothing(() => { a = 5 })
+        expect(a).toEqual(0)
+
+        let b = 0
+        Nothing.ifNothing(() => { b = 5 })
+        expect(b).toEqual(5)
+    })
 })
