@@ -5,3 +5,4 @@ documentation
 coverage
 **/*.js
 **/*.d.ts
+.cache
