@@ -6,3 +6,4 @@ coverage
 **/*.js
 **/*.d.ts
 .cache
+dist
