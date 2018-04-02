@@ -50,18 +50,22 @@ export class Either<L, R> implements Show, Setoid<Either<L, R>>, Ord<Either<L, R
         return this as any as Right<R>
     }
 
-    static of<R>(value: R): Either<never, R> {
+    /** Takes a value and wraps it in a `Right` */
+    static of<R>(value: R): Right<R> {
         return Right(value)
     }
 
+    /** Takes a list of eithers and returns a list of all `Left` values */
     static lefts<L, R>(list: Either<L,R>[]): L[] {
         return list.filter(x => x.isLeft()).map(x => x.asLeft().value)
     }
 
+    /** Takes a list of eithers and returns a list of all `Right` values */
     static rights<L, R>(list: Either<L, R>[]): R[] {
         return list.filter(x => x.isRight()).map(x => x.asRight().value)
     }
 
+    /** Calls a function and returns a `Right` with the return value or an exception wrapped in a `Left` in case of failure*/
     static encase<L extends Error, R>(throwsF: () => R): Either<L, R> {
         try {
             return Right(throwsF())
@@ -70,10 +74,12 @@ export class Either<L, R> implements Show, Setoid<Either<L, R>>, Ord<Either<L, R
         }
     }
 
+    /** Returns true if `this` is `Left`, otherwise it returns false */
     isLeft(): boolean {
         return this.tag === _left
     }
 
+    /** Returns true if `this` is `Right`, otherwise it returns false */
     isRight(): boolean {
         return this.tag === _right
     }
@@ -90,22 +96,29 @@ export class Either<L, R> implements Show, Setoid<Either<L, R>>, Ord<Either<L, R
         return this.inspect()
     }
 
+    /** Given two functions, maps the value inside `this` using the first if `this` is `Left` or using the second one if `this` is `Right`.
+     * If both functions return the same type consider using `Either#either` instead
+     */
     bimap<L2, R2>(f: (value: L) => L2, g: (value: R) => R2): Either<L2, R2> {
         return this.isLeft() ? Left(f(this.asLeft().value)) : Right(g(this.asRight().value))
     }
 
+    /** Maps the `Right` value of `this`, acts like an identity if `this` is `Left` */
     map<T>(f: (value: R) => T): Either<L, T> {
         return this.bimap(x => x, f)
     }
 
+    /** Maps the `Left` value of `this`, acts like an identity if `this` is `Right` */
     mapLeft<T>(f: (value: L) => T): Either<T, R> {
         return this.bimap(f, x => x)
     }
 
+    /** Applies a `Right` function over a `Right` value. Returns `Left` if either `this` or the function are `Left` */
     ap<T>(other: Either<L, (value: R) => T>): Either<L, T> {
         return other.isLeft() ? other.asLeft() : this.map(other.asRight().value)
     }
 
+    /** Compares `this` to another `Either`, returns false if the constructors or the values inside are different, e.g. `Right(5).equals(Left(5))` is false */
     equals(other: Either<L, R>): boolean {
         if (this.isLeft() && other.isLeft()) {
             return this.value === other.value
@@ -118,6 +131,7 @@ export class Either<L, R> implements Show, Setoid<Either<L, R>>, Ord<Either<L, R
         return false
     }
 
+    /** Compares `this` to another `Either`, returns false if the constructors are different or if the other `Either` is larger than `this` */
     lte(other: Either<L, R>): boolean {
         if (this.isLeft() && other.isLeft()) {
             return this.value <= other.value

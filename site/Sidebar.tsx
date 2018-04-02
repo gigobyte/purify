@@ -1,31 +1,43 @@
 import * as React from 'react'
+import styled from 'styled-components'
 import DataType from './DataType'
 import { data } from './data'
 
-const headerStyle =
-    { backgroundColor: '#007acc'
-    , color: 'white'
-    , display: 'flex' as 'flex'
-    , justifyContent: 'center' as 'center'
-    , height: 60
-    , flexDirection: 'column' as 'column'
-    , alignItems: 'center' as 'center'
-    , borderBottom: '1px solid #e0e0e0'
-    }
+const Container = styled.div`
+    height: 100%;
+`
+
+const Header = styled.div`
+    background-color: #007acc;
+    color: white;
+    display: flex;
+    justify-content: center;
+    height: 60px;
+    flex-direction: column;
+    align-items: center;
+    border-bottom: 1px solid #e0e0e0;
+`
+
+const HeaderTitle = styled.span`
+    font-size: 20px;
+`
+
+const Nav = styled.div`
+    border-right: 1px solid #e0e0e0;
+    height: 100%;
+`
 
 const Sidebar = () =>
-    <div>
-        <div style={headerStyle}>
-            <span style={{fontSize: 20}}>Pure</span>
+    <Container>
+        <Header>
+            <HeaderTitle>Pure</HeaderTitle>
             <span>v0.0.1</span>
-        </div>
-        <div style={{borderRight: '1px solid #e0e0e0'}}>
+        </Header>
+        <Nav>
             {data.datatypes.map(datatype => (
-                <div key={datatype.name}>
-                    <DataType datatype={datatype} />
-                </div>
+                <DataType key={datatype.name} datatype={datatype} />
             ))}
-        </div>
-    </div>
+        </Nav>
+    </Container>
 
 export default Sidebar
