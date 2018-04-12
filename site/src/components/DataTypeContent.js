@@ -24,7 +24,7 @@ const DataTypeContent = adt => () =>
     <Container>
         <Title>{adt.name}</Title>
         <Description>{adt.description}</Description>
-        <TopicHeader>Construction</TopicHeader>
+        <TopicHeader>Constructors</TopicHeader>
         {adt.constructors.map(DataTypeMethod)}
         <TopicHeader>Static methods</TopicHeader>
         {adt.staticMethods.map(DataTypeMethod)}
