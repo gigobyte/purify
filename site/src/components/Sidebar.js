@@ -5,6 +5,9 @@ import data from '../data'
 
 const Container = styled.div`
     min-height: 100%;
+    position: fixed;
+    min-width: 232px;
+    width: 232px;
 `
 
 const Header = styled.div`
