@@ -44,7 +44,7 @@ const DataTypeContent = adt => () =>
         <Title>{adt.name}</Title>
         <TypeclassBadges>
             {adt.implements.map(typeclass =>
-                <TypeclassBadge to={`/typeclasses/${typeclass.toLowerCase()}`}>{typeclass}</TypeclassBadge>
+                <TypeclassBadge to={`/typeclasses/${typeclass}`}>{typeclass}</TypeclassBadge>
             )}
         </TypeclassBadges>
         <Description>{adt.description}</Description>

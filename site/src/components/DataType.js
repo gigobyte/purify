@@ -32,7 +32,7 @@ const Tag = styled.div`
 `
 
 const DataType = ({ datatype }: DataTypeProps) =>
-    <Container to={`/adts/${datatype.slug}`}>
+    <Container to={`/adts/${datatype.name}`}>
         <span>{datatype.name}</span>
         <Tag>ADT</Tag>
     </Container>
