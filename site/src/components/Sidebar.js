@@ -1,13 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
 import DataType from './DataType'
+import Typeclass from './Typeclass'
 import data from '../data'
 
 const Container = styled.div`
     min-height: 100%;
-    position: fixed;
-    min-width: 232px;
-    width: 232px;
 `
 
 const Header = styled.div`
@@ -43,6 +41,9 @@ const Sidebar = () =>
         <Nav>
             {data.datatypes.map(datatype => (
                 <DataType key={datatype.name} datatype={datatype} />
+            ))}
+            {data.typeclasses.map(typeclass => (
+                <Typeclass key={typeclass.name} typeclass={typeclass} />
             ))}
         </Nav>
     </Container>

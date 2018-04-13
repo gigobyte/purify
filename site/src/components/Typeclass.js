@@ -20,9 +20,9 @@ const Container = styled(Link)`
 `
 
 const Tag = styled.div`
-    background-color: #d6eeff;
+    background-color: #af87e6;
     border-radius: 5px;
-    color: #2877ad;
+    color: white;
     height: 16px;
     line-height: 18px;
     margin-right: 20px;
@@ -31,10 +31,10 @@ const Tag = styled.div`
     align-self: center;
 `
 
-const DataType = ({ datatype }) =>
-    <Container to={`/adts/${datatype.name}`}>
-        <span>{datatype.name}</span>
-        <Tag>ADT</Tag>
+const Typeclass = ({ typeclass }) =>
+    <Container to={`/typeclasses/${typeclass.name}`}>
+        <span>{typeclass.name}</span>
+        <Tag>Typeclass</Tag>
     </Container>
 
-export default DataType
+export default Typeclass

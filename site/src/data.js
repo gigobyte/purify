@@ -308,7 +308,28 @@ const data = {
                 }
             ]
         },
-        {name: 'Either', methods: []}
+        {name: 'Either', methods: []},
+        {name: 'Tuple', methods: []},
+        {name: 'Id', methods: []},
+    ],
+    typeclasses: [
+        {name: 'Alt'},
+        {name: 'Alternative'},
+        {name: 'Applicative'},
+        {name: 'Apply'},
+        {name: 'Bifunctor'},
+        {name: 'Chain'},
+        {name: 'Extend'},
+        {name: 'Foldable'},
+        {name: 'Functor'},
+        {name: 'Monad'},
+        {name: 'Monoid'},
+        {name: 'Ord'},
+        {name: 'Plus'},
+        {name: 'Semigroup'},
+        {name: 'Setoid'},
+        {name: 'Traversable'},
+        {name: 'Unsafe'},
     ]
 }
 

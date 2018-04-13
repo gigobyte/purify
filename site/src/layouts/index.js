@@ -15,8 +15,6 @@ const SidebarContainer = styled.div`
     min-height: 100%;
     box-shadow: 0 3px 6px rgba(0,0,0,0.1);
     z-index: 1;
-    min-width: 232px;
-    width: 232px;
 `
 
 const ContentContainer = styled.div`
