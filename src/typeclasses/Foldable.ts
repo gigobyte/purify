@@ -1,4 +1,4 @@
 export default interface Foldable<T> {
-    reduce<U>(reducer: (value: T) => U, initialValue: T): U
+    reduce<U>(reducer: (accumulator: U, value: T) => U, initialValue: U): U
     'fantasy-land/reduce'?: Foldable<T>['reduce']
 }

@@ -130,8 +130,8 @@ export class Maybe<T> implements Show, Setoid<Maybe<T>>, Ord<Maybe<T>>, Semigrou
         return this.isNothing() ? Nothing : f(this.value)
     }
 
-    reduce<U>(reducer: (value: T) => U, initialValue: T): U {
-        return reducer(this.isNothing() ? initialValue : this.value)
+    reduce<U>(reducer: (accumulator: U, value: T) => U, initialValue: U): U {
+        return this.isNothing() ? initialValue : reducer(initialValue, this.value)
     }
 
     extend<U>(f: (value: Maybe<T>) => U): Maybe<U> {

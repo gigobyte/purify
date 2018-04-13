@@ -98,8 +98,8 @@ describe('Maybe', () => {
     })
 
     test('reduce', () => {
-        expect(Just(5).reduce(x => x + 1, 0)).toEqual(6)
-        expect(Nothing.reduce(x => x + 1, 0 as never)).toEqual(1)
+        expect(Just(5).reduce((acc, x) => x * acc, 2)).toEqual(10)
+        expect(Nothing.reduce((acc, x) => x * acc, 0)).toEqual(0)
     })
 
     test('extend', () => {

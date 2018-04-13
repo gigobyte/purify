@@ -168,8 +168,8 @@ export class Either<L, R> implements Show, Setoid<Either<L, R>>, Ord<Either<L, R
         return this.isRight() ? this : other
     }
 
-    reduce<T>(f: (value: R) => T, defaultValue: R): T {
-        return f(this.isRight() ? this.asRight().value : defaultValue)
+    reduce<T>(reducer: (accumulator: T, value: R) => T, initialValue: T): T {
+        return this.isLeft() ? initialValue : reducer(initialValue, this.asRight().value)
     }
 
     extend<T>(f: (value: Either<L, R>) => T): Either<L, T> {
