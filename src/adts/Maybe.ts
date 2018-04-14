@@ -82,12 +82,12 @@ export class Maybe<T> implements Show, Setoid<Maybe<T>>, Ord<Maybe<T>>, Semigrou
     }
 
     /** Returns true if `this` is `Just`, otherwise it returns false */
-    isJust(): this is Maybe<T> {
+    isJust(): boolean {
         return this.value !== null
     }
 
     /** Returns true if `this` is `Nothing`, otherwise it returns false */
-    isNothing(): this is Maybe<never> {
+    isNothing(): this is typeof Nothing {
         return this.value == null
     }
 
@@ -113,7 +113,7 @@ export class Maybe<T> implements Show, Setoid<Maybe<T>>, Ord<Maybe<T>>, Semigrou
         return this.isNothing() || this.value <= other.value
     }
 
-    /** Concatenates a value to the value inside `this` */
+    /** Concatenates a value inside a `Maybe` to the value inside `this` */
     concat(other: Maybe<T>): Maybe<T> {
         if (this.isNothing() && other.isNothing()) {
             return Nothing
@@ -151,7 +151,7 @@ export class Maybe<T> implements Show, Setoid<Maybe<T>>, Ord<Maybe<T>>, Semigrou
         return this.isNothing() ? initialValue : reducer(initialValue, this.value)
     }
 
-    /** Return `this` if it\'s `Nothing`, otherwise it returns the result of applying the function argument to `this` and wrapping it in a `Just` */
+    /** Returns `this` if it\'s `Nothing`, otherwise it returns the result of applying the function argument to `this` and wrapping it in a `Just` */
     extend<U>(f: (value: Maybe<T>) => U): Maybe<U> {
         return this.isNothing() ? Nothing : Just(f(this))
     }
