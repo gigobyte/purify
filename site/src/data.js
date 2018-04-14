@@ -38,7 +38,7 @@ const data = {
                     name: 'empty',
                     signatureML: '() → Maybe a',
                     signatureTS: '(): Maybe<never>',
-                    description: 'Returns Nothing',
+                    description: 'Returns `Nothing`',
                     examples: [
                         {input: 'Maybe.empty()', output: 'Nothing'}
                     ]
@@ -47,7 +47,7 @@ const data = {
                     name: 'zero',
                     signatureML: '() → Maybe a',
                     signatureTS: '(): Maybe<never>',
-                    description: 'Returns Nothing',
+                    description: 'Returns `Nothing`',
                     examples: [
                         {input: 'Maybe.zero()', output: 'Nothing'}
                     ]
@@ -55,7 +55,7 @@ const data = {
                 {
                     name: 'toMaybe',
                     signatureTS: '<T>(value?: T): Maybe<T>',
-                    description: 'Takes a value and returns Nothing if the value is null or undefined, otherwise a Just is returned',
+                    description: 'Takes a value and returns `Nothing` if the value is null or undefined, otherwise a `Just` is returned',
                     examples: [
                         {input: 'Maybe.toMaybe(null)', output: 'Nothing'},
                         {input: 'Maybe.toMaybe(10)', output: 'Just(10)'},
