@@ -5,8 +5,8 @@ describe('Id', () => {
         expect(Id.of(5)).toEqual(Id(5))
     })
 
-    test('unwrap', () => {
-        expect(Id(5).unwrap()).toEqual(5)
+    test('extract', () => {
+        expect(Id(5).extract()).toEqual(5)
     })
 
     test('map', () => {

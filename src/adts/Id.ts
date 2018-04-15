@@ -27,7 +27,7 @@ export class Id_<T> implements Show, Functor<T>, Chain<T>, Apply<T>, Applicative
         return Id(value)
     }
 
-    unwrap(): T {
+    extract(): T {
         return this.value
     }
 
