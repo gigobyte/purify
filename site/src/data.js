@@ -606,8 +606,51 @@ const data = {
                 }
             ]
         },
-        {name: 'Tuple', methods: []},
-        {name: 'Id', methods: []},
+        {
+            name: 'Tuple',
+            implements: ['Setoid', 'Ord', 'Semigroup', 'Functor', 'Bifunctor', 'Apply'],
+            description: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.`,
+            constructors: [
+                {
+                    name: 'Tuple',
+                    description: 'Constructs a tuple',
+                    signatureML: 'a -> b -> (a, b)',
+                    signatureTS: '<F, S>(fst: F, snd: S): Tuple<F, S>',
+                    examples: [
+                        {input: 'Tuple(1, true)', output: 'Tuple(1, true) // Tuple<number, boolean>'}
+                    ]
+                }
+            ],
+            staticMethods: [
+                {
+                    name: 'fromArray',
+                    description: 'Constructs a tuple from an array with two elements',
+                    signatureTS: '<F, S>([fst, snd]: [F, S]): Tuple<F, S>',
+                    examples: [
+                        {input: 'Tuple.fromArray([5, 10])', output: 'Tuple(5, 10)'}
+                    ]
+                },
+                {
+                    name: 'fanout',
+                    description: 'Applies two functions over a single value and constructs a tuple from the results',
+                    signatureML: '(a -> b) -> (a -> c) -> a -> (b, c)',
+                    signatureTS: '<F, S, T>(f: (value: T) => F, g: (value: T) => S, value: T): Tuple<F, S>',
+                    examples: [
+                        {input: `Tuple.fanout(x => x[0], x => x.length, 'sss')`, output: `Tuple('s', 3)`},
+                        {input: `Tuple.fanout(x => x[0], x => x.length)('sss')`, output: `Tuple('s', 3)`}
+                    ]
+                }
+            ],
+            instanceMethods: []
+        },
+        {
+            name: 'Id',
+            implements: [],
+            description: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.`,
+            constructors: [],
+            staticMethods: [],
+            instanceMethods: []
+        },
     ],
     typeclasses: [
         {name: 'Alt'},

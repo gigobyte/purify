@@ -20,6 +20,7 @@ export class Tuple_<F, S> implements Show, Setoid<Tuple<F, S>>, Ord<Tuple<F, S>>
     readonly 'fantasy-land/map' = this.map
     readonly 'fantasy-land/ap' = this.ap
 
+    /** Applies two functions over a single value and constructs a tuple from the results */
     static fanout<F, S, T>(f: (value: T) => F, g: (value: T) => S): (value: T) => Tuple<F, S>
     static fanout<F, S, T>(f: (value: T) => F, g: (value: T) => S, value: T): Tuple<F, S>
     static fanout<F, S, T>(f: (value: T) => F, g: (value: T) => S, value?: T) : any {
@@ -30,6 +31,7 @@ export class Tuple_<F, S> implements Show, Setoid<Tuple<F, S>>, Ord<Tuple<F, S>>
         return (value: T): Tuple<F, S> => Tuple(f(value), g(value))
     }
 
+    /** Constructs a tuple from an array with two elements */
     static fromArray<F, S>([fst, snd]: [F, S]): Tuple<F, S> {
         return Tuple(fst, snd)
     }
