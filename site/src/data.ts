@@ -1,6 +1,37 @@
 import React from 'react'
 
-const data = {
+export interface MethodExample {
+    input: string,
+    output: string
+}
+
+export interface Method {
+    name: string,
+    description: string,
+    signatureML?: string,
+    signatureTS?: string,
+    examples: MethodExample[]
+}
+
+export interface DataType {
+    name: string,
+    implements: string[],
+    description: string,
+    constructors: Method[],
+    staticMethods: Method[],
+    instanceMethods: Method[]
+}
+
+export interface Typeclass {
+    name: string
+}
+
+export interface Data {
+    datatypes: DataType[],
+    typeclasses: Typeclass[]
+}
+
+const data: Data = {
     datatypes: [
         {
             name: 'Maybe',

@@ -10,6 +10,7 @@
     "gatsby-plugin-google-fonts": "^0.0.4",
     "gatsby-plugin-react-helmet": "^2.0.10",
     "gatsby-plugin-styled-components": "^2.0.11",
+    "gatsby-plugin-typescript": "^1.4.19",
     "gh-pages": "^1.1.0",
     "react-helmet": "^5.2.0",
     "react-syntax-highlighter": "^7.0.2",
