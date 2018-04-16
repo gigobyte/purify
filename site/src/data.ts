@@ -1,5 +1,3 @@
-import React from 'react'
-
 export interface MethodExample {
     input: string,
     output: string
@@ -672,7 +670,109 @@ const data: Data = {
                     ]
                 }
             ],
-            instanceMethods: []
+            instanceMethods: [
+                {
+                    name: 'fst',
+                    description: 'Returns the first value from `this`',
+                    signatureML: '(a, b) ~> a',
+                    signatureTS: '(): F',
+                    examples: [
+                        {input: 'Tuple(5, 10).fst()', output: '5'}
+                    ]
+                },
+                {
+                    name: 'snd',
+                    description: 'Returns the second value from `this`',
+                    signatureML: '(a, b) ~> b',
+                    signatureTS: '(): S',
+                    examples: [
+                        {input: 'Tuple(5, 10).snd()', output: '10'}
+                    ]
+                },
+                {
+                    name: 'equals',
+                    description: 'Compares the values inside `this` and another tuple',
+                    signatureML: '(a, b) ~> (a, b) -> Bool',
+                    signatureTS: 'other: Tuple<F, S>): boolean',
+                    examples: [
+                        {input: 'Tuple(5, 10).equals(Tuple(5, 10))', output: 'true'},
+                        {input: `Tuple(5, 'foo').equals(5, 'bar')`, output: 'false'}
+                    ]
+                },
+                {
+                    name: 'lte',
+                    description: 'Returns true if both values inside `this` are less than or equal to the values inside anotther tuple, otherwise returns false',
+                    signatureML: '(a, b) ~> (a, b) -> Bool',
+                    signatureTS: '(other: Tuple<F, S>): boolean',
+                    examples: [
+                        {input: 'Tuple(5, 5).lte(Tuple(0, 0))', output: 'false'},
+                        {input: 'Tuple(0, 5).lte(Tuple(5, 5))', output: 'true'},
+                        {input: 'Tuple(10, 5).lte(Tuple(0, 10))', output: 'false'}
+                    ]
+                },
+                {
+                    name: 'bimap',
+                    description: 'Transforms the two values inside `this` with two mapper functions',
+                    signatureML: '(a, b) ~> (a -> c) -> (b -> d) -> (c, d)',
+                    signatureTS: '<F2, S2>(f: (fst: F) => F2, g: (snd: S) => S2): Tuple<F2, S2>',
+                    examples: [
+                        {input: `Tuple(1, 'apple').bimap(x => x + 1, x => x + 's')`, output: `Tuple(2, 'apples')`}
+                    ]
+                },
+                {
+                    name: 'map',
+                    description: 'Applies a function to the second value of `this`',
+                    signatureML: '(a, b) ~> (b -> c) -> (a, c)',
+                    signatureTS: '<S2>(f: (snd: S) => S2): Tuple<F, S2>',
+                    examples: [
+                        {input: `Tuple('configured', false).map(x => !x)`, output: `Tuple('configured', true)`}
+                    ]
+                },
+                {
+                    name: 'mapFirst',
+                    description: 'Applies a function to the first value of `this`',
+                    signatureML: '(a, b) ~> (a -> c) -> (c, b)',
+                    signatureTS: '<F2>(f: (fst: F) => F2): Tuple<F2, S>',
+                    examples: [
+                        {input: `Tuple(2, 'items').mapFirst(x => x + 1)`, output: `Tuple(3, 'items')`}
+                    ]
+                },
+                {
+                    name: 'concat',
+                    description: 'Concatinates the first and second values of `this` and another tuple',
+                    signatureML: '(a, b) ~> (a, b) -> (a, b)',
+                    signatureTS: '(other: Tuple<F, S>): Tuple<F, S>',
+                    examples: [
+                        {input: `Tuple('First name', [1, 2]).concat(Tuple(' Last name', [3, 4]))`, output: `Tuple('First name Last name', [1, 2, 3, 4])`}
+                    ]
+                },
+                {
+                    name: 'ap',
+                    description: 'Applies the second value of a tuple to the second value of `this`',
+                    signatureML: '(a, b) ~> (c, (b -> d)) -> (a, d)',
+                    signatureTS: '<T, S2>(f: Tuple<T, (value: S) => S2>): Tuple<F, S2>',
+                    examples: [
+                        {input: `Tuple(5, 10).ap(Tuple('increment', x => x + 1))`, output: `Tuple(5, 11)`}
+                    ]
+                },
+                {
+                    name: 'swap',
+                    description: 'Swaps the values inside `this`',
+                    signatureML: '(a, b) ~> (b, a)',
+                    signatureTS: '(): Tuple<S, F>',
+                    examples: [
+                        {input: 'Tuple(0, 1).swap()', output: 'Tuple(1, 0)'}
+                    ]
+                },
+                {
+                    name: 'toArray',
+                    description: 'Returns an array with 2 elements - the values inside `this`',
+                    signatureTS: '(): [F, S]',
+                    examples: [
+                        {input: `Tuple('username', true).toArray()`, output: `['username', true]`}
+                    ]
+                }
+            ]
         },
         {
             name: 'Id',
