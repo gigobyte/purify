@@ -858,7 +858,7 @@ const data: Data = {
                 },
                 {
                     name: 'chain',
-                    description: 'Transforms `this` with a function that returns an `Id`.',
+                    description: 'Transforms `this` with a function that returns an `Id`',
                     signatureML: 'Id a ~> (a -> Id b) -> Id b',
                     signatureTS: '<U>(f: (value: T) => Id<U>): Id<U>',
                     examples: [
