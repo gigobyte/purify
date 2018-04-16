@@ -15,6 +15,7 @@ export interface DataType {
     name: string,
     implements: string[],
     description: string,
+    example: string[],
     constructors: Method[],
     staticMethods: Method[],
     instanceMethods: Method[]
@@ -34,7 +35,24 @@ const data: Data = {
         {
             name: 'Maybe',
             implements: ['Setoid', 'Ord', 'Semigroup', 'Monoid', 'Functor', 'Apply', 'Applicative', 'Alt', 'Plus', 'Alternative', 'Chain', 'Monad', 'Foldable', 'Extend', 'Unsafe'],
-            description: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.`,
+            description: `The Maybe type is one of the most popular data types available. It is fundamental to learning about functional error handling and representing missing values. A Maybe value can be either Just a value or Nothing. The Just data constructor is used for wrapping present values while the Nothing constructor is used when a value is absent. Both constructors share the same API which makes it easy to manipulate optional values without null checking or exception handling.`,
+            example: [
+                `import { Maybe } from 'pure-ts'`,
+                '',
+                '// Without Maybe',
+                'let port: number',
+                'const config: Config | null = getConfig()',
+                '',
+                'if (config && config.port) {',
+                '    port = parseInt(config.port)',
+                '} else {',
+                '    port = 8080',
+                '}',
+                '',
+                '// With Maybe',
+                'const config: Maybe<Config> = getConfig()',
+                'const port: number = config.chain(x => x.port).map(parseInt).orDefault(8080)'
+            ],
             constructors: [
                 {
                     name: 'Just',
@@ -341,6 +359,7 @@ const data: Data = {
             name: 'Either',
             implements: ['Setoid', 'Ord', 'Semigroup', 'Functor', 'Apply', 'Applicative', 'Alt', 'Chain', 'Monad', 'Foldable', 'Extend', 'Bifunctor', 'Unsafe'],
             description: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.`,
+            example: [''],
             constructors: [
                 {
                     name: 'Left',
@@ -639,6 +658,7 @@ const data: Data = {
             name: 'Tuple',
             implements: ['Setoid', 'Ord', 'Semigroup', 'Functor', 'Bifunctor', 'Apply'],
             description: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.`,
+            example: [''],
             constructors: [
                 {
                     name: 'Tuple',
@@ -778,6 +798,7 @@ const data: Data = {
             name: 'Id',
             implements: ['Setoid', 'Ord', 'Semigroup', 'Function', 'Apply', 'Applicative', 'Chain', 'Monad'],
             description: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.`,
+            example: [''],
             constructors: [
                 {
                     name: 'Id',

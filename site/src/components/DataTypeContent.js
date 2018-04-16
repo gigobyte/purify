@@ -3,6 +3,8 @@ import styled from 'styled-components'
 import Link from 'gatsby-link'
 import data from '../data'
 import DataTypeMethod from './DataTypeMethod'
+import SyntaxHighlighter from 'react-syntax-highlighter'
+import highlightStyle from 'react-syntax-highlighter/styles/hljs/googlecode'
 
 const Container = styled.div`
 `
@@ -48,6 +50,7 @@ const DataTypeContent = adt => () =>
             )}
         </TypeclassBadges>
         <Description>{adt.description}</Description>
+        <SyntaxHighlighter language="javascript" style={highlightStyle}>{adt.example.join('\n')}</SyntaxHighlighter>   
         <TopicHeader>Constructors</TopicHeader>
         {adt.constructors.map(DataTypeMethod)}
         <TopicHeader>Static methods</TopicHeader>
