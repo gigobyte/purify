@@ -425,7 +425,7 @@ const data: Data = {
                     description: 'Structural pattern matching for `Either` in the form of a function',
                     signatureTS: '<T>(patterns: { Left: (l: L) => T, Right: (r: R) => T }): T',
                     examples: [
-                        {input: `Left('Error').caseOf({ Left: x => x, Right: () => 'No error' })`, output: 'Error'},
+                        {input: `Left('Error').caseOf({ Left: x => x, Right: () => 'No error' })`, output: `'Error'`},
                         {input: `Right(6).caseOf({ Left: _ => 0, Right: x => x + 1 })`, output: '7'}
                     ]
                 },
@@ -621,7 +621,7 @@ const data: Data = {
                     signatureTS: '<T>(ifLeft: (value: L) => T, ifRight: (value: R) => T): T',
                     examples: [
                         {input: 'Right(5).either(_ => 0, x => x + 1)', output: '6'},
-                        {input: `Left('Error').either(x => x + '!', _ => '')`, output: 'Error!'}
+                        {input: `Left('Error').either(x => x + '!', _ => '')`, output: `'Error!'`}
                     ]
                 },
                 {
@@ -630,7 +630,7 @@ const data: Data = {
                     signatureTS: '(): L | R',
                     examples: [
                         {input: 'Right(5).extract()', output: '5'},
-                        {input: `Left('Error').extract()`, output: 'Error'}
+                        {input: `Left('Error').extract()`, output: `'Error'`}
                     ]
                 }
             ]
