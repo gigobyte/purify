@@ -776,31 +776,116 @@ const data: Data = {
         },
         {
             name: 'Id',
-            implements: [],
+            implements: ['Setoid', 'Ord', 'Semigroup', 'Function', 'Apply', 'Applicative', 'Chain', 'Monad'],
             description: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.`,
-            constructors: [],
-            staticMethods: [],
-            instanceMethods: []
+            constructors: [
+                {
+                    name: 'Id',
+                    description: 'Contructs an Id',
+                    signatureML: 'a -> Id a',
+                    signatureTS: '<T>(value: T): Id<T>',
+                    examples: [
+                        {input: `Id('some primitive')`, output: `Id('some primitive') // Id<string>`}
+                    ]
+                }
+            ],
+            staticMethods: [
+                {
+                    name: 'of',
+                    description: 'Contructs an Id',
+                    signatureML: 'a -> Id a',
+                    signatureTS: '<T>(value: T): Id<T>',
+                    examples: [
+                        {input: `Id.of('some primitive')`, output: `Id('some primitive')`}
+                    ]
+                }
+            ],
+            instanceMethods: [
+                {
+                    name: 'extract',
+                    description: 'Returns the value stored in `this`',
+                    signatureML: 'Id a -> a',
+                    signatureTS: '(): T',
+                    examples: [
+                        {input: 'Id(1).extract()', output: '1'}
+                    ]
+                },
+                {
+                    name: 'map',
+                    description: 'Applies a function to the value stored in `this`',
+                    signatureML: 'Id a ~> (a -> b) -> Id b',
+                    signatureTS: '<U>(f: (value: T) => U): Id<U>',
+                    examples: [
+                        {input: `Id('1').map(parseInt)`, output: 'Id(1)'}
+                    ]
+                },
+                {
+                    name: 'equals',
+                    description: 'Compares the value in `this` with the value in the other `Id`',
+                    signatureML: 'Id a ~> Id a -> Bool',
+                    signatureTS: '(other: Id<T>): boolean',
+                    examples: [
+                        {input: `Id(0).equals(Id(0))`, output: 'true'}
+                    ]
+                },
+                {
+                    name: 'lte',
+                    description: 'Returns true if the value in `this` is less than or equal to the value in the other `Id`, otherwise returns false',
+                    signatureML: 'Id a ~> Id a -> Bool',
+                    signatureTS: '(other: Id<T>): boolean',
+                    examples: [
+                        {input: `Id(5).lte(Id(10))`, output: 'true'},
+                        {input: `Id(10).lte(Id(-1))`, output: 'false'}
+                    ]
+                },
+                {
+                    name: 'concat',
+                    description: 'Concatinates the values inside `this` and another `Id`',
+                    signatureML: 'Id a ~> Id a -> Id a',
+                    signatureTS: '(other: Id<T>): Id<T>',
+                    examples: [
+                        {input: `Id('NaNaNaNa ').concat(Id('Batman!'))`, output: `Id('NaNaNaNa Batman!')`}
+                    ]
+                },
+                {
+                    name: 'ap',
+                    description: 'Applies a function stored in Id to the value in `this`',
+                    signatureML: 'Id a ~> Id (a -> b) -> Id b',
+                    signatureTS: '<U>(f: Id<(value: T) => U>): Id<U>',
+                    examples: [
+                        {input: 'Id(5).ap(Id(x => x + 1))', output: 'Id(6)'}
+                    ]
+                },
+                {
+                    name: 'chain',
+                    description: 'Transforms `this` with a function that returns an `Id`.',
+                    signatureML: 'Id a ~> (a -> Id b) -> Id b',
+                    signatureTS: '<U>(f: (value: T) => Id<U>): Id<U>',
+                    examples: [
+                        {input: 'Id(10).chain(Id)', output: 'Id(10)'}
+                    ]
+                }
+            ]
         },
     ],
     typeclasses: [
-        {name: 'Alt'},
-        {name: 'Alternative'},
-        {name: 'Applicative'},
-        {name: 'Apply'},
-        {name: 'Bifunctor'},
-        {name: 'Chain'},
-        {name: 'Extend'},
-        {name: 'Foldable'},
-        {name: 'Functor'},
-        {name: 'Monad'},
-        {name: 'Monoid'},
-        {name: 'Ord'},
-        {name: 'Plus'},
-        {name: 'Semigroup'},
-        {name: 'Setoid'},
-        {name: 'Traversable'},
-        {name: 'Unsafe'},
+        // {name: 'Alt'},
+        // {name: 'Alternative'},
+        // {name: 'Applicative'},
+        // {name: 'Apply'},
+        // {name: 'Bifunctor'},
+        // {name: 'Chain'},
+        // {name: 'Extend'},
+        // {name: 'Foldable'},
+        // {name: 'Functor'},
+        // {name: 'Monad'},
+        // {name: 'Monoid'},
+        // {name: 'Ord'},
+        // {name: 'Plus'},
+        // {name: 'Semigroup'},
+        // {name: 'Setoid'},
+        // {name: 'Traversable'},
+        // {name: 'Unsafe'},
     ]
 }
 

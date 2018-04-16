@@ -27,6 +27,7 @@ export class Id_<T> implements Show, Functor<T>, Chain<T>, Apply<T>, Applicative
         return Id(value)
     }
 
+    /** Returns the value stored in `this` */
     extract(): T {
         return this.value
     }
@@ -43,26 +44,32 @@ export class Id_<T> implements Show, Functor<T>, Chain<T>, Apply<T>, Applicative
         return this.inspect()
     }
 
+    /** Applies a function to the value stored in `this` */
     map<U>(f: (value: T) => U): Id<U> {
         return Id(f(this.value))
     }
 
+    /** Transforms `this` with a function that returns an `Id` */
     chain<U>(f: (value: T) => Id<U>): Id<U> {
         return f(this.value)
     }
 
+    /** Applies a function stored in Id to the value in `this` */
     ap<U>(f: Id<(value: T) => U>): Id<U> {
         return Id(f.value(this.value))
     }
 
+    /** Compares the value in `this` with the value in the other `Id` */
     equals(other: Id<T>): boolean {
         return this.value === other.value
     }
 
+    /** Returns true if the value in `this` is less than or equal to the value in the other `Id`, otherwise returns false */
     lte(other: Id<T>): boolean {
         return this.value <= other.value
     }
 
+    /** Concatinates the values inside `this` and another `Id` */
     concat(other: Id<T>): Id<T> {
         return Id(concat(this.value, other.value))
     }
