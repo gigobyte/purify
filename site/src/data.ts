@@ -693,8 +693,10 @@ const data: Data = {
         {
             name: 'Tuple',
             implements: ['Setoid', 'Ord', 'Semigroup', 'Functor', 'Bifunctor', 'Apply'],
-            description: `Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.`,
-            example: [''],
+            description: `Tuple, also known as Pair, is a data type containing two values. You can think of it as an immutable array of only two elements, but unlike arrays (which are commonly homogeneous), the two values inside can be of different types.`,
+            example: [
+                `import { Tuple } from 'pure-ts/adts/Tuple'`, 
+            ],
             constructors: [
                 {
                     name: 'Tuple',
