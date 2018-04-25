@@ -618,7 +618,7 @@ const data: Data = {
                     signatureTS: '(): R',
                     examples: [
                         {input: 'Right(5).unsafeCoerce()', output: '5'},
-                        {input: `Left('Error').unsafeCoerce()`, output: '// Either got coerced to a Left'}
+                        {input: `Left('Error').unsafeCoerce()`, output: '// Error: Either got coerced to a Left'}
                     ]
                 },
                 {
@@ -637,8 +637,8 @@ const data: Data = {
                     signatureML: 'Either a b ~> a -⁠> a',
                     signatureTS: '(defaultValue: L): L',
                     examples: [
-                        {input: `Left('Error').leftOrDefault('No error')`, output: 'Error'},
-                        {input: `Right(5).leftOrDefault('No error')`, output: 'No error'},
+                        {input: `Left('Error').leftOrDefault('No error')`, output: `'Error'`},
+                        {input: `Right(5).leftOrDefault('No error')`, output: `'No error'`},
                     ]
                 },
                 {
