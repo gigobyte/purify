@@ -173,7 +173,7 @@ export class Maybe<T> implements Show, Setoid<Maybe<T>>, Ord<Maybe<T>>, Semigrou
 
     /** Returns empty list if the `Maybe` is `Nothing` or a list where the only element is the value of `Just` */
     toList(): T[] {
-        return this.isNothing() ?[] : [this.value]
+        return this.isNothing() ? [] : [this.value]
     }
 
     /** Maps over `this` and returns the resulting value or returns the default value if `this` is `Nothing` */
@@ -199,6 +199,14 @@ export class Maybe<T> implements Show, Setoid<Maybe<T>>, Ord<Maybe<T>>, Semigrou
     /** Runs an effect if `this` is `Nothing`, returns `this` for easier composiblity */
     ifNothing(effect: () => any): this {
         return this.isNothing() ? (effect(), this) : this
+    }
+
+    filter(pred: (value: T) => boolean): Maybe<T> {
+        if (this.isNothing()) {
+            return Nothing
+        }
+
+        return pred(this.value) ? Just(this.value) : Nothing
     }
 }
 

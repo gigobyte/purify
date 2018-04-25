@@ -161,4 +161,10 @@ describe('Maybe', () => {
         Nothing.ifNothing(() => { b = 5 })
         expect(b).toEqual(5)
     })
+
+    test('filter', () => {
+        expect(Just(5).filter(x => x > 10)).toEqual(Nothing)
+        expect(Just(5).filter(x => x > 0)).toEqual(Just(5))
+        expect(Nothing.filter(x => x > 0)).toEqual(Nothing)
+    })
 })

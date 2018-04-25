@@ -307,6 +307,16 @@ const data: Data = {
                     ]
                 },
                 {
+                    name: 'filter',
+                    signatureML: 'Maybe a ~> (a -> Bool) -> Maybe a',
+                    signatureTS: '(pred: (value: T) => boolean): Maybe<T>',
+                    description: 'Takes a predicate function and returns `this` if the predicate returns true or Nothing if it returns false',
+                    examples: [
+                        {input: `Just(5).filter(x => x > 1)`, output: 'Just(5)'},
+                        {input: `Just('apple').filter(x => x === 'banana')`, output: 'Nothing'}
+                    ]
+                },
+                {
                     name: 'extract',
                     signatureTS: '(): T | null',
                     description: 'Returns the value inside `this` or null if `this` is `Nothing`',
