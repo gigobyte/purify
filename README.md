@@ -10,6 +10,18 @@
 * **Type safety** - While _pure_ can be used in vanilla JavaScript, it's entirely written with TypeScript and type safety in mind.
 * **Fantasy-land compatibility** - _pure_ implements the [Fantasy Land](https://github.com/fantasyland/fantasy-land) specification as much as possible
 
+# Installation
+
+_pure_ is available as a npm package
+
+```
+$ npm install pure-ts
+```
+
+# Documentation
+
+You can find the documentation on the [official site](https://gigobyte.github.io/pure/).
+
 # Inspired by
 
 * Haskell
