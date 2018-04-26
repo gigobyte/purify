@@ -2,8 +2,15 @@ import React from 'react'
 import Link from 'gatsby-link'
 import styled from 'styled-components'
 
+const Container = styled.div`
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+`
+
 const Title = styled.h1`
     margin: 0;
+    font-style: italic;
 `
 
 const Subtitle = styled.h2`
@@ -13,6 +20,7 @@ const Subtitle = styled.h2`
 const NavBar = styled.div`
     background-color: #007acc;
     height: 65px;
+    min-height: 65px;
     display: flex;
     justify-content: flex-end;
     padding-right: 80px;
@@ -39,16 +47,32 @@ const Content = styled.div`
     height: 100%;
 `
 
+const Heading = styled.div`
+    padding-top: 5%;
+`
+
+const InstallBox = styled.div`
+    padding: 12px;
+    margin: 10px;
+    background-color: white;
+    border: 1px dashed #007acc;
+`
+
 const IndexPage = () =>
-    <div>
+    <Container>
         <NavBar>
-            <NavBarLink><Link to="adts/Maybe">Docs</Link></NavBarLink>
+            <NavBarLink><Link to="/adts/Maybe">Docs</Link></NavBarLink>
             <NavBarLink><a href="https://github.com/gigobyte/pure">Github</a></NavBarLink>
         </NavBar>
         <Content>
-            <Title>Pure</Title>
-            <Subtitle>Functional programming standard library for TypeScript</Subtitle>
+            <Heading>
+                <Title>Pure</Title>
+                <Subtitle>Functional programming standard library for TypeScript</Subtitle>
+                <InstallBox>
+                     $ npm install pure-ts
+                </InstallBox>
+            </Heading>
         </Content>
-    </div>
+    </Container>
 
 export default IndexPage

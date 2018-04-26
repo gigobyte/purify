@@ -6,6 +6,6 @@ html, body {
     padding: 0;
 }
 
-div[data-reactroot], body div {
+body > div {
     height: 100%;
 }
