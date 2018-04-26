@@ -33,7 +33,7 @@ const LayoutWithSidebar = (children) =>
         </ContentContainer>
     </Container>
 
-const Layout = ({ children, location }) => location.pathname === '/'
+const Layout = ({ children, location }) => location.pathname === '/' || location.pathname === '/pure/'
     ? children()
     : LayoutWithSidebar(children)
 
