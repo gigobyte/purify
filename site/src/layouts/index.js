@@ -23,7 +23,7 @@ const ContentContainer = styled.div`
     padding: 20px;
 `
 
-const Layout = ({ children }) =>
+const LayoutWithSidebar = (children) =>
     <Container>
         <SidebarContainer>
             <Sidebar />
@@ -32,5 +32,9 @@ const Layout = ({ children }) =>
             {children()}
         </ContentContainer>
     </Container>
+
+const Layout = ({ children, location }) => location.pathname === '/'
+    ? children()
+    : LayoutWithSidebar(children)
 
 export default Layout

@@ -5,3 +5,7 @@ html, body {
     margin: 0;
     padding: 0;
 }
+
+div[data-reactroot], body div {
+    height: 100%;
+}
