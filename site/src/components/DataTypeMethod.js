@@ -140,7 +140,7 @@ const DataTypeMethod = method =>
 
                 <MethodExampleColumn>
                     {method.examples.map(example => (
-                        <Highlight key={example.input}>🡲</Highlight>
+                        <Highlight key={example.input}>➔</Highlight>
                     ))}
                 </MethodExampleColumn>
 
