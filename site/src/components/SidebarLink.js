@@ -20,9 +20,9 @@ const Container = styled(Link)`
 `
 
 const Tag = styled.div`
-    background-color: #af87e6;
+    background-color: #d6eeff;
     border-radius: 5px;
-    color: white;
+    color: #2877ad;
     height: 16px;
     line-height: 18px;
     margin-right: 20px;
@@ -31,10 +31,10 @@ const Tag = styled.div`
     align-self: center;
 `
 
-const Typeclass = ({ typeclass }) =>
-    <Container to={`/typeclasses/${typeclass.name}`}>
-        <span>{typeclass.name}</span>
-        <Tag>Typeclass</Tag>
+const SidebarLink = ({ name, tag, link }) =>
+    <Container to={link}>
+        <span>{name}</span>
+        {tag && <Tag>{tag}</Tag>}
     </Container>
 
-export default Typeclass
+export default SidebarLink

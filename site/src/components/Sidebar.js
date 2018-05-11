@@ -1,7 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import DataType from './DataType'
-import Typeclass from './Typeclass'
+import SidebarLink from './SidebarLink'
 import HamburgerMenu from './HamburgerMenu'
 import data from '../data'
 
@@ -55,14 +54,15 @@ class Sidebar extends React.Component {
                     <HamburgerMenu onClick={this.toggleMenu} opened={this.state.isMenuShown} />
                 </Header>
                 <Nav shown={this.state.isMenuShown}>
+                    <SidebarLink name="Getting started" link="/" />
                     {data.datatypes.map(datatype => (
                         <div key={datatype.name} onClick={this.toggleMenu}>
-                            <DataType datatype={datatype} />
+                            <SidebarLink name={datatype.name} link={`/adts/${datatype.name}`} tag="ADT" />
                         </div>
                     ))}
                     {data.typeclasses.map(typeclass => (
                         <div key={typeclass.name} onClick={this.toggleMenu}>
-                            <Typeclass key={typeclass.name} typeclass={typeclass} />
+                            <SidebarLink name={typeclass.name} link={`/adts/${typeclasses.name}`} tag="Typeclass" />
                         </div>
                     ))}
                 </Nav>
