@@ -57,7 +57,7 @@ const data: Data = {
                 {
                     name: 'Just',
                     description: 'Constructs a Just',
-                    signatureML: 'a → Maybe a',
+                    signatureML: 'a -> Maybe a',
                     signatureTS: '<T>(value: T): Maybe<T>',
                     examples: [
                         {input: 'Just(10)', output: 'Just(10) // Maybe<number>'}
@@ -74,7 +74,7 @@ const data: Data = {
             staticMethods: [
                 {
                     name: 'of',
-                    signatureML: 'a → Maybe a',
+                    signatureML: 'a -> Maybe a',
                     signatureTS: '<T>(value: T): Maybe<T>',
                     description: 'Takes a value and wraps it in a `Just`',
                     examples: [
@@ -83,7 +83,7 @@ const data: Data = {
                 },
                 {
                     name: 'empty',
-                    signatureML: '() → Maybe a',
+                    signatureML: '() -> Maybe a',
                     signatureTS: '(): Maybe<never>',
                     description: 'Returns `Nothing`',
                     examples: [
@@ -92,7 +92,7 @@ const data: Data = {
                 },
                 {
                     name: 'zero',
-                    signatureML: '() → Maybe a',
+                    signatureML: '() -> Maybe a',
                     signatureTS: '(): Maybe<never>',
                     description: 'Returns `Nothing`',
                     examples: [
@@ -177,7 +177,7 @@ const data: Data = {
                 },
                 {
                     name: 'equals',
-                    signatureML: 'Maybe a ~> Maybe a -⁠> Bool',
+                    signatureML: 'Maybe a ~> Maybe a -> Bool',
                     signatureTS: '(other: Maybe<T>): boolean',
                     description: 'Compares the values inside `this` and the argument, returns true if both are Nothing or if the values are equal',
                     examples: [
@@ -188,7 +188,7 @@ const data: Data = {
                 },
                 {
                     name: 'lte',
-                    signatureML: 'Maybe a ~> Maybe a -⁠> Boolean',
+                    signatureML: 'Maybe a ~> Maybe a -> Boolean',
                     signatureTS: '(other: Maybe<T>): boolean',
                     description: 'Compares the values inside `this` and the argument, returns true if `this` is Nothing or if the value inside `this` is less than or equal to the value of the argument',
                     examples: [
@@ -201,7 +201,7 @@ const data: Data = {
                 },
                 {
                     name: 'concat',
-                    signatureML: 'Maybe a ~> Maybe a -⁠> Maybe a',
+                    signatureML: 'Maybe a ~> Maybe a -> Maybe a',
                     signatureTS: '(other: Maybe<T>): Maybe<T>',
                     description: 'Concatenates a value inside a `Maybe` to the value inside `this`',
                     examples: [
@@ -214,7 +214,7 @@ const data: Data = {
                 },
                 {
                     name: 'map',
-                    signatureML: 'Maybe a ~> (a -⁠> b) -⁠> Maybe b',
+                    signatureML: 'Maybe a ~> (a -> b) -> Maybe b',
                     signatureTS: '<U>(f: (value: T) => U): Maybe<U>',
                     description: 'Transforms the value inside `this` with a given function. Returns `Nothing` if `this` is `Nothing`',
                     examples: [
@@ -224,7 +224,7 @@ const data: Data = {
                 },
                 {
                     name: 'ap',
-                    signatureML: 'Maybe a ~> Maybe (a -⁠> b) -⁠> Maybe b',
+                    signatureML: 'Maybe a ~> Maybe (a -> b) -> Maybe b',
                     signatureTS: '<U>(maybeF: Maybe<(value: T) => U>): Maybe<U>',
                     description: 'Maps `this` with a `Maybe` function',
                     examples: [
@@ -236,7 +236,7 @@ const data: Data = {
                 },
                 {
                     name: 'alt',
-                    signatureML: 'Maybe a ~> Maybe a -⁠> Maybe a',
+                    signatureML: 'Maybe a ~> Maybe a -> Maybe a',
                     signatureTS: '(other: Maybe<T>): Maybe<T>',
                     description: 'Returns the first `Just` between `this` and another `Maybe` or `Nothing` if both `this` and the argument are `Nothing`',
                     examples: [
@@ -248,7 +248,7 @@ const data: Data = {
                 },
                 {
                     name: 'chain',
-                    signatureML: 'Maybe a ~> (a -⁠> Maybe b) -⁠> Maybe b',
+                    signatureML: 'Maybe a ~> (a -> Maybe b) -> Maybe b',
                     signatureTS: '<U>(f: (value: T) => Maybe<U>): Maybe<U>',
                     description: 'Transforms `this` with a function that returns a `Maybe`. Useful for chaining many computations that may fail',
                     examples: [
@@ -258,7 +258,7 @@ const data: Data = {
                 },
                 {
                     name: 'reduce',
-                    signatureML: 'Maybe a ~> ((b, a) -⁠> b, b) -⁠> b',
+                    signatureML: 'Maybe a ~> ((b, a) -> b, b) -> b',
                     signatureTS: '<U>(reducer: (accumulator: U, value: T) => U, initialValue: U): U',
                     description: 'Takes a reducer and a initial value and returns the initial value if `this` is `Nothing` or the result of applying the function to the initial value and the value inside `this`',
                     examples: [
@@ -268,7 +268,7 @@ const data: Data = {
                 },
                 {
                     name: 'extend',
-                    signatureML: 'Maybe a ~> (Maybe a -⁠> b) -⁠> Maybe b',
+                    signatureML: 'Maybe a ~> (Maybe a -> b) -> Maybe b',
                     signatureTS: '<U>(f: (value: Maybe<T>) => U): Maybe<U>',
                     description: 'Returns `this` if it\'s `Nothing`, otherwise it returns the result of applying the function argument to `this` and wrapping it in a `Just`',
                     examples: [
@@ -410,7 +410,7 @@ const data: Data = {
                 {
                     name: 'Left',
                     description: 'Constructs a Left',
-                    signatureML: 'a → Either a b',
+                    signatureML: 'a -> Either a b',
                     signatureTS: '<L>(value: L): Either<L, never>',
                     examples: [
                         {input: `Left('Error')`, output: `Left('Error') // Either<string, never>`}
@@ -497,7 +497,7 @@ const data: Data = {
                 {
                     name: 'bimap',
                     description: 'Given two functions, maps the value inside `this` using the first if `this` is `Left` or using the second one if `this` is `Right`. If both functions return the same type consider using `Either#either` instead',
-                    signatureML: 'Either a b ~> (a -⁠> c, b -⁠> d) -⁠> Either c d',
+                    signatureML: 'Either a b ~> (a -> c, b -> d) -> Either c d',
                     signatureTS: '<L2, R2>(f: (value: L) => L2, g: (value: R) => R2): Either<L2, R2>',
                     examples: [
                         {input: `Left('Error').bimap(x => x + '!', x => x + 1)`, output: `Left('Error!')`},
@@ -507,7 +507,7 @@ const data: Data = {
                 {
                     name: 'map',
                     description: 'Maps the `Right` value of `this`, acts like an identity if `this` is `Left`',
-                    signatureML: 'Either a b ~> (b -⁠> c) -⁠> Either a c',
+                    signatureML: 'Either a b ~> (b -> c) -> Either a c',
                     signatureTS: '<R2>(f: (value: R) => R2): Either<L, R2>',
                     examples: [
                         {input: `Left('Error').map(x => x + 1)`, output: `Left('Error')`},
@@ -517,7 +517,7 @@ const data: Data = {
                 {
                     name: 'mapLeft',
                     description: 'Maps the `Left` value of `this`, acts like an identity if `this` is `Right`',
-                    signatureML: 'Either a b ~> (a -⁠> c) -⁠> Either c b',
+                    signatureML: 'Either a b ~> (a -> c) -> Either c b',
                     signatureTS: '<L2>(f: (value: L) => L2): Either<L2, R>',
                     examples: [
                         {input: `Left('Error').mapLeft(x => x + '!')`, output: `Left('Error!')`},
@@ -527,7 +527,7 @@ const data: Data = {
                 {
                     name: 'ap',
                     description: 'Applies a `Right` function over a `Right` value. Returns `Left` if either `this` or the function are `Left`',
-                    signatureML: 'Either a b ~> Either a (b -⁠> c) -⁠> Either a c',
+                    signatureML: 'Either a b ~> Either a (b -> c) -> Either a c',
                     signatureTS: '<R2>(other: Either<L, (value: R) => R2>): Either<L, R2>',
                     examples: [
                         {input: 'Right(5).ap(Right(x => x + 1))', output: 'Right(6)'},
@@ -539,7 +539,7 @@ const data: Data = {
                 {
                     name: 'equals',
                     description: 'Compares `this` to another `Either`, returns false if the constructors or the values inside are different',
-                    signatureML: 'Either a b ~> Either a b -⁠> Bool',
+                    signatureML: 'Either a b ~> Either a b -> Bool',
                     signatureTS: '(other: Either<L, R>): boolean',
                     examples: [
                         {input: `Left('Error').equals(Left('Error'))`, output: 'true'},
@@ -551,7 +551,7 @@ const data: Data = {
                 {
                     name: 'lte',
                     description: 'Compares `this` to another `Either`, returns false if the constructors are different or if the other `Either` is larger than `this`',
-                    signatureML: 'Either a b ~> Either a b -⁠> Bool',
+                    signatureML: 'Either a b ~> Either a b -> Bool',
                     signatureTS: '(other: Either<L, R>): boolean',
                     examples: [
                         {input: 'Left(5).lte(Left(6))', output: 'true'},
@@ -562,7 +562,7 @@ const data: Data = {
                 {
                     name: 'concat',
                     description: 'Concatenates a value inside an `Either` to the value inside `this`',
-                    signatureML: 'Either a b ~> Either a b -⁠> Either a b',
+                    signatureML: 'Either a b ~> Either a b -> Either a b',
                     signatureTS: '(other: Either<L, R>): Either<L, R>',
                     examples: [
                         {input: 'Right([1,2]).concat(Right([3,4]))', output: 'Right([1, 2, 3, 4])'},
@@ -573,7 +573,7 @@ const data: Data = {
                 {
                     name: 'chain',
                     description: 'Transforms `this` with a function that returns an `Either`. Useful for chaining many computations that may fail',
-                    signatureML: 'Either a b ~> (b -⁠> Either a c) -⁠> Either a c',
+                    signatureML: 'Either a b ~> (b -> Either a c) -> Either a c',
                     signatureTS: '<R2>(f: (value: R) => Either<L, R2>): Either<L, R2>',
                     examples: [
                         {input: `Left('Error').chain(x => Right(x + 1))`, output: `Left('Error')`},
@@ -583,7 +583,7 @@ const data: Data = {
                 {
                     name: 'alt',
                     description: 'Returns the first `Right` between `this` and another `Either` or the `Left` in the argument if both `this` and the argument are `Left`',
-                    signatureML: 'Either a b ~> Either a b -⁠> Either a b',
+                    signatureML: 'Either a b ~> Either a b -> Either a b',
                     signatureTS: 'other: Either<L, R>): Either<L, R>',
                     examples: [
                         {input: `Left('Error').alt(Left('Error!'))`, output: `Left('Error!')`},
@@ -595,7 +595,7 @@ const data: Data = {
                 {
                     name: 'reduce',
                     description: 'Takes a reducer and a initial value and returns the initial value if `this` is `Left` or the result of applying the function to the initial value and the value inside `this`',
-                    signatureML: 'Either a b ~> ((c, b) -⁠> c, c) -⁠> c',
+                    signatureML: 'Either a b ~> ((c, b) -> c, c) -> c',
                     signatureTS: '<T>(reducer: (accumulator: T, value: R) => T, initialValue: T): T',
                     examples: [
                         {input: 'Right(5).reduce((acc, x) => x * acc, 2)', output: '10'},
@@ -605,7 +605,7 @@ const data: Data = {
                 {
                     name: 'extend',
                     description: 'Returns `this` if it\'s a `Left`, otherwise it returns the result of applying the function argument to `this` and wrapping it in a `Right`',
-                    signatureML: 'Either a b ~> (Either a b -⁠> c) -⁠> Either a c',
+                    signatureML: 'Either a b ~> (Either a b -> c) -> Either a c',
                     signatureTS: '<R2>(f: (value: Either<L, R>) => R2): Either<L, R2>',
                     examples: [
                         {input: `Left('Error').extend(x => x.isRight())`, output: `Left('Error')`},
@@ -624,7 +624,7 @@ const data: Data = {
                 {
                     name: 'orDefault',
                     description: 'Returns the value inside `this` if it\'s `Right` or a default value if `this` is `Left`',
-                    signatureML: 'Either a b ~> b -⁠> b',
+                    signatureML: 'Either a b ~> b -> b',
                     signatureTS: '(defaultValue: R): R',
                     examples: [
                         {input: `Left('Error').orDefault(0)`, output: '0'},
@@ -634,7 +634,7 @@ const data: Data = {
                 {
                     name: 'leftOrDefault',
                     description: 'Returns the value inside `this` if it\'s `Left` or a default value if `this` is `Right`',
-                    signatureML: 'Either a b ~> a -⁠> a',
+                    signatureML: 'Either a b ~> a -> a',
                     signatureTS: '(defaultValue: L): L',
                     examples: [
                         {input: `Left('Error').leftOrDefault('No error')`, output: `'Error'`},
@@ -682,7 +682,7 @@ const data: Data = {
                 {
                     name: 'either',
                     description: 'Given two map functions, maps using the first if `this` is `Left` or using the second one if `this` is `Right`. If you want the functions to return different types depending on the either you may want to use `Either#bimap` instead',
-                    signatureML: '(a -⁠> c) -⁠> (b -⁠> c) -⁠> Either a b -⁠> c',
+                    signatureML: '(a -> c) -> (b -> c) -> Either a b -> c',
                     signatureTS: '<T>(ifLeft: (value: L) => T, ifRight: (value: R) => T): T',
                     examples: [
                         {input: 'Right(5).either(_ => 0, x => x + 1)', output: '6'},
