@@ -78,7 +78,7 @@ const Highlight = ({ children }) =>
     <SyntaxHighlighter language="javascript" style={highlightStyle}>{children}</SyntaxHighlighter>
 
 const DataTypeMethod = method =>
-    <Container>
+    <Container key={method.name}>
         <MethodName>{method.name}</MethodName>
         <div>
             {method.signatureML &&
@@ -95,19 +95,19 @@ const DataTypeMethod = method =>
             <MethodExample>
                 <MethodExampleColumn>
                     {method.examples.map(example => (
-                        <Highlight>{example.input}</Highlight>
-                    ))}
-                </MethodExampleColumn>
-
-                <MethodExampleColumn>
-                    {method.examples.map(_ => (
-                        <Highlight>🡲</Highlight>
+                        <Highlight key={example.input}>{example.input}</Highlight>
                     ))}
                 </MethodExampleColumn>
 
                 <MethodExampleColumn>
                     {method.examples.map(example => (
-                        <Highlight>{example.output}</Highlight>
+                        <Highlight key={example.input}>🡲</Highlight>
+                    ))}
+                </MethodExampleColumn>
+
+                <MethodExampleColumn>
+                    {method.examples.map(example => (
+                        <Highlight key={example.input}>{example.output}</Highlight>
                     ))}
                 </MethodExampleColumn>
             </MethodExample>
