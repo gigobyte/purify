@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import DataType from './DataType'
 import Typeclass from './Typeclass'
+import HamburgerMenu from './HamburgerMenu'
 import data from '../data'
 
 const Container = styled.div`
@@ -30,22 +31,44 @@ const HeaderTitleVersion = styled.span`
 
 const Nav = styled.div`
     height: 100%;
+    transition: 0.2s;
+
+    @media only screen and (max-width : 768px) {
+        opacity: ${props => props.shown ? '1' : '0'};
+        height: ${props => props.shown ? '100%' : '0'};
+    }
 `
 
-const Sidebar = () =>
-    <Container>
-        <Header>
-            <HeaderTitle>Pure</HeaderTitle>
-            <HeaderTitleVersion>v0.0.1</HeaderTitleVersion>
-        </Header>
-        <Nav>
-            {data.datatypes.map(datatype => (
-                <DataType key={datatype.name} datatype={datatype} />
-            ))}
-            {data.typeclasses.map(typeclass => (
-                <Typeclass key={typeclass.name} typeclass={typeclass} />
-            ))}
-        </Nav>
-    </Container>
+class Sidebar extends React.Component {
+    state = {isMenuShown: false}
+
+    toggleMenu = () => {
+        this.setState({isMenuShown: !this.state.isMenuShown})
+    }
+
+    render() {
+        return (
+            <Container>
+                <Header>
+                    <HeaderTitle>Pure</HeaderTitle>
+                    <HeaderTitleVersion>v0.0.1</HeaderTitleVersion>
+                    <HamburgerMenu onClick={this.toggleMenu} opened={this.state.isMenuShown} />
+                </Header>
+                <Nav shown={this.state.isMenuShown}>
+                    {data.datatypes.map(datatype => (
+                        <div key={datatype.name} onClick={this.toggleMenu}>
+                            <DataType datatype={datatype} />
+                        </div>
+                    ))}
+                    {data.typeclasses.map(typeclass => (
+                        <div key={typeclass.name} onClick={this.toggleMenu}>
+                            <Typeclass key={typeclass.name} typeclass={typeclass} />
+                        </div>
+                    ))}
+                </Nav>
+            </Container>
+        );
+    }
+}
 
 export default Sidebar

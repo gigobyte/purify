@@ -15,6 +15,10 @@ const Title = styled.h1`
 
 const Subtitle = styled.h2`
     margin: 0;
+
+    @media only screen and (max-width : 768px) {
+        font-size: 19px;
+    }
 `
 
 const NavBar = styled.div`
@@ -24,6 +28,14 @@ const NavBar = styled.div`
     display: flex;
     justify-content: flex-end;
     padding-right: 80px;
+
+    @media only screen and (max-width : 768px) {
+        justify-content: center;
+        padding-right: 0;
+
+        height: 50px;
+        min-height: 50px;
+    }
 `
 
 const NavBarLink = styled.span`
@@ -60,10 +72,18 @@ const InstallBox = styled.div`
 
 const FeaturesContainer = styled.div`
     display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
 `
 
 const Feature = styled.div`
     flex: 1;
+    padding: 0 10px;
+    max-width: 380px;
+
+    @media only screen and (max-width : 768px) {
+        flex-basis: 100%;
+    }
 `
 
 const FeatureTitle = styled.h3`
@@ -84,7 +104,6 @@ const IndexPage = () =>
                 </InstallBox>
             </Heading>
             <FeaturesContainer>
-                <Feature />
                 <Feature>
                     <FeatureTitle>Algebraic Data Types</FeatureTitle>
                     Easily separate conditional logic and error handling with ADTs like Maybe and Either
@@ -97,7 +116,6 @@ const IndexPage = () =>
                     <FeatureTitle>Utility functions</FeatureTitle>
                     Avoid code duplication by making use of pure's utility functions and combinators
                 </Feature>
-                <Feature />
             </FeaturesContainer>
         </Content>
     </Container>

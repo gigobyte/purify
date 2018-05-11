@@ -8,6 +8,10 @@ import './index.css'
 const Container = styled.div`
     min-height: 100vh;
     display: flex;
+
+    @media only screen and (max-width : 768px) {
+        flex-direction: column;
+    }
 `
 
 const SidebarContainer = styled.div`
@@ -15,6 +19,7 @@ const SidebarContainer = styled.div`
     min-height: 100%;
     box-shadow: 0 3px 6px rgba(0,0,0,0.1);
     z-index: 1;
+    min-width: 200px;
 `
 
 const ContentContainer = styled.div`

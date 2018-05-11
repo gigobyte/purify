@@ -16,6 +16,11 @@ const MethodName = styled.div`
     font-size: 19px;
     color: #007acc;
     border-left: 5px;
+
+    @media only screen and (max-width : 768px) {
+        text-align: center;
+        padding-bottom: 5px;
+    }
 `
 
 const MethodSignature = styled.span`
@@ -39,6 +44,28 @@ const MethodSignature = styled.span`
         text-align: center;
         letter-spacing: ${props => props.ts ? '-1px' : '0'}
     }
+
+    @media only screen and (max-width : 768px) {
+        position: relative;
+        text-align: center;
+        width: 100%;
+        margin-bottom: 0;
+        padding: 5px;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+        border-top: 1px solid #dfe4e6;
+        font-size: 13px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+
+        &:before {
+            position: absolute;
+            left: 0;
+            padding: 5px 5px;
+            margin-top: -5px;
+        }
+    }
 `
 
 const MethodSignatureText = styled.span`
@@ -51,6 +78,12 @@ const MethodExample = styled.div`
     border-left: 4px solid #8acefb;
     padding: 5px;
     margin: 5px 0;
+
+    @media only screen and (max-width : 768px) {
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow-x: scroll;
+    }
 `
 
 const MethodExampleColumn = styled.div`
@@ -74,6 +107,12 @@ const MethodExampleColumn = styled.div`
     }
 `
 
+const MethodDescription = styled.div`
+    @media only screen and (max-width : 768px) {
+        padding: 10px 0;
+    }
+`
+
 const Highlight = ({ children }) =>
     <SyntaxHighlighter language="javascript" style={highlightStyle}>{children}</SyntaxHighlighter>
 
@@ -91,7 +130,7 @@ const DataTypeMethod = method =>
                     <MethodSignatureText>{method.signatureTS}</MethodSignatureText>
                 </MethodSignature>
             }
-            <div>{method.description}</div>
+            <MethodDescription>{method.description}</MethodDescription>
             <MethodExample>
                 <MethodExampleColumn>
                     {method.examples.map(example => (
