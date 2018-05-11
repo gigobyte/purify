@@ -39,7 +39,7 @@ const NavBar = styled.div`
 `
 
 const NavBarLink = styled.span`
-    color: white;
+    color: white !important;
     font-size: 22px;
     align-self: center;
     padding: 0 10px;
@@ -47,7 +47,11 @@ const NavBarLink = styled.span`
     > a {
         text-decoration: none;
 
-        :-webkit-any-link {
+        &:-webkit-any-link {
+            color: white !important;
+        }
+
+        &:link, &:visited, &:focus, &:hover, &:active {
             color: white;
         }
     }
