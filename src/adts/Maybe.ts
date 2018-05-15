@@ -68,7 +68,13 @@ export class Maybe<T> implements Show, Setoid<Maybe<T>>, Ord<Maybe<T>>, Semigrou
     }
 
     /** Maps over a list of values and returns a list of all resulting `Just` values */
-    static mapMaybe<T, U>(f: (value: T) => Maybe<U>, list: T[]): U[] {
+    static mapMaybe<T, U>(f: (value: T) => Maybe<U>): (list: T[]) => U[]
+    static mapMaybe<T, U>(f: (value: T) => Maybe<U>, list: T[]): U[]
+    static mapMaybe<T, U>(f: (value: T) => Maybe<U>, list?: T[]): any {
+        if (!list) {
+            return (list: T[]) => Maybe.catMaybes(list.map(f))
+        }
+
         return Maybe.catMaybes(list.map(f))
     }
 

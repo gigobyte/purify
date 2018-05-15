@@ -31,6 +31,7 @@ describe('Maybe', () => {
     })
 
     test('mapMaybe', () => {
+        expect(Maybe.mapMaybe(x => x > 5 ? Just(x) : Nothing)([1,2,3,7,8,9])).toEqual([7,8,9])
         expect(Maybe.mapMaybe(x => x > 5 ? Just(x) : Nothing, [1,2,3,7,8,9])).toEqual([7,8,9])
     })
 
