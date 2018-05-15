@@ -13,6 +13,7 @@ export interface Id<T> extends Id_<T> { }
 
 export class Id_<T> implements Show, Functor<T>, Chain<T>, Apply<T>, Applicative<T>, Monad<T>, Setoid<Id<T>>, Ord<Id<T>>, Semigroup<Id<T>> {
     constructor(private readonly value: T) {}
+    __tag: 'Id' = 'Id'
 
     of = Id_.of
     readonly 'fantasy-land/map' = this.map

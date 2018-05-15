@@ -12,6 +12,7 @@ export interface Tuple<F, S> extends Tuple_<F, S> {}
 
 export class Tuple_<F, S> implements Show, Setoid<Tuple<F, S>>, Ord<Tuple<F, S>>, Semigroup<Tuple<F, S>>, Bifunctor<F, S>, Functor<S>, Apply<S> {
     constructor(private readonly first: F, private readonly second: S) {}
+    __tag: 'Tuple' = 'Tuple'
 
     readonly 'fantasy-land/equals' = this.equals
     readonly 'fantasy-land/lte' = this.lte
