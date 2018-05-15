@@ -1,6 +1,6 @@
 {
   "name": "pure-ts",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Functional programming standard library for TypeScript ",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -9,9 +9,9 @@
   "license": "MIT",
   "sideEffects": false,
   "scripts": {
+    "build": "tsc",
     "docs": "typedoc --out documentation/ src/ --theme minimal",
-    "test": "jest",
-    "start": "parcel site/index.html"
+    "test": "jest"
   },
   "jest": {
     "transform": {
