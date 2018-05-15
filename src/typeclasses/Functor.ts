@@ -1,4 +1,4 @@
-import { HigherKindedType } from './../utils/HigherKindedType'
+import { HigherKindedType } from './../utils/HigherKindedTypes'
 import { Maybe } from '../adts/Maybe'
 import { Either } from '../adts/Either'
 import { Tuple } from '../adts/Tuple'
