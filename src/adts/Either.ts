@@ -28,7 +28,6 @@ export type EitherPatterns<L, R, T> = { Left: (l: L) => T, Right: (r: R) => T }
 
 export class Either<L, R> implements Show, Setoid<Either<L, R>>, Ord<Either<L, R>>, Semigroup<Either<L, R>>, Functor<R>, Apply<R>, Applicative<R>, Alt<L | R>, Chain<R>, Monad<R>, Foldable<L | R>, Extend<L | R>, Bifunctor<L, R>, Unsafe {
     constructor(private readonly value: L | R, private readonly tag: symbol) {}
-    __tag: 'Either' = 'Either'
 
     readonly of = Either.of
     readonly 'fantasy-land/alt' = this.alt

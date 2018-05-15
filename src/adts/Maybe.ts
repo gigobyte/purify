@@ -21,7 +21,6 @@ export type MaybePatterns<T, U> = {Just: (value: T) => U, Nothing: () => U}
 
 export class Maybe<T> implements Show, Setoid<Maybe<T>>, Ord<Maybe<T>>, Semigroup<Maybe<T>>, Monoid<Maybe<T>>, Functor<T>, Apply<T>, Applicative<T>, Alt<T>, Plus<T>, Alternative<T>, Chain<T>, Monad<T>, Foldable<T>, Extend<T>, Unsafe {
     constructor(public readonly value: T) {}
-    __tag: 'Maybe' = 'Maybe'
 
     readonly of = Maybe.of
     readonly zero = Maybe.zero
