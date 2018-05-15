@@ -1,3 +1,3 @@
-export default interface Unsafe {
+export interface Unsafe {
     unsafeCoerce(...args: any[]): any
 }

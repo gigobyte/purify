@@ -1,6 +1,6 @@
-import Apply from './Apply'
+import { Apply } from './Apply'
 
-export default interface Chain<T> extends Apply<T> {
+export interface Chain<T> extends Apply<T> {
     chain<U>(f: (value: T) => Chain<U>): Chain<U>
     'fantasy-land/chain'?: Chain<T>['chain']
 }

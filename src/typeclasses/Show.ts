@@ -1,4 +1,4 @@
-export default interface Show {
+export interface Show {
     toString(): string
     toJSON(): any
     inspect(): string
