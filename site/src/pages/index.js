@@ -15,6 +15,7 @@ const Title = styled.h1`
 
 const Subtitle = styled.h2`
     margin: 0;
+    padding: 0 10px;
 
     @media only screen and (max-width : 768px) {
         font-size: 19px;
@@ -61,6 +62,11 @@ const Content = styled.div`
     text-align: center;
     background-color: #fbfbfb;
     height: 100%;
+
+    @media only screen and (max-width : 768px) {
+        padding-bottom: 25px;
+        height: initial;
+    }
 `
 
 const Heading = styled.div`
@@ -90,6 +96,20 @@ const Feature = styled.div`
     }
 `
 
+const Footer = styled.div`
+    text-align: center;
+    height: 40px;
+    line-height: 40px;
+    font-size: 14px;
+
+    @media only screen and (max-width : 768px) {
+        background-color: #fbfbfb;
+        height: initial;
+        line-height: initial;
+        padding-bottom: 10px;
+    }
+`
+
 const FeatureTitle = styled.h3`
 `
 
@@ -109,19 +129,22 @@ const IndexPage = () =>
             </Heading>
             <FeaturesContainer>
                 <Feature>
-                    <FeatureTitle>Algebraic Data Types</FeatureTitle>
-                    Easily separate conditional logic and error handling with ADTs like Maybe and Either
-                </Feature>
-                <Feature>
-                    <FeatureTitle>Typeclasses</FeatureTitle>
-                    Implement instances of common typeclasses like Functor and Monad for your own data structures
-                </Feature>
-                <Feature>
                     <FeatureTitle>Utility functions</FeatureTitle>
-                    Avoid code duplication by making use of pure's utility functions and combinators
+                    <i>Pure</i> provides implementations for common typeclasses like Functor and Monad, along with utility functions that operate on them
+                </Feature>
+                <Feature>
+                    <FeatureTitle>Algebraic Data Types</FeatureTitle>
+                    <i>Pure</i> provides a collection of algebraic data structures that will help you tackle common problems that increase code complexity, such as conditional logic and error handling
+                </Feature>
+                <Feature>
+                    <FeatureTitle>Practical approach</FeatureTitle>
+                    <i>Pure</i> is a library focused on practical functional programming in TypeScript. You will find many examples and tutorials in the docs section of this site.  
                 </Feature>
             </FeaturesContainer>
         </Content>
+        <Footer>
+            Pure is developed and maintained by Stanislav Iliev, distributed under the ISC License.
+        </Footer>
     </Container>
 
 export default IndexPage
