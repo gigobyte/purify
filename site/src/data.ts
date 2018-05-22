@@ -846,7 +846,7 @@ const data: Data = {
             name: 'Id',
             implements: ['Setoid', 'Ord', 'Semigroup', 'Function', 'Apply', 'Applicative', 'Chain', 'Monad'],
             description: `The identity data constructor.`,
-            example: [''],
+            example: [`import { Id } from 'pure-ts/adts/Id'`],
             constructors: [
                 {
                     name: 'Id',
