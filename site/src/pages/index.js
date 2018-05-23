@@ -1,6 +1,7 @@
 import React from 'react'
 import Link from 'gatsby-link'
 import styled from 'styled-components'
+import Meta from '../components/Meta'
 
 const Container = styled.div`
     display: flex;
@@ -115,6 +116,7 @@ const FeatureTitle = styled.h3`
 
 const IndexPage = () =>
     <Container>
+        <Meta />
         <NavBar>
             <NavBarLink><Link to="/adts/Maybe">Docs</Link></NavBarLink>
             <NavBarLink><a href="https://github.com/gigobyte/pure">Github</a></NavBarLink>

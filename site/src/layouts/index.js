@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import Helmet from 'react-helmet'
+import Meta from '../components/Meta'
 
 import Sidebar from '../components/Sidebar'
 import './index.css'
@@ -30,6 +30,7 @@ const ContentContainer = styled.div`
 
 const LayoutWithSidebar = (children) =>
     <Container>
+        <Meta />
         <SidebarContainer>
             <Sidebar />
         </SidebarContainer>
