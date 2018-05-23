@@ -1,4 +1,5 @@
 import React from 'react'
+import Link from 'gatsby-link'
 import styled from 'styled-components'
 import SyntaxHighlighter from 'react-syntax-highlighter'
 import highlightStyle from 'react-syntax-highlighter/styles/hljs/googlecode'
@@ -12,10 +13,15 @@ const Container = styled.div`
     border-right: 0;
 `
 
-const MethodName = styled.div`
+const MethodName = styled(Link)`
     font-size: 19px;
     color: #007acc;
     border-left: 5px;
+    text-decoration: none;
+
+    &:hover {
+        text-decoration: underline;
+    }
 
     @media only screen and (max-width : 768px) {
         text-align: center;
@@ -118,7 +124,7 @@ const Highlight = ({ children }) =>
 
 const DataTypeMethod = method =>
     <Container key={method.name}>
-        <MethodName>{method.name}</MethodName>
+        <MethodName id={method.name} to={'#' + method.name}>{method.name}</MethodName>
         <div>
             {method.signatureML &&
                 <MethodSignature ml>
