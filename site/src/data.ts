@@ -15,7 +15,11 @@ export interface DataType {
     name: string,
     implements: string[],
     description: string,
-    example: string[],
+    example: {
+        import: string,
+        before?: string[],
+        after?: string[]
+    },
     constructors: Method[],
     staticMethods: Method[],
     instanceMethods: Method[]
@@ -36,23 +40,25 @@ const data: Data = {
             name: 'Maybe',
             implements: ['Setoid', 'Ord', 'Semigroup', 'Monoid', 'Functor', 'Apply', 'Applicative', 'Alt', 'Plus', 'Alternative', 'Chain', 'Monad', 'Foldable', 'Extend', 'Unsafe'],
             description: `The Maybe type is one of the most popular data types available. It is fundamental to learning about functional error handling and representing missing values. A Maybe value can be either Just a value or Nothing. The Just data constructor is used for wrapping present values while the Nothing constructor is used when a value is absent. Both constructors produce objects that share the same API which makes it easy to manipulate optional values without null checking or exception handling.`,
-            example: [
-                `import { Maybe } from 'pure-ts/adts/Maybe'`,
-                '',
-                '// Without Maybe',
-                'let port: number',
-                'let config: Config | null = getConfig()',
-                '',
-                'if (config && config.port) {',
-                '    port = parseInt(config.port)',
-                '} else {',
-                '    port = 8080',
-                '}',
-                '',
-                '// With Maybe',
-                'const config: Maybe<Config> = getConfig()',
-                'const port: number = config.chain(x => x.port).map(parseInt).orDefault(8080)'
-            ],
+            example: {
+                import: `import { Maybe, Just, Nothing } from 'pure-ts/adts/Maybe'`,
+                before: [
+                    'let port: number',
+                    'let config: Config | null = getConfig()',
+                    '',
+                    'if (config && config.port) {',
+                    '    port = parseInt(config.port)',
+                    '} else {',
+                    '    port = 8080',
+                    '}',
+                ],
+                after: [
+                    'const port: number = getConfig() // Maybe<Config>',
+                    '    .chain(x => x.port)',
+                    '    .map(parseInt)',
+                    '    .orDefault(8080)'
+                ]
+            },
             constructors: [
                 {
                     name: 'Just',
@@ -369,43 +375,44 @@ const data: Data = {
             name: 'Either',
             implements: ['Setoid', 'Ord', 'Semigroup', 'Functor', 'Apply', 'Applicative', 'Alt', 'Chain', 'Monad', 'Foldable', 'Extend', 'Bifunctor', 'Unsafe'],
             description: `Either is a data type with two sides (constructors) - Left and Right. It is most commonly used for error handling as it is very similar to the Maybe type with the only difference being that you can store information about the missing value (an error message for example). By convention, "Right is right", meaning that success is stored on the Right and failure is stored on the Left. It is also important to note that Either is right-biased which means that \`map\`, \`chain\` and other similar methods will operate on the right side.`,
-            example: [
-                `import { Either, Left, Right } from 'pure-ts/adts/Either'`,
-                '',
-                '// Without Either',
-                'const getPort = () => {',
-                '    const config: Config | null = getConfig()',
-                '',
-                '    if (config && config.port) {',
-                '        return parseInt(config.port)',
-                '    }',
-                '',
-                `    throw new Error("Couldn't parse port from config")`,
-                '}',
-                '',
-                'let port: number',
-                '',
-                'try {',
-                '    port = getPort()',
-                '} catch (e) {',
-                '    loggingService.log(e.message)',
-                '    port = 8080',
-                '}',
-                '',
-                '',
-                '// With Either',
-                'const getPort = () => {',
-                '    const config: Config | null = getConfig()',
-                '',
-                '    if (config && config.port) {',
-                '        return Right(parseInt(config.port))',
-                '    }',
-                '',
-                `    return Left(new Error("Couldn't parse port from config"))`,
-                '}',
-                '',
-                'const port: number = getPort().ifLeft((e) => loggingService.log(e.message)).orDefault(8080)'
-            ],
+            example: {
+                import: `import { Either, Left, Right } from 'pure-ts/adts/Either'`,
+                before: [
+                    'const getPort = () => {',
+                    '    const config: Config | null = getConfig()',
+                    '',
+                    '    if (config && config.port) {',
+                    '        return parseInt(config.port)',
+                    '    }',
+                    '',
+                    `    throw new Error("Couldn't parse port from config")`,
+                    '}',
+                    '',
+                    'let port: number',
+                    '',
+                    'try {',
+                    '    port = getPort()',
+                    '} catch (e) {',
+                    '    loggingService.log(e.message)',
+                    '    port = 8080',
+                    '}'
+                ],
+                after: [
+                    'const getPort = () => {',
+                    '    const config: Config | null = getConfig()',
+                    '',
+                    '    if (config && config.port) {',
+                    '        return Right(parseInt(config.port))',
+                    '    }',
+                    '',
+                    `    return Left(new Error("Couldn't parse port from config"))`,
+                    '}',
+                    '',
+                    'const port: number = getPort()',
+                    '    .ifLeft((e) => loggingService.log(e.message))',
+                    '    .orDefault(8080)'
+                ]
+            },
             constructors: [
                 {
                     name: 'Left',
@@ -704,9 +711,9 @@ const data: Data = {
             name: 'Tuple',
             implements: ['Setoid', 'Ord', 'Semigroup', 'Functor', 'Bifunctor', 'Apply'],
             description: `Tuple, also known as Pair, is a data type containing two values. You can think of it as an immutable array of only two elements, but unlike arrays (which are commonly homogeneous), the two values inside can be of different types.`,
-            example: [
-                `import { Tuple } from 'pure-ts/adts/Tuple'`, 
-            ],
+            example: {
+                import: `import { Tuple } from 'pure-ts/adts/Tuple'`
+            },
             constructors: [
                 {
                     name: 'Tuple',
@@ -846,7 +853,9 @@ const data: Data = {
             name: 'Id',
             implements: ['Setoid', 'Ord', 'Semigroup', 'Function', 'Apply', 'Applicative', 'Chain', 'Monad'],
             description: `The identity data constructor.`,
-            example: [`import { Id } from 'pure-ts/adts/Id'`],
+            example: {
+                import: `import { Id } from 'pure-ts/adts/Id'`
+            },
             constructors: [
                 {
                     name: 'Id',

@@ -62,16 +62,50 @@ const TypeclassBadge = styled(Link)`
     }
 `
 
+const ExamplesContainer = styled.div`
+    pre {
+        margin: 0;
+    }
+`
+
+const ExampleHeader = styled.div`
+    text-align: center;
+    background-color: #f9f4f4;
+    padding: 4px;
+`
+
+const Example = styled.div`
+    max-width: 650px;
+    margin: 10px 0;
+    border: 1px solid #f3eeee;
+`
+
 const DataTypeContent = adt => () =>
     <Container>
         <Title>{adt.name}</Title>
-        <TypeclassBadges>
-            {adt.implements.map(typeclass =>
+        <TypeclassBadges>            {adt.implements.map(typeclass =>
                 <TypeclassBadge key={typeclass} to={`/typeclasses/${typeclass}`}>{typeclass}</TypeclassBadge>
             )}
         </TypeclassBadges>
         <Description>{adt.description}</Description>
-        <SyntaxHighlighter language="javascript" style={highlightStyle}>{adt.example.join('\n')}</SyntaxHighlighter>   
+        <ExamplesContainer>
+            <Example>
+                <ExampleHeader>How to import</ExampleHeader>
+                <SyntaxHighlighter language="javascript" style={highlightStyle}>{adt.example.import}</SyntaxHighlighter>
+            </Example>
+            {adt.example.before &&
+                <Example>
+                    <ExampleHeader>Without {adt.name}</ExampleHeader>
+                    <SyntaxHighlighter language="javascript" style={highlightStyle}>{adt.example.before.join('\n')}</SyntaxHighlighter>
+                </Example>
+            }
+            {adt.example.after &&
+                <Example>
+                    <ExampleHeader>With {adt.name}</ExampleHeader>
+                    <SyntaxHighlighter language="javascript" style={highlightStyle}>{adt.example.after.join('\n')}</SyntaxHighlighter>
+                </Example>
+            }
+        </ExamplesContainer>
         <TopicHeader>Constructors</TopicHeader>
         {adt.constructors.map(DataTypeMethod)}
         <TopicHeader>Static methods</TopicHeader>
