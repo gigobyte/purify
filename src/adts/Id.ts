@@ -11,6 +11,11 @@ import concat from '../utils/concat'
 
 export interface Id<T> extends Id_<T> { }
 
+export interface IId {
+    <T>(value: T): Id<T>
+    of: typeof Id_.of
+}
+
 export class Id_<T> implements Show, Functor<T>, Chain<T>, Apply<T>, Applicative<T>, Monad<T>, Setoid<Id<T>>, Ord<Id<T>>, Semigroup<Id<T>> {
     constructor(private readonly value: T) {}
 
@@ -73,11 +78,6 @@ export class Id_<T> implements Show, Functor<T>, Chain<T>, Apply<T>, Applicative
     concat(other: Id<T>): Id<T> {
         return Id(concat(this.value, other.value))
     }
-}
-
-export interface IId {
-    <T>(value: T): Id<T>
-    of: typeof Id_.of
 }
 
 const IdConstructor = <T>(value: T): Id<T> =>

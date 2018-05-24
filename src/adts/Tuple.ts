@@ -10,6 +10,12 @@ import concat from '../utils/concat'
 
 export interface Tuple<F, S> extends Tuple_<F, S> {}
 
+export interface ITuple {
+    <F, S>(fst: F, snd: S): Tuple<F, S>
+    fanout: typeof Tuple_.fanout,
+    fromArray: typeof Tuple_.fromArray
+}
+
 export class Tuple_<F, S> implements Show, Setoid<Tuple<F, S>>, Ord<Tuple<F, S>>, Semigroup<Tuple<F, S>>, Bifunctor<F, S>, Functor<S>, Apply<S> {
     constructor(private readonly first: F, private readonly second: S) {}
 
@@ -102,12 +108,6 @@ export class Tuple_<F, S> implements Show, Setoid<Tuple<F, S>>, Ord<Tuple<F, S>>
     ap<T, S2>(f: Tuple<T, (value: S) => S2>): Tuple<F, S2> {
         return Tuple(this.first, f.second(this.second))
     }
-}
-
-export interface ITuple {
-    <F, S>(fst: F, snd: S): Tuple<F, S>
-    fanout: typeof Tuple_.fanout,
-    fromArray: typeof Tuple_.fromArray
 }
 
 const TupleConstructor = <F, S>(fst: F, snd: S): Tuple<F, S> =>
