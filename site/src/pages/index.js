@@ -118,7 +118,7 @@ const IndexPage = () =>
     <Container>
         <Meta />
         <NavBar>
-            <NavBarLink><Link to="/adts/Maybe">Docs</Link></NavBarLink>
+            <NavBarLink><Link to="/getting-started">Docs</Link></NavBarLink>
             <NavBarLink><a href="https://github.com/gigobyte/pure">Github</a></NavBarLink>
         </NavBar>
         <Content>
