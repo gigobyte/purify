@@ -35,7 +35,7 @@ const Tag = styled.div`
 
 const colorMap = {
     ADT: {color: '#2877ad', bgColor: '#d6eeff'},
-    Util: {color: '#3c6f42', bgColor: '#b9f1c0'}
+    Util: {color: '#0a9e1b', bgColor: '#d3f9d8'}
 }
 
 const SidebarLink = ({ name, tag, link }) =>
