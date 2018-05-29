@@ -55,7 +55,8 @@ class Sidebar extends React.Component {
                     <HamburgerMenu onClick={this.toggleMenu} opened={this.state.isMenuShown} />
                 </Header>
                 <Nav shown={this.state.isMenuShown}>
-                    <SidebarLink name="Getting started" link="/" />
+                    <SidebarLink name="Home" link="/" />
+                    <SidebarLink name="Getting started" link="/getting-started" />
                     {data.datatypes.map(datatype => (
                         <div key={datatype.name} onClick={this.toggleMenu}>
                             <SidebarLink name={datatype.name} link={`/adts/${datatype.name}`} tag="ADT" />
