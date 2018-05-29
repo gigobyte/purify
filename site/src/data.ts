@@ -67,8 +67,8 @@ const data: Data = {
                 after: [
                     'const port: number = getConfig() // Maybe<Config>',
                     '    .chain(x => x.port)',
-                    '    .map(parseInt)',
-                    '    .orDefault(8080)'
+                    '    .map(parseInt)    // Alternatively,',
+                    '    .orDefault(8080)  // you can use .mapOrDefault as a shorthand'
                 ]
             },
             constructors: [
@@ -394,7 +394,7 @@ const data: Data = {
                     '    const config: Config | null = getConfig()',
                     '',
                     '    if (config && config.port) {',
-                    '        return parseInt(config.port)',
+                    '        return config.port',
                     '    }',
                     '',
                     `    throw new Error("Couldn't parse port from config")`,
@@ -403,25 +403,20 @@ const data: Data = {
                     'let port: number',
                     '',
                     'try {',
-                    '    port = getPort()',
+                    '    port = parseInt(getPort())',
                     '} catch (e) {',
                     '    loggingService.log(e.message)',
                     '    port = 8080',
                     '}'
                 ],
                 after: [
-                    'const getPort = () => {',
-                    '    const config: Config | null = getConfig()',
+                    'const getPort = () => getConfig() // Maybe makes a great combo with Either',
+                    '    .chain(x => x.port)',
+                    `    .toEither(new Error("Couldn't parse port from config"))`,
                     '',
-                    '    if (config && config.port) {',
-                    '        return Right(parseInt(config.port))',
-                    '    }',
-                    '',
-                    `    return Left(new Error("Couldn't parse port from config"))`,
-                    '}',
-                    '',
-                    'const port: number = getPort()',
+                    'const port: number = getPort() // Either<Error, number>',
                     '    .ifLeft((e) => loggingService.log(e.message))',
+                    '    .map(parseInt)',
                     '    .orDefault(8080)'
                 ]
             },
