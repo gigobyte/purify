@@ -44,11 +44,11 @@ export class Maybe<T> implements Show, Setoid<Maybe<T>>, Ord<Maybe<T>>, Semigrou
     }
 
     /** Takes a value and returns `Nothing` if the value is null or undefined, otherwise a `Just` is returned */
-    static toMaybe<T>(value: T): Maybe<T> {
+    static toMaybe<T>(value: T | undefined | null | void): Maybe<T> {
         return value == null ? Nothing : Just(value)
     }
 
-    static toMaybeWeak<T>(value: T): Maybe<T> {
+    static toMaybeWeak<T>(value: T | undefined | null | void): Maybe<T> {
         return value ? Just(value) : Nothing
     }
 

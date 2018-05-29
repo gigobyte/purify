@@ -29,8 +29,20 @@ export interface Typeclass {
     name: string
 }
 
+export interface Util {
+    name: string,
+    description: string,
+    example: {
+        import: string,
+        before?: string[],
+        after?: string[]
+    },
+    methods: Method[]
+}
+
 export interface Data {
     datatypes: DataType[],
+    utils: Util[]
     typeclasses: Typeclass[]
 }
 
@@ -944,7 +956,71 @@ const data: Data = {
                     ]
                 }
             ]
-        },
+        }
+    ],
+    utils: [
+        {
+            name: 'List',
+            description: 'This module contains type-safe functions for working with arrays.',
+            example: {
+                import: `import { head, last, tail, init, uncons } from 'pure-ts/utils/List`
+            },
+            methods: [
+                {
+                    name: 'head',
+                    description: 'Returns the first element of an array',
+                    signatureML: '[a] -> Maybe a',
+                    signatureTS: '<T>(list: T[]): Maybe<T>',
+                    examples: [
+                        {input: 'head([1])', output: 'Just(1)'},
+                        {input: 'head([])', output: 'Nothing'}
+                    ]
+                },
+                {
+                    name: 'last',
+                    description: 'Returns the last element of an array',
+                    signatureML: '[a] -> Maybe a',
+                    signatureTS: '<T>(list: T[]): Maybe<T>',
+                    examples: [
+                        {input: 'last([1, 2, 3])', output: 'Just(3)'},
+                        {input: 'last([])', output: 'Nothing'}
+                    ]
+                },
+                {
+                    name: 'tail',
+                    description: 'Returns all elements of an array except the first',
+                    signatureML: '[a] -> Maybe [a]',
+                    signatureTS: '<T>(list: T[]): Maybe<T[]>',
+                    examples: [
+                        {input: 'tail([1, 2, 3])', output: 'Just([2, 3])'},
+                        {input: 'tail([1])', output: 'Just([])'},
+                        {input: 'tail([])', output: 'Nothing'}
+                    ]
+                },
+                {
+                    name: 'init',
+                    description: 'Returns all elements of an array except the last',
+                    signatureML: '[a] -> Maybe [a]',
+                    signatureTS: ' <T>(list: T[]): Maybe<T[]>',
+                    examples: [
+                        {input: 'init([1, 2, 3])', output: 'Just([1, 2])'},
+                        {input: 'init([1])', output: 'Just([])'},
+                        {input: 'init([])', output: 'Nothing'}
+                    ]
+                },
+                {
+                    name: 'uncons',
+                    description: `Returns a tuple of an array's head and tail`,
+                    signatureML: '[a] -> Maybe (a, [a]) ',
+                    signatureTS: '<T>(list: T[]): Maybe<Tuple<T, T[]>>',
+                    examples: [
+                        {input: 'uncons([1, 2, 3])', output: 'Just(Tuple(1, [2, 3]))'},
+                        {input: 'uncons([1])', output: 'Just(Tuple(1, []))'},
+                        {input: 'uncons([])', output: 'Nothing'}
+                    ]
+                }
+            ]
+        }
     ],
     typeclasses: [
         // {name: 'Alt'},

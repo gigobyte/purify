@@ -61,6 +61,11 @@ class Sidebar extends React.Component {
                             <SidebarLink name={datatype.name} link={`/adts/${datatype.name}`} tag="ADT" />
                         </div>
                     ))}
+                    {data.utils.map(util => (
+                        <div key={util.name} onClick={this.toggleMenu}>
+                            <SidebarLink name={util.name} link={`/utils/${util.name}`} tag="Util" />
+                        </div>
+                    ))}
                     {data.typeclasses.map(typeclass => (
                         <div key={typeclass.name} onClick={this.toggleMenu}>
                             <SidebarLink name={typeclass.name} link={`/adts/${typeclasses.name}`} tag="Typeclass" />

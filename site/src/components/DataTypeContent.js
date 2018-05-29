@@ -83,7 +83,8 @@ const Example = styled.div`
 const DataTypeContent = adt => () =>
     <Container>
         <Title>{adt.name}</Title>
-        <TypeclassBadges>            {adt.implements.map(typeclass =>
+        <TypeclassBadges>
+            {adt.implements.map(typeclass =>
                 <TypeclassBadge key={typeclass} to={`/typeclasses/${typeclass}`}>{typeclass}</TypeclassBadge>
             )}
         </TypeclassBadges>

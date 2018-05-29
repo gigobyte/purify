@@ -20,21 +20,28 @@ const Container = styled(Link)`
 `
 
 const Tag = styled.div`
-    background-color: #d6eeff;
+    background-color: ${props => props.palette.bgColor};
     border-radius: 5px;
-    color: #2877ad;
+    color: ${props => props.palette.color};
     height: 16px;
     line-height: 18px;
     margin-right: 20px;
     font-size: 12px;
     padding: 5px;
+    min-width: 21px;
+    text-align: center;
     align-self: center;
 `
+
+const colorMap = {
+    ADT: {color: '#2877ad', bgColor: '#d6eeff'},
+    Util: {color: '#3c6f42', bgColor: '#b9f1c0'}
+}
 
 const SidebarLink = ({ name, tag, link }) =>
     <Container to={link}>
         <span>{name}</span>
-        {tag && <Tag>{tag}</Tag>}
+        {tag && <Tag palette={colorMap[tag]}>{tag}</Tag>}
     </Container>
 
 export default SidebarLink
