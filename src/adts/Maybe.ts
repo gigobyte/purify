@@ -71,7 +71,7 @@ export class Maybe<T> implements Show, Setoid<Maybe<T>>, Ord<Maybe<T>>, Semigrou
     static mapMaybe<T, U>(f: (value: T) => Maybe<U>): (list: T[]) => U[]
     static mapMaybe<T, U>(f: (value: T) => Maybe<U>, list: T[]): U[]
     static mapMaybe<T, U>(f: (value: T) => Maybe<U>, list?: T[]): any {
-        if (!list) {
+        if (list === undefined) {
             return (list: T[]) => Maybe.catMaybes(list.map(f))
         }
 

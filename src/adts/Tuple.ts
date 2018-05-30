@@ -30,7 +30,7 @@ export class Tuple_<F, S> implements Show, Setoid<Tuple<F, S>>, Ord<Tuple<F, S>>
     static fanout<F, S, T>(f: (value: T) => F, g: (value: T) => S): (value: T) => Tuple<F, S>
     static fanout<F, S, T>(f: (value: T) => F, g: (value: T) => S, value: T): Tuple<F, S>
     static fanout<F, S, T>(f: (value: T) => F, g: (value: T) => S, value?: T) : any {
-        if (value) {
+        if (value !== undefined) {
             return Tuple(f(value), g(value))
         }
 
