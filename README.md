@@ -1,5 +1,5 @@
 <h3 align="center">
-  <img align="center" src="assets/logo.png" alt="List logo" width=200 />
+  <img align="center" src="assets/logo.png" alt="List logo" width=300 />
 </h3
 
 <a href="https://travis-ci.org/gigobyte/pure"><img src="https://travis-ci.org/gigobyte/pure.svg?branch=master" alt="Build Status"></a>
