@@ -1,4 +1,5 @@
-import React from 'react';
+import React from 'react'
+import Link from 'gatsby-link'
 import styled from 'styled-components'
 
 const Container = styled.div`
@@ -49,7 +50,7 @@ const GettingStarted = () =>
             $ yarn add pure-ts
         </Console>
         On the left sidebar you can find all of <i>pure</i>'s contents, each page contains a guide on how to start using it. <br />
-        You can start by visiting the page about <a href="/adts/Maybe">Maybe</a>, one of the most popular data types.
+        You can start by visiting the page about <Link to="/adts/Maybe">Maybe</Link>, one of the most popular data types.
     </Container>
 
 export default GettingStarted
