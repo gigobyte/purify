@@ -201,12 +201,12 @@ export class Either<L, R> implements Show, Setoid<Either<L, R>>, Ord<Either<L, R
         return this.isRight() ? this.asRight().value : defaultValue
     }
     
-    /** Runs an effect if `this` is `Left`, returns `this` for easier composiblity */
+    /** Runs an effect if `this` is `Left`, returns `this` to make chaining other methods possible */
     ifLeft(effect: (value: L) => any): this {
         return this.isLeft() ? (effect(this.asLeft().value), this) : this
     }
 
-    /** Runs an effect if `this` is `Right`, returns `this` for easier composiblity */
+    /** Runs an effect if `this` is `Right`, returns `this` to make chaining other methods possible */
     ifRight(effect: (value: R) => any): this {
         return this.isLeft() ? this : (effect(this.asRight().value), this)
     }
@@ -232,10 +232,10 @@ export class Either<L, R> implements Show, Setoid<Either<L, R>>, Ord<Either<L, R
     }
 }
 
-/** Constructs a Left */
+/** Constructs a Left. Most commonly represents information about an operation that failed */
 export const Left = <T>(value: T): Left<T> =>
     new Either(value, _left)
 
-/** Constructs a Right */
+/** Constructs a Right. Represents a successful result of an operation */
 export const Right = <T>(value: T): Right<T> =>
     new Either(value, _right)

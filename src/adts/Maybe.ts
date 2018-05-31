@@ -147,7 +147,7 @@ export class Maybe<T> implements Show, Setoid<Maybe<T>>, Ord<Maybe<T>>, Semigrou
         return this.isNothing() ? other : this
     }
 
-    /** Transforms `this` with a function that returns a `Maybe`. Useful for chaining many computations that may fail */
+    /** Transforms `this` with a function that returns a `Maybe`. Useful for chaining many computations that may result in a missing value */
     chain<U>(f: (value: T) => Maybe<U>): Maybe<U> {
         return this.isNothing() ? Nothing : f(this.value)
     }
@@ -172,7 +172,7 @@ export class Maybe<T> implements Show, Setoid<Maybe<T>>, Ord<Maybe<T>>, Semigrou
         return this.isNothing() ? patterns.Nothing() : patterns.Just(this.value)
     }
 
-    /** Returns the default value if `this` is `Nothing`, otherwise it unwraps `this` and returns the value */
+    /** Returns the default value if `this` is `Nothing`, otherwise it return the value inside `this` */
     orDefault(defaultValue: T): T {
         return this.isNothing() ? defaultValue : this.value
     }
@@ -197,12 +197,12 @@ export class Maybe<T> implements Show, Setoid<Maybe<T>>, Ord<Maybe<T>>, Semigrou
         return this.isNothing() ? Left(left) : Right(this.value)
     }
 
-    /** Runs an effect if `this` is `Just`, returns `this` for easier composiblity */
+    /** Runs an effect if `this` is `Just`, returns `this` to make chaining other methods possible */
     ifJust(effect: (value: T) => any): this {
         return this.isJust() ? (effect(this.value), this) : this
     }
 
-    /** Runs an effect if `this` is `Nothing`, returns `this` for easier composiblity */
+    /** Runs an effect if `this` is `Nothing`, returns `this` to make chaining other methods possible */
     ifNothing(effect: () => any): this {
         return this.isNothing() ? (effect(), this) : this
     }
@@ -216,10 +216,10 @@ export class Maybe<T> implements Show, Setoid<Maybe<T>>, Ord<Maybe<T>>, Semigrou
     }
 }
 
-/** Constructs a Just */
+/** Constructs a Just. Respents an optional value that exists. */
 export const Just = <T>(value: T): Maybe<T> =>
     new Maybe(value)
 
-/** Exported Nothing */
+/** Represents a missing value, you can think of it as a smart 'null'. */
 export const Nothing: Maybe<never> =
     new Maybe(null as never)

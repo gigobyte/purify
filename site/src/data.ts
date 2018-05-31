@@ -68,7 +68,7 @@ const data: Data = {
                     'const port: number = getConfig() // Maybe<Config>',
                     '    .chain(x => x.port)',
                     '    .map(parseInt)    // Alternatively,',
-                    '    .orDefault(8080)  // you can use .mapOrDefault as a shorthand'
+                    '    .orDefault(8080)  // you can use the .mapOrDefault shorthand'
                 ]
             },
             constructors: [

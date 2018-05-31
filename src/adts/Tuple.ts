@@ -54,12 +54,12 @@ export class Tuple_<F, S> implements Show, Setoid<Tuple<F, S>>, Ord<Tuple<F, S>>
         return this.inspect()
     }
 
-    /** Returns the first value from `this` */
+    /** Returns the first value of `this` */
     fst(): F {
         return this.first
     }
 
-    /** Returns the second value from `this` */
+    /** Returns the second value of `this` */
     snd(): S {
         return this.second
     }
