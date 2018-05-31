@@ -6,15 +6,15 @@ describe('Maybe', () => {
         expect(Maybe.of(5)).toEqual(Just(5))
     })
 
-    test('toMaybe', () => {
-        expect(Maybe.toMaybe(null)).toEqual(Nothing)
-        expect(Maybe.toMaybe(5)).toEqual(Just(5))
+    test('fromNullable', () => {
+        expect(Maybe.fromNullable(null)).toEqual(Nothing)
+        expect(Maybe.fromNullable(5)).toEqual(Just(5))
     })
 
-    test('toMaybeWeak', () => {
-        expect(Maybe.toMaybeWeak(0)).toEqual(Nothing)
-        expect(Maybe.toMaybeWeak('')).toEqual(Nothing)
-        expect(Maybe.toMaybeWeak(5)).toEqual(Just(5))
+    test('fromFalsy', () => {
+        expect(Maybe.fromFalsy(0)).toEqual(Nothing)
+        expect(Maybe.fromFalsy('')).toEqual(Nothing)
+        expect(Maybe.fromFalsy(5)).toEqual(Just(5))
     })
 
     test('empty', () => {
