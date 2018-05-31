@@ -11,7 +11,7 @@ const Container = styled.div`
 
 const Console = styled.div`
     background-color: #283646;
-    padding: 5px;
+    padding: 5px 10px;
     color: white;
     margin: 10px 0;
     border-radius: 4px;

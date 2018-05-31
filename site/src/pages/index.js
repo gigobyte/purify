@@ -124,7 +124,7 @@ const IndexPage = () =>
         <Content>
             <Heading>
                 <Title>Pure</Title>
-                <Subtitle>Functional programming standard library for TypeScript</Subtitle>
+                <Subtitle>Functional programming library for TypeScript</Subtitle>
                 <InstallBox>
                      $ npm install pure-ts
                 </InstallBox>
