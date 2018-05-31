@@ -962,6 +962,16 @@ const data: Data = {
             },
             methods: [
                 {
+                    name: 'at',
+                    description: 'Returns the element at a given index of a list',
+                    signatureML: 'Integer -> [a] -> Maybe a',
+                    signatureTS: '<T>(index: number, list: T[]): Maybe<T>',
+                    examples: [
+                        {input: 'at(0, [1, 2])', output: 'Just(1)'},
+                        {input: 'at(2, [1, 2])', output: 'Nothing'}
+                    ]
+                },
+                {
                     name: 'head',
                     description: 'Returns the first element of an array.',
                     signatureML: '[a] -> Maybe a',
