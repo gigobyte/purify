@@ -1,4 +1,3 @@
-import { Applicative } from '../typeclasses/Applicative'
 import { Show } from '../typeclasses/Show'
 import { Setoid } from '../typeclasses/Setoid'
 import { Ord } from '../typeclasses/Ord'
