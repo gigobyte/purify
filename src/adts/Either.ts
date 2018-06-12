@@ -19,15 +19,15 @@ import concat from '../utils/concat'
 
 import { Maybe, Just, Nothing } from './Maybe'
 
-const _left: unique symbol = Symbol('Left')
-const _right: unique symbol = Symbol('Right')
+const _left: string = 'Left'
+const _right: string = 'Right'
 
 export type Left<L> = Either<L, never>
 export type Right<R> = Either<never, R>
 export type EitherPatterns<L, R, T> = { Left: (l: L) => T, Right: (r: R) => T }
 
 export class Either<L, R> implements Show, Setoid<Either<L, R>>, Ord<Either<L, R>>, Semigroup<Either<L, R>>, Functor<R>, Apply<R>, Applicative<R>, Alt<L | R>, Chain<R>, Monad<R>, Foldable<L | R>, Extend<L | R>, Bifunctor<L, R>, Unsafe {
-    constructor(private readonly value: L | R, private readonly tag: symbol) {}
+    constructor(private readonly value: L | R, private readonly tag: string) {}
 
     readonly of = Either.of
     readonly 'fantasy-land/alt' = this.alt
