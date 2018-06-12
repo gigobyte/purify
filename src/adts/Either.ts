@@ -19,8 +19,8 @@ import { Maybe, Just, Nothing } from './Maybe'
 const _left: string = 'Left'
 const _right: string = 'Right'
 
-export type Left<L> = Either<L, never>
-export type Right<R> = Either<never, R>
+export type Left<L, R> = Either<L, R>
+export type Right<L, R> = Either<L, R>
 export type EitherPatterns<L, R, T> = { Left: (l: L) => T, Right: (r: R) => T }
 
 export class Either<L, R> implements Show, Setoid<Either<L, R>>, Ord<Either<L, R>>, Semigroup<Either<L, R>>, Functor<R>, Apply<R>, Applicative<R>, Alt<L | R>, Chain<R>, Monad<R>, Foldable<L | R>, Extend<L | R>, Bifunctor<L, R>, Unsafe {
@@ -39,16 +39,16 @@ export class Either<L, R> implements Show, Setoid<Either<L, R>>, Ord<Either<L, R
     readonly 'fantasy-land/equals' = this.equals
     readonly 'fantasy-land/bimap' = this.bimap
 
-    private asLeft(): Left<L> {
-        return this as any as Left<L>
+    private asLeft(): Left<L, never> {
+        return this as any as Left<L, never>
     }
 
-    private asRight(): Right<R> {
-        return this as any as Right<R>
+    private asRight(): Right<never, R> {
+        return this as any as Right<never, R>
     }
 
     /** Takes a value and wraps it in a `Right` */
-    static of<R>(value: R): Right<R> {
+    static of<R, L = never>(value: R): Right<L, R> {
         return Right(value)
     }
 
@@ -230,9 +230,9 @@ export class Either<L, R> implements Show, Setoid<Either<L, R>>, Ord<Either<L, R
 }
 
 /** Constructs a Left. Most commonly represents information about an operation that failed */
-export const Left = <T>(value: T): Left<T> =>
+export const Left = <L, R = never>(value: L): Left<L, R> =>
     new Either(value, _left)
 
 /** Constructs a Right. Represents a successful result of an operation */
-export const Right = <T>(value: T): Right<T> =>
+export const Right = <R, L = never>(value: R): Right<L, R> =>
     new Either(value, _right)
