@@ -1035,7 +1035,7 @@ const data: Data = {
             methods: [
                 {
                     name: 'Validate.all',
-                    description: 'Takes a value and a list of validations and returns either a list of all errors or the value that was being validated',
+                    description: 'Takes a value and a list of validation predicates and returns either a list of all errors or the value that was being validated',
                     signatureML: 'a -> [((a -> Bool), err)] -> Either [err] a',
                     signatureTS: '<T, Err>(value: T, validations: [(value: T) => boolean, Err][]): Either<Err[], T>',
                     examples: [
@@ -1048,7 +1048,7 @@ const data: Data = {
                 },
                 {
                     name: 'Validate.untilError',
-                    description: 'Takes a value and a list of validations and returns either an error or the value that was being validated. Execution of the validation functions stop after the first error.',
+                    description: 'Takes a value and a list of validation predicates and returns either an error or the value that was being validated. Execution of the validations stops after the first error.',
                     signatureML: 'a -> [((a -> Bool), err)] -> Either [err] a',
                     signatureTS: '<T, Err>(value: T, validations: [(value: T) => boolean, Err][]): Either<Err[], T>',
                     examples: [
@@ -1155,14 +1155,14 @@ const data: Data = {
                 },
                 {
                     name: 'or',
-                    description: 'Logical or on two predicates',
+                    description: 'Logical `or` on two predicates',
                     signatureML: '(a -> Bool) -> (a -> Bool) -> a -> Bool',
                     signatureTS: '<T>(validation: (value: T) => boolean, validation2: (value: T) => boolean) => (value: T) => boolean',
                     examples: []
                 },
                 {
                     name: 'and',
-                    description: 'Logical and on two predicates',
+                    description: 'Logical `and` on two predicates',
                     signatureML: '(a -> Bool) -> (a -> Bool) -> a -> Bool',
                     signatureTS: '<T>(validation: (value: T) => boolean, validation2: (value: T) => boolean) => (value: T) => boolean',
                     examples: []
