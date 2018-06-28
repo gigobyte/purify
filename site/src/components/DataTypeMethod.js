@@ -137,25 +137,27 @@ const DataTypeMethod = method =>
                 </MethodSignature>
             }
             <MethodDescription>{method.description}</MethodDescription>
-            <MethodExample>
-                <MethodExampleColumn>
-                    {method.examples.map(example => (
-                        <Highlight key={example.input}>{example.input}</Highlight>
-                    ))}
-                </MethodExampleColumn>
+            {method.examples.length > 0 &&
+                <MethodExample>
+                    <MethodExampleColumn>
+                        {method.examples.map(example => (
+                            <Highlight key={example.input}>{example.input}</Highlight>
+                        ))}
+                    </MethodExampleColumn>
 
-                <MethodExampleColumn>
-                    {method.examples.map(example => (
-                        <Highlight key={example.input}>➔</Highlight>
-                    ))}
-                </MethodExampleColumn>
+                    <MethodExampleColumn>
+                        {method.examples.map(example => (
+                            <Highlight key={example.input}>➔</Highlight>
+                        ))}
+                    </MethodExampleColumn>
 
-                <MethodExampleColumn>
-                    {method.examples.map(example => (
-                        <Highlight key={example.input}>{example.output}</Highlight>
-                    ))}
-                </MethodExampleColumn>
-            </MethodExample>
+                    <MethodExampleColumn>
+                        {method.examples.map(example => (
+                            <Highlight key={example.input}>{example.output}</Highlight>
+                        ))}
+                    </MethodExampleColumn>
+                </MethodExample>
+            }
         </div>
     </Container>
 

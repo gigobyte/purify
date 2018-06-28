@@ -1025,7 +1025,150 @@ const data: Data = {
                     ]
                 }
             ]
-        }
+        },
+        {
+            name: 'Validation',
+            description: 'This is a module that provides useful constructs for data validation. What makes it different than libraries that have a similar feature set is that the Validation module utilizes Either which makes it more pleasant to work with if your codebase is already using ADTs. The API is as unopinionated as possible making all kinds of use cases possible, from form validation to smart constructors. Although this module provides a wide variety of validation predicates, you can use any predicate you want.',
+            example: {
+                import: `import { Validate, ifEmpty, ifJust, and, not, or ... } from 'pure-ts/utils/Validation'`
+            },
+            methods: [
+                {
+                    name: 'Validate.all',
+                    description: 'Takes a value and a list of validations and returns either a list of all errors or the value that was being validated',
+                    signatureML: 'a -> [((a -> Bool), err)] -> Either [err] a',
+                    signatureTS: '<T, Err>(value: T, validations: [(value: T) => boolean, Err][]): Either<Err[], T>',
+                    examples: [
+                        {input: `Validate.all('12333.34$', [
+    [ifEmpty, 'Please enter amount'],
+    [ifContains('$'), 'Currency cannot be USD'],
+    [ifLongerThan(4), 'Please enter smaller amount']
+])`, output: `Left(['Currency cannot be USD', 'Please enter smaller amount'])`}
+                    ]
+                },
+                {
+                    name: 'Validate.untilError',
+                    description: 'Takes a value and a list of validations and returns either an error or the value that was being validated. Execution of the validation functions stop after the first error.',
+                    signatureML: 'a -> [((a -> Bool), err)] -> Either [err] a',
+                    signatureTS: '<T, Err>(value: T, validations: [(value: T) => boolean, Err][]): Either<Err[], T>',
+                    examples: [
+                        {input: `Validate.untilError('error on line 12', [
+    [ifLongerThan(100000), 'Log is too long to read'],
+    [or(ifContains('error'), ifContains('warning')), 'There is an error in the log!']
+])`, output: `Left('There is an error in the log!')`}
+                    ]
+                },
+                {
+                    name: 'ifEmpty',
+                    description: 'Fails validation if the argument string is empty or contains only whitespace',
+                    signatureML: 'String -> Bool',
+                    signatureTS: '(value: string) => boolean',
+                    examples: []
+                },
+                {
+                    name: 'ifJust',
+                    description: 'Fails validation if the argument is a Just',
+                    signatureML: 'Maybe a -> Bool',
+                    signatureTS: '<T>(value: Maybe<T>) => boolean',
+                    examples: []
+                },
+                {
+                    name: 'ifNothing',
+                    description: 'Fails validation if the argument is Nothing',
+                    signatureML: 'Maybe a -> Bool',
+                    signatureTS: '<T>(value: Maybe<T>) => boolean',
+                    examples: []
+                },
+                {
+                    name: 'ifShorterThan',
+                    description: 'Fails validation if the argument string length is shorter than the length given',
+                    signatureML: 'Int -> String -> Bool',
+                    signatureTS: '(length: number) => (value: string) => boolean',
+                    examples: []
+                },
+                {
+                    name: 'ifLongerThan',
+                    description: 'Fails validation if the argument string length is longer than the length given',
+                    signatureML: 'Int -> String -> Bool',
+                    signatureTS: '(length: number) => (value: string) => boolean',
+                    examples: []
+                },
+                {
+                    name: 'ifLengthIs',
+                    description: 'Fails validation if the argument string length is exactly the length given',
+                    signatureML: 'Int -> String -> Bool',
+                    signatureTS: '(length: number) => (value: string) => boolean',
+                    examples: []
+                },
+                {
+                    name: 'ifSubstringOf',
+                    description: 'Fails validation if the argument string is a substring of a given string',
+                    signatureML: 'String -> String -> Bool',
+                    signatureTS: '(str: string) => (value: string) => boolean',
+                    examples: []
+                },
+                {
+                    name: 'ifContains',
+                    description: 'Fails validation if the argument string contains a given substring',
+                    signatureML: 'String -> String -> Bool',
+                    signatureTS: '(str: string) => (value: string) => boolean',
+                    examples: []
+                },
+                {
+                    name: 'ifEmptyList',
+                    description: 'Fails validation if the argument is an empty array',
+                    signatureML: '[a] -> Bool',
+                    signatureTS: '<T>(arr: T[]) => boolean',
+                    examples: []
+                },
+                {
+                    name: 'ifEqualTo',
+                    description: 'Fails validation if the argument is equal to a given value',
+                    signatureML: 'a -> a -> Bool',
+                    signatureTS: '<T>(other: T[]) => (value: T) => boolean',
+                    examples: []
+                },
+                {
+                    name: 'ifTrue',
+                    description: 'Takes a predicate and fails validation if the predicate returns true',
+                    signatureML: '(a -> Bool) -> a -> Bool',
+                    signatureTS: '<T>(condition: (value: T) => boolean) => (value: T) => boolean',
+                    examples: [
+                        {input: 'ifTrue(x => x > 10)', output: 'Returns whatever the predicate returns'}
+                    ]
+                },
+                {
+                    name: 'ifFalse',
+                    description: 'Takes a predicate and fails validation if the predicate returns false',
+                    signatureML: '(a -> Bool) -> a -> Bool',
+                    signatureTS: '<T>(condition: (value: T) => boolean) => (value: T) => boolean',
+                    examples: [
+                        {input: 'ifTrue(x => x > 10)', output: 'Returns the opposite of what the predicate returns'}
+                    ]
+                },
+                {
+                    name: 'not',
+                    description: 'Negates any predicate',
+                    signatureML: '(a -> Bool) -> a -> Bool',
+                    signatureTS: '<T>(validation: (value: T) => boolean) => (value: T) => boolean',
+                    examples: []
+                },
+                {
+                    name: 'or',
+                    description: 'Logical or on two predicates',
+                    signatureML: '(a -> Bool) -> (a -> Bool) -> a -> Bool',
+                    signatureTS: '<T>(validation: (value: T) => boolean, validation2: (value: T) => boolean) => (value: T) => boolean',
+                    examples: []
+                },
+                {
+                    name: 'and',
+                    description: 'Logical and on two predicates',
+                    signatureML: '(a -> Bool) -> (a -> Bool) -> a -> Bool',
+                    signatureTS: '<T>(validation: (value: T) => boolean, validation2: (value: T) => boolean) => (value: T) => boolean',
+                    examples: []
+                },
+            ]
+        },
     ],
     typeclasses: [
         // {name: 'Alt'},

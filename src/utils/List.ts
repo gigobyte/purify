@@ -1,5 +1,5 @@
 import { Tuple } from '../adts/Tuple';
-import { Maybe, Just, Nothing } from "../adts/Maybe"
+import { Maybe, Just, Nothing } from '../adts/Maybe'
 
 /** Returns the first element of an array */
 export const head = <T>(list: T[]): Maybe<T> =>

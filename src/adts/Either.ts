@@ -86,7 +86,7 @@ export class Either<L, R> implements Show, Setoid<Either<L, R>>, Ord<Either<L, R
     }
 
     inspect(): string {
-        return this.value ? this.value.toString() : JSON.stringify(this.value)
+        return `${this.tag} (${JSON.stringify(this.value)})`
     }
 
     toString(): string {
