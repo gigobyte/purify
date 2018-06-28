@@ -1028,7 +1028,7 @@ const data: Data = {
         },
         {
             name: 'Validation',
-            description: 'This is a module that provides useful constructs for data validation. What makes it different than libraries that have a similar feature set is that the Validation module utilizes Either which makes it more pleasant to work with if your codebase is already using ADTs. The API is as unopinionated as possible making all kinds of use cases possible, from form validation to smart constructors. Although this module provides a wide variety of validation predicates, you can use any predicate you want.',
+            description: 'This is a module that provides useful constructs for data validation. What makes it different than libraries that have a similar feature set is that the Validation module utilizes Either which makes it more pleasant to work with if your codebase is already using ADTs. The API is quite unopinionated making all kinds of use cases possible, from form validation to smart constructors. Although this module provides a wide variety of validation predicates, you can use any predicate you want.',
             example: {
                 import: `import { Validate, ifEmpty, ifJust, and, not, or ... } from 'pure-ts/utils/Validation'`
             },
