@@ -13,7 +13,7 @@ const Container = styled.div`
     border-right: 0;
 `
 
-const MethodName = styled(Link)`
+const MethodName = styled('a')`
     font-size: 19px;
     color: #007acc;
     border-left: 5px;
@@ -124,7 +124,7 @@ const Highlight = ({ children }) =>
 
 const DataTypeMethod = method =>
     <Container key={method.name}>
-        <MethodName id={method.name} to={'#' + method.name}>{method.name}</MethodName>
+        <MethodName id={method.name} href={'#' + method.name}>{method.name}</MethodName>
         <div>
             {method.signatureML &&
                 <MethodSignature ml>
