@@ -1,9 +1,8 @@
 import { Either, Left, Right } from '../adts/Either'
-import { Tuple } from '../adts/Tuple'
 import { Maybe, Just, Nothing } from '../adts/Maybe'
 
-type Validator<T> = (value: T) => boolean
-type ValidationTuple<T, Err> = [Validator<T>, Err]
+export type Validator<T> = (value: T) => boolean
+export type ValidationTuple<T, Err> = [Validator<T>, Err]
 
 export abstract class Validate {
     static all<T, Err>(value: T, validations: ValidationTuple<T, Err>[]): Either<Err[], T> {
