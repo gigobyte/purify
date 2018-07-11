@@ -27,7 +27,7 @@ export const ifLongerThan = (length: number) => (value: string) => value.length 
 export const ifLengthIs = (length: number) => (value: string) => value.length !== length
 export const ifSubstringOf = (str: string) => (value: string) => !str.includes(value)
 export const ifContains = (substr: string) => (value: string) => !value.includes(substr)
-export const ifEmptyList = <T>(arr: T[]) => arr.length > 0
+export const ifEmptyList = <T>(arr: ArrayLike<T>) => arr.length > 0
 export const ifEqualTo = <T>(other: T) => (value: T) => value !== other
 export const ifTrue = <T>(condition: Validator<T>) => (value: T) => !condition(value)
 export const ifFalse = <T>(condition: Validator<T>) => (value: T) => condition(value)

@@ -1116,9 +1116,9 @@ const data: Data = {
                 },
                 {
                     name: 'ifEmptyList',
-                    description: 'Fails validation if the argument is an empty array',
+                    description: 'Fails validation if the argument is an empty iterable',
                     signatureML: '[a] -> Bool',
-                    signatureTS: '<T>(arr: T[]) => boolean',
+                    signatureTS: '<T>(arr: ArrayLike<T>) => boolean',
                     examples: []
                 },
                 {
@@ -1143,7 +1143,7 @@ const data: Data = {
                     signatureML: '(a -> Bool) -> a -> Bool',
                     signatureTS: '<T>(condition: (value: T) => boolean) => (value: T) => boolean',
                     examples: [
-                        {input: 'ifTrue(x => x > 10)', output: 'Returns the opposite of what the predicate returns'}
+                        {input: 'ifFalse(x => x > 10)', output: 'Returns the opposite of what the predicate returns'}
                     ]
                 },
                 {
