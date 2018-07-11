@@ -47,7 +47,7 @@ const TypeclassBadges = styled.div`
     }
 `
 
-const TypeclassBadge = styled(Link)`
+const TypeclassBadge = styled.span`
     background-color: #af87e6;
     border-radius: 6px;
     color: white;
@@ -85,7 +85,7 @@ const DataTypeContent = adt => () =>
         <Title>{adt.name}</Title>
         <TypeclassBadges>
             {adt.implements.map(typeclass =>
-                <TypeclassBadge key={typeclass} to={`/typeclasses/${typeclass}`}>{typeclass}</TypeclassBadge>
+                <TypeclassBadge key={typeclass}>{typeclass}</TypeclassBadge>
             )}
         </TypeclassBadges>
         <Description>{adt.description}</Description>
