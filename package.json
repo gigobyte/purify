@@ -1,6 +1,6 @@
 {
   "name": "pure-ts",
-  "version": "0.10.1",
+  "version": "0.10.2",
   "description": "Functional programming standard library for TypeScript ",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
