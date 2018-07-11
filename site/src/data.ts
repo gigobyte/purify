@@ -26,7 +26,13 @@ export interface DataType {
 }
 
 export interface Typeclass {
-    name: string
+    name: string,
+    implementedBy: string[],
+    description: string,
+    example: {
+        import: string
+    },
+    methods: Method[]
 }
 
 export interface Util {
@@ -1171,7 +1177,32 @@ const data: Data = {
         },
     ],
     typeclasses: [
-        // {name: 'Alt'},
+        // {
+        //     name: 'Alt',
+        //     implementedBy: ['Maybe', 'Either'],
+        //     description: 'A value that implements the Alt specification must also implement the Functor specification.',
+        //     example: {
+        //         import: `import { Alt } from 'pure-ts/typeclasses/Alt'`
+        //     },
+        //     methods: [
+        //         {
+        //             name: 'alt',
+        //             description: '',
+        //             signatureML: 'Alt f => f a ~> f a -> f a',
+        //             signatureTS: 'alt(other: Alt<T>): Alt<T>',
+        //             examples: []
+        //         }
+        //     ]
+        // },
+        // {
+        //     name: 'Alternative',
+        //     implementedBy: ['Maybe'],
+        //     description: 'A value that implements the Alternative specification must also implement the Applicative and Plus specifications.',
+        //     example: {
+        //         import: `import { Alternative } from 'pure-ts/typeclasses/Alternative'`
+        //     },
+        //     methods: []
+        // },
         // {name: 'Alternative'},
         // {name: 'Applicative'},
         // {name: 'Apply'},

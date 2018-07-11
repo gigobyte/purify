@@ -69,7 +69,7 @@ class Sidebar extends React.Component {
                     ))}
                     {data.typeclasses.map(typeclass => (
                         <div key={typeclass.name} onClick={this.toggleMenu}>
-                            <SidebarLink name={typeclass.name} link={`/adts/${typeclasses.name}`} tag="Typeclass" />
+                            <SidebarLink name={typeclass.name} link={`/typeclasses/${typeclass.name}`} tag="Typeclass" />
                         </div>
                     ))}
                 </Nav>
