@@ -186,8 +186,8 @@ const data: Data = {
                     signatureTS: '(): this is Maybe<never>',
                     description: 'Returns true if `this` is `Nothing`, otherwise it returns false.',
                     examples: [
-                        {input: 'Just(5).isJust()', output: 'false'},
-                        {input: 'Nothing.isJust()', output: 'true'}
+                        {input: 'Just(5).isNothing()', output: 'false'},
+                        {input: 'Nothing.isNothing()', output: 'true'}
                     ]
                 },
                 {
