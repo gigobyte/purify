@@ -75,10 +75,11 @@ const Heading = styled.div`
 `
 
 const InstallBox = styled.div`
-    padding: 12px;
-    margin: 10px;
+    padding: 12px 0;
+    margin: 10px 0;
     background-color: white;
-    border: 1px dashed #3b74d7;
+    border-top: 1px dashed #3b74d7;
+    border-bottom: 1px dashed #3b74d7;
 `
 
 const FeaturesContainer = styled.div`
@@ -132,15 +133,15 @@ const IndexPage = () =>
             <FeaturesContainer>
                 <Feature>
                     <FeatureTitle>Utility functions</FeatureTitle>
-                    <i>Pure</i> provides implementations for common typeclasses like Functor and Monad, along with utility functions that operate on them
+                    Pure provides implementations for common typeclasses like Functor and Monad, along with utility functions that operate on them
                 </Feature>
                 <Feature>
                     <FeatureTitle>Algebraic Data Types</FeatureTitle>
-                    <i>Pure</i> provides a collection of algebraic data structures that will help you tackle common problems that increase code complexity, such as conditional logic and error handling
+                    Pure provides a collection of algebraic data structures that will help you tackle common problems that increase code complexity, such as conditional logic and error handling
                 </Feature>
                 <Feature>
                     <FeatureTitle>Practical approach</FeatureTitle>
-                    <i>Pure</i> is a library focused on practical functional programming in TypeScript. You will find many examples and tutorials in the docs section of this site.  
+                    Pure is a library focused on practical functional programming in TypeScript. You will find many examples and tutorials in the docs section of this site.  
                 </Feature>
             </FeaturesContainer>
         </Content>
