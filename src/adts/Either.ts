@@ -47,6 +47,14 @@ export class Either<L, R> implements Show, Setoid<Either<L, R>>, Ord<Either<L, R
         return this as any as Right<never, R>
     }
 
+    private isLeft_(): boolean {
+        return this.isLeft()
+    }
+
+    private isRight_(): boolean {
+        return this.isRight()
+    }
+
     /** Takes a value and wraps it in a `Right` */
     static of<R, L = never>(value: R): Right<L, R> {
         return Right(value)
@@ -72,12 +80,12 @@ export class Either<L, R> implements Show, Setoid<Either<L, R>>, Ord<Either<L, R
     }
 
     /** Returns true if `this` is `Left`, otherwise it returns false */
-    isLeft(): boolean {
+    isLeft(): this is Left<L, never> {
         return this.tag === _left
     }
 
     /** Returns true if `this` is `Right`, otherwise it returns false */
-    isRight(): boolean {
+    isRight(): this is Right<R, never> {
         return this.tag === _right
     }
 
@@ -97,7 +105,7 @@ export class Either<L, R> implements Show, Setoid<Either<L, R>>, Ord<Either<L, R
      * If both functions return the same type consider using `Either#either` instead
      */
     bimap<L2, R2>(f: (value: L) => L2, g: (value: R) => R2): Either<L2, R2> {
-        return this.isLeft() ? Left(f(this.asLeft().value)) : Right(g(this.asRight().value))
+        return this.isLeft_() ? Left(f(this.asLeft().value)) : Right(g(this.asRight().value))
     }
 
     /** Maps the `Right` value of `this`, acts like an identity if `this` is `Left` */
@@ -112,16 +120,16 @@ export class Either<L, R> implements Show, Setoid<Either<L, R>>, Ord<Either<L, R
 
     /** Applies a `Right` function over a `Right` value. Returns `Left` if either `this` or the function are `Left` */
     ap<R2>(other: Either<L, (value: R) => R2>): Either<L, R2> {
-        return other.isLeft() ? other.asLeft() : this.map(other.asRight().value)
+        return other.isLeft_() ? other.asLeft() : this.map(other.asRight().value)
     }
 
     /** Compares `this` to another `Either`, returns false if the constructors or the values inside are different, e.g. `Right(5).equals(Left(5))` is false */
     equals(other: Either<L, R>): boolean {
-        if (this.isLeft() && other.isLeft()) {
+        if (this.isLeft_() && other.isLeft_()) {
             return this.value === other.value
         }
 
-        if (this.isRight() && other.isRight()) {
+        if (this.isRight_() && other.isRight_()) {
             return this.value === other.value
         }
 
@@ -130,11 +138,11 @@ export class Either<L, R> implements Show, Setoid<Either<L, R>>, Ord<Either<L, R
 
     /** Compares `this` to another `Either`, returns false if the constructors are different or if the other `Either` is larger than `this` */
     lte(other: Either<L, R>): boolean {
-        if (this.isLeft() && other.isLeft()) {
+        if (this.isLeft_() && other.isLeft_()) {
             return this.value <= other.value
         }
 
-        if (this.isRight() && other.isRight()) {
+        if (this.isRight_() && other.isRight_()) {
             return this.value <= other.value
         }
 
@@ -143,15 +151,15 @@ export class Either<L, R> implements Show, Setoid<Either<L, R>>, Ord<Either<L, R
 
     /** Concatenates a value inside an `Either` to the value inside `this` */
     concat(other: Either<L, R>): Either<L, R> {
-        if (this.isLeft() && other.isLeft()) {
+        if (this.isLeft_() && other.isLeft_()) {
             return Left(concat(this.asLeft().value, other.asLeft().value))
         }
 
-        if (this.isRight() && other.isRight()) {
+        if (this.isRight_() && other.isRight_()) {
             return Right(concat(this.asRight().value, other.asRight().value))
         }
 
-        if (this.isLeft() && other.isRight()) {
+        if (this.isLeft_() && other.isRight_()) {
             return other
         }
 
@@ -160,67 +168,67 @@ export class Either<L, R> implements Show, Setoid<Either<L, R>>, Ord<Either<L, R
 
     /** Transforms `this` with a function that returns an `Either`. Useful for chaining many computations that may fail */
     chain<R2>(f: (value: R) => Either<L, R2>): Either<L, R2> {
-        return this.isLeft() ? this.asLeft() : f(this.asRight().value)
+        return this.isLeft_() ? this.asLeft() : f(this.asRight().value)
     }
 
     /** Returns the first `Right` between `this` and another `Either` or the `Left` in the argument if both `this` and the argument are `Left` */
     alt(other: Either<L, R>): Either<L, R> {
-        return this.isRight() ? this : other
+        return this.isRight_() ? this : other
     }
 
     /** Takes a reducer and a initial value and returns the initial value if `this` is `Left` or the result of applying the function to the initial value and the value inside `this` */
     reduce<T>(reducer: (accumulator: T, value: R) => T, initialValue: T): T {
-        return this.isLeft() ? initialValue : reducer(initialValue, this.asRight().value)
+        return this.isLeft_() ? initialValue : reducer(initialValue, this.asRight().value)
     }
 
     /** Returns `this` if it\'s a `Left`, otherwise it returns the result of applying the function argument to `this` and wrapping it in a `Right` */
     extend<R2>(f: (value: Either<L, R>) => R2): Either<L, R2> {
-        return this.isLeft() ? this.asLeft() : Right(f(this))
+        return this.isLeft_() ? this.asLeft() : Right(f(this))
     }
 
     /** Returns the value inside `this` or throws an error if `this` is a `Left` */
     unsafeCoerce(): R {
-        return this.isLeft() ? (() => { throw new Error('Either got coerced to a Left') })() : this.asRight().value;
+        return this.isLeft_() ? (() => { throw new Error('Either got coerced to a Left') })() : this.asRight().value;
     }
 
     /** Structural pattern matching for `Either` in the form of a function */
     caseOf<T>(patterns: EitherPatterns<L, R, T>): T {
-        return this.isLeft() ? patterns.Left(this.asLeft().value) : patterns.Right(this.asRight().value)
+        return this.isLeft_() ? patterns.Left(this.asLeft().value) : patterns.Right(this.asRight().value)
     }
 
     /** Returns the value inside `this` if it\'s `Left` or a default value if `this` is `Right` */
     leftOrDefault(defaultValue: L): L {
-        return this.isLeft() ? this.asLeft().value : defaultValue
+        return this.isLeft_() ? this.asLeft().value : defaultValue
     }
 
     /** Returns the value inside `this` if it\'s `Right` or a default value if `this` is `Left` */
     orDefault(defaultValue: R): R {
-        return this.isRight() ? this.asRight().value : defaultValue
+        return this.isRight_() ? this.asRight().value : defaultValue
     }
     
     /** Runs an effect if `this` is `Left`, returns `this` to make chaining other methods possible */
     ifLeft(effect: (value: L) => any): this {
-        return this.isLeft() ? (effect(this.asLeft().value), this) : this
+        return this.isLeft_() ? (effect(this.asLeft().value), this) : this
     }
 
     /** Runs an effect if `this` is `Right`, returns `this` to make chaining other methods possible */
     ifRight(effect: (value: R) => any): this {
-        return this.isLeft() ? this : (effect(this.asRight().value), this)
+        return this.isLeft_() ? this : (effect(this.asRight().value), this)
     }
 
     /** Constructs a `Just` with the value of `this` if it\'s `Right` or a `Nothing` if `this` is `Left` */
     toMaybe(): Maybe<R> {
-        return this.isLeft() ? Nothing : Just(this.asRight().value)
+        return this.isLeft_() ? Nothing : Just(this.asRight().value)
     }
 
     /** Constructs a `Just` with the value of `this` if it\'s `Left` or a `Nothing` if `this` is `Right` */
     leftToMaybe(): Maybe<L> {
-        return this.isLeft() ? Just(this.asLeft().value) : Nothing
+        return this.isLeft_() ? Just(this.asLeft().value) : Nothing
     }
 
     /** Given two map functions, maps using the first if `this` is `Left` or using the second one if `this` is `Right`. If you want the functions to return different types depending on the either you may want to use `Either#bimap` instead */
     either<T>(ifLeft: (value: L) => T, ifRight: (value: R) => T): T {
-        return this.isLeft() ? ifLeft(this.asLeft().value) : ifRight(this.asRight().value)
+        return this.isLeft_() ? ifLeft(this.asLeft().value) : ifRight(this.asRight().value)
     }
 
     /** Extracts the value out of `this` */

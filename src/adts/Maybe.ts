@@ -18,6 +18,7 @@ import { Unsafe } from '../typeclasses/Unsafe'
 import concat from '../utils/concat'
 
 export type MaybePatterns<T, U> = {Just: (value: T) => U, Nothing: () => U}
+export type AlwaysJust = {kind: '$$MaybeAlwaysJust'}
 
 export class Maybe<T> implements Show, Setoid<Maybe<T>>, Ord<Maybe<T>>, Semigroup<Maybe<T>>, Monoid<Maybe<T>>, Functor<T>, Apply<T>, Applicative<T>, Alt<T>, Plus<T>, Alternative<T>, Chain<T>, Monad<T>, Foldable<T>, Extend<T>, Unsafe {
     constructor(private readonly value: T) {}
@@ -88,7 +89,7 @@ export class Maybe<T> implements Show, Setoid<Maybe<T>>, Ord<Maybe<T>>, Semigrou
     }
 
     /** Returns true if `this` is `Just`, otherwise it returns false */
-    isJust(): boolean {
+    isJust(): this is AlwaysJust {
         return this.value !== null
     }
 
@@ -188,8 +189,8 @@ export class Maybe<T> implements Show, Setoid<Maybe<T>>, Ord<Maybe<T>>, Semigrou
     }
 
     /** Returns the value inside `this` or null if `this` is `Nothing` */
-    extract(): T | null {
-        return this.value
+    extract(): this extends AlwaysJust ? T : T | null {
+        return this.value as this extends AlwaysJust ? T : T | null
     }
 
     /** Constructs a `Right` from a `Just` or a `Left` with a provided left value if `this` is `Nothing` */
