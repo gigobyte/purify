@@ -24,7 +24,7 @@ const Subtitle = styled.h2`
 `
 
 const NavBar = styled.div`
-    background-color: #007acc;
+    background-color: #3b74d7;
     height: 60px;
     min-height: 60px;
     display: flex;
@@ -71,14 +71,14 @@ const Content = styled.div`
 `
 
 const Heading = styled.div`
-    padding-top: 5%;
+    padding-top: 4%;
 `
 
 const InstallBox = styled.div`
     padding: 12px;
     margin: 10px;
     background-color: white;
-    border: 1px dashed #007acc;
+    border: 1px dashed #3b74d7;
 `
 
 const FeaturesContainer = styled.div`
@@ -123,7 +123,7 @@ const IndexPage = () =>
         </NavBar>
         <Content>
             <Heading>
-                <Title>Pure</Title>
+                <Title><img src="https://raw.githubusercontent.com/gigobyte/pure/master/assets/logo.png" alt="Pure" /></Title>
                 <Subtitle>Functional programming library for TypeScript</Subtitle>
                 <InstallBox>
                      $ npm install pure-ts

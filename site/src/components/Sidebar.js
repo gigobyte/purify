@@ -9,7 +9,7 @@ const Container = styled.div`
 `
 
 const Header = styled.div`
-    background-color: #007acc;
+    background-color: #3b74d7;
     color: white;
     display: flex;
     justify-content: center;

@@ -15,7 +15,7 @@ const Container = styled.div`
 
 const MethodName = styled('a')`
     font-size: 19px;
-    color: #007acc;
+    color: #3b74d7;
     border-left: 5px;
     text-decoration: none;
 
@@ -40,7 +40,7 @@ const MethodSignature = styled.span`
 
     &:before {
         content: ${props => props.ml ? "'λ'" : "'TS'"};
-        background-color: ${props => props.ml ? '#9756f3' : '#007acc'} ;
+        background-color: ${props => props.ml ? '#9756f3' : '#3b74d7'} ;
         color: white;
         border-bottom-left-radius: 4px;
         border-top-left-radius: 4px;
