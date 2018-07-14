@@ -1,8 +1,12 @@
 <h3 align="center">
-  <img align="center" src="assets/logo.png" alt="Pure logo" width="280" />
+  <img align="center" src="assets/logo.png" alt="Pure logo" width="112" />
 </h3
 
-<a href="https://travis-ci.org/gigobyte/pure"><img src="https://travis-ci.org/gigobyte/pure.svg?branch=master" alt="Build Status"></a>
+<p align="center">
+    <a href="https://travis-ci.org/gigobyte/pure">
+      <img src="https://travis-ci.org/gigobyte/pure.svg?branch=master" alt="Build Status">
+    </a>
+</p>
 
 # What is _pure_?
 
