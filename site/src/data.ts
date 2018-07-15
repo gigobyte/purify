@@ -865,7 +865,7 @@ const data: Data = {
         {
             name: 'Id',
             implements: ['Setoid', 'Ord', 'Semigroup', 'Function', 'Apply', 'Applicative', 'Chain', 'Monad'],
-            description: `The identity data constructor.`,
+            description: `The identity data constructor. Useful when a function requires a Functor or a Monad object and you only have a regular value, you can wrap that value in an Id to make the compiler happy.`,
             example: {
                 import: `import { Id } from 'pure-ts/adts/Id'`
             },
