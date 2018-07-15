@@ -93,7 +93,7 @@ const TypeclassContent = typeclass => () =>
         <ExamplesContainer>
             <Example>
                 <ExampleHeader>How to import</ExampleHeader>
-                <SyntaxHighlighter language="javascript" style={highlightStyle}>{typeclass.example.import}</SyntaxHighlighter>
+                <SyntaxHighlighter language="typescript" style={highlightStyle}>{typeclass.example.import}</SyntaxHighlighter>
             </Example>
         </ExamplesContainer>
         {typeclass.methods.length > 0 &&

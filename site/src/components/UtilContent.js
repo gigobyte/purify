@@ -62,18 +62,18 @@ const UtilContent = util => () =>
         <ExamplesContainer>
             <Example>
                 <ExampleHeader>How to import</ExampleHeader>
-                <SyntaxHighlighter language="javascript" style={highlightStyle}>{util.example.import}</SyntaxHighlighter>
+                <SyntaxHighlighter language="typescript" style={highlightStyle}>{util.example.import}</SyntaxHighlighter>
             </Example>
             {util.example.before &&
                 <Example>
                     <ExampleHeader>Without {util.name}</ExampleHeader>
-                    <SyntaxHighlighter language="javascript" style={highlightStyle}>{util.example.before.join('\n')}</SyntaxHighlighter>
+                    <SyntaxHighlighter language="typescript" style={highlightStyle}>{util.example.before.join('\n')}</SyntaxHighlighter>
                 </Example>
             }
             {util.example.after &&
                 <Example>
                     <ExampleHeader>With {util.name}</ExampleHeader>
-                    <SyntaxHighlighter language="javascript" style={highlightStyle}>{util.example.after.join('\n')}</SyntaxHighlighter>
+                    <SyntaxHighlighter language="typescript" style={highlightStyle}>{util.example.after.join('\n')}</SyntaxHighlighter>
                 </Example>
             }
         </ExamplesContainer>

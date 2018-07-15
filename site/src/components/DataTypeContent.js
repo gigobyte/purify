@@ -92,18 +92,18 @@ const DataTypeContent = adt => () =>
         <ExamplesContainer>
             <Example>
                 <ExampleHeader>How to import</ExampleHeader>
-                <SyntaxHighlighter language="javascript" style={highlightStyle}>{adt.example.import}</SyntaxHighlighter>
+                <SyntaxHighlighter language="typescript" style={highlightStyle}>{adt.example.import}</SyntaxHighlighter>
             </Example>
             {adt.example.before &&
                 <Example>
                     <ExampleHeader>Without {adt.name}</ExampleHeader>
-                    <SyntaxHighlighter language="javascript" style={highlightStyle}>{adt.example.before.join('\n')}</SyntaxHighlighter>
+                    <SyntaxHighlighter language="typescript" style={highlightStyle}>{adt.example.before.join('\n')}</SyntaxHighlighter>
                 </Example>
             }
             {adt.example.after &&
                 <Example>
                     <ExampleHeader>With {adt.name}</ExampleHeader>
-                    <SyntaxHighlighter language="javascript" style={highlightStyle}>{adt.example.after.join('\n')}</SyntaxHighlighter>
+                    <SyntaxHighlighter language="typescript" style={highlightStyle}>{adt.example.after.join('\n')}</SyntaxHighlighter>
                 </Example>
             }
         </ExamplesContainer>

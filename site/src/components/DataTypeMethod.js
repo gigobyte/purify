@@ -120,7 +120,7 @@ const MethodDescription = styled.div`
 `
 
 const Highlight = ({ children }) =>
-    <SyntaxHighlighter language="javascript" style={highlightStyle}>{children}</SyntaxHighlighter>
+    <SyntaxHighlighter language="typescript" style={highlightStyle}>{children}</SyntaxHighlighter>
 
 const DataTypeMethod = method =>
     <Container key={method.name}>
