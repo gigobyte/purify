@@ -1,4 +1,5 @@
 import React from 'react'
+import Link from 'gatsby-link'
 import styled from 'styled-components'
 import SidebarLink from './SidebarLink'
 import HamburgerMenu from './HamburgerMenu'
@@ -19,8 +20,10 @@ const Header = styled.div`
     border-bottom: 1px solid #e0e0e0;
 `
 
-const HeaderTitle = styled.span`
+const HeaderTitle = styled(Link)`
     font-size: 20px;
+    color: white;
+    text-decoration: none;
 `
 
 const HeaderTitleVersion = styled.span`
@@ -50,7 +53,7 @@ class Sidebar extends React.Component {
         return (
             <Container>
                 <Header>
-                    <HeaderTitle>Pure</HeaderTitle>
+                    <HeaderTitle to="/">Pure</HeaderTitle>
                     <HeaderTitleVersion>v0.10</HeaderTitleVersion>
                     <HamburgerMenu onClick={this.toggleMenu} opened={this.state.isMenuShown} />
                 </Header>
