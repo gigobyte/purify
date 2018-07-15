@@ -123,6 +123,11 @@ describe('Maybe', () => {
         expect(Nothing.orDefault(0 as never)).toEqual(0)
     })
 
+    test('orDefaultLazy', () => {
+        expect(Just(5).orDefaultLazy(() => 0)).toEqual(5)
+        expect(Nothing.orDefaultLazy(() => 0 as never)).toEqual(0)
+    })
+
     test('toList', () => {
         expect(Just(5).toList()).toEqual([5])
         expect(Nothing.toList()).toEqual([])

@@ -178,6 +178,11 @@ export class Maybe<T> implements Show, Setoid<Maybe<T>>, Ord<Maybe<T>>, Semigrou
         return this.isNothing() ? defaultValue : this.value
     }
 
+    /** Lazy version of `orDefault`. Takes a function that returns the default value, that function will be called only if `this` is `Nothing` */
+    orDefaultLazy(getDefaultValue: () => T): T {
+        return this.isNothing() ? getDefaultValue() : this.value
+    }
+
     /** Returns empty list if the `Maybe` is `Nothing` or a list where the only element is the value of `Just` */
     toList(): T[] {
         return this.isNothing() ? [] : [this.value]

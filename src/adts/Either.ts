@@ -205,7 +205,17 @@ export class Either<L, R> implements Show, Setoid<Either<L, R>>, Ord<Either<L, R
     orDefault(defaultValue: R): R {
         return this.isRight_() ? this.asRight().value : defaultValue
     }
+
+    /** Lazy version of `orDefault`. Takes a function that returns the default value, that function will be called only if `this` is `Left` */
+    orDefaultLazy(getDefaultValue: () => R): R {
+        return this.isRight_() ? this.asRight().value : getDefaultValue()
+    }
     
+    /** Lazy version of `leftOrDefault`. Takes a function that returns the default value, that function will be called only if `this` is `Right` */
+    leftOrDefaultLazy(getDefaultValue: () => L): L {
+        return this.isLeft_() ? this.asLeft().value : getDefaultValue()
+    }
+
     /** Runs an effect if `this` is `Left`, returns `this` to make chaining other methods possible */
     ifLeft(effect: (value: L) => any): this {
         return this.isLeft_() ? (effect(this.asLeft().value), this) : this

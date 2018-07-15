@@ -321,6 +321,16 @@ const data: Data = {
                     ]
                 },
                 {
+                    name: 'orDefaultLazy',
+                    signatureML: 'Maybe a ~ (() -> a) -> a',
+                    signatureTS: '(getDefaultValue: () => T): T',
+                    description: 'Lazy version of `orDefault`. Takes a function that returns the default value, that function will be called only if `this` is `Nothing`',
+                    examples: [
+                        {input: 'Just(5).orDefaultLazy(() => expensiveComputation())', output: '5 // expensiveComputation is never called'},
+                        {input: 'Nothing.orDefaultLazy(() => 0)', output: '0'}
+                    ]
+                },
+                {
                     name: 'mapOrDefault',
                     signatureML: 'Maybe a ~> (a -> b) -> b -> b',
                     signatureTS: '<U>(f: (value: T) => U, defaultValue: U): U',
@@ -659,6 +669,26 @@ const data: Data = {
                     examples: [
                         {input: `Left('Error').leftOrDefault('No error')`, output: `'Error'`},
                         {input: `Right(5).leftOrDefault('No error')`, output: `'No error'`},
+                    ]
+                },
+                {
+                    name: 'orDefaultLazy',
+                    description: 'Lazy version of `orDefault`. Takes a function that returns the default value, that function will be called only if `this` is `Left`.',
+                    signatureML: 'Either a b ~> (() -> b) -> b',
+                    signatureTS: '(defaultValue: R): R',
+                    examples: [
+                        {input: `Left('Error').orDefault(() => 0)`, output: '0'},
+                        {input: `Right(5).orDefault(() => expensiveComputation())`, output: '5 // expensiveComputation is never called'},
+                    ]
+                },
+                {
+                    name: 'leftOrDefaultLazy',
+                    description: 'Lazy version of `leftOrDefault`. Takes a function that returns the default value, that function will be called only if `this` is `Right`.',
+                    signatureML: 'Either a b ~> (() -> a) -> a',
+                    signatureTS: '(defaultValue: L): L',
+                    examples: [
+                        {input: `Left('Error').leftOrDefault(() => 'No error')`, output: `'Error'`},
+                        {input: `Right(5).leftOrDefault(() => 'No error')`, output: `'No error'`},
                     ]
                 },
                 {

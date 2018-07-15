@@ -119,6 +119,16 @@ describe('Either', () => {
         expect(Right(5).orDefault(0)).toEqual(5)
     })
 
+    test('leftOrDefaultLazy', () => {
+        expect(Left('Error').leftOrDefaultLazy(() => 'No error')).toEqual('Error')
+        expect(Right(5).leftOrDefaultLazy(() => 'No error' as never)).toEqual('No error')
+    })
+
+    test('orDefaultLazy', () => {
+        expect(Left('Error').orDefaultLazy(() => 0 as never)).toEqual(0)
+        expect(Right(5).orDefaultLazy(() => 0)).toEqual(5)
+    })
+
     test('ifLeft', () => {
         let a = 0
         Left('Error').ifLeft(() => { a = 5})
