@@ -2,6 +2,8 @@ import React from 'react'
 import Link from 'gatsby-link'
 import styled from 'styled-components'
 import Meta from '../components/Meta'
+import SyntaxHighlighter from 'react-syntax-highlighter'
+import highlightStyle from 'react-syntax-highlighter/styles/hljs/tomorrow'
 
 const Container = styled.div`
     display: flex;
@@ -115,6 +117,28 @@ const Footer = styled.div`
 const FeatureTitle = styled.h3`
 `
 
+const RefactoringContainer = styled.div`
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    padding-top: 25px;
+
+    pre {
+        text-align: left;
+        align-self: center;
+        font-size: 12px;
+        background-color: rgba(0,0,0,.02) !important;
+        border-radius: 5px;
+        padding: 1em !important;
+    }
+`
+
+const RefactoringText = styled.div`
+    align-self: center;
+    font-size: 27px;
+    padding: 0 20px;
+`
+
 const IndexPage = () =>
     <Container>
         <Meta />
@@ -141,9 +165,36 @@ const IndexPage = () =>
                 </Feature>
                 <Feature>
                     <FeatureTitle>Practical approach</FeatureTitle>
-                    Pure is a library focused on practical functional programming in TypeScript. You will find many examples and tutorials in the docs section of this site.  
+                    Pure is a library focused on practical functional programming in TypeScript. You will find many examples and tutorials in the <Link to="/getting-started">docs</Link> section of this site.  
                 </Feature>
             </FeaturesContainer>
+            <RefactoringContainer>
+                <RefactoringText>Turn</RefactoringText>
+                <SyntaxHighlighter language="typescript" style={highlightStyle}>
+                    {`const getUsers = (country: Country): User[] => {
+    if (!country) {
+        return []
+    }
+
+    const users = getUsersByCountry(country)
+
+    if (!users) {
+        return []
+    }
+
+    return users
+}`}
+                </SyntaxHighlighter>
+                <RefactoringText>into</RefactoringText>
+                <SyntaxHighlighter language="typescript" style={highlightStyle} show>
+                    {`import { Maybe } from 'pure-ts/adts/Maybe'
+
+const getUsers = (country: Country): User[] =>
+    Maybe.fromNullable(country)
+         .chain(getUsersByCountry)
+         .toList()`}
+                </SyntaxHighlighter>
+            </RefactoringContainer>
         </Content>
         <Footer>
             Pure is developed and maintained by Stanislav Iliev, distributed under the ISC License.
