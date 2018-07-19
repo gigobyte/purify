@@ -5,6 +5,7 @@ import { Tuple } from '../adts/Tuple';
 describe('List', () => {
     test('at', () => {
         expect(List.at(0, [1, 2])).toEqual(Just(1))
+        expect(List.at(0)([1, 2])).toEqual(Just(1))
         expect(List.at(0, [1, 2])).toEqual(Just(1))
         expect(List.at(0, [])).toEqual(Nothing)
     })
