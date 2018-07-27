@@ -1,6 +1,6 @@
 import * as List from './List'
-import { Just, Nothing } from '../adts/Maybe'
-import { Tuple } from '../adts/Tuple';
+import { Just, Nothing } from 'adts/Maybe'
+import { Tuple } from 'adts/Tuple';
 
 describe('List', () => {
     test('at', () => {

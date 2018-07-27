@@ -22,7 +22,8 @@ export interface DataType {
     },
     constructors: Method[],
     staticMethods: Method[],
-    instanceMethods: Method[]
+    instanceMethods: Method[],
+    helperMethods?: Method[]
 }
 
 export interface Typeclass {
@@ -987,6 +988,80 @@ const data: Data = {
                     ]
                 }
             ]
+        },
+        {
+            name: 'NonEmptyList',
+            implements: ['Unsafe'],
+            description: `A type which represents a list that is not empty. NonEmptyList has no runtime, during execution it's a regular array. This gives not only performance benefits, but it also allows you to use Array and NonEmptyList interchangeably - you can pass a NonEmptyList to any function that expects an Array (this includes access to all Array.prototype methods like map and filter for free).`,
+            example: {
+                import: `import { NonEmptyList, isNonEmpty, head, last } from 'pure-ts/adts/NonEmptyList'`
+            },
+            constructors: [
+                {
+                    name: 'NonEmptyList',
+                    signatureTS: '<T extends NonEmptyListCompliant<T[0]>>(list: T): NonEmptyList<T[0]>',
+                    description: 'Typecasts an array with at least one element into a `NonEmptyList`. Works only if the compiler can confirm that the array has one or more elements.',
+                    examples: [
+                        {input: 'NonEmptyList([1])', output: '// NonEmptyList<number>'},
+                        {input: 'NonEmptyList([])', output: '// Compiler error'}
+                    ]
+                }
+            ],
+            staticMethods: [
+                {
+                    name: 'fromArray',
+                    description: 'Return a `Just NonEmptyList` if the parameter has one or more elements, otherwise it returns `Nothing`.',
+                    signatureML: '[a] -> Maybe (NonEmptyList a)',
+                    signatureTS: '<T>(source: T[]): Maybe<NonEmptyList<T>>',
+                    examples: [
+                        {input: 'NonEmptyList.fromArray([1])', output: 'Just(NonEmptyList([1]))'},
+                        {input: 'NonEmptyList.fromArray([])', output: 'Nothing'}
+                    ]
+                },
+                {
+                    name: 'fromTuple',
+                    description: 'Converts a `Tuple` to a `NonEmptyList`.',
+                    signatureTS: '<T, U>(source: Tuple<T, U>): NonEmptyList<T | U>',
+                    examples: [
+                        {input: 'NonEmptyList.fromTuple(Tuple(1, 2))', output: 'NonEmptyList([1, 2])'}
+                    ]
+                },
+                {
+                    name: 'unsafeCoerce',
+                    description: 'Typecasts any array into a `NonEmptyList`, but throws an exception if the array is empty. Use `fromArray` as a safe alternative.',
+                    signatureTS: '<T>(source: T[]): NonEmptyList<T>',
+                    examples: [
+                        {input: 'NonEmptyList.unsafeCoerce([])', output: '// Error: NonEmptyList#unsafeCoerce passed an empty array'},
+                        {input: 'NonEmptyList.unsafeCoerce([1])', output: '// NonEmptyList<number>'}
+                    ]
+                },
+            ],
+            instanceMethods: [],
+            helperMethods: [
+                {
+                    name: 'isNonEmpty',
+                    signatureML: '[a] -> Bool',
+                    signatureTS: '<T>(list: T[]): list is NonEmptyList<T>',
+                    description: 'Returns true and narrows the type if the passed array has one or more elements.',
+                    examples: [
+                        {input: 'isNonEmpty([1])', output: 'true'}
+                    ]
+                },
+                {
+                    name: 'head',
+                    signatureML: 'NonEmptyList a -> a',
+                    signatureTS: '<T>(list: NonEmptyList<T>): T',
+                    description: `The same function as \`List#head\`, but it doesn't return a Maybe as a NonEmptyList will always have a head.`,
+                    examples: []
+                },
+                {
+                    name: 'last',
+                    signatureML: 'NonEmptyList a -> a',
+                    signatureTS: '<T>(list: NonEmptyList<T>): T',
+                    description: `The same function as \`List#last\`, but it doesn't return a Maybe as a NonEmptyList will always have a last element.`,
+                    examples: []
+                }
+            ]
         }
     ],
     utils: [
@@ -1009,7 +1084,7 @@ const data: Data = {
                 },
                 {
                     name: 'head',
-                    description: 'Returns the first element of an array.',
+                    description: `Returns Just the first element of an array or Nothing if there is none. If you don't want to work with a Maybe but still keep type safety, check out \`NonEmptyList\``,
                     signatureML: '[a] -> Maybe a',
                     signatureTS: '<T>(list: T[]): Maybe<T>',
                     examples: [
@@ -1019,7 +1094,7 @@ const data: Data = {
                 },
                 {
                     name: 'last',
-                    description: 'Returns the last element of an array.',
+                    description: 'Returns Just the last element of an array or Nothing if there is none.',
                     signatureML: '[a] -> Maybe a',
                     signatureTS: '<T>(list: T[]): Maybe<T>',
                     examples: [

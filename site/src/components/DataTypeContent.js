@@ -111,8 +111,18 @@ const DataTypeContent = adt => () =>
         {adt.constructors.map(DataTypeMethod)}
         <TopicHeader>Static methods</TopicHeader>
         {adt.staticMethods.map(DataTypeMethod)}
-        <TopicHeader>Instance methods</TopicHeader>
-        {adt.instanceMethods.map(DataTypeMethod)}
+        {adt.instanceMethods.length > 0 &&
+            <div>
+                <TopicHeader>Instance methods</TopicHeader>
+                {adt.instanceMethods.map(DataTypeMethod)}
+            </div>
+        }
+        {adt.helperMethods && adt.helperMethods.length > 0 &&
+            <div>
+                <TopicHeader>Helper methods</TopicHeader>
+                {adt.helperMethods.map(DataTypeMethod)}
+            </div>
+        }
     </Container>
 
 export default DataTypeContent
