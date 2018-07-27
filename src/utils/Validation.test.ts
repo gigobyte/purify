@@ -1,5 +1,5 @@
 import { Validate } from './Validation'
-import { Left, Right } from '../adts/Either'
+import { Left, Right } from 'adts/Either'
 import * as V from './Validation'
 
 const err1 = 'Username shouldnt contain 1';

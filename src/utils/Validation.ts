@@ -1,5 +1,5 @@
-import { Either, Left, Right } from '../adts/Either'
-import { Maybe, Just, Nothing } from '../adts/Maybe'
+import { Either, Left, Right } from 'adts/Either'
+import { Maybe, Just, Nothing } from 'adts/Maybe'
 
 export type Validator<T> = (value: T) => boolean
 export type ValidationTuple<T, Err> = [Validator<T>, Err]
