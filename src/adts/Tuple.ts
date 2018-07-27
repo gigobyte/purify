@@ -1,11 +1,11 @@
-import { Show } from 'typeclasses/Show'
-import { Setoid } from 'typeclasses/Setoid'
-import { Ord } from 'typeclasses/Ord'
-import { Semigroup } from 'typeclasses/Semigroup'
-import { Bifunctor } from 'typeclasses/Bifunctor'
-import { Functor } from 'typeclasses/Functor'
-import { Apply } from 'typeclasses/Apply'
-import concat from 'utils/concat'
+import { Show } from '../typeclasses/Show'
+import { Setoid } from '../typeclasses/Setoid'
+import { Ord } from '../typeclasses/Ord'
+import { Semigroup } from '../typeclasses/Semigroup'
+import { Bifunctor } from '../typeclasses/Bifunctor'
+import { Functor } from '../typeclasses/Functor'
+import { Apply } from '../typeclasses/Apply'
+import concat from '../utils/concat'
 
 export interface Tuple<F, S> extends Tuple_<F, S> {}
 

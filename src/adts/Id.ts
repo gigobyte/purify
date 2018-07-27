@@ -1,13 +1,13 @@
-import { Show } from 'typeclasses/Show'
-import { Functor } from 'typeclasses/Functor'
-import { Chain } from 'typeclasses/Chain'
-import { Apply } from 'typeclasses/Apply'
-import { Monad } from 'typeclasses/Monad'
-import { Applicative } from 'typeclasses/Applicative'
-import { Setoid } from 'typeclasses/Setoid'
-import { Ord } from 'typeclasses/Ord'
-import { Semigroup } from 'typeclasses/Semigroup'
-import concat from 'utils/concat'
+import { Show } from '../typeclasses/Show'
+import { Functor } from '../typeclasses/Functor'
+import { Chain } from '../typeclasses/Chain'
+import { Apply } from '../typeclasses/Apply'
+import { Monad } from '../typeclasses/Monad'
+import { Applicative } from '../typeclasses/Applicative'
+import { Setoid } from '../typeclasses/Setoid'
+import { Ord } from '../typeclasses/Ord'
+import { Semigroup } from '../typeclasses/Semigroup'
+import concat from '../utils/concat'
 
 export interface Id<T> extends Id_<T> { }
 

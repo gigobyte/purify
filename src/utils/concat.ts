@@ -1,4 +1,4 @@
-import { Semigroup } from 'typeclasses/Semigroup'
+import { Semigroup } from '../typeclasses/Semigroup'
 
 function concat<T>(a: T, b: T): T
 function concat<T>(a: T[], b: T[]): T[]
