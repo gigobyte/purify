@@ -791,6 +791,13 @@ const data: Data = {
             ],
             instanceMethods: [
                 {
+                    name: '[Symbol.iterator]',
+                    description: '`Tuple` implements the Iterator and ArrayLike interfaces, which means that you can destructure tuples like you would destructure arrays',
+                    examples: [
+                        {input: `const [ fst, snd ] = Tuple(1, 'str')`, output: '// Types are preserved - fst has type of number, snd has type of string'}
+                    ]
+                },
+                {
                     name: 'fst',
                     description: 'Returns the first value of `this`.',
                     signatureML: '(a, b) ~> a',

@@ -1,6 +1,12 @@
 import { Tuple } from './Tuple'
 
 describe('Tuple', () => {
+    it('should be ArrayLike', () => {
+        const [ fst, snd ] = Tuple(1, 'test');
+        expect(fst).toEqual(1)
+        expect(snd).toEqual('test')
+    })
+
     test('fanout', () => {
         expect(Tuple.fanout((x: string) => x[0], x => x.length, 'sss')).toEqual(Tuple('s', 3))
         expect(Tuple.fanout((x: string) => x[0], x => x.length)('sss')).toEqual(Tuple('s', 3))
