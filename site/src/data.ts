@@ -1147,8 +1147,8 @@ const data: Data = {
                 {
                     name: 'Validate.all',
                     description: 'Takes a value and a list of validation predicates and returns either a list of all errors or the value that was being validated',
-                    signatureML: 'a -> [((a -> Bool), err)] -> Either [err] a',
-                    signatureTS: '<T, Err>(value: T, validations: [(value: T) => boolean, Err][]): Either<Err[], T>',
+                    signatureML: 'a -> [((a -> Bool), err)] -> Either (NonEmptyList err) a',
+                    signatureTS: '<T, Err>(value: T, validations: [(value: T) => boolean, Err][]): Either<NonEmptyList<Err>, T>',
                     examples: [
                         {input: `Validate.all('12333.34$', [
     [ifEmpty, 'Please enter amount'],
@@ -1160,8 +1160,8 @@ const data: Data = {
                 {
                     name: 'Validate.untilError',
                     description: 'Takes a value and a list of validation predicates and returns either an error or the value that was being validated. Execution of the validations stops after the first error.',
-                    signatureML: 'a -> [((a -> Bool), err)] -> Either [err] a',
-                    signatureTS: '<T, Err>(value: T, validations: [(value: T) => boolean, Err][]): Either<Err[], T>',
+                    signatureML: 'a -> [((a -> Bool), err)] -> Either err a',
+                    signatureTS: '<T, Err>(value: T, validations: [(value: T) => boolean, Err][]): Either<Err, T>',
                     examples: [
                         {input: `Validate.untilError('error on line 12', [
     [ifLongerThan(100000), 'Log is too long to read'],

@@ -1,14 +1,15 @@
 import { Either, Left, Right } from '../adts/Either'
 import { Maybe, Just, Nothing } from '../adts/Maybe'
+import { NonEmptyList, isNonEmpty } from '../adts/NonEmptyList'
 
 export type Validator<T> = (value: T) => boolean
 export type ValidationTuple<T, Err> = [Validator<T>, Err]
 
 export abstract class Validate {
-    static all<T, Err>(value: T, validations: ValidationTuple<T, Err>[]): Either<Err[], T> {
+    static all<T, Err>(value: T, validations: ValidationTuple<T, Err>[]): Either<NonEmptyList<Err>, T> {
         const results = Maybe.catMaybes(validations.map(x => x[0](value) ? Nothing : Just(x[1])))
 
-        return results.length > 0 ? Left(results) : Right(value)
+        return isNonEmpty(results) ? Left(results) : Right(value)
     }
 
     static untilError<T, Err>(value: T, validations: ValidationTuple<T, Err>[]): Either<Err, T> {
