@@ -107,6 +107,8 @@ describe('Either', () => {
     test('caseOf', () => {
         expect(Left('Error').caseOf({ Left: x => x, Right: () => 'No error' })).toEqual('Error')
         expect(Right(6).caseOf({ Left: _ => 0, Right: x => x + 1 })).toEqual(7)
+        expect(Right(6).caseOf({ _: () => 0 })).toEqual(0)
+        expect(Left('Error').caseOf({ _: () => 0 })).toEqual(0)
     })
 
     test('leftOrDefault', () => {

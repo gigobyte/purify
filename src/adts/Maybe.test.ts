@@ -116,6 +116,8 @@ describe('Maybe', () => {
     test('caseOf', () => {
         expect(Just(5).caseOf({ Just: x => x + 1, Nothing: () => 0 })).toEqual(6)
         expect(Nothing.caseOf({ Just: x => x + 1, Nothing: () => 0 })).toEqual(0)
+        expect(Just(10).caseOf({ _: () => 99 })).toEqual(99)
+        expect(Nothing.caseOf({ _: () => 99 })).toEqual(99)
     })
 
     test('orDefault', () => {

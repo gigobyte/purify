@@ -193,11 +193,12 @@ const data: Data = {
                 },
                 {
                     name: 'caseOf',
-                    signatureTS: '<U>(patterns: {Just: (value: T) => U, Nothing: () => U}): U',
+                    signatureTS: '<U>(patterns: {Just: (value: T) => U, Nothing: () => U} | {_: () => U}): U',
                     description: 'Structural pattern matching for `Maybe` in the form of a function.',
                     examples: [
                         {input: 'Just(5).caseOf({ Just: x => x + 1, Nothing: () => 0 })', output: '6'},
-                        {input: 'Nothing.caseOf({ Just: x => x + 1, Nothing: () => 0 })', output: '0'}
+                        {input: 'Nothing.caseOf({ Just: x => x + 1, Nothing: () => 0 })', output: '0'},
+                        {input: `Nothing.caseOf({ _: () => 'anything'}) // wildcard`, output: `'anything'`}
                     ]
                 },
                 {
@@ -522,7 +523,8 @@ const data: Data = {
                     signatureTS: '<T>(patterns: { Left: (l: L) => T, Right: (r: R) => T }): T',
                     examples: [
                         {input: `Left('Error').caseOf({ Left: x => x, Right: () => 'No error' })`, output: `'Error'`},
-                        {input: `Right(6).caseOf({ Left: _ => 0, Right: x => x + 1 })`, output: '7'}
+                        {input: `Right(6).caseOf({ Left: _ => 0, Right: x => x + 1 })`, output: '7'},
+                        {input: `Left('Error').caseOf({ _: () => 0 }) // wildcard`, output: '0'}
                     ]
                 },
                 {

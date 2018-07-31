@@ -17,7 +17,7 @@ import { Extend } from '../typeclasses/Extend'
 import { Unsafe } from '../typeclasses/Unsafe'
 import concat from '../utils/concat'
 
-export type MaybePatterns<T, U> = {Just: (value: T) => U, Nothing: () => U}
+export type MaybePatterns<T, U> = {Just: (value: T) => U, Nothing: () => U} | {_: () => U}
 export type AlwaysJust = {kind: '$$MaybeAlwaysJust'}
 
 export class Maybe<T> implements Show, Setoid<Maybe<T>>, Ord<Maybe<T>>, Semigroup<Maybe<T>>, Monoid<Maybe<T>>, Functor<T>, Apply<T>, Applicative<T>, Alt<T>, Plus<T>, Alternative<T>, Chain<T>, Monad<T>, Foldable<T>, Extend<T>, Unsafe {
@@ -170,7 +170,11 @@ export class Maybe<T> implements Show, Setoid<Maybe<T>>, Ord<Maybe<T>>, Semigrou
 
     /** Structural pattern matching for `Maybe` in the form of a function */
     caseOf<U>(patterns: MaybePatterns<T, U>): U {
-        return this.isNothing() ? patterns.Nothing() : patterns.Just(this.value)
+        if ('_' in patterns) {
+            return patterns._()
+        } else {
+            return this.isNothing() ? patterns.Nothing() : patterns.Just(this.value)
+        }
     }
 
     /** Returns the default value if `this` is `Nothing`, otherwise it return the value inside `this` */

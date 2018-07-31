@@ -21,7 +21,7 @@ const _right: string = 'Right'
 
 export type Left<L, R> = Either<L, R>
 export type Right<L, R> = Either<L, R>
-export type EitherPatterns<L, R, T> = { Left: (l: L) => T, Right: (r: R) => T }
+export type EitherPatterns<L, R, T> = { Left: (l: L) => T, Right: (r: R) => T } | {_: () => T}
 
 export class Either<L, R> implements Show, Setoid<Either<L, R>>, Ord<Either<L, R>>, Semigroup<Either<L, R>>, Functor<R>, Apply<R>, Applicative<R>, Alt<L | R>, Chain<R>, Monad<R>, Foldable<L | R>, Extend<L | R>, Bifunctor<L, R>, Unsafe {
     constructor(private readonly value: L | R, private readonly tag: string) {}
@@ -193,7 +193,11 @@ export class Either<L, R> implements Show, Setoid<Either<L, R>>, Ord<Either<L, R
 
     /** Structural pattern matching for `Either` in the form of a function */
     caseOf<T>(patterns: EitherPatterns<L, R, T>): T {
-        return this.isLeft_() ? patterns.Left(this.asLeft().value) : patterns.Right(this.asRight().value)
+        if ('_' in patterns) {
+            return patterns._()
+        } else {
+            return this.isLeft_() ? patterns.Left(this.asLeft().value) : patterns.Right(this.asRight().value)
+        }
     }
 
     /** Returns the value inside `this` if it\'s `Left` or a default value if `this` is `Right` */
