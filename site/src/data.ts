@@ -90,7 +90,7 @@ const data: Data = {
                 },
                 {
                     name: 'Nothing',
-                    description: `Nothing doesn't have a constructor, instead you can use it directly. Represents a missing value, you can think of it as a smart 'null'.`,
+                    description: `Nothing doesn't have a constructor, instead you can use it directly as a value. Represents a missing value, you can think of it as a smart 'null'.`,
                     examples: [
                         {input: 'Nothing', output: 'Nothing // Maybe<never>'}
                     ]
