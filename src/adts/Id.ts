@@ -42,7 +42,7 @@ export class Id_<T> implements Show, Functor<T>, Chain<T>, Apply<T>, Applicative
     }
 
     inspect(): string {
-        return this.value != null ? this.value.toString() : JSON.stringify(this.value)
+        return `Id(${this.value})`
     }
 
     toString(): string {

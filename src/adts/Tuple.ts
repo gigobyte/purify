@@ -56,7 +56,7 @@ export class Tuple_<F, S> implements Show, Setoid<Tuple<F, S>>, Ord<Tuple<F, S>>
     }
 
     inspect(): string {
-        return this.toArray().toString()
+        return `Tuple(${this.first}, ${this.second})`
     }
 
     toString(): string {
