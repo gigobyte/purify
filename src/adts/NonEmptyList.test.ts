@@ -18,7 +18,7 @@ describe('NonEmptyList', () => {
     })
 
     test('fromTuple', () => {
-        expect(NonEmptyList.fromTuple(Tuple(1, 2))).toEqual(NonEmptyList([1, 2]))
+        expect(NonEmptyList.fromTuple(Tuple(1, 'test'))).toEqual(NonEmptyList([1, 'test']))
     })
 
     test('head', () => {

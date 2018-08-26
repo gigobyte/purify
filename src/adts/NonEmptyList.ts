@@ -9,7 +9,7 @@ export interface NonEmptyList<T> extends NonEmptyListCompliant<T> {
 }
 
 export interface INonEmptyList {
-    <T extends NonEmptyListCompliant<T[0]>>(list: T): NonEmptyList<T[0]>
+    <T extends NonEmptyListCompliant<T[number]>>(list: T): NonEmptyList<T[number]>
     fromArray: typeof fromArray
     fromTuple: typeof fromTuple
     unsafeCoerce: typeof unsafeCoerce
@@ -25,7 +25,7 @@ const fromArray = <T>(source: T[]): Maybe<NonEmptyList<T>> =>
 
 /** Converts a `Tuple` to a `NonEmptyList` */
 const fromTuple = <T, U>(source: Tuple<T, U>): NonEmptyList<T | U> =>
-    fromArray(source.toArray()).unsafeCoerce()
+    NonEmptyList(source.toArray())
 
 /** Typecasts any array into a `NonEmptyList`, but throws an exception if the array is empty. Use `fromArray` as a safe alternative */
 const unsafeCoerce = <T>(source: T[]): NonEmptyList<T> =>
@@ -39,8 +39,8 @@ const head = <T>(list: NonEmptyList<T>): T =>
 const last = <T>(list: NonEmptyList<T>): T =>
     list[list.length - 1]
 
-const NonEmptyListConstructor = <T extends NonEmptyListCompliant<T[0]>>(list: T): NonEmptyList<T[0]> =>
-    list as any as NonEmptyList<T[0]>
+const NonEmptyListConstructor = <T extends NonEmptyListCompliant<T[number]>>(list: T): NonEmptyList<T[number]> =>
+    list as any as NonEmptyList<T[number]>
 
 export const NonEmptyList: INonEmptyList = Object.assign(NonEmptyListConstructor, {fromArray, fromTuple, unsafeCoerce})
 export { isNonEmpty, head, last }
