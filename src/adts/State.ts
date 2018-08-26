@@ -26,7 +26,10 @@ class State_<S, A> implements Functor<A>, Apply<A>, Applicative<A>, Chain<A>, Mo
     constructor(private readonly runner: StateFn<S, A>) {}
 
     readonly of = State_.of
+    readonly 'fantasy-land/of' = this.of
     readonly 'fantasy-land/map' = this.map
+    readonly 'fantasy-land/ap' = this.ap
+    readonly 'fantasy-land/chain' = this.chain
 
     static of<S, A>(value: A): State<S, A> {
         return State(s => Tuple(value, s))
