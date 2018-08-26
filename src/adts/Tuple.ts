@@ -18,7 +18,7 @@ export interface ITuple {
 export class Tuple_<F, S> implements Show, Setoid<Tuple<F, S>>, Ord<Tuple<F, S>>, Semigroup<Tuple<F, S>>, Bifunctor<F, S>, Functor<S>, Apply<S>, Iterable<F | S>, ArrayLike<F | S> {
     0: F
     1: S
-    [index: number]: F| S
+    [index: number]: F | S
     length: 2 = 2
 
     constructor(private readonly first: F, private readonly second: S) {}
