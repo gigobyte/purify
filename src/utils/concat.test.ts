@@ -12,11 +12,4 @@ describe('concat', () => {
     it('Should concatenate Semigroup objects', () => {
         expect(concat([1,2],[3,4])).toEqual([1,2,3,4])
     })
-
-    it('Should OR booleans', () => {
-        expect(concat(true,false)).toEqual(true)
-        expect(concat(true,true)).toEqual(true)
-        expect(concat(false,true)).toEqual(true)
-        expect(concat(false,false)).toEqual(false)
-    })
 })
