@@ -33,12 +33,16 @@ export class Tuple_<F, S> implements Show, Setoid<Tuple<F, S>>, Ord<Tuple<F, S>>
     /** Applies two functions over a single value and constructs a tuple from the results */
     static fanout<F, S, T>(f: (value: T) => F, g: (value: T) => S): (value: T) => Tuple<F, S>
     static fanout<F, S, T>(f: (value: T) => F, g: (value: T) => S, value: T): Tuple<F, S>
-    static fanout<F, S, T>(f: (value: T) => F, g: (value: T) => S, value?: T) : any {
-        if (value !== undefined) {
-            return Tuple(f(value), g(value))
+    static fanout<F, T>(f: (value: T) => F): <S>(g: (value: T) => S) => (value: T) => Tuple<F, S>
+    static fanout<F, S, T>(f: (value: T) => F, g?: (value: T) => S, value?: T) : any {
+        switch (arguments.length) {
+            case 3:
+                return Tuple(f(value!), g!(value!))
+            case 2:
+                return (value: T) => Tuple.fanout(f, g!, value)
+            default:
+                return <S>(g: (value: T) => S) => (value: T) => Tuple.fanout(f, g, value)
         }
-
-        return (value: T): Tuple<F, S> => Tuple(f(value), g(value))
     }
 
     /** Constructs a tuple from an array with two elements */

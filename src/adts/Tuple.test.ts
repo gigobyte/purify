@@ -10,6 +10,7 @@ describe('Tuple', () => {
     test('fanout', () => {
         expect(Tuple.fanout((x: string) => x[0], x => x.length, 'sss')).toEqual(Tuple('s', 3))
         expect(Tuple.fanout((x: string) => x[0], x => x.length)('sss')).toEqual(Tuple('s', 3))
+        expect(Tuple.fanout((x: string) => x[0])(x => x.length)('sss')).toEqual(Tuple('s', 3))
     })
 
     test('fromArray', () => {
