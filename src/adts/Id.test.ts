@@ -32,6 +32,6 @@ describe('Id', () => {
     })
 
     test('concat', () => {
-        expect(Id(5).concat(Id(5))).toEqual(Id(10))
+        expect(Id([5]).concat(Id([5]))).toEqual(Id([5,5]))
     })
 })

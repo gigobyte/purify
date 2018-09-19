@@ -15,7 +15,6 @@ import { Monad } from '../typeclasses/Monad'
 import { Foldable } from '../typeclasses/Foldable'
 import { Extend } from '../typeclasses/Extend'
 import { Unsafe } from '../typeclasses/Unsafe'
-import concat from '../utils/concat'
 
 export type MaybePatterns<T, U> = {Just: (value: T) => U, Nothing: () => U} | {_: () => U}
 export type AlwaysJust = {kind: '$$MaybeAlwaysJust'}
@@ -72,17 +71,18 @@ export class Maybe<T> implements Show, Setoid<Maybe<T>>, Ord<Maybe<T>>, Semigrou
     static mapMaybe<T, U>(f: (value: T) => Maybe<U>): (list: T[]) => U[]
     static mapMaybe<T, U>(f: (value: T) => Maybe<U>, list: T[]): U[]
     static mapMaybe<T, U>(f: (value: T) => Maybe<U>, list?: T[]): any {
-        if (list === undefined) {
-            return (list: T[]) => Maybe.catMaybes(list.map(f))
+        switch (arguments.length) {
+            case 1:
+                return (list: T[]) => Maybe.mapMaybe(f, list)
+            default:
+                return Maybe.catMaybes(list!.map(f))
         }
-
-        return Maybe.catMaybes(list.map(f))
     }
 
     /** Calls a function that may throw and wraps the result in a `Just` if successful or `Nothing` if an error is caught */
-    static encase<T>(throwsF: () => T): Maybe<T> {
+    static encase<T>(thunk: () => T): Maybe<T> {
         try {
-            return Just(throwsF())
+            return Just(thunk())
         } catch {
             return Nothing
         }
@@ -121,16 +121,16 @@ export class Maybe<T> implements Show, Setoid<Maybe<T>>, Ord<Maybe<T>>, Semigrou
     }
 
     /** Concatenates a value inside a `Maybe` to the value inside `this` */
-    concat(other: Maybe<T>): Maybe<T> {
+    concat(this: Maybe<Semigroup<any>>, other: Maybe<T>): Maybe<T> {
         if (this.isNothing() && other.isNothing()) {
             return Nothing
         }
 
         if (this.isJust() && other.isJust()) {
-            return Just(concat(this.value, other.value))
+            return Just(this.value.concat(other.value))
         }
 
-        return this.alt(other)
+        return (this as any as Maybe<T>).alt(other)
     }
 
     /** Transforms the value inside `this` with a given function. Returns `Nothing` if `this` is `Nothing` */

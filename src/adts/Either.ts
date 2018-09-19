@@ -12,7 +12,6 @@ import { Foldable } from '../typeclasses/Foldable'
 import { Extend } from '../typeclasses/Extend'
 import { Bifunctor } from '../typeclasses/Bifunctor'
 import { Unsafe } from '../typeclasses/Unsafe'
-import concat from '../utils/concat'
 
 import { Maybe, Just, Nothing } from './Maybe'
 
@@ -150,20 +149,20 @@ export class Either<L, R> implements Show, Setoid<Either<L, R>>, Ord<Either<L, R
     }
 
     /** Concatenates a value inside an `Either` to the value inside `this` */
-    concat(other: Either<L, R>): Either<L, R> {
+    concat(this: Either<Semigroup<any>, Semigroup<any>>, other: Either<L, R>): Either<L, R> {
         if (this.isLeft_() && other.isLeft_()) {
-            return Left(concat(this.asLeft().value, other.asLeft().value))
+            return Left(this.asLeft().value.concat(other.asLeft().value))
         }
 
         if (this.isRight_() && other.isRight_()) {
-            return Right(concat(this.asRight().value, other.asRight().value))
+            return Right(this.asRight().value.concat(other.asRight().value))
         }
 
         if (this.isLeft_() && other.isRight_()) {
             return other
         }
 
-        return this
+        return this as any as Either<L, R>
     }
 
     /** Transforms `this` with a function that returns an `Either`. Useful for chaining many computations that may fail */

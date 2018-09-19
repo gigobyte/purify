@@ -60,8 +60,7 @@ describe('Tuple', () => {
     })
 
     test('concat', () => {
-        expect(Tuple(1,1).concat(Tuple(1,1))).toEqual(Tuple(2,2))
-        expect(Tuple(Tuple(1,1), 'Te').concat(Tuple(Tuple(1,1), 'st'))).toEqual(Tuple(Tuple(2,2), 'Test'))
+        expect(Tuple([1],[1]).concat(Tuple([1],[1]))).toEqual(Tuple([1,1],[1,1]))
     })
 
     test('ap', () => {

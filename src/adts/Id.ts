@@ -7,7 +7,6 @@ import { Applicative } from '../typeclasses/Applicative'
 import { Setoid } from '../typeclasses/Setoid'
 import { Ord } from '../typeclasses/Ord'
 import { Semigroup } from '../typeclasses/Semigroup'
-import concat from '../utils/concat'
 
 export interface Id<T> extends Id_<T> { }
 
@@ -75,8 +74,8 @@ export class Id_<T> implements Show, Functor<T>, Chain<T>, Apply<T>, Applicative
     }
 
     /** Concatinates the values inside `this` and another `Id` */
-    concat(other: Id<T>): Id<T> {
-        return Id(concat(this.value, other.value))
+    concat(this: Id<Semigroup<any>>, other: Id<T>): Id<T> {
+        return Id(this.value.concat(other.value))
     }
 }
 

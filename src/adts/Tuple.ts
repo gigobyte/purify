@@ -5,7 +5,6 @@ import { Semigroup } from '../typeclasses/Semigroup'
 import { Bifunctor } from '../typeclasses/Bifunctor'
 import { Functor } from '../typeclasses/Functor'
 import { Apply } from '../typeclasses/Apply'
-import concat from '../utils/concat'
 
 export interface Tuple<F, S> extends Tuple_<F, S> {}
 
@@ -113,8 +112,8 @@ export class Tuple_<F, S> implements Show, Setoid<Tuple<F, S>>, Ord<Tuple<F, S>>
     }
 
     /** Concatinates the first and second values of `this` and another tuple */
-    concat(other: Tuple<F, S>): Tuple<F, S> {
-        return Tuple(concat(this.first, other.first), concat(this.second, other.second))
+    concat(this: Tuple<Semigroup<any>, Semigroup<any>>, other: Tuple<F, S>): Tuple<F, S> {
+        return Tuple(this.first.concat(other.first), this.second.concat(other.second))
     }
 
     /** Applies the second value of a tuple to the second value of `this` */
