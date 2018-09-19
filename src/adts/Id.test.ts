@@ -25,13 +25,4 @@ describe('Id', () => {
         expect(Id(5).equals(Id(5))).toEqual(true)
         expect(Id(5).equals(Id(0))).toEqual(false)
     })
-
-    test('lte', () => {
-        expect(Id(5).lte(Id(6))).toEqual(true)
-        expect(Id(5).lte(Id(0))).toEqual(false)
-    })
-
-    test('concat', () => {
-        expect(Id([5]).concat(Id([5]))).toEqual(Id([5,5]))
-    })
 })

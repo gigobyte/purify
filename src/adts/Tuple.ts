@@ -1,7 +1,5 @@
 import { Show } from '../typeclasses/Show'
 import { Setoid } from '../typeclasses/Setoid'
-import { Ord } from '../typeclasses/Ord'
-import { Semigroup } from '../typeclasses/Semigroup'
 import { Bifunctor } from '../typeclasses/Bifunctor'
 import { Functor } from '../typeclasses/Functor'
 import { Apply } from '../typeclasses/Apply'
@@ -14,7 +12,7 @@ export interface ITuple {
     fromArray: typeof Tuple_.fromArray
 }
 
-export class Tuple_<F, S> implements Show, Setoid<Tuple<F, S>>, Ord<Tuple<F, S>>, Semigroup<Tuple<F, S>>, Bifunctor<F, S>, Functor<S>, Apply<S>, Iterable<F | S>, ArrayLike<F | S> {
+export class Tuple_<F, S> implements Show, Setoid<Tuple<F, S>>, Bifunctor<F, S>, Functor<S>, Apply<S>, Iterable<F | S>, ArrayLike<F | S> {
     0: F
     1: S
     [index: number]: F | S
@@ -23,8 +21,6 @@ export class Tuple_<F, S> implements Show, Setoid<Tuple<F, S>>, Ord<Tuple<F, S>>
     constructor(private readonly first: F, private readonly second: S) {}
 
     readonly 'fantasy-land/equals' = this.equals
-    readonly 'fantasy-land/lte' = this.lte
-    readonly 'fantasy-land/concat' = this.concat
     readonly 'fantasy-land/bimap' = this.bimap
     readonly 'fantasy-land/map' = this.map
     readonly 'fantasy-land/ap' = this.ap
@@ -81,11 +77,6 @@ export class Tuple_<F, S> implements Show, Setoid<Tuple<F, S>>, Ord<Tuple<F, S>>
         return this.first === other.first && this.second === other.second
     }
 
-    /** Returns true if both values inside `this` are less than or equal to the values inside anotther tuple, otherwise returns false */
-    lte(other: Tuple<F, S>): boolean {
-        return this.first <= other.first && this.second <= other.second
-    }
-
     /** Transforms the two values inside `this` with two mapper functions */
     bimap<F2, S2>(f: (fst: F) => F2, g: (snd: S) => S2): Tuple<F2, S2> {
         return Tuple(f(this.first), g(this.second))
@@ -109,11 +100,6 @@ export class Tuple_<F, S> implements Show, Setoid<Tuple<F, S>>, Ord<Tuple<F, S>>
     /** Swaps the values inside `this` */
     swap(): Tuple<S, F> {
         return Tuple(this.second, this.first)
-    }
-
-    /** Concatinates the first and second values of `this` and another tuple */
-    concat(this: Tuple<Semigroup<any>, Semigroup<any>>, other: Tuple<F, S>): Tuple<F, S> {
-        return Tuple(this.first.concat(other.first), this.second.concat(other.second))
     }
 
     /** Applies the second value of a tuple to the second value of `this` */

@@ -62,21 +62,6 @@ describe('Either', () => {
         expect(Right(5).equals(Left('Error') as any)).toEqual(false)
     })
 
-    test('lte', () => {
-        expect(Left(5).lte(Left(6))).toEqual(true)
-        expect(Left(5).lte(Left(3))).toEqual(false)
-        expect(Left(5).lte(Right(6) as any)).toEqual(false)
-        expect(Right(5).lte(Right(6))).toEqual(true)
-        expect(Right(5).lte(Right(3))).toEqual(false)
-        expect(Right(5).lte(Left(6) as any)).toEqual(false)
-    })
-
-    test('concat', () => {
-        expect(Right([1,2]).concat(Right([3,4]))).toEqual(Right([1,2,3,4]))
-        expect(Right([1,2]).concat(Left('Error') as any)).toEqual(Right([1,2]))
-        expect(Left('Error').concat(Right([1, 2]) as any)).toEqual(Right([1,2]))
-    })
-
     test('chain', () => {
         expect(Left('Error').chain(x => Right(x + 1))).toEqual(Left('Error'))
         expect(Right(5).chain(x => Right(x + 1))).toEqual(Right(6))

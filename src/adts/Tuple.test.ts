@@ -32,13 +32,6 @@ describe('Tuple', () => {
         expect(Tuple(0,5).equals(Tuple(10,15))).toEqual(false)
     })
 
-    test('lte', () => {
-        expect(Tuple(5,5).lte(Tuple(0,0))).toEqual(false)
-        expect(Tuple(0,5).lte(Tuple(0,5))).toEqual(true)
-        expect(Tuple(0,5).lte(Tuple(5,5))).toEqual(true)
-        expect(Tuple(0,5).lte(Tuple(5,10))).toEqual(true)
-    })
-
     test('bimap', () => {
         expect(Tuple(5, 'Error').bimap(x => x + 1, x => x + '!')).toEqual(Tuple(6, 'Error!'))
     })
@@ -57,10 +50,6 @@ describe('Tuple', () => {
 
     test('swap', () => {
         expect(Tuple(5,10).swap()).toEqual(Tuple(10,5))
-    })
-
-    test('concat', () => {
-        expect(Tuple([1],[1]).concat(Tuple([1],[1]))).toEqual(Tuple([1,1],[1,1]))
     })
 
     test('ap', () => {

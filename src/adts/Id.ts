@@ -5,8 +5,6 @@ import { Apply } from '../typeclasses/Apply'
 import { Monad } from '../typeclasses/Monad'
 import { Applicative } from '../typeclasses/Applicative'
 import { Setoid } from '../typeclasses/Setoid'
-import { Ord } from '../typeclasses/Ord'
-import { Semigroup } from '../typeclasses/Semigroup'
 
 export interface Id<T> extends Id_<T> { }
 
@@ -15,7 +13,7 @@ export interface IId {
     of: typeof Id_.of
 }
 
-export class Id_<T> implements Show, Functor<T>, Chain<T>, Apply<T>, Applicative<T>, Monad<T>, Setoid<Id<T>>, Ord<Id<T>>, Semigroup<Id<T>> {
+export class Id_<T> implements Show, Functor<T>, Chain<T>, Apply<T>, Applicative<T>, Monad<T>, Setoid<Id<T>> {
     constructor(private readonly value: T) {}
 
     of = Id_.of
@@ -24,8 +22,6 @@ export class Id_<T> implements Show, Functor<T>, Chain<T>, Apply<T>, Applicative
     readonly 'fantasy-land/ap' = this.ap
     readonly 'fantasy-land/of' = this.of
     readonly 'fantasy-land/equals' = this.equals
-    readonly 'fantasy-land/lte' = this.lte
-    readonly 'fantasy-land/concat' = this.concat
 
     static of<T>(value: T): Id<T> {
         return Id(value)
@@ -66,16 +62,6 @@ export class Id_<T> implements Show, Functor<T>, Chain<T>, Apply<T>, Applicative
     /** Compares the value in `this` with the value in the other `Id` */
     equals(other: Id<T>): boolean {
         return this.value === other.value
-    }
-
-    /** Returns true if the value in `this` is less than or equal to the value in the other `Id`, otherwise returns false */
-    lte(other: Id<T>): boolean {
-        return this.value <= other.value
-    }
-
-    /** Concatinates the values inside `this` and another `Id` */
-    concat(this: Id<Semigroup<any>>, other: Id<T>): Id<T> {
-        return Id(this.value.concat(other.value))
     }
 }
 

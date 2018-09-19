@@ -22,7 +22,7 @@ export type Left<L, R> = Either<L, R>
 export type Right<L, R> = Either<L, R>
 export type EitherPatterns<L, R, T> = { Left: (l: L) => T, Right: (r: R) => T } | {_: () => T}
 
-export class Either<L, R> implements Show, Setoid<Either<L, R>>, Ord<Either<L, R>>, Semigroup<Either<L, R>>, Functor<R>, Apply<R>, Applicative<R>, Alt<L | R>, Chain<R>, Monad<R>, Foldable<L | R>, Extend<L | R>, Bifunctor<L, R>, Unsafe {
+export class Either<L, R> implements Show, Setoid<Either<L, R>>, Functor<R>, Apply<R>, Applicative<R>, Alt<L | R>, Chain<R>, Monad<R>, Foldable<L | R>, Extend<L | R>, Bifunctor<L, R>, Unsafe {
     constructor(private readonly value: L | R, private readonly tag: string) {}
 
     readonly of = Either.of
@@ -32,9 +32,7 @@ export class Either<L, R> implements Show, Setoid<Either<L, R>>, Ord<Either<L, R
     readonly 'fantasy-land/chain' = this.chain
     readonly 'fantasy-land/reduce' = this.reduce
     readonly 'fantasy-land/map' = this.map
-    readonly 'fantasy-land/lte' = this.lte
     readonly 'fantasy-land/extend' = this.extend
-    readonly 'fantasy-land/concat' = this.concat
     readonly 'fantasy-land/equals' = this.equals
     readonly 'fantasy-land/bimap' = this.bimap
 
@@ -133,36 +131,6 @@ export class Either<L, R> implements Show, Setoid<Either<L, R>>, Ord<Either<L, R
         }
 
         return false
-    }
-
-    /** Compares `this` to another `Either`, returns false if the constructors are different or if the other `Either` is larger than `this` */
-    lte(other: Either<L, R>): boolean {
-        if (this.isLeft_() && other.isLeft_()) {
-            return this.value <= other.value
-        }
-
-        if (this.isRight_() && other.isRight_()) {
-            return this.value <= other.value
-        }
-
-        return false
-    }
-
-    /** Concatenates a value inside an `Either` to the value inside `this` */
-    concat(this: Either<Semigroup<any>, Semigroup<any>>, other: Either<L, R>): Either<L, R> {
-        if (this.isLeft_() && other.isLeft_()) {
-            return Left(this.asLeft().value.concat(other.asLeft().value))
-        }
-
-        if (this.isRight_() && other.isRight_()) {
-            return Right(this.asRight().value.concat(other.asRight().value))
-        }
-
-        if (this.isLeft_() && other.isRight_()) {
-            return other
-        }
-
-        return this as any as Either<L, R>
     }
 
     /** Transforms `this` with a function that returns an `Either`. Useful for chaining many computations that may fail */

@@ -2,8 +2,6 @@ import { Either, Left, Right } from './Either'
 import { Show } from '../typeclasses/Show'
 import { Setoid } from '../typeclasses/Setoid'
 import { Ord } from '../typeclasses/Ord'
-import { Semigroup } from '../typeclasses/Semigroup'
-import { Monoid } from '../typeclasses/Monoid'
 import { Functor } from '../typeclasses/Functor'
 import { Apply } from '../typeclasses/Apply'
 import { Applicative } from '../typeclasses/Applicative'
@@ -19,7 +17,7 @@ import { Unsafe } from '../typeclasses/Unsafe'
 export type MaybePatterns<T, U> = {Just: (value: T) => U, Nothing: () => U} | {_: () => U}
 export type AlwaysJust = {kind: '$$MaybeAlwaysJust'}
 
-export class Maybe<T> implements Show, Setoid<Maybe<T>>, Ord<Maybe<T>>, Semigroup<Maybe<T>>, Monoid<Maybe<T>>, Functor<T>, Apply<T>, Applicative<T>, Alt<T>, Plus<T>, Alternative<T>, Chain<T>, Monad<T>, Foldable<T>, Extend<T>, Unsafe {
+export class Maybe<T> implements Show, Setoid<Maybe<T>>, Functor<T>, Apply<T>, Applicative<T>, Alt<T>, Plus<T>, Alternative<T>, Chain<T>, Monad<T>, Foldable<T>, Extend<T>, Unsafe {
     constructor(private readonly value: T) {}
 
     readonly of = Maybe.of
@@ -31,10 +29,8 @@ export class Maybe<T> implements Show, Setoid<Maybe<T>>, Ord<Maybe<T>>, Semigrou
     readonly 'fantasy-land/chain' = this.chain
     readonly 'fantasy-land/reduce' = this.reduce
     readonly 'fantasy-land/map' = this.map
-    readonly 'fantasy-land/lte' = this.lte
     readonly 'fantasy-land/zero' = this.zero
     readonly 'fantasy-land/extend' = this.extend
-    readonly 'fantasy-land/concat' = this.concat
     readonly 'fantasy-land/empty' = this.empty
     readonly 'fantasy-land/equals' = this.equals
 
@@ -113,24 +109,6 @@ export class Maybe<T> implements Show, Setoid<Maybe<T>>, Ord<Maybe<T>>, Semigrou
     /** Compares the values inside `this` and the argument, returns true if both are Nothing or if the values are equal */
     equals(other: Maybe<T>): boolean {
         return this.value === other.value
-    }
-
-    /** Compares the values inside `this` and the argument, returns true if `this` is Nothing or if the value inside `this` is less than or equal to the value of the argument */
-    lte(other: Maybe<T>): boolean {
-        return this.isNothing() || this.value <= other.value
-    }
-
-    /** Concatenates a value inside a `Maybe` to the value inside `this` */
-    concat(this: Maybe<Semigroup<any>>, other: Maybe<T>): Maybe<T> {
-        if (this.isNothing() && other.isNothing()) {
-            return Nothing
-        }
-
-        if (this.isJust() && other.isJust()) {
-            return Just(this.value.concat(other.value))
-        }
-
-        return (this as any as Maybe<T>).alt(other)
     }
 
     /** Transforms the value inside `this` with a given function. Returns `Nothing` if `this` is `Nothing` */

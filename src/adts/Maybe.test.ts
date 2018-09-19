@@ -58,22 +58,6 @@ describe('Maybe', () => {
         expect(Nothing.equals(Nothing)).toEqual(true)
     })
 
-    test('lte', () => {
-        expect(Just(5).lte(Just(0))).toEqual(false)
-        expect(Just(5).lte(Just(5))).toEqual(true)
-        expect(Just(5).lte(Just(10))).toEqual(true)
-        expect(Just(5).lte(Nothing)).toEqual(false)
-        expect(Nothing.lte(Just(5 as never))).toEqual(true)
-        expect(Nothing.lte(Nothing)).toEqual(true)
-    })
-
-    test('concat', () => {
-        expect(Just([1,2,3]).concat(Just([7,8,9]))).toEqual(Just([1,2,3,7,8,9]))
-        expect(Just([1,2,3]).concat(Nothing)).toEqual(Just([1,2,3]))
-        expect(Nothing.concat(Just([1,2,3] as never))).toEqual(Just([1, 2, 3]))
-        expect(Nothing.concat(Nothing)).toEqual(Nothing)
-    })
-
     test('map', () => {
         expect(Just(5).map(x => x + 1)).toEqual(Just(6))
         expect(Nothing.map(x => x + 1)).toEqual(Nothing)

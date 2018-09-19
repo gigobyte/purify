@@ -57,7 +57,7 @@ const data: Data = {
     datatypes: [
         {
             name: 'Maybe',
-            implements: ['Setoid', 'Ord', 'Semigroup', 'Monoid', 'Functor', 'Apply', 'Applicative', 'Alt', 'Plus', 'Alternative', 'Chain', 'Monad', 'Foldable', 'Extend', 'Unsafe'],
+            implements: ['Setoid', 'Monoid', 'Functor', 'Apply', 'Applicative', 'Alt', 'Plus', 'Alternative', 'Chain', 'Monad', 'Foldable', 'Extend', 'Unsafe'],
             description: `The Maybe type is one of the most popular data types available. It is fundamental to learning about functional error handling and representing missing values. A Maybe value can be either Just a value or Nothing. The Just data constructor is used for wrapping present values while the Nothing constructor is used when a value is absent. Both constructors produce objects that share the same API which makes it easy to manipulate optional values without null checking or exception handling.`,
             example: {
                 import: `import { Maybe, Just, Nothing } from 'pure-ts/adts/Maybe'`,
@@ -210,32 +210,6 @@ const data: Data = {
                         {input: 'Just(5).equals(Just(5))', output: 'true'},
                         {input: 'Just(5).equals(Just(10))', output: 'false'},
                         {input: 'Just(5).equals(Nothing)', output: 'false'}
-                    ]
-                },
-                {
-                    name: 'lte',
-                    signatureML: 'Maybe a ~> Maybe a -> Boolean',
-                    signatureTS: '(other: Maybe<T>): boolean',
-                    description: 'Compares the values inside `this` and the argument, returns true if `this` is Nothing or if the value inside `this` is less than or equal to the value of the argument.',
-                    examples: [
-                        {input: 'Just(5).lte(Just(10))', output: 'true'},
-                        {input: 'Just(5).lte(Just(0))', output: 'false'},
-                        {input: 'Just(5).lte(Nothing)', output: 'false'},
-                        {input: 'Nothing.lte(Just(5))', output: 'true'},
-                        {input: 'Nothing.lte(Nothing)', output: 'true'}
-                    ]
-                },
-                {
-                    name: 'concat',
-                    signatureML: 'Maybe a ~> Maybe a -> Maybe a',
-                    signatureTS: '(other: Maybe<T>): Maybe<T>',
-                    description: 'Concatenates a value inside a `Maybe` to the value inside `this`.',
-                    examples: [
-                        {input: 'Just([1,2,3]).concat(Just([7,8,9]))', output: 'Just([1,2,3,7,8,9])'},
-                        {input: `Just('Some string').concat(Just('!'))`, output: `Just('Some string!')`},
-                        {input: 'Nothing.concat(Just([1,2,3]))', output: 'Just([1,2,3])'},
-                        {input: 'Just([1,2,3]).concat(Nothing)', output: 'Just([1,2,3])'},
-                        {input: 'Nothing.concat(Nothing)', output: 'Nothing'}
                     ]
                 },
                 {
@@ -403,7 +377,7 @@ const data: Data = {
         },
         {
             name: 'Either',
-            implements: ['Setoid', 'Ord', 'Semigroup', 'Functor', 'Apply', 'Applicative', 'Alt', 'Chain', 'Monad', 'Foldable', 'Extend', 'Bifunctor', 'Unsafe'],
+            implements: ['Setoid', 'Functor', 'Apply', 'Applicative', 'Alt', 'Chain', 'Monad', 'Foldable', 'Extend', 'Bifunctor', 'Unsafe'],
             description: `Either is a data type with two sides (constructors) - Left and Right. It is most commonly used for error handling as it is very similar to the Maybe type with the only difference being that you can store information about the missing value (an error message for example). By convention, "Right is right", meaning that success is stored on the Right and failure is stored on the Left. It is also important to note that Either is right-biased which means that \`map\`, \`chain\` and other similar methods will operate on the right side.`,
             example: {
                 import: `import { Either, Left, Right } from 'pure-ts/adts/Either'`,
@@ -582,28 +556,6 @@ const data: Data = {
                     ]
                 },
                 {
-                    name: 'lte',
-                    description: 'Compares `this` to another `Either`, returns false if the constructors are different or if the other `Either` is larger than `this`.',
-                    signatureML: 'Either a b ~> Either a b -> Bool',
-                    signatureTS: '(other: Either<L, R>): boolean',
-                    examples: [
-                        {input: 'Left(5).lte(Left(6))', output: 'true'},
-                        {input: 'Right(5).lte(Left(6))', output: 'false'},
-                        {input: 'Right(5).lte(Right(3))', output: 'false'},
-                    ]
-                },
-                {
-                    name: 'concat',
-                    description: 'Concatenates a value inside an `Either` to the value inside `this`.',
-                    signatureML: 'Either a b ~> Either a b -> Either a b',
-                    signatureTS: '(other: Either<L, R>): Either<L, R>',
-                    examples: [
-                        {input: 'Right([1,2]).concat(Right([3,4]))', output: 'Right([1, 2, 3, 4])'},
-                        {input: `Right([1,2]).concat(Left('Error'))`, output: 'Right([1, 2])'},
-                        {input: `Left('Error').concat(Right([1, 2]))`, output: 'Right([1, 2])'},
-                    ]
-                },
-                {
                     name: 'chain',
                     description: 'Transforms `this` with a function that returns an `Either`. Useful for chaining many computations that may fail.',
                     signatureML: 'Either a b ~> (b -> Either a c) -> Either a c',
@@ -755,7 +707,7 @@ const data: Data = {
         },
         {
             name: 'Tuple',
-            implements: ['Setoid', 'Ord', 'Semigroup', 'Functor', 'Bifunctor', 'Apply'],
+            implements: ['Setoid', 'Functor', 'Bifunctor', 'Apply'],
             description: `Tuple, also known as Pair, is a data type containing two values. You can think of it as an immutable array of only two elements, but unlike arrays (which are commonly homogeneous), the two values inside can be of different types.`,
             example: {
                 import: `import { Tuple } from 'pure-ts/adts/Tuple'`
@@ -828,17 +780,6 @@ const data: Data = {
                     ]
                 },
                 {
-                    name: 'lte',
-                    description: 'Returns true if both values inside `this` are less than or equal to the values inside anotther tuple, otherwise returns false.',
-                    signatureML: '(a, b) ~> (a, b) -> Bool',
-                    signatureTS: '(other: Tuple<F, S>): boolean',
-                    examples: [
-                        {input: 'Tuple(5, 5).lte(Tuple(0, 0))', output: 'false'},
-                        {input: 'Tuple(0, 5).lte(Tuple(5, 5))', output: 'true'},
-                        {input: 'Tuple(10, 5).lte(Tuple(0, 10))', output: 'false'}
-                    ]
-                },
-                {
                     name: 'bimap',
                     description: 'Transforms the two values inside `this` with two mapper functions.',
                     signatureML: '(a, b) ~> (a -> c) -> (b -> d) -> (c, d)',
@@ -863,15 +804,6 @@ const data: Data = {
                     signatureTS: '<F2>(f: (fst: F) => F2): Tuple<F2, S>',
                     examples: [
                         {input: `Tuple(2, 'items').mapFirst(x => x + 1)`, output: `Tuple(3, 'items')`}
-                    ]
-                },
-                {
-                    name: 'concat',
-                    description: 'Concatinates the first and second values of `this` and another tuple.',
-                    signatureML: '(a, b) ~> (a, b) -> (a, b)',
-                    signatureTS: '(other: Tuple<F, S>): Tuple<F, S>',
-                    examples: [
-                        {input: `Tuple('First name', [1, 2]).concat(Tuple(' Last name', [3, 4]))`, output: `Tuple('First name Last name', [1, 2, 3, 4])`}
                     ]
                 },
                 {
@@ -904,7 +836,7 @@ const data: Data = {
         },
         {
             name: 'Id',
-            implements: ['Setoid', 'Ord', 'Semigroup', 'Function', 'Apply', 'Applicative', 'Chain', 'Monad'],
+            implements: ['Setoid', 'Function', 'Apply', 'Applicative', 'Chain', 'Monad'],
             description: `The identity data constructor. Useful when a function requires a Functor or a Monad object and you only have a regular value, you can wrap that value in an Id to make the compiler happy.`,
             example: {
                 import: `import { Id } from 'pure-ts/adts/Id'`
@@ -957,25 +889,6 @@ const data: Data = {
                     signatureTS: '(other: Id<T>): boolean',
                     examples: [
                         {input: `Id(0).equals(Id(0))`, output: 'true'}
-                    ]
-                },
-                {
-                    name: 'lte',
-                    description: 'Returns true if the value in `this` is less than or equal to the value in the other `Id`, otherwise returns false.',
-                    signatureML: 'Id a ~> Id a -> Bool',
-                    signatureTS: '(other: Id<T>): boolean',
-                    examples: [
-                        {input: `Id(5).lte(Id(10))`, output: 'true'},
-                        {input: `Id(10).lte(Id(-1))`, output: 'false'}
-                    ]
-                },
-                {
-                    name: 'concat',
-                    description: 'Concatinates the values inside `this` and another `Id`.',
-                    signatureML: 'Id a ~> Id a -> Id a',
-                    signatureTS: '(other: Id<T>): Id<T>',
-                    examples: [
-                        {input: `Id('NaNaNaNa ').concat(Id('Batman!'))`, output: `Id('NaNaNaNa Batman!')`}
                     ]
                 },
                 {
