@@ -144,8 +144,8 @@ const data: Data = {
                 },
                 {
                     name: 'fromPredicate',
-                    signatureTS: '<T>(pred: (value: T) => boolean, value: T): Maybe<T>',
                     signatureML: '(a -> Bool) -> a -> Maybe a',
+                    signatureTS: '<T>(pred: (value: T) => boolean, value: T): Maybe<T>',
                     description: 'Takes a predicate and a value, passes the value to the predicate and returns a Just if it returns true, otherwise a Nothing is returned',
                     examples: [
                         {input: 'Maybe.fromPredicate(x => x > 0, 5)', output: 'Just(5)'},
@@ -264,6 +264,16 @@ const data: Data = {
                     examples: [
                         {input: 'Just(5).chain(x => Just(x + 1))', output: 'Just(6)'},
                         {input: 'Nothing.chain(x => Just(x + 1))', output: 'Nothing'}
+                    ]
+                },
+                {
+                    name: 'join',
+                    signatureML: 'Maybe (Maybe a) ~> Maybe a',
+                    signatureTS: '<U>(this: Maybe<Maybe<U>>): Maybe<U>',
+                    description: 'Flattens nested Maybes. `m.join()` is equivalent to `m.chain(x => x)`.',
+                    examples: [
+                        {input: 'Just(Just(5)).join()', output: 'Just(5)'},
+                        {input: 'Nothing.join()', output: 'Nothing'}
                     ]
                 },
                 {
@@ -573,6 +583,16 @@ const data: Data = {
                     examples: [
                         {input: `Left('Error').chain(x => Right(x + 1))`, output: `Left('Error')`},
                         {input: `Right(5).chain(x => Right(x + 1))`, output: `Right(6)`}
+                    ]
+                },
+                {
+                    name: 'join',
+                    description: 'Flattens nested Eithers. `e.join()` is equivalent to `e.chain(x => x)`',
+                    signatureML: 'Either a (Either a b) ~> Either a b',
+                    signatureTS: '<R2>(this: Either<L, Either<L, R2>>): Either<L, R2>',
+                    examples: [
+                        {input: 'Right(Right(5)).join()', output: 'Right(5)'},
+                        {input: `Left(Left('Error')).join()`, output: `Left(Left('Error'))`}
                     ]
                 },
                 {

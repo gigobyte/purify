@@ -138,6 +138,11 @@ export class Either<L, R> implements Show, Setoid<Either<L, R>>, Functor<R>, App
         return this.isLeft_() ? this.asLeft() : f(this.asRight().value)
     }
 
+    /** Flattens nested Eithers. `e.join()` is equivalent to `e.chain(x => x)` */
+    join<R2>(this: Either<L, Either<L, R2>>): Either<L, R2> {
+        return this.chain(x => x)
+    }
+
     /** Returns the first `Right` between `this` and another `Either` or the `Left` in the argument if both `this` and the argument are `Left` */
     alt(other: Either<L, R>): Either<L, R> {
         return this.isRight_() ? this : other

@@ -88,6 +88,11 @@ describe('Maybe', () => {
         expect(Nothing.chain(x => Just(x + 1))).toEqual(Nothing)
     })
 
+    test('join', () => {
+        expect(Just(Just(5)).join()).toEqual(Just(5))
+        expect(Nothing.join()).toEqual(Nothing)
+    })
+
     test('reduce', () => {
         expect(Just(5).reduce((acc, x) => x * acc, 2)).toEqual(10)
         expect(Nothing.reduce((acc, x) => x * acc, 0)).toEqual(0)

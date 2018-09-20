@@ -67,6 +67,11 @@ describe('Either', () => {
         expect(Right(5).chain(x => Right(x + 1))).toEqual(Right(6))
     })
 
+    test('join', () => {
+        expect(Right(Right(5)).join()).toEqual(Right(5))
+        expect(Left(Left('')).join()).toEqual(Left(Left('')))
+    })
+
     test('alt', () => {
         expect(Left('Error').alt(Left('Error!'))).toEqual(Left('Error!'))
         expect(Left('Error').alt(Right(5) as any)).toEqual(Right(5))

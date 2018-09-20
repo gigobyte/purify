@@ -144,6 +144,11 @@ export class Maybe<T> implements Show, Setoid<Maybe<T>>, Functor<T>, Apply<T>, A
         return this.isNothing() ? Nothing : f(this.value)
     }
 
+    /** Flattens nested Maybes. `m.join()` is equivalent to `m.chain(x => x)` */
+    join<U>(this: Maybe<Maybe<U>>): Maybe<U> {
+        return this.chain(x => x)
+    }
+
     /** Takes a reducer and a initial value and returns the initial value if `this` is `Nothing` or the result of applying the function to the initial value and the value inside `this` */
     reduce<U>(reducer: (accumulator: U, value: T) => U, initialValue: U): U {
         return this.isNothing() ? initialValue : reducer(initialValue, this.value)
