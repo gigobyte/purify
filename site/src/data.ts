@@ -951,7 +951,7 @@ const data: Data = {
             constructors: [
                 {
                     name: 'NonEmptyList',
-                    signatureTS: '<T extends NonEmptyListCompliant<T[0]>>(list: T): NonEmptyList<T[0]>',
+                    signatureTS: '<T extends NonEmptyListCompliant>(list: T): NonEmptyList<T[number]>',
                     description: 'Typecasts an array with at least one element into a `NonEmptyList`. Works only if the compiler can confirm that the array has one or more elements.',
                     examples: [
                         {input: 'NonEmptyList([1])', output: '// NonEmptyList<number>'},

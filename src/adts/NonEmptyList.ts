@@ -1,15 +1,15 @@
 import { Maybe, Just, Nothing } from './Maybe'
 import { Tuple } from './Tuple'
 
-export type NonEmptyListCompliant<T> = T[] & {0: T}
+export type NonEmptyListCompliant = any[] & {0: any}
 
-export interface NonEmptyList<T> extends NonEmptyListCompliant<T> {
+export interface NonEmptyList<T> extends NonEmptyListCompliant {
     map<U>(this: NonEmptyList<T>, callbackfn: (value: T, index: number, array: NonEmptyList<T>) => U, thisArg?: any): NonEmptyList<U>
     reverse(this: NonEmptyList<T>): NonEmptyList<T>
 }
 
 export interface INonEmptyList {
-    <T extends NonEmptyListCompliant<T[number]>>(list: T): NonEmptyList<T[number]>
+    <T extends NonEmptyListCompliant>(list: T): NonEmptyList<T[number]>
     fromArray: typeof fromArray
     fromTuple: typeof fromTuple
     unsafeCoerce: typeof unsafeCoerce
@@ -39,7 +39,7 @@ const head = <T>(list: NonEmptyList<T>): T =>
 const last = <T>(list: NonEmptyList<T>): T =>
     list[list.length - 1]
 
-const NonEmptyListConstructor = <T extends NonEmptyListCompliant<T[number]>>(list: T): NonEmptyList<T[number]> =>
+const NonEmptyListConstructor = <T extends NonEmptyListCompliant>(list: T): NonEmptyList<T[number]> =>
     list as any as NonEmptyList<T[number]>
 
 export const NonEmptyList: INonEmptyList = Object.assign(NonEmptyListConstructor, {fromArray, fromTuple, unsafeCoerce})
