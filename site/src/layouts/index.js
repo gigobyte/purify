@@ -39,7 +39,7 @@ const LayoutWithSidebar = (children) =>
         </ContentContainer>
     </Container>
 
-const Layout = ({ children, location }) => location.pathname === '/' || location.pathname === '/pure/'
+const Layout = ({ children, location }) => location.pathname === '/' || location.pathname === '/purify/'
     ? children()
     : LayoutWithSidebar(children)
 

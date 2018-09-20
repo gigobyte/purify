@@ -27,11 +27,11 @@ It is also <a href="https://github.com/fantasyland/fantasy-land">Fantasy Land</a
 Pure is available as a package on npm. You can install it with a package manager of your choice:
 
 ```
-$ npm install pure-ts
+$ npm install purify-ts
 ```
 or
 ```
-$ yarn add pure-ts
+$ yarn add purify-ts
 ```
 
 # Documentation

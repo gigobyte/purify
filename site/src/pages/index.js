@@ -144,28 +144,28 @@ const IndexPage = () =>
         <Meta />
         <NavBar>
             <NavBarLink><Link to="/getting-started">Docs</Link></NavBarLink>
-            <NavBarLink><a href="https://github.com/gigobyte/pure">Github</a></NavBarLink>
+            <NavBarLink><a href="https://github.com/gigobyte/purify">Github</a></NavBarLink>
         </NavBar>
         <Content>
             <Heading>
-                <Title><img src="https://raw.githubusercontent.com/gigobyte/pure/master/assets/logo.png" alt="Pure" /></Title>
+                <Title><img src="https://raw.githubusercontent.com/gigobyte/purify/master/assets/logo.png" alt="Purify" /></Title>
                 <Subtitle>Functional programming library for TypeScript</Subtitle>
                 <InstallBox>
-                     $ npm install pure-ts
+                     $ npm install purify-ts
                 </InstallBox>
             </Heading>
             <FeaturesContainer>
                 <Feature>
                     <FeatureTitle>Utility functions</FeatureTitle>
-                    Pure provides implementations for common typeclasses like Functor and Monad, along with utility functions that operate on them
+                    Purify provides implementations for common typeclasses like Functor and Monad, along with utility functions that operate on them
                 </Feature>
                 <Feature>
                     <FeatureTitle>Algebraic Data Types</FeatureTitle>
-                    Pure provides a collection of algebraic data structures that will help you tackle common problems that increase code complexity, such as conditional logic and error handling
+                    Purify provides a collection of algebraic data structures that will help you tackle common problems that increase code complexity, such as conditional logic and error handling
                 </Feature>
                 <Feature>
                     <FeatureTitle>Practical approach</FeatureTitle>
-                    Pure is a library focused on practical functional programming in TypeScript. You will find many examples and tutorials in the <Link to="/getting-started">docs</Link> section of this site.  
+                    Purify is a library focused on practical functional programming in TypeScript. You will find many examples and tutorials in the <Link to="/getting-started">docs</Link> section of this site.  
                 </Feature>
             </FeaturesContainer>
             <RefactoringContainer>
@@ -187,7 +187,7 @@ const IndexPage = () =>
                 </SyntaxHighlighter>
                 <RefactoringText>into</RefactoringText>
                 <SyntaxHighlighter language="typescript" style={highlightStyle} show>
-                    {`import { Maybe } from 'pure-ts/adts/Maybe'
+                    {`import { Maybe } from 'purify-ts/adts/Maybe'
 
 const getUsers = (country: Country): User[] =>
     Maybe.fromNullable(country)
@@ -197,7 +197,7 @@ const getUsers = (country: Country): User[] =>
             </RefactoringContainer>
         </Content>
         <Footer>
-            Pure is developed and maintained by Stanislav Iliev, distributed under the ISC License.
+            Purify is developed and maintained by Stanislav Iliev, distributed under the ISC License.
         </Footer>
     </Container>
 

@@ -60,7 +60,7 @@ const data: Data = {
             implements: ['Setoid', 'Monoid', 'Functor', 'Apply', 'Applicative', 'Alt', 'Plus', 'Alternative', 'Chain', 'Monad', 'Foldable', 'Extend', 'Unsafe'],
             description: `The Maybe type is one of the most popular data types available. It is fundamental to learning about functional error handling and representing missing values. A Maybe value can be either Just a value or Nothing. The Just data constructor is used for wrapping present values while the Nothing constructor is used when a value is absent. Both constructors produce objects that share the same API which makes it easy to manipulate optional values without null checking or exception handling.`,
             example: {
-                import: `import { Maybe, Just, Nothing } from 'pure-ts/adts/Maybe'`,
+                import: `import { Maybe, Just, Nothing } from 'purify-ts/adts/Maybe'`,
                 before: [
                     'let port: number',
                     'let config: Config | null = getConfig()',
@@ -400,7 +400,7 @@ const data: Data = {
             implements: ['Setoid', 'Functor', 'Apply', 'Applicative', 'Alt', 'Chain', 'Monad', 'Foldable', 'Extend', 'Bifunctor', 'Unsafe'],
             description: `Either is a data type with two sides (constructors) - Left and Right. It is most commonly used for error handling as it is very similar to the Maybe type with the only difference being that you can store information about the missing value (an error message for example). By convention, "Right is right", meaning that success is stored on the Right and failure is stored on the Left. It is also important to note that Either is right-biased which means that \`map\`, \`chain\` and other similar methods will operate on the right side.`,
             example: {
-                import: `import { Either, Left, Right } from 'pure-ts/adts/Either'`,
+                import: `import { Either, Left, Right } from 'purify-ts/adts/Either'`,
                 before: [
                     'const getPort = () => {',
                     '    const config: Config | null = getConfig()',
@@ -740,7 +740,7 @@ const data: Data = {
             implements: ['Setoid', 'Functor', 'Bifunctor', 'Apply'],
             description: `Tuple, also known as Pair, is a data type containing two values. You can think of it as an immutable array of only two elements, but unlike arrays (which are commonly homogeneous), the two values inside can be of different types.`,
             example: {
-                import: `import { Tuple } from 'pure-ts/adts/Tuple'`
+                import: `import { Tuple } from 'purify-ts/adts/Tuple'`
             },
             constructors: [
                 {
@@ -869,7 +869,7 @@ const data: Data = {
             implements: ['Setoid', 'Function', 'Apply', 'Applicative', 'Chain', 'Monad'],
             description: `The identity data constructor. Useful when a function requires a Functor or a Monad object and you only have a regular value, you can wrap that value in an Id to make the compiler happy.`,
             example: {
-                import: `import { Id } from 'pure-ts/adts/Id'`
+                import: `import { Id } from 'purify-ts/adts/Id'`
             },
             constructors: [
                 {
@@ -946,7 +946,7 @@ const data: Data = {
             implements: ['Unsafe'],
             description: `A type which represents a list that is not empty. NonEmptyList has no runtime, during execution it's a regular array. This gives not only performance benefits, but it also allows you to use Array and NonEmptyList interchangeably - you can pass a NonEmptyList to any function that expects an Array (this includes access to all Array.prototype methods like map and filter for free).`,
             example: {
-                import: `import { NonEmptyList, isNonEmpty, head, last } from 'pure-ts/adts/NonEmptyList'`
+                import: `import { NonEmptyList, isNonEmpty, head, last } from 'purify-ts/adts/NonEmptyList'`
             },
             constructors: [
                 {
@@ -1021,7 +1021,7 @@ const data: Data = {
             name: 'List',
             description: 'This module contains type-safe functions for working with arrays.',
             example: {
-                import: `import { head, last, tail, init, uncons } from 'pure-ts/utils/List`
+                import: `import { head, last, tail, init, uncons } from 'purify-ts/utils/List`
             },
             methods: [
                 {
@@ -1093,7 +1093,7 @@ const data: Data = {
             name: 'Validation',
             description: 'This is a module that provides useful constructs for data validation. What makes it different than libraries that have a similar feature set is that the Validation module utilizes Either which makes it more pleasant to work with if your codebase is already using ADTs. The API is quite unopinionated making all kinds of use cases possible, from form validation to smart constructors. Although this module provides a wide variety of validation predicates, you can use any predicates you want.',
             example: {
-                import: `import { Validate, ifEmpty, ifJust, and, not, or ... } from 'pure-ts/utils/Validation'`
+                import: `import { Validate, ifEmpty, ifJust, and, not, or ... } from 'purify-ts/utils/Validation'`
             },
             methods: [
                 {
@@ -1239,7 +1239,7 @@ const data: Data = {
         //     implementedBy: ['Maybe', 'Either'],
         //     description: 'A value that implements the Alt specification must also implement the Functor specification.',
         //     example: {
-        //         import: `import { Alt } from 'pure-ts/typeclasses/Alt'`
+        //         import: `import { Alt } from 'purify-ts/typeclasses/Alt'`
         //     },
         //     methods: [
         //         {
@@ -1256,7 +1256,7 @@ const data: Data = {
         //     implementedBy: ['Maybe'],
         //     description: 'A value that implements the Alternative specification must also implement the Applicative and Plus specifications.',
         //     example: {
-        //         import: `import { Alternative } from 'pure-ts/typeclasses/Alternative'`
+        //         import: `import { Alternative } from 'purify-ts/typeclasses/Alternative'`
         //     },
         //     methods: []
         // },

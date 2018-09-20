@@ -1,10 +1,10 @@
 {
-  "name": "pure-ts",
+  "name": "purify-ts",
   "version": "0.10.2",
   "description": "Functional programming standard library for TypeScript ",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
-  "repository": "https://github.com/gigobyte/pure.git",
+  "repository": "https://github.com/gigobyte/purify.git",
   "author": "gigobyte <gigobest2@gmail.com>",
   "license": "MIT",
   "sideEffects": false,

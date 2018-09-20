@@ -1,6 +1,6 @@
 {
-  "name": "pure-website",
-  "description": "Pure official website",
+  "name": "purify-website",
+  "description": "Purify official website",
   "version": "1.0.0",
   "author": "Stanislav Iliev <s.iliev3@gmail.com>",
   "dependencies": {

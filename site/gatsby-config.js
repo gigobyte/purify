@@ -6,5 +6,5 @@ module.exports = {
     {resolve: 'gatsby-plugin-google-fonts', options: { fonts: ['Titillium Web'] }},
     {resolve: 'gatsby-plugin-favicon', options: { logo: './images/favicon.png', injectHTML: true, icons: { android: true, appleIcon: true, appleStartup: true } }}
   ],
-  pathPrefix: '/pure'
+  pathPrefix: '/purify'
 }
