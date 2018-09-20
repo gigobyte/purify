@@ -44,8 +44,21 @@ export class Maybe<T> implements Show, Setoid<Maybe<T>>, Functor<T>, Apply<T>, A
         return value == null ? Nothing : Just(value)
     }
 
+    /** Takes a value and returns Nothing if the value is falsy, otherwise a Just is returned */
     static fromFalsy<T>(value: T | undefined | null | void): Maybe<T> {
         return value ? Just(value) : Nothing
+    }
+
+    /** Takes a predicate and a value, passes the value to the predicate and returns a Just if it returns true, otherwise a Nothing is returned */
+    static fromPredicate<T>(pred: (value: T) => boolean): (value: T) => Maybe<T>
+    static fromPredicate<T>(pred: (value: T) => boolean, value: T): Maybe<T>
+    static fromPredicate<T>(pred: (value: T) => boolean, value?: T): any {
+        switch (arguments.length) {
+            case 1:
+                return (value: T) => Maybe.fromPredicate(pred, value)
+            default:
+                return pred(value!) ? Just(value) : Nothing
+        }
     }
 
     /** Returns `Nothing` */
@@ -195,6 +208,7 @@ export class Maybe<T> implements Show, Setoid<Maybe<T>>, Functor<T>, Apply<T>, A
         return this.isNothing() ? (effect(), this) : this
     }
 
+    /** Takes a predicate function and returns `this` if the predicate returns true or Nothing if it returns false */
     filter(pred: (value: T) => boolean): Maybe<T> {
         if (this.isNothing()) {
             return Nothing

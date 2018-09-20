@@ -17,6 +17,12 @@ describe('Maybe', () => {
         expect(Maybe.fromFalsy(5)).toEqual(Just(5))
     })
 
+    test('fromPredicate', () => {
+        expect(Maybe.fromPredicate(x => x > 0, 0)).toEqual(Nothing)
+        expect(Maybe.fromPredicate(x => x === 0, 0)).toEqual(Just(0))
+        expect(Maybe.fromPredicate<number>(x => x > 0)(0)).toEqual(Nothing)
+    })
+
     test('empty', () => {
         expect(Maybe.empty()).toEqual(Nothing)
     })

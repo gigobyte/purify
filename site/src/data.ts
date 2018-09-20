@@ -143,6 +143,16 @@ const data: Data = {
                     ]
                 },
                 {
+                    name: 'fromPredicate',
+                    signatureTS: '<T>(pred: (value: T) => boolean, value: T): Maybe<T>',
+                    signatureML: '(a -> Bool) -> a -> Maybe a',
+                    description: 'Takes a predicate and a value, passes the value to the predicate and returns a Just if it returns true, otherwise a Nothing is returned',
+                    examples: [
+                        {input: 'Maybe.fromPredicate(x => x > 0, 5)', output: 'Just(5)'},
+                        {input: 'Maybe.fromPredicate(x => x > 0, -1)', output: 'Nothing'}
+                    ]
+                },
+                {
                     name: 'catMaybes',
                     signatureML: '[Maybe a] -> [a]',
                     signatureTS: '<T>(list: Maybe<T>[]): T[]',
