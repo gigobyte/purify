@@ -82,7 +82,7 @@ export class Either<L, R> implements Show, Setoid<Either<L, R>>, Functor<R>, App
     }
 
     /** Returns true if `this` is `Right`, otherwise it returns false */
-    isRight(): this is Right<R, never> {
+    isRight(): this is Right<never, R> {
         return this.tag === _right
     }
 
