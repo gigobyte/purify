@@ -13,7 +13,7 @@ const Subtitle = styled.div`
 `
 
 const Topic = styled.h2`
-    font-weight: normal
+    font-weight: normal;
 `
 
 const TopicDescription = styled.div`
@@ -35,7 +35,7 @@ const v011 = () => (
     <div>
         <Title>Purify v0.11</Title>
         <Subtitle>September 20, 2018</Subtitle>
-        <div>Not sure what purify is? Check out the <Link to="/getting-started">Getting Started</Link> page.</div>
+        <div>Not sure what purify is? Check out the <Link to="/getting-started">Getting Started</Link> page. The package was renamed from `pure-ts` because of NSFW search results</div>
 
         <Topic>NonEmptyList</Topic>
         <TopicDescription>
@@ -55,7 +55,7 @@ getRandomElement(NonEmptyList([]))
 getRandomElement(NonEmptyList([1]))
 
 // For runtime values, you have to deal with a Maybe
-const numbers: number[] = await fetchArrayFromBackend()
+const numbers: number[] = getArrayFromForm()
 const randEl: Maybe<number> = NonEmptyList.fromArray(numbers).map(getRandomElement)
                 `}
             </SyntaxHighlighter>
@@ -94,16 +94,44 @@ adt.caseOf({ _ => 0 })`}
         <TopicDescription>Tuples now implement the Iterable and ArrayLike interfaces, making them applicable to more use cases.</TopicDescription>
 
         <SyntaxHighlighter language="typescript" style={highlightStyle}>
-                {` const [ fst, snd ] = Tuple(1, 2)`}
-            </SyntaxHighlighter>
+            {` const [ fst, snd ] = Tuple(1, 2)`}
+        </SyntaxHighlighter>
 
         <Topic>New Maybe and Either methods</Topic>
         <TopicDescription>
-            Check out the docs for Maybe and Either to find out more about those methods.
+            Check out the docs for Maybe and Either to find out more about the following methods:
 
             <ul>
                 <li><HL>Maybe.fromPredicate</HL>, <HL>Maybe#join</HL> and <HL>Maybe#orDefaultLazy</HL></li>
                 <li><HL>Either#join</HL> and <HL>Either#orDefaultLazy</HL></li>
+            </ul>
+        </TopicDescription>
+
+        <Topic>Improved pretty printing</Topic>
+        <TopicDescription>
+            When using <HL>toString</HL> on ADT instances now it displays the constructor name. Keep in mind that this behaviour is strictly for pretty printing, in the case of <HL>JSON.stringify</HL> it strips out any ADT info and leaves only relevant JSON data.
+
+            <SyntaxHighlighter language="typescript" style={highlightStyle}>
+                {`const val = Just(5)
+console.log(val.toString()) // "Just(5)"
+console.log(JSON.stringify(val)) // "5"`}
+            </SyntaxHighlighter>
+        </TopicDescription>
+
+        <Topic>All functions with multiple arguments support partial application</Topic>
+        <TopicDescription>
+            <div>Added partial application support to: <HL>List#at</HL></div>
+            <div>Improved partial application for: <HL>Tuple.fanout</HL>, <HL>Maybe.mapMaybe</HL></div>
+        </TopicDescription>
+
+        <Topic>Other changes</Topic>
+        <TopicDescription>
+            <ul>
+                <li>Removed <HL>Semigroup</HL> and <HL>Ord</HL> instances because they were not sound and making them typesafe required using very confusing type definitions.</li>
+                <li>Fixed <HL>Either#isRight</HL> type definition (thanks <a href="https://github.com/sledorze">sledorze</a>)</li>
+                <li>Made the <HL>value</HL> property inside the Maybe class private</li>
+                <li>Reduced package size by excluding the tests</li>
+                <li>Many improvements (rewordings, corrections and clarifications) made to the docs (thanks <a href="https://github.com/squirly">squirly</a>)</li>
             </ul>
         </TopicDescription>
     </div>

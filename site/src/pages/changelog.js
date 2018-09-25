@@ -13,6 +13,7 @@ const versionStyle = css`
 
 const Version = styled(Link)`
     display: block;
+    height: 25px;
     ${versionStyle}
 `
 
@@ -40,8 +41,8 @@ const Changelog = () => (
     <div>
         <h2>Choose version:</h2>
         <VersionContainer>
-            <Version to="/changelog/zeroeleven">0.11</Version>
-            <Description>NonEmptyList, Tuple improvements, New Maybe and Either methods, Better pretty printing</Description>
+            <Version to="/changelog/0.11">0.11</Version>
+            <Description>NonEmptyList, Tuple destructuring, Improved pretty printing and more</Description>
             <Date>September 2018</Date>
         </VersionContainer>
 
