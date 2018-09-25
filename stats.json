@@ -8,6 +8,10 @@
       "component---src-pages-getting-started-js-64eeda7cd1c89bf290e9.js",
       "component---src-pages-getting-started-js-64eeda7cd1c89bf290e9.js.map"
     ],
+    "component---src-pages-changelog-0-11-js": [
+      "component---src-pages-changelog-0-11-js-c035e3ecf4c38d2597c9.js",
+      "component---src-pages-changelog-0-11-js-c035e3ecf4c38d2597c9.js.map"
+    ],
     "component---src-pages-index-js": [
       "component---src-pages-index-js-20e89bd99f2af757514b.js",
       "component---src-pages-index-js-20e89bd99f2af757514b.js.map"
@@ -15,6 +19,10 @@
     "path---adts-non-empty-list": [
       "path---adts-non-empty-list-a0e39f21c11f6a62c5ab.js",
       "path---adts-non-empty-list-a0e39f21c11f6a62c5ab.js.map"
+    ],
+    "path---changelog-0-11": [
+      "path---changelog-0-11-a0e39f21c11f6a62c5ab.js",
+      "path---changelog-0-11-a0e39f21c11f6a62c5ab.js.map"
     ],
     "path---": [
       "path----557518bd178906f8d58a.js",
@@ -24,13 +32,17 @@
       "path---adts-id-a0e39f21c11f6a62c5ab.js",
       "path---adts-id-a0e39f21c11f6a62c5ab.js.map"
     ],
+    "component---src-pages-changelog-js": [
+      "component---src-pages-changelog-js-467d83c745358d7182d6.js",
+      "component---src-pages-changelog-js-467d83c745358d7182d6.js.map"
+    ],
     "path---utils-list": [
       "path---utils-list-a0e39f21c11f6a62c5ab.js",
       "path---utils-list-a0e39f21c11f6a62c5ab.js.map"
     ],
     "component---src-layouts-index-js": [
-      "component---src-layouts-index-js-690316959b51cb661f7f.js",
-      "component---src-layouts-index-js-690316959b51cb661f7f.js.map"
+      "component---src-layouts-index-js-630e26bc9c8f9387bba5.js",
+      "component---src-layouts-index-js-630e26bc9c8f9387bba5.js.map"
     ],
     "path---getting-started": [
       "path---getting-started-a0e39f21c11f6a62c5ab.js",
@@ -57,8 +69,8 @@
       "path---index-a0e39f21c11f6a62c5ab.js.map"
     ],
     "commons": [
-      "commons-a4b2f0f274d5f4489e98.js",
-      "commons-a4b2f0f274d5f4489e98.js.map"
+      "commons-a43b9a33227b6f71c44e.js",
+      "commons-a43b9a33227b6f71c44e.js.map"
     ],
     "component---src-pages-adts-non-empty-list-js": [
       "component---src-pages-adts-non-empty-list-js-74904b6646c68e18107b.js",
@@ -72,10 +84,14 @@
       "path---utils-validation-a0e39f21c11f6a62c5ab.js",
       "path---utils-validation-a0e39f21c11f6a62c5ab.js.map"
     ],
+    "path---changelog": [
+      "path---changelog-a0e39f21c11f6a62c5ab.js",
+      "path---changelog-a0e39f21c11f6a62c5ab.js.map"
+    ],
     "app": [
-      "app-0f6dc73177df703e4f26.js",
+      "app-8f4df1f7b89d4c7e7001.js",
       "build-js-styles.css",
-      "app-0f6dc73177df703e4f26.js.map",
+      "app-8f4df1f7b89d4c7e7001.js.map",
       "build-js-styles.css.map"
     ],
     "component---src-pages-utils-list-js": [
