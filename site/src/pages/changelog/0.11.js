@@ -35,7 +35,7 @@ const v011 = () => (
     <div>
         <Title>Purify v0.11</Title>
         <Subtitle>September 20, 2018</Subtitle>
-        <div>Not sure what purify is? Check out the <Link to="/getting-started">Getting Started</Link> page. The package was renamed from `pure-ts` because of NSFW search results</div>
+        <div>Not sure what purify is? Check out the <Link to="/getting-started">Getting Started</Link> page. The package was renamed from `pure-ts` because of NSFW search results.</div>
 
         <Topic>NonEmptyList</Topic>
         <TopicDescription>
@@ -83,10 +83,10 @@ if (sometimesValue.isJust()) {
 
             <SyntaxHighlighter language="typescript" style={highlightStyle}>
                 {` // v0.10
-adt.caseOf({ Just: _value => 0, Nothing: () => 0})
+adt.caseOf({ Just: value => 0, Nothing: () => 0})
 
 // Now
-adt.caseOf({ _ => 0 })`}
+adt.caseOf({ _: () => 0 })`}
             </SyntaxHighlighter>
         </TopicDescription>
 
