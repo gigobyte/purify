@@ -20,7 +20,7 @@ It is also <a href="https://github.com/fantasyland/fantasy-land">Fantasy Land</a
 
 * **Type-safety** - While purify can be used in vanilla JavaScript, it's entirely written with TypeScript and type safety in mind. While TypeScript does a great job at preventing runtime errors, purify goes a step further and provides utility functions for working with native objects like arrays in a type-safe manner.
 
-* **Emphasis on practical code** - Higher-kinded types and other type-level features would be great additions to this library, but as of right now they don't have reasonable implementations in TypeScript. Purify focuses on being a library that you ca include in any TypeScript project and favors instance methods instead of functions, clean and readable type definitions instead of advanced type features and a curated API instead of trying to port over another language's standard library.
+* **Emphasis on practical code** - Higher-kinded types and other type-level features would be great additions to this library, but as of right now they don't have reasonable implementations in TypeScript. Purify focuses on being a library that you can include in any TypeScript project and favors instance methods instead of functions, clean and readable type definitions instead of advanced type features and a curated API instead of trying to port over another language's standard library.
 
 # How to start?
 
