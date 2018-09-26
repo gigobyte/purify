@@ -44,6 +44,10 @@ describe('Tuple', () => {
         expect(Tuple(5,5).map(x => x + 1)).toEqual(Tuple(5,6))
     })
 
+    test('reduce', () => {
+        expect(Tuple(1,1).reduce((acc, x) => acc + x, 0)).toEqual(1)
+    })
+
     test('toArray', () => {
         expect(Tuple(5,5).toArray()).toEqual([5,5])
     })

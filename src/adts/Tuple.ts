@@ -3,8 +3,9 @@ import { Setoid } from '../typeclasses/Setoid'
 import { Bifunctor } from '../typeclasses/Bifunctor'
 import { Functor } from '../typeclasses/Functor'
 import { Apply } from '../typeclasses/Apply'
+import { Foldable } from '../typeclasses/Foldable'
 
-export interface Tuple<F, S> extends Tuple_<F, S> {}
+export interface Tuple<F, S> extends Tuple_<F, S> { }
 
 export interface ITuple {
     <F, S>(fst: F, snd: S): Tuple<F, S>
@@ -12,13 +13,13 @@ export interface ITuple {
     fromArray: typeof Tuple_.fromArray
 }
 
-export class Tuple_<F, S> implements Show, Setoid<Tuple<F, S>>, Bifunctor<F, S>, Functor<S>, Apply<S>, Iterable<F | S>, ArrayLike<F | S> {
+export class Tuple_<F, S> implements Show, Setoid<Tuple<F, S>>, Bifunctor<F, S>, Functor<S>, Apply<S>, Foldable<S>, Iterable<F | S>, ArrayLike<F | S> {
     0: F
     1: S
     [index: number]: F | S
     length: 2 = 2
 
-    constructor(private readonly first: F, private readonly second: S) {}
+    constructor(private readonly first: F, private readonly second: S) { }
 
     readonly 'fantasy-land/equals' = this.equals
     readonly 'fantasy-land/bimap' = this.bimap
@@ -29,7 +30,7 @@ export class Tuple_<F, S> implements Show, Setoid<Tuple<F, S>>, Bifunctor<F, S>,
     static fanout<F, S, T>(f: (value: T) => F, g: (value: T) => S): (value: T) => Tuple<F, S>
     static fanout<F, S, T>(f: (value: T) => F, g: (value: T) => S, value: T): Tuple<F, S>
     static fanout<F, T>(f: (value: T) => F): <S>(g: (value: T) => S) => (value: T) => Tuple<F, S>
-    static fanout<F, S, T>(f: (value: T) => F, g?: (value: T) => S, value?: T) : any {
+    static fanout<F, S, T>(f: (value: T) => F, g?: (value: T) => S, value?: T): any {
         switch (arguments.length) {
             case 3:
                 return Tuple(f(value!), g!(value!))
@@ -92,6 +93,10 @@ export class Tuple_<F, S> implements Show, Setoid<Tuple<F, S>>, Bifunctor<F, S>,
         return Tuple(this.first, f(this.second))
     }
 
+    reduce<T>(reducer: (accumulator: T, value: S) => T, initialValue: T): T {
+        return reducer(initialValue, this.second)
+    }
+
     /** Returns an array with 2 elements - the values inside `this` */
     toArray(): [F, S] {
         return [this.first, this.second]
@@ -111,4 +116,4 @@ export class Tuple_<F, S> implements Show, Setoid<Tuple<F, S>>, Bifunctor<F, S>,
 const TupleConstructor = <F, S>(fst: F, snd: S): Tuple<F, S> =>
     new Tuple_(fst, snd)
 
-export const Tuple: ITuple = Object.assign(TupleConstructor, {fanout: Tuple_.fanout, fromArray: Tuple_.fromArray})
+export const Tuple: ITuple = Object.assign(TupleConstructor, { fanout: Tuple_.fanout, fromArray: Tuple_.fromArray })
