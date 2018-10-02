@@ -62,7 +62,7 @@ const data: Data = {
             description: `The Maybe type is one of the most popular data types available. It is fundamental to learning about functional error handling and representing missing values. A Maybe value can be either Just a value or Nothing. The Just data constructor is used for wrapping present values while the Nothing constructor is used when a value is absent. Both constructors produce objects that share the same API which makes it easy to manipulate optional values without null checking or exception handling.`,
             examples: [
                 {title: 'How to import', content: [`import { Maybe, Just, Nothing } from 'purify-ts/adts/Maybe'`]},
-                {title: 'Without Maybe', content: [
+                {title: 'Without Maybe (naive)', content: [
                     'let port: number',
                     'let config: Config | null = getConfig()',
                     '',
@@ -72,11 +72,14 @@ const data: Data = {
                     '    port = 8080',
                     '}',
                 ]},
+                {title: 'Without Maybe (functional-light)', content: [
+                    'const config: Config | null = getConfig()',
+                    '',
+                    '// immutable, terse, but harder to read',
+                    'const port = config && config.port ? parseInt(config.port) : 8080'
+                ]},
                 {title: 'With Maybe', content: [
-                    'const port: number = getConfig() // Maybe<Config>',
-                    '    .chain(x => x.port)',
-                    '    .map(parseInt)    // Alternatively,',
-                    '    .orDefault(8080)  // you can use the .mapOrDefault shorthand'
+                    'const port = getConfig().chain(x => x.port).map(parseInt).orDefault(8080)'
                 ]}
             ],
             constructors: [
