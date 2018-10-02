@@ -3,6 +3,11 @@ export interface MethodExample {
     output: string
 }
 
+export interface DataTypeExample {
+    title: string,
+    content: string[]
+}
+
 export interface Method {
     name: string,
     description: string,
@@ -15,11 +20,7 @@ export interface DataType {
     name: string,
     implements: string[],
     description: string,
-    example: {
-        import: string,
-        before?: string[],
-        after?: string[]
-    },
+    examples: DataTypeExample[],
     constructors: Method[],
     staticMethods: Method[],
     instanceMethods: Method[],
@@ -59,9 +60,9 @@ const data: Data = {
             name: 'Maybe',
             implements: ['Setoid', 'Monoid', 'Functor', 'Apply', 'Applicative', 'Alt', 'Plus', 'Alternative', 'Chain', 'Monad', 'Foldable', 'Extend', 'Unsafe'],
             description: `The Maybe type is one of the most popular data types available. It is fundamental to learning about functional error handling and representing missing values. A Maybe value can be either Just a value or Nothing. The Just data constructor is used for wrapping present values while the Nothing constructor is used when a value is absent. Both constructors produce objects that share the same API which makes it easy to manipulate optional values without null checking or exception handling.`,
-            example: {
-                import: `import { Maybe, Just, Nothing } from 'purify-ts/adts/Maybe'`,
-                before: [
+            examples: [
+                {title: 'How to import', content: [`import { Maybe, Just, Nothing } from 'purify-ts/adts/Maybe'`]},
+                {title: 'Without Maybe', content: [
                     'let port: number',
                     'let config: Config | null = getConfig()',
                     '',
@@ -70,14 +71,14 @@ const data: Data = {
                     '} else {',
                     '    port = 8080',
                     '}',
-                ],
-                after: [
+                ]},
+                {title: 'With Maybe', content: [
                     'const port: number = getConfig() // Maybe<Config>',
                     '    .chain(x => x.port)',
                     '    .map(parseInt)    // Alternatively,',
                     '    .orDefault(8080)  // you can use the .mapOrDefault shorthand'
-                ]
-            },
+                ]}
+            ],
             constructors: [
                 {
                     name: 'Just',
@@ -399,9 +400,9 @@ const data: Data = {
             name: 'Either',
             implements: ['Setoid', 'Functor', 'Apply', 'Applicative', 'Alt', 'Chain', 'Monad', 'Foldable', 'Extend', 'Bifunctor', 'Unsafe'],
             description: `Either is a data type with two sides (constructors) - Left and Right. It is most commonly used for error handling as it is very similar to the Maybe type with the only difference being that you can store information about the missing value (an error message for example). By convention, "Right is right", meaning that success is stored on the Right and failure is stored on the Left. It is also important to note that Either is right-biased which means that \`map\`, \`chain\` and other similar methods will operate on the right side.`,
-            example: {
-                import: `import { Either, Left, Right } from 'purify-ts/adts/Either'`,
-                before: [
+            examples: [
+                {title: 'How to import', content: [`import { Either, Left, Right } from 'purify-ts/adts/Either'`]},
+                {title: 'Without Either', content: [
                     'const getPort = () => {',
                     '    const config: Config | null = getConfig()',
                     '',
@@ -420,8 +421,8 @@ const data: Data = {
                     '    loggingService.log(e.message)',
                     '    port = 8080',
                     '}'
-                ],
-                after: [
+                ]},
+                {title: 'With Either', content: [
                     'const getPort = () => getConfig() // Maybe makes a great combo with Either',
                     '    .chain(x => x.port)',
                     `    .toEither(new Error("Couldn't parse port from config"))`,
@@ -430,8 +431,8 @@ const data: Data = {
                     '    .ifLeft((e) => loggingService.log(e.message))',
                     '    .map(parseInt)',
                     '    .orDefault(8080)'
-                ]
-            },
+                ]}
+            ],
             constructors: [
                 {
                     name: 'Left',
@@ -739,9 +740,9 @@ const data: Data = {
             name: 'Tuple',
             implements: ['Setoid', 'Functor', 'Bifunctor', 'Apply'],
             description: `Tuple, also known as Pair, is a data type containing two values. You can think of it as an immutable array of only two elements, but unlike arrays (which are commonly homogeneous), the two values inside can be of different types.`,
-            example: {
-                import: `import { Tuple } from 'purify-ts/adts/Tuple'`
-            },
+            examples: [
+                {title: 'How to import', content: [`import { Tuple } from 'purify-ts/adts/Tuple'`]}
+            ],
             constructors: [
                 {
                     name: 'Tuple',
@@ -868,9 +869,9 @@ const data: Data = {
             name: 'Id',
             implements: ['Setoid', 'Function', 'Apply', 'Applicative', 'Chain', 'Monad'],
             description: `The identity data constructor. Useful when a function requires a Functor or a Monad object and you only have a regular value, you can wrap that value in an Id to make the compiler happy.`,
-            example: {
-                import: `import { Id } from 'purify-ts/adts/Id'`
-            },
+            examples: [
+                {title: 'How to import', content: [`import { Id } from 'purify-ts/adts/Id'`]}
+            ],
             constructors: [
                 {
                     name: 'Id',
@@ -945,9 +946,9 @@ const data: Data = {
             name: 'NonEmptyList',
             implements: ['Unsafe'],
             description: `A type which represents a list that is not empty. NonEmptyList has no runtime, during execution it's a regular array. This gives not only performance benefits, but it also allows you to use Array and NonEmptyList interchangeably - you can pass a NonEmptyList to any function that expects an Array (this includes access to all Array.prototype methods like map and filter for free).`,
-            example: {
-                import: `import { NonEmptyList, isNonEmpty, head, last } from 'purify-ts/adts/NonEmptyList'`
-            },
+            examples: [
+                {title: 'How to import', content: [`import { NonEmptyList, isNonEmpty, head, last } from 'purify-ts/adts/NonEmptyList'`]}
+            ],
             constructors: [
                 {
                     name: 'NonEmptyList',

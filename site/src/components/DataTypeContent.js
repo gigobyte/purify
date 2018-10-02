@@ -90,22 +90,12 @@ const DataTypeContent = adt => () =>
         </TypeclassBadges>
         <Description>{adt.description}</Description>
         <ExamplesContainer>
-            <Example>
-                <ExampleHeader>How to import</ExampleHeader>
-                <SyntaxHighlighter language="typescript" style={highlightStyle}>{adt.example.import}</SyntaxHighlighter>
-            </Example>
-            {adt.example.before &&
+            {adt.examples.map(example => (
                 <Example>
-                    <ExampleHeader>Without {adt.name}</ExampleHeader>
-                    <SyntaxHighlighter language="typescript" style={highlightStyle}>{adt.example.before.join('\n')}</SyntaxHighlighter>
+                    <ExampleHeader>{example.title}</ExampleHeader>
+                    <SyntaxHighlighter language="typescript" style={highlightStyle}>{example.content.join('\n')}</SyntaxHighlighter>
                 </Example>
-            }
-            {adt.example.after &&
-                <Example>
-                    <ExampleHeader>With {adt.name}</ExampleHeader>
-                    <SyntaxHighlighter language="typescript" style={highlightStyle}>{adt.example.after.join('\n')}</SyntaxHighlighter>
-                </Example>
-            }
+            ))}
         </ExamplesContainer>
         <TopicHeader>Constructors</TopicHeader>
         {adt.constructors.map(DataTypeMethod)}
