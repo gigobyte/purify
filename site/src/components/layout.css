@@ -6,6 +6,6 @@ html, body {
     padding: 0;
 }
 
-body > div {
+body > div, body > div > div {
     height: 100%;
 }

@@ -174,27 +174,27 @@ const IndexPage = props =>
                     <RefactoringText>Turn</RefactoringText>
                     <SyntaxHighlighter language="typescript" style={highlightStyle}>
                         {`const getUsers = (country: Country): User[] => {
-        if (!country) {
-            return []
-        }
+    if (!country) {
+        return []
+    }
 
-        const users = getUsersByCountry(country)
+    const users = getUsersByCountry(country)
 
-        if (!users) {
-            return []
-        }
+    if (!users) {
+        return []
+    }
 
-        return users
-    }`}
+    return users
+}`}
                     </SyntaxHighlighter>
                     <RefactoringText>into</RefactoringText>
                     <SyntaxHighlighter language="typescript" style={highlightStyle} show>
                         {`import { Maybe } from 'purify-ts/adts/Maybe'
 
-    const getUsers = (country: Country): User[] =>
-        Maybe.fromNullable(country)
-            .chain(getUsersByCountry)
-            .toList()`}
+const getUsers = (country: Country): User[] =>
+    Maybe.fromNullable(country)
+         .chain(getUsersByCountry)
+         .toList()`}
                     </SyntaxHighlighter>
                 </RefactoringContainer>
             </Content>
