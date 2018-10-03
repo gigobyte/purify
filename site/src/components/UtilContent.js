@@ -1,10 +1,9 @@
 import React from 'react'
 import styled from 'styled-components'
-import Link from 'gatsby-link'
-import data from '../data'
 import DataTypeMethod from './DataTypeMethod'
 import SyntaxHighlighter from 'react-syntax-highlighter'
 import highlightStyle from 'react-syntax-highlighter/styles/hljs/googlecode'
+import Layout from './layout'
 
 const Container = styled.div`
 `
@@ -55,30 +54,32 @@ const Example = styled.div`
     border: 1px solid #f3eeee;
 `
 
-const UtilContent = util => () =>
-    <Container>
-        <Title>{util.name}</Title>
-        <Description>{util.description}</Description>
-        <ExamplesContainer>
-            <Example>
-                <ExampleHeader>How to import</ExampleHeader>
-                <SyntaxHighlighter language="typescript" style={highlightStyle}>{util.example.import}</SyntaxHighlighter>
-            </Example>
-            {util.example.before &&
+const UtilContent = util => props =>
+    <Layout location={props.location}>
+        <Container>
+            <Title>{util.name}</Title>
+            <Description>{util.description}</Description>
+            <ExamplesContainer>
                 <Example>
-                    <ExampleHeader>Without {util.name}</ExampleHeader>
-                    <SyntaxHighlighter language="typescript" style={highlightStyle}>{util.example.before.join('\n')}</SyntaxHighlighter>
+                    <ExampleHeader>How to import</ExampleHeader>
+                    <SyntaxHighlighter language="typescript" style={highlightStyle}>{util.example.import}</SyntaxHighlighter>
                 </Example>
-            }
-            {util.example.after &&
-                <Example>
-                    <ExampleHeader>With {util.name}</ExampleHeader>
-                    <SyntaxHighlighter language="typescript" style={highlightStyle}>{util.example.after.join('\n')}</SyntaxHighlighter>
-                </Example>
-            }
-        </ExamplesContainer>
-        <TopicHeader>Methods</TopicHeader>
-        {util.methods.map(DataTypeMethod)}
-    </Container>
+                {util.example.before &&
+                    <Example>
+                        <ExampleHeader>Without {util.name}</ExampleHeader>
+                        <SyntaxHighlighter language="typescript" style={highlightStyle}>{util.example.before.join('\n')}</SyntaxHighlighter>
+                    </Example>
+                }
+                {util.example.after &&
+                    <Example>
+                        <ExampleHeader>With {util.name}</ExampleHeader>
+                        <SyntaxHighlighter language="typescript" style={highlightStyle}>{util.example.after.join('\n')}</SyntaxHighlighter>
+                    </Example>
+                }
+            </ExamplesContainer>
+            <TopicHeader>Methods</TopicHeader>
+            {util.methods.map(DataTypeMethod)}
+        </Container>
+    </Layout>
 
 export default UtilContent
