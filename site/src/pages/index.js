@@ -2,6 +2,7 @@ import React from 'react'
 import Link from 'gatsby-link'
 import styled from 'styled-components'
 import Meta from '../components/Meta'
+import Layout from '../components/layout'
 import SyntaxHighlighter from 'react-syntax-highlighter'
 import highlightStyle from 'react-syntax-highlighter/styles/hljs/tomorrow'
 
@@ -139,66 +140,68 @@ const RefactoringText = styled.div`
     padding: 0 20px;
 `
 
-const IndexPage = () =>
-    <Container>
-        <Meta />
-        <NavBar>
-            <NavBarLink><Link to="/getting-started">Docs</Link></NavBarLink>
-            <NavBarLink><a href="https://github.com/gigobyte/purify">Github</a></NavBarLink>
-        </NavBar>
-        <Content>
-            <Heading>
-                <Title><img src="https://raw.githubusercontent.com/gigobyte/purify/master/assets/logo.png" alt="Purify" /></Title>
-                <Subtitle>Functional programming library for TypeScript</Subtitle>
-                <InstallBox>
-                     $ npm install purify-ts
-                </InstallBox>
-            </Heading>
-            <FeaturesContainer>
-                <Feature>
-                    <FeatureTitle>Utility functions</FeatureTitle>
-                    Purify provides implementations for common typeclasses like Functor and Monad, along with utility functions that operate on them
-                </Feature>
-                <Feature>
-                    <FeatureTitle>Algebraic Data Types</FeatureTitle>
-                    Purify provides a collection of algebraic data structures that will help you tackle common problems that increase code complexity, such as conditional logic and error handling
-                </Feature>
-                <Feature>
-                    <FeatureTitle>Practical approach</FeatureTitle>
-                    Purify is a library focused on practical functional programming in TypeScript. You will find many examples and tutorials in the <Link to="/getting-started">docs</Link> section of this site.  
-                </Feature>
-            </FeaturesContainer>
-            <RefactoringContainer>
-                <RefactoringText>Turn</RefactoringText>
-                <SyntaxHighlighter language="typescript" style={highlightStyle}>
-                    {`const getUsers = (country: Country): User[] => {
-    if (!country) {
-        return []
-    }
+const IndexPage = props =>
+    <Layout location={props.location}>
+        <Container>
+            <Meta />
+            <NavBar>
+                <NavBarLink><Link to="/getting-started">Docs</Link></NavBarLink>
+                <NavBarLink><a href="https://github.com/gigobyte/purify">Github</a></NavBarLink>
+            </NavBar>
+            <Content>
+                <Heading>
+                    <Title><img src="https://raw.githubusercontent.com/gigobyte/purify/master/assets/logo.png" alt="Purify" /></Title>
+                    <Subtitle>Functional programming library for TypeScript</Subtitle>
+                    <InstallBox>
+                        $ npm install purify-ts
+                    </InstallBox>
+                </Heading>
+                <FeaturesContainer>
+                    <Feature>
+                        <FeatureTitle>Utility functions</FeatureTitle>
+                        Purify provides implementations for common typeclasses like Functor and Monad, along with utility functions that operate on them
+                    </Feature>
+                    <Feature>
+                        <FeatureTitle>Algebraic Data Types</FeatureTitle>
+                        Purify provides a collection of algebraic data structures that will help you tackle common problems that increase code complexity, such as conditional logic and error handling
+                    </Feature>
+                    <Feature>
+                        <FeatureTitle>Practical approach</FeatureTitle>
+                        Purify is a library focused on practical functional programming in TypeScript. You will find many examples and tutorials in the <Link to="/getting-started">docs</Link> section of this site.  
+                    </Feature>
+                </FeaturesContainer>
+                <RefactoringContainer>
+                    <RefactoringText>Turn</RefactoringText>
+                    <SyntaxHighlighter language="typescript" style={highlightStyle}>
+                        {`const getUsers = (country: Country): User[] => {
+        if (!country) {
+            return []
+        }
 
-    const users = getUsersByCountry(country)
+        const users = getUsersByCountry(country)
 
-    if (!users) {
-        return []
-    }
+        if (!users) {
+            return []
+        }
 
-    return users
-}`}
-                </SyntaxHighlighter>
-                <RefactoringText>into</RefactoringText>
-                <SyntaxHighlighter language="typescript" style={highlightStyle} show>
-                    {`import { Maybe } from 'purify-ts/adts/Maybe'
+        return users
+    }`}
+                    </SyntaxHighlighter>
+                    <RefactoringText>into</RefactoringText>
+                    <SyntaxHighlighter language="typescript" style={highlightStyle} show>
+                        {`import { Maybe } from 'purify-ts/adts/Maybe'
 
-const getUsers = (country: Country): User[] =>
-    Maybe.fromNullable(country)
-         .chain(getUsersByCountry)
-         .toList()`}
-                </SyntaxHighlighter>
-            </RefactoringContainer>
-        </Content>
-        <Footer>
-            Purify is developed and maintained by Stanislav Iliev, distributed under the ISC License.
-        </Footer>
-    </Container>
+    const getUsers = (country: Country): User[] =>
+        Maybe.fromNullable(country)
+            .chain(getUsersByCountry)
+            .toList()`}
+                    </SyntaxHighlighter>
+                </RefactoringContainer>
+            </Content>
+            <Footer>
+                Purify is developed and maintained by Stanislav Iliev, distributed under the ISC License.
+            </Footer>
+        </Container>
+    </Layout>
 
 export default IndexPage

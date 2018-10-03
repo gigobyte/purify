@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import DataTypeMethod from './DataTypeMethod'
 import SyntaxHighlighter from 'react-syntax-highlighter'
 import highlightStyle from 'react-syntax-highlighter/styles/hljs/googlecode'
+import Layout from './layout'
 
 const Container = styled.div`
 `
@@ -78,39 +79,41 @@ const Example = styled.div`
     border: 1px solid #f3eeee;
 `
 
-const DataTypeContent = adt => () =>
-    <Container>
-        <Title>{adt.name}</Title>
-        <TypeclassBadges>
-            {adt.implements.map(typeclass =>
-                <TypeclassBadge key={typeclass}>{typeclass}</TypeclassBadge>
-            )}
-        </TypeclassBadges>
-        <Description>{adt.description}</Description>
-        <ExamplesContainer>
-            {adt.examples.map(example => (
-                <Example>
-                    <ExampleHeader>{example.title}</ExampleHeader>
-                    <SyntaxHighlighter language="typescript" style={highlightStyle}>{example.content.join('\n')}</SyntaxHighlighter>
-                </Example>
-            ))}
-        </ExamplesContainer>
-        <TopicHeader>Constructors</TopicHeader>
-        {adt.constructors.map(DataTypeMethod)}
-        <TopicHeader>Static methods</TopicHeader>
-        {adt.staticMethods.map(DataTypeMethod)}
-        {adt.instanceMethods.length > 0 &&
-            <div>
-                <TopicHeader>Instance methods</TopicHeader>
-                {adt.instanceMethods.map(DataTypeMethod)}
-            </div>
-        }
-        {adt.helperMethods && adt.helperMethods.length > 0 &&
-            <div>
-                <TopicHeader>Helper methods</TopicHeader>
-                {adt.helperMethods.map(DataTypeMethod)}
-            </div>
-        }
-    </Container>
+const DataTypeContent = adt => props =>
+    <Layout location={props.location}>
+        <Container>
+            <Title>{adt.name}</Title>
+            <TypeclassBadges>
+                {adt.implements.map(typeclass =>
+                    <TypeclassBadge key={typeclass}>{typeclass}</TypeclassBadge>
+                )}
+            </TypeclassBadges>
+            <Description>{adt.description}</Description>
+            <ExamplesContainer>
+                {adt.examples.map(example => (
+                    <Example>
+                        <ExampleHeader>{example.title}</ExampleHeader>
+                        <SyntaxHighlighter language="typescript" style={highlightStyle}>{example.content.join('\n')}</SyntaxHighlighter>
+                    </Example>
+                ))}
+            </ExamplesContainer>
+            <TopicHeader>Constructors</TopicHeader>
+            {adt.constructors.map(DataTypeMethod)}
+            <TopicHeader>Static methods</TopicHeader>
+            {adt.staticMethods.map(DataTypeMethod)}
+            {adt.instanceMethods.length > 0 &&
+                <div>
+                    <TopicHeader>Instance methods</TopicHeader>
+                    {adt.instanceMethods.map(DataTypeMethod)}
+                </div>
+            }
+            {adt.helperMethods && adt.helperMethods.length > 0 &&
+                <div>
+                    <TopicHeader>Helper methods</TopicHeader>
+                    {adt.helperMethods.map(DataTypeMethod)}
+                </div>
+            }
+        </Container>
+    </Layout>
 
 export default DataTypeContent

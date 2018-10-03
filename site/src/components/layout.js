@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import Meta from '../components/Meta'
 
 import Sidebar from '../components/Sidebar'
-import './index.css'
+import './layout.css'
 
 const Container = styled.div`
     min-height: 100vh;
@@ -35,12 +35,12 @@ const LayoutWithSidebar = (children) =>
             <Sidebar />
         </SidebarContainer>
         <ContentContainer>
-            {children()}
+            {children}
         </ContentContainer>
     </Container>
 
 const Layout = ({ children, location }) => location.pathname === '/' || location.pathname === '/purify/'
-    ? children()
+    ? children
     : LayoutWithSidebar(children)
 
 export default Layout
