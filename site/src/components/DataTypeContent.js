@@ -1,7 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-import Link from 'gatsby-link'
-import data from '../data'
 import DataTypeMethod from './DataTypeMethod'
 import SyntaxHighlighter from 'react-syntax-highlighter'
 import highlightStyle from 'react-syntax-highlighter/styles/hljs/googlecode'

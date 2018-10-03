@@ -1,5 +1,4 @@
 import React from 'react'
-import Link from 'gatsby-link'
 import styled from 'styled-components'
 import SyntaxHighlighter from 'react-syntax-highlighter'
 import highlightStyle from 'react-syntax-highlighter/styles/hljs/googlecode'
