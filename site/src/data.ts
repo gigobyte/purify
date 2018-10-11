@@ -79,7 +79,7 @@ const data: Data = {
                     'const port = config && config.port ? parseInt(config.port) : 8080'
                 ]},
                 {title: 'With Maybe', content: [
-                    'const port = getConfig().chain(x => x.port).map(parseInt).orDefault(8080)'
+                    'const port = getConfig().map(x => x.port).map(parseInt).orDefault(8080)'
                 ]}
             ],
             constructors: [
