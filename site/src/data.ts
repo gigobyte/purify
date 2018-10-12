@@ -1025,7 +1025,7 @@ const data: Data = {
             name: 'List',
             description: 'This module contains type-safe functions for working with arrays.',
             example: {
-                import: `import { head, last, tail, init, uncons } from 'purify-ts/utils/List`
+                import: `import { head, last, tail, init, uncons } from 'purify-ts/utils/List'`
             },
             methods: [
                 {
