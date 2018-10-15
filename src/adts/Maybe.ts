@@ -144,6 +144,11 @@ export class Maybe<T> implements Show, Setoid<Maybe<T>>, Functor<T>, Apply<T>, A
         return this.isNothing() ? Nothing : f(this.value)
     }
 
+    /** Transforms `this` with a function that returns a nullable value. Equivalent to `m.chain(x => Maybe.fromNullable(f(x)))` */
+    chainNullable<U>(f: (value: T) => U | undefined | null | void): Maybe<U> {
+        return this.isNothing() ? Nothing : Maybe.fromNullable(f(this.value))
+    }
+
     /** Flattens nested Maybes. `m.join()` is equivalent to `m.chain(x => x)` */
     join<U>(this: Maybe<Maybe<U>>): Maybe<U> {
         return this.chain(x => x)

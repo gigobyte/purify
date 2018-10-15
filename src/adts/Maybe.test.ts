@@ -88,6 +88,12 @@ describe('Maybe', () => {
         expect(Nothing.chain(x => Just(x + 1))).toEqual(Nothing)
     })
 
+    test('chainNullable', () => {
+        expect(Just(5).chainNullable(x => x + 1)).toEqual(Just(6))
+        expect(Nothing.chainNullable(x => x + 1)).toEqual(Nothing)
+        expect(Just({prop: null}).chainNullable(x => x.prop)).toEqual(Nothing)
+    })
+
     test('join', () => {
         expect(Just(Just(5)).join()).toEqual(Just(5))
         expect(Nothing.join()).toEqual(Nothing)

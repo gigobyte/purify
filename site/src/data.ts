@@ -271,6 +271,15 @@ const data: Data = {
                     ]
                 },
                 {
+                    name: 'chainNullable',
+                    signatureTS: '<U>(f: (value: T) => U | undefined | null | void): Maybe<U>',
+                    description: 'Transforms `this` with a function that returns a nullable value. Equivalent to `m.chain(x => Maybe.fromNullable(f(x)))`',
+                    examples: [
+                        {input: 'Just({prop: null}).chainNullable(x => x.prop)', output: 'Nothing'},
+                        {input: 'Just(5).chainNullable(x => x + 1)', output: 'Just(6)'}
+                    ]
+                },
+                {
                     name: 'join',
                     signatureML: 'Maybe (Maybe a) ~> Maybe a',
                     signatureTS: '<U>(this: Maybe<Maybe<U>>): Maybe<U>',
