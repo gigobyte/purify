@@ -8,6 +8,11 @@ export interface DataTypeExample {
     content: string[]
 }
 
+export interface DataTypeGuide {
+    title: string
+    link: string
+}
+
 export interface Method {
     name: string,
     description: string,
@@ -19,6 +24,7 @@ export interface Method {
 export interface DataType {
     name: string,
     implements: string[],
+    guides: DataTypeGuide[],
     description: string,
     examples: DataTypeExample[],
     constructors: Method[],
@@ -82,6 +88,7 @@ const data: Data = {
                     'const port = getConfig().chain(x => x.port).map(parseInt).orDefault(8080)'
                 ]}
             ],
+            guides: [],
             constructors: [
                 {
                     name: 'Just',
@@ -445,6 +452,7 @@ const data: Data = {
                     '    .orDefault(8080)'
                 ]}
             ],
+            guides: [],
             constructors: [
                 {
                     name: 'Left',
@@ -755,6 +763,7 @@ const data: Data = {
             examples: [
                 {title: 'How to import', content: [`import { Tuple } from 'purify-ts/adts/Tuple'`]}
             ],
+            guides: [],
             constructors: [
                 {
                     name: 'Tuple',
@@ -884,6 +893,7 @@ const data: Data = {
             examples: [
                 {title: 'How to import', content: [`import { Id } from 'purify-ts/adts/Id'`]}
             ],
+            guides: [],
             constructors: [
                 {
                     name: 'Id',
@@ -961,6 +971,7 @@ const data: Data = {
             examples: [
                 {title: 'How to import', content: [`import { NonEmptyList, isNonEmpty, head, last } from 'purify-ts/adts/NonEmptyList'`]}
             ],
+            guides: [],
             constructors: [
                 {
                     name: 'NonEmptyList',
@@ -1036,6 +1047,7 @@ const data: Data = {
             example: {
                 import: `import { head, last, tail, init, uncons } from 'purify-ts/utils/List'`
             },
+            guides: [],
             methods: [
                 {
                     name: 'at',
