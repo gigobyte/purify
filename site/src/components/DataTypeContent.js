@@ -1,4 +1,5 @@
 import React from 'react'
+import Link from 'gatsby-link'
 import styled from 'styled-components'
 import DataTypeMethod from './DataTypeMethod'
 import SyntaxHighlighter from 'react-syntax-highlighter'
@@ -79,6 +80,13 @@ const Example = styled.div`
     border: 1px solid #f3eeee;
 `
 
+const Guide = styled(Link)`
+    display: inline-block;
+    text-align: center;
+    text-decoration: none;
+    width: 100%;
+`
+
 const DataTypeContent = adt => props =>
     <Layout location={props.location}>
         <Container>
@@ -90,6 +98,14 @@ const DataTypeContent = adt => props =>
             </TypeclassBadges>
             <Description>{adt.description}</Description>
             <ExamplesContainer>
+                {adt.guides.length > 0 &&
+                    <Example>
+                        <ExampleHeader>Official Guides</ExampleHeader>
+                        {adt.guides.map(guide => (
+                            <Guide to={guide.link}>{guide.title}</Guide>
+                        ))}
+                    </Example>
+                }
                 {adt.examples.map(example => (
                     <Example>
                         <ExampleHeader>{example.title}</ExampleHeader>

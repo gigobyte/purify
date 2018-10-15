@@ -88,7 +88,9 @@ const data: Data = {
                     'const port = getConfig().chain(x => x.port).map(parseInt).orDefault(8080)'
                 ]}
             ],
-            guides: [],
+            guides: [
+                {title: 'Migrating old code to purify using Maybe', link: '/guides/migrating-to-maybe'}
+            ],
             constructors: [
                 {
                     name: 'Just',
@@ -1047,7 +1049,6 @@ const data: Data = {
             example: {
                 import: `import { head, last, tail, init, uncons } from 'purify-ts/utils/List'`
             },
-            guides: [],
             methods: [
                 {
                     name: 'at',

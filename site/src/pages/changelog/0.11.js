@@ -4,6 +4,7 @@ import Link from 'gatsby-link'
 import SyntaxHighlighter from 'react-syntax-highlighter'
 import highlightStyle from 'react-syntax-highlighter/styles/hljs/googlecode'
 import Layout from '../../components/Layout'
+import HL from '../../components/HL'
 
 const Title = styled.h1`
     margin-bottom: 0;
@@ -23,13 +24,6 @@ const TopicDescription = styled.div`
     @media only screen and (max-width: 768px) {
         padding-right: 0;
     }
-`
-
-const HL = styled.span`
-    background: white;
-    padding: 0.5em;
-    font-family: monospace;
-    white-space: pre;
 `
 
 const v011 = props => (
