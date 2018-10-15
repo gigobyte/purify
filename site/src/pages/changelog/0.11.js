@@ -92,7 +92,7 @@ adt.caseOf({ _: () => 0 })`}
         </TopicDescription>
 
         <Topic>Tuple support for more array behaviour</Topic>
-        <TopicDescription>Tuples now implement the Iterable and ArrayLike interfaces, making them applicable to more use cases.</TopicDescription>
+        <TopicDescription>Tuples now implement the Iterable, ArrayLike and Foldable interfaces.</TopicDescription>
 
         <SyntaxHighlighter language="typescript" style={highlightStyle}>
             {` const [ fst, snd ] = Tuple(1, 2)`}
