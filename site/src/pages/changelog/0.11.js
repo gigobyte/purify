@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import Link from 'gatsby-link'
 import SyntaxHighlighter from 'react-syntax-highlighter'
 import highlightStyle from 'react-syntax-highlighter/styles/hljs/googlecode'
+import Layout from '../../components/Layout'
 
 const Title = styled.h1`
     margin-bottom: 0;
@@ -31,8 +32,8 @@ const HL = styled.span`
     white-space: pre;
 `
 
-const v011 = () => (
-    <div>
+const v011 = props => (
+    <Layout location={props.location}>
         <Title>Purify v0.11</Title>
         <Subtitle>September 20, 2018</Subtitle>
         <div>Not sure what purify is? Check out the <Link to="/getting-started">Getting Started</Link> page. The package was renamed from `pure-ts` because of NSFW search results.</div>
@@ -134,7 +135,7 @@ console.log(JSON.stringify(val)) // "5"`}
                 <li>Many improvements (rewordings, corrections and clarifications) made to the docs (thanks <a href="https://github.com/squirly">squirly</a>)</li>
             </ul>
         </TopicDescription>
-    </div>
+    </Layout>
 )
 
 export default v011
