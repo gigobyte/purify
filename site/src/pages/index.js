@@ -173,7 +173,7 @@ const IndexPage = props =>
                 <RefactoringContainer>
                     <RefactoringText>Turn</RefactoringText>
                     <SyntaxHighlighter language="typescript" style={highlightStyle}>
-                        {`const getUsers = (country: Country): User[] => {
+                        {`const getUsers = (country?: Country): User[] => {
     if (!country) {
         return []
     }
@@ -191,7 +191,7 @@ const IndexPage = props =>
                     <SyntaxHighlighter language="typescript" style={highlightStyle} show>
                         {`import { Maybe } from 'purify-ts/adts/Maybe'
 
-const getUsers = (country: Country): User[] =>
+const getUsers = (country?: Country): User[] =>
     Maybe.fromNullable(country)
          .chain(getUsersByCountry)
          .toList()`}
