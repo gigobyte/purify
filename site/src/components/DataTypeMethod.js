@@ -12,10 +12,9 @@ const Container = styled.div`
     border-right: 0;
 `
 
-const MethodName = styled('a')`
+const MethodName = styled.a`
     font-size: 19px;
     color: #3b74d7;
-    border-left: 5px;
     text-decoration: none;
 
     &:hover {
@@ -23,6 +22,7 @@ const MethodName = styled('a')`
     }
 
     @media only screen and (max-width : 768px) {
+        display: block;
         text-align: center;
         padding-bottom: 5px;
     }
