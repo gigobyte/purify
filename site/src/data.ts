@@ -87,7 +87,7 @@ const data: Data = {
                 ]},
             ],
             guides: [
-                {title: 'Migrating old code to purify using Maybe', link: '/guides/migrating-to-maybe'}
+                {title: 'Which method am I supposed to use now? (API guide)', link: '/guides/maybe-api-guide'}
             ],
             constructors: [
                 {
