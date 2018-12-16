@@ -98,6 +98,12 @@ const DataTypeContent = adt => props =>
             </TypeclassBadges>
             <Description>{adt.description}</Description>
             <ExamplesContainer>
+                {adt.examples.map(example => (
+                    <Example>
+                        <ExampleHeader>{example.title}</ExampleHeader>
+                        <SyntaxHighlighter language="typescript" style={highlightStyle}>{example.content.join('\n')}</SyntaxHighlighter>
+                    </Example>
+                ))}
                 {adt.guides.length > 0 &&
                     <Example>
                         <ExampleHeader>Official Guides</ExampleHeader>
@@ -106,12 +112,6 @@ const DataTypeContent = adt => props =>
                         ))}
                     </Example>
                 }
-                {adt.examples.map(example => (
-                    <Example>
-                        <ExampleHeader>{example.title}</ExampleHeader>
-                        <SyntaxHighlighter language="typescript" style={highlightStyle}>{example.content.join('\n')}</SyntaxHighlighter>
-                    </Example>
-                ))}
             </ExamplesContainer>
             <TopicHeader>Constructors</TopicHeader>
             {adt.constructors.map(DataTypeMethod)}
