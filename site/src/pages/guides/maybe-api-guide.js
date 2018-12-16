@@ -16,7 +16,10 @@ const Note = styled.div`
 
 const MethodName = styled.a`
     font-size: 17px;
+    font-weight: bold;
     color: #3b74d7;
+    margin-top: 5px;
+    display: inline-block;
     text-decoration: none;
 
     &:hover {
@@ -47,7 +50,6 @@ const MaybeApiGuide = props =>
         <SyntaxHighlighter language="typescript" style={highlightStyle}>
          {`const _ = Maybe.fromPredicate(x => x && x.length > 0, value)`}
         </SyntaxHighlighter>
-        <br/>
 
         <MethodName href="/adts/Maybe/#chainNullable">chainNullable</MethodName>
         <br />
@@ -63,7 +65,6 @@ const MaybeApiGuide = props =>
 // or just straight up
 myMaybe.chainNullable(transform)`}
         </SyntaxHighlighter>
-        <br />
 
         <MethodName href="/adts/Maybe/#extract">extract</MethodName> / <MethodName href="/adts/Maybe/#extractUndefined">extractUndefined</MethodName> / <MethodName href="/adts/Maybe/#unsafeCoerce">unsafeCoerce</MethodName>
         <br />
