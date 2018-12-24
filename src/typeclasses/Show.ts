@@ -1,5 +1,5 @@
 export interface Show {
-    toString(): string
-    toJSON(): any
-    inspect(): string
+  toString(): string
+  toJSON(): any
+  inspect(): string
 }
