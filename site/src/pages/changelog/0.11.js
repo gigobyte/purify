@@ -7,36 +7,43 @@ import Layout from '../../components/Layout'
 import HL from '../../components/HL'
 
 const Title = styled.h1`
-    margin-bottom: 0;
+  margin-bottom: 0;
 `
 
 const Subtitle = styled.div`
-    padding-bottom: 30px;
+  padding-bottom: 30px;
 `
 
 const Topic = styled.h2`
-    font-weight: normal;
+  font-weight: normal;
 `
 
 const TopicDescription = styled.div`
-    padding-right: 15%;
+  padding-right: 15%;
 
-    @media only screen and (max-width: 768px) {
-        padding-right: 0;
-    }
+  @media only screen and (max-width: 768px) {
+    padding-right: 0;
+  }
 `
 
 const v011 = props => (
-    <Layout location={props.location}>
-        <Title>Purify v0.11</Title>
-        <Subtitle>September 20, 2018</Subtitle>
-        <div>Not sure what purify is? Check out the <Link to="/getting-started">Getting Started</Link> page. The package was renamed from `pure-ts` because of NSFW search results.</div>
+  <Layout location={props.location}>
+    <Title>Purify v0.11</Title>
+    <Subtitle>September 20, 2018</Subtitle>
+    <div>
+      Not sure what purify is? Check out the{' '}
+      <Link to="/getting-started">Getting Started</Link> page. The package was
+      renamed from `pure-ts` because of NSFW search results.
+    </div>
 
-        <Topic>NonEmptyList</Topic>
-        <TopicDescription>
-            The new NonEmptyList ADT is a list that is guaranteed to have at least one value. Because of it's utility there is an implementation of this data structure in pretty much all ML languages, which is why it's now a part of purify too. Let's look at some example code:
-            <SyntaxHighlighter language="typescript" style={highlightStyle}>
-                {`import { NonEmptyList, head } from 'purify-ts/adts/NonEmptyList'
+    <Topic>NonEmptyList</Topic>
+    <TopicDescription>
+      The new NonEmptyList ADT is a list that is guaranteed to have at least one
+      value. Because of it's utility there is an implementation of this data
+      structure in pretty much all ML languages, which is why it's now a part of
+      purify too. Let's look at some example code:
+      <SyntaxHighlighter language="typescript" style={highlightStyle}>
+        {`import { NonEmptyList, head } from 'purify-ts/adts/NonEmptyList'
 
 // Create functions with a contract - the caller has to verify that the input is valid instead of the callee
 // Since the list parameter is guaranteed to have at least one element, this function will always return a value
@@ -53,14 +60,16 @@ getRandomElement(NonEmptyList([1]))
 const numbers: number[] = getArrayFromForm()
 const randEl: Maybe<number> = NonEmptyList.fromArray(numbers).map(getRandomElement)
                 `}
-            </SyntaxHighlighter>
-        </TopicDescription>
+      </SyntaxHighlighter>
+    </TopicDescription>
 
-        <Topic>Maybe and Either predicates narrow the type</Topic>
-        <TopicDescription>
-            v0.11 makes a lot of improvements to type safety. Using one of TypeScript's more unique features - type predicates, the compiler can now know when it's safe to extract a value from a Maybe or Either.
-            <SyntaxHighlighter language="typescript" style={highlightStyle}>
-                {`const sometimesValue: Maybe<number> = ...
+    <Topic>Maybe and Either predicates narrow the type</Topic>
+    <TopicDescription>
+      v0.11 makes a lot of improvements to type safety. Using one of
+      TypeScript's more unique features - type predicates, the compiler can now
+      know when it's safe to extract a value from a Maybe or Either.
+      <SyntaxHighlighter language="typescript" style={highlightStyle}>
+        {`const sometimesValue: Maybe<number> = ...
 
 sometimesValue.extract() // number | null
 
@@ -69,67 +78,95 @@ if (sometimesValue.isJust()) {
     sometimesValue.extract() // number
 }
                 `}
-            </SyntaxHighlighter>
-        </TopicDescription>
+      </SyntaxHighlighter>
+    </TopicDescription>
 
-        <Topic>Wildcard pattern for pattern matching</Topic>
-        <TopicDescription>
-            You can now use a wildcard when pattern matching a Maybe, Either or any other ADT that supports pattern matching.
-
-            <SyntaxHighlighter language="typescript" style={highlightStyle}>
-                {` // v0.10
+    <Topic>Wildcard pattern for pattern matching</Topic>
+    <TopicDescription>
+      You can now use a wildcard when pattern matching a Maybe, Either or any
+      other ADT that supports pattern matching.
+      <SyntaxHighlighter language="typescript" style={highlightStyle}>
+        {` // v0.10
 adt.caseOf({ Just: value => 0, Nothing: () => 0})
 
 // Now
 adt.caseOf({ _: () => 0 })`}
-            </SyntaxHighlighter>
-        </TopicDescription>
+      </SyntaxHighlighter>
+    </TopicDescription>
 
-        <Topic>Tuple support for more array behaviour</Topic>
-        <TopicDescription>Tuples now implement the Iterable, ArrayLike and Foldable interfaces.</TopicDescription>
+    <Topic>Tuple support for more array behaviour</Topic>
+    <TopicDescription>
+      Tuples now implement the Iterable, ArrayLike and Foldable interfaces.
+    </TopicDescription>
 
-        <SyntaxHighlighter language="typescript" style={highlightStyle}>
-            {` const [ fst, snd ] = Tuple(1, 2)`}
-        </SyntaxHighlighter>
+    <SyntaxHighlighter language="typescript" style={highlightStyle}>
+      {` const [ fst, snd ] = Tuple(1, 2)`}
+    </SyntaxHighlighter>
 
-        <Topic>New Maybe and Either methods</Topic>
-        <TopicDescription>
-            Check out the docs for Maybe and Either to find out more about the following methods:
+    <Topic>New Maybe and Either methods</Topic>
+    <TopicDescription>
+      Check out the docs for Maybe and Either to find out more about the
+      following methods:
+      <ul>
+        <li>
+          <HL>Maybe.fromPredicate</HL>, <HL>Maybe#join</HL> and{' '}
+          <HL>Maybe#orDefaultLazy</HL>
+        </li>
+        <li>
+          <HL>Either#join</HL> and <HL>Either#orDefaultLazy</HL>
+        </li>
+      </ul>
+    </TopicDescription>
 
-            <ul>
-                <li><HL>Maybe.fromPredicate</HL>, <HL>Maybe#join</HL> and <HL>Maybe#orDefaultLazy</HL></li>
-                <li><HL>Either#join</HL> and <HL>Either#orDefaultLazy</HL></li>
-            </ul>
-        </TopicDescription>
-
-        <Topic>Improved pretty printing</Topic>
-        <TopicDescription>
-            When using <HL>toString</HL> on ADT instances now it displays the constructor name. Keep in mind that this behaviour is strictly for pretty printing, in the case of <HL>JSON.stringify</HL> it strips out any ADT info and leaves only relevant JSON data.
-
-            <SyntaxHighlighter language="typescript" style={highlightStyle}>
-                {`const val = Just(5)
+    <Topic>Improved pretty printing</Topic>
+    <TopicDescription>
+      When using <HL>toString</HL> on ADT instances now it displays the
+      constructor name. Keep in mind that this behaviour is strictly for pretty
+      printing, in the case of <HL>JSON.stringify</HL> it strips out any ADT
+      info and leaves only relevant JSON data.
+      <SyntaxHighlighter language="typescript" style={highlightStyle}>
+        {`const val = Just(5)
 console.log(val.toString()) // "Just(5)"
 console.log(JSON.stringify(val)) // "5"`}
-            </SyntaxHighlighter>
-        </TopicDescription>
+      </SyntaxHighlighter>
+    </TopicDescription>
 
-        <Topic>All functions with multiple arguments support partial application</Topic>
-        <TopicDescription>
-            <div>Added partial application support to: <HL>List#at</HL></div>
-            <div>Improved partial application for: <HL>Tuple.fanout</HL>, <HL>Maybe.mapMaybe</HL></div>
-        </TopicDescription>
+    <Topic>
+      All functions with multiple arguments support partial application
+    </Topic>
+    <TopicDescription>
+      <div>
+        Added partial application support to: <HL>List#at</HL>
+      </div>
+      <div>
+        Improved partial application for: <HL>Tuple.fanout</HL>,{' '}
+        <HL>Maybe.mapMaybe</HL>
+      </div>
+    </TopicDescription>
 
-        <Topic>Other changes</Topic>
-        <TopicDescription>
-            <ul>
-                <li>Removed <HL>Semigroup</HL> and <HL>Ord</HL> instances because they were not sound and making them typesafe required using very confusing type definitions.</li>
-                <li>Fixed <HL>Either#isRight</HL> type definition (thanks <a href="https://github.com/sledorze">sledorze</a>)</li>
-                <li>Made the <HL>value</HL> property inside the Maybe class private</li>
-                <li>Reduced package size by excluding the tests</li>
-                <li>Many improvements (rewordings, corrections and clarifications) made to the docs (thanks <a href="https://github.com/squirly">squirly</a>)</li>
-            </ul>
-        </TopicDescription>
-    </Layout>
+    <Topic>Other changes</Topic>
+    <TopicDescription>
+      <ul>
+        <li>
+          Removed <HL>Semigroup</HL> and <HL>Ord</HL> instances because they
+          were not sound and making them typesafe required using very confusing
+          type definitions.
+        </li>
+        <li>
+          Fixed <HL>Either#isRight</HL> type definition (thanks{' '}
+          <a href="https://github.com/sledorze">sledorze</a>)
+        </li>
+        <li>
+          Made the <HL>value</HL> property inside the Maybe class private
+        </li>
+        <li>Reduced package size by excluding the tests</li>
+        <li>
+          Many improvements (rewordings, corrections and clarifications) made to
+          the docs (thanks <a href="https://github.com/squirly">squirly</a>)
+        </li>
+      </ul>
+    </TopicDescription>
+  </Layout>
 )
 
 export default v011
