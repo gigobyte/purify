@@ -63,6 +63,7 @@ class Sidebar extends React.Component {
         <Nav shown={this.state.isMenuShown}>
           <SidebarLink name="Home" link="/" />
           <SidebarLink name="Getting started" link="/getting-started" />
+          <SidebarLink name="FAQ" link="/faq" />
           <SidebarLink name="Changelog" link="/changelog" />
           {data.datatypes.map(datatype => (
             <div key={datatype.name} onClick={this.toggleMenu}>

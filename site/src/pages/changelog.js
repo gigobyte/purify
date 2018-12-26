@@ -39,7 +39,7 @@ const VersionContainer = styled.div`
 const Changelog = props => (
   <Layout location={props.location}>
     <div>
-      <h2>Choose version:</h2>
+      <h1>Choose version:</h1>
       <VersionContainer>
         <Version to="/changelog/0.11">0.11</Version>
         <Description>

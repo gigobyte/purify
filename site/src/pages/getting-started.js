@@ -55,9 +55,6 @@ const GettingStarted = props => (
           instead of advanced type features and a curated API instead of trying
           to port over another language's standard library.
         </li>
-        <li>
-          <b>Want to learn more?</b> -
-        </li>
       </ul>
       <h1>How to start?</h1>
       Purify is available as a package on npm. You can install it with a package
@@ -69,7 +66,10 @@ const GettingStarted = props => (
       On the left sidebar you can find all of purify's contents, each page
       contains a guide on how to start using it. <br />
       You can start by visiting the page about{' '}
-      <Link to="/adts/Maybe">Maybe</Link>, one of the most popular data types.
+      <Link to="/adts/Maybe">Maybe</Link>, one of the most popular data types.<br />
+      If you are worried about the future of the project, because perharps you
+      are evaluating its usage in a large project, consider checking out the{' '}
+      <Link to="/faq">FAQ</Link>.
     </Container>
   </Layout>
 )
