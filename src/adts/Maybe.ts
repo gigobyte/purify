@@ -127,7 +127,7 @@ export class Maybe<T>
   }
 
   inspect(): string {
-    return this.value === null ? 'Nothing' : `Just(${this.value})`
+    return this.isNothing() ? 'Nothing' : `Just(${this.value})`
   }
 
   toString(): string {
@@ -223,7 +223,7 @@ export class Maybe<T>
 
   /** Returns the value inside `this` or undefined if `this` is `Nothing`. Use `extractNullable` if you need a null returned instead */
   extract(): this extends AlwaysJust ? T : T | undefined {
-    const result = this.value === null ? undefined : this.value
+    const result = this.isNothing() ? undefined : this.value
     return result as this extends AlwaysJust ? T : T | undefined
   }
 
