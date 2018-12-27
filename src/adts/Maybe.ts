@@ -37,7 +37,7 @@ export class Maybe<T>
     Foldable<T>,
     Extend<T>,
     Unsafe {
-  constructor(private readonly value: T) {}
+  constructor(private readonly value: T, private readonly exists: boolean) {}
 
   readonly of = Maybe.of
   readonly zero = Maybe.zero
@@ -118,12 +118,12 @@ export class Maybe<T>
 
   /** Returns true if `this` is `Just`, otherwise it returns false */
   isJust(): this is AlwaysJust {
-    return this.value !== null
+    return this.exists
   }
 
   /** Returns true if `this` is `Nothing`, otherwise it returns false */
   isNothing(): this is typeof Nothing {
-    return this.value == null
+    return !this.isJust()
   }
 
   inspect(): string {
@@ -258,7 +258,7 @@ export class Maybe<T>
 }
 
 /** Constructs a Just. Respents an optional value that exists. */
-export const Just = <T>(value: T): Maybe<T> => new Maybe(value)
+export const Just = <T>(value: T): Maybe<T> => new Maybe(value, true)
 
 /** Represents a missing value, you can think of it as a smart 'null'. */
-export const Nothing: Maybe<never> = new Maybe(null as never)
+export const Nothing: Maybe<never> = new Maybe(null as never, false)

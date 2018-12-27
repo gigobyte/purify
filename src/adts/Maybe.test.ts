@@ -62,6 +62,7 @@ describe('Maybe', () => {
   test('isNothing', () => {
     expect(Just(5).isNothing()).toEqual(false)
     expect(Nothing.isNothing()).toEqual(true)
+    expect(Just(null).isNothing()).toEqual(false)
   })
 
   test('equals', () => {
