@@ -443,12 +443,22 @@ const data: Data = {
         },
         {
           name: 'extract',
-          signatureTS: '(): T | null',
+          signatureTS: '(): T | undefined',
           description:
-            'Returns the value inside `this` or null if `this` is `Nothing`.',
+            'Returns the value inside `this` or undefined if `this` is `Nothing`. Use `extractNullable` if you need a null returned instead.',
           examples: [
             { input: 'Just(5).extract()', output: '5' },
-            { input: 'Nothing.extract()', output: 'null' },
+            { input: 'Nothing.extract()', output: 'undefined' },
+          ],
+        },
+        {
+          name: 'extractNullable',
+          signatureTS: '(): T | null',
+          description:
+            'Returns the value inside `this` or null if `this` is `Nothing`. Use `extract` if you need an undefined returned instead.',
+          examples: [
+            { input: 'Just(5).extract()', output: '5' },
+            { input: 'Nothing.extract()', output: 'undefined' },
           ],
         },
         {

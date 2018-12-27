@@ -17,7 +17,10 @@ import { Unsafe } from '../typeclasses/Unsafe'
 export type MaybePatterns<T, U> =
   | { Just: (value: T) => U; Nothing: () => U }
   | { _: () => U }
-export type AlwaysJust = { kind: '$$MaybeAlwaysJust' }
+
+interface AlwaysJust {
+  kind: '$$MaybeAlwaysJust'
+}
 
 export class Maybe<T>
   implements
@@ -218,8 +221,14 @@ export class Maybe<T>
     return this.map(f).orDefault(defaultValue)
   }
 
-  /** Returns the value inside `this` or null if `this` is `Nothing` */
-  extract(): this extends AlwaysJust ? T : T | null {
+  /** Returns the value inside `this` or undefined if `this` is `Nothing`. Use `extractNullable` if you need a null returned instead */
+  extract(): this extends AlwaysJust ? T : T | undefined {
+    const result = this.value === null ? undefined : this.value
+    return result as this extends AlwaysJust ? T : T | undefined
+  }
+
+  /** Returns the value inside `this` or null if `this` is `Nothing`. Use `extract` if you need an undefined returned instead */
+  extractNullable(): this extends AlwaysJust ? T : T | null {
     return this.value as this extends AlwaysJust ? T : T | null
   }
 

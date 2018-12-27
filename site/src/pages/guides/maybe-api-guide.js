@@ -89,9 +89,7 @@ const MaybeApiGuide = props => (
 myMaybe.chainNullable(transform)`}
     </SyntaxHighlighter>
     <MethodName href="/adts/Maybe/#extract">extract</MethodName> /{' '}
-    <MethodName href="/adts/Maybe/#extractUndefined">
-      extractUndefined
-    </MethodName>{' '}
+    <MethodName href="/adts/Maybe/#extractNullable">extractNullable</MethodName>{' '}
     / <MethodName href="/adts/Maybe/#unsafeCoerce">unsafeCoerce</MethodName>
     <br />
     Sometimes you have to interact with code that expects a nullable value, in

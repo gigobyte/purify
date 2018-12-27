@@ -151,7 +151,12 @@ describe('Maybe', () => {
 
   test('extract', () => {
     expect(Just(5).extract()).toEqual(5)
-    expect(Nothing.extract()).toEqual(null)
+    expect(Nothing.extract()).toEqual(undefined)
+  })
+
+  test('extractNullable', () => {
+    expect(Just(5).extractNullable()).toEqual(5)
+    expect(Nothing.extractNullable()).toEqual(null)
   })
 
   test('toEither', () => {
