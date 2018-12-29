@@ -50,6 +50,15 @@ describe('Either', () => {
     expect(Right(5).map(x => x + 1)).toEqual(Right(6))
   })
 
+  test('mapAsync', async () => {
+    expect(await Left('Error').mapAsync(_ => Promise.resolve(10))).toEqual(
+      Left('Error')
+    )
+    expect(await Right(5).mapAsync(x => Promise.resolve(x + 1))).toEqual(
+      Right(6)
+    )
+  })
+
   test('mapLeft', () => {
     expect(Left('Error').mapLeft(x => x + '!')).toEqual(Left('Error!'))
     expect(Right(5).mapLeft(x => x + '!')).toEqual(Right(5))
@@ -76,6 +85,15 @@ describe('Either', () => {
   test('chain', () => {
     expect(Left('Error').chain(x => Right(x + 1))).toEqual(Left('Error'))
     expect(Right(5).chain(x => Right(x + 1))).toEqual(Right(6))
+  })
+
+  test('mapAsync', async () => {
+    expect(
+      await Left('Error').chainAsync(_ => Promise.resolve(Right(10)))
+    ).toEqual(Left('Error'))
+    expect(
+      await Right(5).chainAsync(x => Promise.resolve(Right(x + 1)))
+    ).toEqual(Right(6))
   })
 
   test('join', () => {
