@@ -17,10 +17,17 @@ const FAQ = props => (
         Here's a preview on what's currently being worked on and when to
         anticipate it:<br />
         <br />
-        0.13 - Focus on making async easier (Monad transformers? We'll see.).<br />
-        0.14 - Data structures! ZipList, List, IO - there are just some of the
+        0.13 - Data structures! ZipList, List, IO - there are just some of the
         many future possibilities<br />
-        0.15 - TBA (Lens? Parser combinators?)
+        0.14 - General functional utilies (identity, const etc)<br />
+        Future - Lens? Parser combinators?
+      </li>
+      <li>
+        <h3>Q: How are new features decided and planned?</h3>
+        Most of the development stems from dogfooding the library in personal
+        projects. <br />
+        User feedback is also extremely important - check out the question at
+        the bottom to see why.
       </li>
       <li>
         <h3>
@@ -37,6 +44,20 @@ const FAQ = props => (
         There are no exact dates for upcoming versions of purify.<br />
         I try to release a new version every couple of months, but there's no
         guarantee for that.
+      </li>
+      <li>
+        <h3>Q: Should I expect breaking changes?</h3>
+        Even though the library is in pre-v1 stage, breaking changes are
+        actively avoided. That doesn't mean that they will never happen. <br />
+        Situations in which you can expect breaking changes are: <br />
+        There is a new TypeScript release that allows for more type safety<br />
+        There is a new TypeScript release that makes expressing certain
+        constructs (like HKTs) possible<br />
+        ECMAScript proposals that allow for a more elegant API (like the
+        pipeline operator) reach stage 3<br /> <br />
+        TL;DR - Breaking changes will be rare, but if the language evolves in a
+        way that makes FP code easier to write then there will be changes for
+        sure.
       </li>
       <li>
         <h3>Q: What should future contributors focus on?</h3>
