@@ -127,13 +127,6 @@ export class Either<L, R>
     return this.bimap(x => x, f)
   }
 
-  /* Maps the `Right` value of `this` with an async function, returns a Promise resolved to `this` if it's `Left`  */
-  mapAsync<R2>(f: (value: R) => Promise<R2>): Promise<Either<L, R2>> {
-    return this.isLeft_()
-      ? Promise.resolve(this.asLeft())
-      : f(this.asRight().value).then(Right)
-  }
-
   /** Maps the `Left` value of `this`, acts like an identity if `this` is `Right` */
   mapLeft<L2>(f: (value: L) => L2): Either<L2, R> {
     return this.bimap(f, x => x)
@@ -160,15 +153,6 @@ export class Either<L, R>
   /** Transforms `this` with a function that returns an `Either`. Useful for chaining many computations that may fail */
   chain<R2>(f: (value: R) => Either<L, R2>): Either<L, R2> {
     return this.isLeft_() ? this.asLeft() : f(this.asRight().value)
-  }
-
-  /* Transforms `this` with a function that returns an `Either` inside a Promise. Useful for chaining many async computations that may fail  */
-  chainAsync<R2>(
-    f: (value: R) => Promise<Either<L, R2>>
-  ): Promise<Either<L, R2>> {
-    return this.isLeft_()
-      ? Promise.resolve(this.asLeft())
-      : f(this.asRight().value)
   }
 
   /** Flattens nested Eithers. `e.join()` is equivalent to `e.chain(x => x)` */

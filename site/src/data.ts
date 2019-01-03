@@ -728,24 +728,6 @@ const data: Data = {
           ],
         },
         {
-          name: 'mapAsync',
-          description:
-            "Maps the `Right` value of `this` with an async function, returns a Promise resolved to `this` if it's `Left`.",
-          signatureML: 'Either a b ~> (b -> IO c) -> IO (Either a c)',
-          signatureTS:
-            '<R2>(f: (value: R) => Promise<R2>): Promise<Either<L, R2>>',
-          examples: [
-            {
-              input: `Left('Error').mapAsync(x => Promise.resolve(x + 1))`,
-              output: `Promise {<resolved>: Left('Error')}`,
-            },
-            {
-              input: `Right(5).mapAsync(x => Promise.resolve(x + 1))`,
-              output: `Promise {<resolved>: Right(6)}`,
-            },
-          ],
-        },
-        {
           name: 'mapLeft',
           description:
             'Maps the `Left` value of `this`, acts like an identity if `this` is `Right`.',
@@ -804,24 +786,6 @@ const data: Data = {
               output: `Left('Error')`,
             },
             { input: `Right(5).chain(x => Right(x + 1))`, output: `Right(6)` },
-          ],
-        },
-        {
-          name: 'chainAsync',
-          description:
-            'Transforms `this` with a function that returns an `Either` inside a Promise. Useful for chaining many async computations that may fail.',
-          signatureML:
-            'Either a b ~> (b -> IO (Either a c)) -> IO (Either a c)',
-          signatureTS: `<R2>(f: (value: R) => Promise<Either<L, R2>>): Promise<Either<L, R2>>`,
-          examples: [
-            {
-              input: `Left('Error').chainAsync(x => Promise.resolve(Right(x + 1)))`,
-              output: `Promise {<resolved>: Left('Error')}`,
-            },
-            {
-              input: `Right(5).chainAsync(x => Promise.resolve(Right(x + 1)))`,
-              output: `Promise {<resolved>: Right(6)}`,
-            },
           ],
         },
         {
