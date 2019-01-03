@@ -113,7 +113,7 @@ export class Either<L, R>
     return this.inspect()
   }
 
-  /** Given two functions, transforms the value inside `this` using the first if `this` is `Left` or using the second one if `this` is `Right`.
+  /** Given two functions, maps the value inside `this` using the first if `this` is `Left` or using the second one if `this` is `Right`.
    * If both functions return the same type consider using `Either#either` instead
    */
   bimap<L2, R2>(f: (value: L) => L2, g: (value: R) => R2): Either<L2, R2> {
@@ -122,19 +122,19 @@ export class Either<L, R>
       : Right(g(this.asRight().value))
   }
 
-  /** Transforms the `Right` value of `this`, acts like an identity if `this` is `Left` */
+  /** Maps the `Right` value of `this`, acts like an identity if `this` is `Left` */
   map<R2>(f: (value: R) => R2): Either<L, R2> {
     return this.bimap(x => x, f)
   }
 
-  /* Transforms the `Right` value of `this` with an async function, returns a Promise resolved to `this` if it's `Left`  */
+  /* Maps the `Right` value of `this` with an async function, returns a Promise resolved to `this` if it's `Left`  */
   mapAsync<R2>(f: (value: R) => Promise<R2>): Promise<Either<L, R2>> {
     return this.isLeft_()
       ? Promise.resolve(this.asLeft())
       : f(this.asRight().value).then(Right)
   }
 
-  /** Transforms the `Left` value of `this`, acts like an identity if `this` is `Right` */
+  /** Maps the `Left` value of `this`, acts like an identity if `this` is `Right` */
   mapLeft<L2>(f: (value: L) => L2): Either<L2, R> {
     return this.bimap(f, x => x)
   }

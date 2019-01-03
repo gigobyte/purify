@@ -78,11 +78,6 @@ describe('Maybe', () => {
     expect(Nothing.map(x => x + 1)).toEqual(Nothing)
   })
 
-  test('map', async () => {
-    expect(await Just(5).mapAsync(x => Promise.resolve(x + 1))).toEqual(Just(6))
-    expect(await Nothing.mapAsync(x => Promise.resolve(x + 1))).toEqual(Nothing)
-  })
-
   test('ap', () => {
     expect(Just(5).ap(Just((x: number) => x + 1))).toEqual(Just(6))
     expect(Just(5).ap(Nothing)).toEqual(Nothing)
@@ -100,15 +95,6 @@ describe('Maybe', () => {
   test('chain', () => {
     expect(Just(5).chain(x => Just(x + 1))).toEqual(Just(6))
     expect(Nothing.chain(x => Just(x + 1))).toEqual(Nothing)
-  })
-
-  test('chain', async () => {
-    expect(await Just(5).chainAsync(x => Promise.resolve(Just(x + 1)))).toEqual(
-      Just(6)
-    )
-    expect(await Nothing.chainAsync(x => Promise.resolve(Just(x + 1)))).toEqual(
-      Nothing
-    )
   })
 
   test('chainNullable', () => {

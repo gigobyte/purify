@@ -294,23 +294,6 @@ const data: Data = {
           ],
         },
         {
-          name: 'mapAsync',
-          signatureML: 'Maybe a ~> (a -> IO b) -> IO (Maybe b)',
-          signatureTS: '<U>(f: (value: T) => Promise<U>): Promise<Maybe<U>>',
-          description:
-            'Transforms the value inside `this` with a given async function. Returns a Promise resolve to `Nothing` if `this` is `Nothing`',
-          examples: [
-            {
-              input: 'Just(5).map(x => Promise.resolve(x + 1))',
-              output: 'Promise {<resolved>: Just(6)}',
-            },
-            {
-              input: 'Nothing.map(x => Promise.resolve(x + 1))',
-              output: 'Promise {<resolved>: Nothing}',
-            },
-          ],
-        },
-        {
           name: 'ap',
           signatureML: 'Maybe a ~> Maybe (a -> b) -> Maybe b',
           signatureTS: '<U>(maybeF: Maybe<(value: T) => U>): Maybe<U>.',
@@ -344,24 +327,6 @@ const data: Data = {
           examples: [
             { input: 'Just(5).chain(x => Just(x + 1))', output: 'Just(6)' },
             { input: 'Nothing.chain(x => Just(x + 1))', output: 'Nothing' },
-          ],
-        },
-        {
-          name: 'chainAsync',
-          signatureML: 'Maybe a ~> (a -> IO (Maybe b)) -> IO (Maybe b)',
-          signatureTS:
-            '<U>(f: (value: T) => Promise<Maybe<U>>): Promise<Maybe<U>>',
-          description:
-            'Transforms `this` with a function that returns a `Maybe` inside a Promise. Useful for chaining many async computations that may result in a missing value.',
-          examples: [
-            {
-              input: 'Just(5).chainAsync(x => Promise.resolve(Just(x + 1)))',
-              output: 'Promise {<resolved>: Just(6)}',
-            },
-            {
-              input: 'Nothing.chainAsync(x => Promise.resolve(Just(x + 1)))',
-              output: 'Promise {<resolved>: Nothing}',
-            },
           ],
         },
         {
@@ -754,7 +719,7 @@ const data: Data = {
         {
           name: 'map',
           description:
-            'Transforms the `Right` value of `this`, acts like an identity if `this` is `Left`.',
+            'Maps the `Right` value of `this`, acts like an identity if `this` is `Left`.',
           signatureML: 'Either a b ~> (b -> c) -> Either a c',
           signatureTS: '<R2>(f: (value: R) => R2): Either<L, R2>',
           examples: [
@@ -765,7 +730,7 @@ const data: Data = {
         {
           name: 'mapAsync',
           description:
-            "Transforms the `Right` value of `this` with an async function, returns a Promise resolved to `this` if it's `Left`.",
+            "Maps the `Right` value of `this` with an async function, returns a Promise resolved to `this` if it's `Left`.",
           signatureML: 'Either a b ~> (b -> IO c) -> IO (Either a c)',
           signatureTS:
             '<R2>(f: (value: R) => Promise<R2>): Promise<Either<L, R2>>',
@@ -783,7 +748,7 @@ const data: Data = {
         {
           name: 'mapLeft',
           description:
-            'Transforms the `Left` value of `this`, acts like an identity if `this` is `Right`.',
+            'Maps the `Left` value of `this`, acts like an identity if `this` is `Right`.',
           signatureML: 'Either a b ~> (a -> c) -> Either c b',
           signatureTS: '<L2>(f: (value: L) => L2): Either<L2, R>',
           examples: [
@@ -1050,7 +1015,7 @@ const data: Data = {
         {
           name: 'either',
           description:
-            'Given two map functions, transforms using the first if `this` is `Left` or using the second one if `this` is `Right`. If you want the functions to return different types depending on the either you may want to use `Either#bimap` instead.',
+            'Given two map functions, maps using the first if `this` is `Left` or using the second one if `this` is `Right`. If you want the functions to return different types depending on the either you may want to use `Either#bimap` instead.',
           signatureML: '(a -> c) -> (b -> c) -> Either a b -> c',
           signatureTS:
             '<T>(ifLeft: (value: L) => T, ifRight: (value: R) => T): T',

@@ -148,13 +148,6 @@ export class Maybe<T>
     return this.isNothing() ? Nothing : Just(f(this.value))
   }
 
-  /** Transforms the value inside `this` with a given async function. Returns a Promise resolve to `Nothing` if `this` is `Nothing` */
-  mapAsync<U>(f: (value: T) => Promise<U>): Promise<Maybe<U>> {
-    return this.isNothing()
-      ? Promise.resolve(Nothing)
-      : f(this.value).then(Just)
-  }
-
   /** Maps `this` with a `Maybe` function */
   ap<U>(maybeF: Maybe<(value: T) => U>): Maybe<U> {
     return maybeF.isNothing() ? Nothing : this.map(maybeF.value)
@@ -168,11 +161,6 @@ export class Maybe<T>
   /** Transforms `this` with a function that returns a `Maybe`. Useful for chaining many computations that may result in a missing value */
   chain<U>(f: (value: T) => Maybe<U>): Maybe<U> {
     return this.isNothing() ? Nothing : f(this.value)
-  }
-
-  /** Transforms `this` with a function that returns a `Maybe` inside a Promise. Useful for chaining many async computations that may result in a missing value */
-  chainAsync<U>(f: (value: T) => Promise<Maybe<U>>): Promise<Maybe<U>> {
-    return this.isNothing() ? Promise.resolve(Nothing) : f(this.value)
   }
 
   /** Transforms `this` with a function that returns a nullable value. Equivalent to `m.chain(x => Maybe.fromNullable(f(x)))` */
