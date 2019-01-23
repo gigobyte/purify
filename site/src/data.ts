@@ -1127,6 +1127,20 @@ const data: Data = {
           ],
         },
         {
+          name: 'reduce',
+          description:
+            'A somewhat arbitraty implementation of Foldable for Tuple, the reducer will be passed the initial value and the second value insinde `this` as arguments',
+          signatureML: '(a, b) ~> (b -> a -> b) -> b -> b',
+          signatureTS:
+            '<T>(reducer: (accumulator: T, value: S) => T, initialValue: T): T',
+          examples: [
+            {
+              input: `Tuple(5, 10).reduce((acc, x) => acc + x, 10)`,
+              output: '20',
+            },
+          ],
+        },
+        {
           name: 'swap',
           description: 'Swaps the values inside `this`.',
           signatureML: '(a, b) ~> (b, a)',
