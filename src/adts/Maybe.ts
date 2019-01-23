@@ -170,7 +170,7 @@ export function Just<T>(value: T): Maybe<T> {
       return Maybe.fromNullable(f(value))
     },
     join<U>(this: Maybe<Maybe<U>>): Maybe<U> {
-      return this.chain(x => x)
+      return this.__value
     },
     reduce<U>(reducer: (accumulator: U, value: T) => U, initialValue: U): U {
       return reducer(initialValue, value)
