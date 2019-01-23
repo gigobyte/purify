@@ -1,6 +1,6 @@
 import { Just, Nothing } from './Maybe'
 import { Tuple } from './Tuple'
-import { NonEmptyList, head, last, isNonEmpty } from './NonEmptyList'
+import { NonEmptyList } from './NonEmptyList'
 
 describe('NonEmptyList', () => {
   test('NonEmptyList', () => {
@@ -8,8 +8,8 @@ describe('NonEmptyList', () => {
   })
 
   test('isNonEmpty', () => {
-    expect(isNonEmpty([])).toEqual(false)
-    expect(isNonEmpty([1])).toEqual(true)
+    expect(NonEmptyList.isNonEmpty([])).toEqual(false)
+    expect(NonEmptyList.isNonEmpty([1])).toEqual(true)
   })
 
   test('fromArray', () => {
@@ -24,11 +24,11 @@ describe('NonEmptyList', () => {
   })
 
   test('head', () => {
-    expect(head(NonEmptyList([1]))).toEqual(1)
+    expect(NonEmptyList.head(NonEmptyList([1]))).toEqual(1)
   })
 
   test('last', () => {
-    expect(last(NonEmptyList([1]))).toEqual(1)
+    expect(NonEmptyList.last(NonEmptyList([1]))).toEqual(1)
   })
 
   test('unsafeCoerce', () => {
@@ -37,6 +37,7 @@ describe('NonEmptyList', () => {
   })
 
   it('Should handle all Array.prototype methods', () => {
-    const a: NonEmptyList<string> = NonEmptyList([1]).map(_ => 'always string')
+    const a = NonEmptyList([1]).map(_ => 'always string')
+    const b = NonEmptyList([1]).filter(_ => true)
   })
 })

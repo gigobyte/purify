@@ -1159,7 +1159,7 @@ const data: Data = {
         {
           title: 'How to import',
           content: [
-            `import { NonEmptyList, isNonEmpty, head, last } from 'purify-ts/adts/NonEmptyList'`,
+            `import { NonEmptyList } from 'purify-ts/adts/NonEmptyList'`,
           ],
         },
       ],
@@ -1168,7 +1168,7 @@ const data: Data = {
         {
           name: 'NonEmptyList',
           signatureTS:
-            '<T extends NonEmptyListCompliant>(list: T): NonEmptyList<T[number]>',
+            '<T extends NonEmptyListCompliant<T[number]>>(list: T): NonEmptyList<T[number]>',
           description:
             'Typecasts an array with at least one element into a `NonEmptyList`. Works only if the compiler can confirm that the array has one or more elements.',
           examples: [
@@ -1220,16 +1220,13 @@ const data: Data = {
             },
           ],
         },
-      ],
-      instanceMethods: [],
-      helperMethods: [
         {
           name: 'isNonEmpty',
           signatureML: '[a] -> Bool',
           signatureTS: '<T>(list: T[]): list is NonEmptyList<T>',
           description:
             'Returns true and narrows the type if the passed array has one or more elements.',
-          examples: [{ input: 'isNonEmpty([1])', output: 'true' }],
+          examples: [{ input: 'NonEmptyList.isNonEmpty([1])', output: 'true' }],
         },
         {
           name: 'head',
@@ -1246,6 +1243,8 @@ const data: Data = {
           examples: [],
         },
       ],
+      instanceMethods: [],
+      helperMethods: [],
     },
   ],
   utils: [
