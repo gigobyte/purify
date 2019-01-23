@@ -8,6 +8,8 @@
     </a>
 </p>
 
+### NOTE: This project is under heavy development at the moment and a lot of things are changing. Please mind the pre-v1 version tag and don't use this for anything other than experimentation ##
+
 # What is purify?
 
 Purify is a library for functional programming in TypeScript.
