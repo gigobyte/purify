@@ -33,16 +33,6 @@ export interface DataType {
   helperMethods?: Method[]
 }
 
-export interface Typeclass {
-  name: string
-  implementedBy: string[]
-  description: string
-  example: {
-    import: string
-  }
-  methods: Method[]
-}
-
 export interface Util {
   name: string
   description: string
@@ -57,7 +47,6 @@ export interface Util {
 export interface Data {
   datatypes: DataType[]
   utils: Util[]
-  typeclasses: Typeclass[]
 }
 
 const data: Data = {
@@ -77,7 +66,6 @@ const data: Data = {
         'Monad',
         'Foldable',
         'Extend',
-        'Unsafe',
       ],
       description: `The Maybe type is one of the most popular data types available. It is fundamental to learning about functional error handling and representing missing values. A Maybe value can be either Just a value or Nothing. The Just data constructor is used for wrapping present values while the Nothing constructor is used when a value is absent. Both constructors produce objects that share the same API which makes it easy to manipulate optional values without null checking or exception handling.`,
       examples: [
@@ -530,7 +518,6 @@ const data: Data = {
         'Foldable',
         'Extend',
         'Bifunctor',
-        'Unsafe',
       ],
       description: `Either is a data type with two sides (constructors) - Left and Right. It is most commonly used for error handling as it is very similar to the Maybe type with the only difference being that you can store information about the missing value (an error message for example). By convention, "Right is right", meaning that success is stored on the Right and failure is stored on the Left. It is also important to note that Either is right-biased which means that \`map\`, \`chain\` and other similar methods will operate on the right side.`,
       examples: [
@@ -1165,95 +1152,8 @@ const data: Data = {
       ],
     },
     {
-      name: 'Id',
-      implements: [
-        'Setoid',
-        'Function',
-        'Apply',
-        'Applicative',
-        'Chain',
-        'Monad',
-      ],
-      description: `The identity data constructor. Useful when a function requires a Functor or a Monad object and you only have a regular value, you can wrap that value in an Id to make the compiler happy.`,
-      examples: [
-        {
-          title: 'How to import',
-          content: [`import { Id } from 'purify-ts/adts/Id'`],
-        },
-      ],
-      guides: [],
-      constructors: [
-        {
-          name: 'Id',
-          description: 'Contructs an Id.',
-          signatureML: 'a -> Id a',
-          signatureTS: '<T>(value: T): Id<T>',
-          examples: [
-            {
-              input: `Id('some primitive')`,
-              output: `Id('some primitive') // Id<string>`,
-            },
-          ],
-        },
-      ],
-      staticMethods: [
-        {
-          name: 'of',
-          description: 'Contructs an Id.',
-          signatureML: 'a -> Id a',
-          signatureTS: '<T>(value: T): Id<T>',
-          examples: [
-            {
-              input: `Id.of('some primitive')`,
-              output: `Id('some primitive')`,
-            },
-          ],
-        },
-      ],
-      instanceMethods: [
-        {
-          name: 'extract',
-          description: 'Returns the value stored in `this`.',
-          signatureML: 'Id a -> a',
-          signatureTS: '(): T',
-          examples: [{ input: 'Id(1).extract()', output: '1' }],
-        },
-        {
-          name: 'map',
-          description: 'Applies a function to the value stored in `this`.',
-          signatureML: 'Id a ~> (a -> b) -> Id b',
-          signatureTS: '<U>(f: (value: T) => U): Id<U>',
-          examples: [{ input: `Id('1').map(parseInt)`, output: 'Id(1)' }],
-        },
-        {
-          name: 'equals',
-          description:
-            'Compares the value in `this` with the value in the other `Id`.',
-          signatureML: 'Id a ~> Id a -> Bool',
-          signatureTS: '(other: Id<T>): boolean',
-          examples: [{ input: `Id(0).equals(Id(0))`, output: 'true' }],
-        },
-        {
-          name: 'ap',
-          description:
-            'Applies a function stored in Id to the value in `this`.',
-          signatureML: 'Id a ~> Id (a -> b) -> Id b',
-          signatureTS: '<U>(f: Id<(value: T) => U>): Id<U>',
-          examples: [{ input: 'Id(5).ap(Id(x => x + 1))', output: 'Id(6)' }],
-        },
-        {
-          name: 'chain',
-          description:
-            'Transforms `this` with a function that returns an `Id`.',
-          signatureML: 'Id a ~> (a -> Id b) -> Id b',
-          signatureTS: '<U>(f: (value: T) => Id<U>): Id<U>',
-          examples: [{ input: 'Id(10).chain(Id)', output: 'Id(10)' }],
-        },
-      ],
-    },
-    {
       name: 'NonEmptyList',
-      implements: ['Unsafe'],
+      implements: [],
       description: `A type which represents a list that is not empty. NonEmptyList has no runtime, during execution it's a regular array. This gives not only performance benefits, but it also allows you to use Array and NonEmptyList interchangeably - you can pass a NonEmptyList to any function that expects an Array (this includes access to all Array.prototype methods like map and filter for free).`,
       examples: [
         {
@@ -1423,225 +1323,6 @@ const data: Data = {
         },
       ],
     },
-    {
-      name: 'Validation',
-      description:
-        'This is a module that provides useful constructs for data validation. What makes it different than libraries that have a similar feature set is that the Validation module utilizes Either which makes it more pleasant to work with if your codebase is already using ADTs. The API is quite unopinionated making all kinds of use cases possible, from form validation to smart constructors. Although this module provides a wide variety of validation predicates, you can use any predicates you want.',
-      example: {
-        import: `import { Validate, ifEmpty, ifJust, and, not, or ... } from 'purify-ts/utils/Validation'`,
-      },
-      methods: [
-        {
-          name: 'Validate.all',
-          description:
-            'Takes a value and a list of validation predicates and returns either a list of all errors or the value that was being validated',
-          signatureML:
-            'a -> [((a -> Bool), err)] -> Either (NonEmptyList err) a',
-          signatureTS:
-            '<T, Err>(value: T, validations: [(value: T) => boolean, Err][]): Either<NonEmptyList<Err>, T>',
-          examples: [
-            {
-              input: `Validate.all('12333.34$', [
-    [ifEmpty, 'Please enter amount'],
-    [ifContains('$'), 'Currency cannot be USD'],
-    [ifLongerThan(4), 'Please enter lesser amount']
-])`,
-              output: `Left(['Currency cannot be USD', 'Please enter lesser amount'])`,
-            },
-          ],
-        },
-        {
-          name: 'Validate.untilError',
-          description:
-            'Takes a value and a list of validation predicates and returns either an error or the value that was being validated. Execution of the validations stops after the first error.',
-          signatureML: 'a -> [((a -> Bool), err)] -> Either err a',
-          signatureTS:
-            '<T, Err>(value: T, validations: [(value: T) => boolean, Err][]): Either<Err, T>',
-          examples: [
-            {
-              input: `Validate.untilError('error on line 12', [
-    [ifLongerThan(100000), 'Log is too long to read'],
-    [or(ifContains('error'), ifContains('warning')), 'There is an error in the log!']
-])`,
-              output: `Left('There is an error in the log!')`,
-            },
-          ],
-        },
-        {
-          name: 'ifEmpty',
-          description:
-            'Fails validation if the argument string is empty or contains only whitespace',
-          signatureML: 'String -> Bool',
-          signatureTS: '(value: string) => boolean',
-          examples: [],
-        },
-        {
-          name: 'ifJust',
-          description: 'Fails validation if the argument is a Just',
-          signatureML: 'Maybe a -> Bool',
-          signatureTS: '<T>(value: Maybe<T>) => boolean',
-          examples: [],
-        },
-        {
-          name: 'ifNothing',
-          description: 'Fails validation if the argument is Nothing',
-          signatureML: 'Maybe a -> Bool',
-          signatureTS: '<T>(value: Maybe<T>) => boolean',
-          examples: [],
-        },
-        {
-          name: 'ifShorterThan',
-          description:
-            'Fails validation if the argument string length is shorter than the length given',
-          signatureML: 'Int -> String -> Bool',
-          signatureTS: '(length: number) => (value: string) => boolean',
-          examples: [],
-        },
-        {
-          name: 'ifLongerThan',
-          description:
-            'Fails validation if the argument string length is longer than the length given',
-          signatureML: 'Int -> String -> Bool',
-          signatureTS: '(length: number) => (value: string) => boolean',
-          examples: [],
-        },
-        {
-          name: 'ifLengthIs',
-          description:
-            'Fails validation if the argument string length is exactly the length given',
-          signatureML: 'Int -> String -> Bool',
-          signatureTS: '(length: number) => (value: string) => boolean',
-          examples: [],
-        },
-        {
-          name: 'ifSubstringOf',
-          description:
-            'Fails validation if the argument string is a substring of a given string',
-          signatureML: 'String -> String -> Bool',
-          signatureTS: '(str: string) => (value: string) => boolean',
-          examples: [],
-        },
-        {
-          name: 'ifContains',
-          description:
-            'Fails validation if the argument string contains a given substring',
-          signatureML: 'String -> String -> Bool',
-          signatureTS: '(str: string) => (value: string) => boolean',
-          examples: [],
-        },
-        {
-          name: 'ifEmptyList',
-          description: 'Fails validation if the argument is an empty iterable',
-          signatureML: '[a] -> Bool',
-          signatureTS: '<T>(arr: ArrayLike<T>) => boolean',
-          examples: [],
-        },
-        {
-          name: 'ifEqualTo',
-          description:
-            'Fails validation if the argument is equal to a given value',
-          signatureML: 'a -> a -> Bool',
-          signatureTS: '<T>(other: T[]) => (value: T) => boolean',
-          examples: [],
-        },
-        {
-          name: 'ifTrue',
-          description:
-            'Takes a predicate and fails validation if the predicate returns true',
-          signatureML: '(a -> Bool) -> a -> Bool',
-          signatureTS:
-            '<T>(condition: (value: T) => boolean) => (value: T) => boolean',
-          examples: [
-            {
-              input: 'ifTrue(x => x > 10)',
-              output: 'Returns whatever the predicate returns',
-            },
-          ],
-        },
-        {
-          name: 'ifFalse',
-          description:
-            'Takes a predicate and fails validation if the predicate returns false',
-          signatureML: '(a -> Bool) -> a -> Bool',
-          signatureTS:
-            '<T>(condition: (value: T) => boolean) => (value: T) => boolean',
-          examples: [
-            {
-              input: 'ifFalse(x => x > 10)',
-              output: 'Returns the opposite of what the predicate returns',
-            },
-          ],
-        },
-        {
-          name: 'not',
-          description: 'Negates any predicate',
-          signatureML: '(a -> Bool) -> a -> Bool',
-          signatureTS:
-            '<T>(validation: (value: T) => boolean) => (value: T) => boolean',
-          examples: [],
-        },
-        {
-          name: 'or',
-          description: 'Logical `or` on two predicates',
-          signatureML: '(a -> Bool) -> (a -> Bool) -> a -> Bool',
-          signatureTS:
-            '<T>(validation: (value: T) => boolean, validation2: (value: T) => boolean) => (value: T) => boolean',
-          examples: [],
-        },
-        {
-          name: 'and',
-          description: 'Logical `and` on two predicates',
-          signatureML: '(a -> Bool) -> (a -> Bool) -> a -> Bool',
-          signatureTS:
-            '<T>(validation: (value: T) => boolean, validation2: (value: T) => boolean) => (value: T) => boolean',
-          examples: [],
-        },
-      ],
-    },
-  ],
-  typeclasses: [
-    // {
-    //     name: 'Alt',
-    //     implementedBy: ['Maybe', 'Either'],
-    //     description: 'A value that implements the Alt specification must also implement the Functor specification.',
-    //     example: {
-    //         import: `import { Alt } from 'purify-ts/typeclasses/Alt'`
-    //     },
-    //     methods: [
-    //         {
-    //             name: 'alt',
-    //             description: '',
-    //             signatureML: 'Alt f => f a ~> f a -> f a',
-    //             signatureTS: 'alt(other: Alt<T>): Alt<T>',
-    //             examples: []
-    //         }
-    //     ]
-    // },
-    // {
-    //     name: 'Alternative',
-    //     implementedBy: ['Maybe'],
-    //     description: 'A value that implements the Alternative specification must also implement the Applicative and Plus specifications.',
-    //     example: {
-    //         import: `import { Alternative } from 'purify-ts/typeclasses/Alternative'`
-    //     },
-    //     methods: []
-    // },
-    // {name: 'Alternative'},
-    // {name: 'Applicative'},
-    // {name: 'Apply'},
-    // {name: 'Bifunctor'},
-    // {name: 'Chain'},
-    // {name: 'Extend'},
-    // {name: 'Foldable'},
-    // {name: 'Functor'},
-    // {name: 'Monad'},
-    // {name: 'Monoid'},
-    // {name: 'Ord'},
-    // {name: 'Plus'},
-    // {name: 'Semigroup'},
-    // {name: 'Setoid'},
-    // {name: 'Traversable'},
-    // {name: 'Unsafe'},
   ],
 }
 
