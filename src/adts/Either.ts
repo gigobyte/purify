@@ -63,7 +63,7 @@ export const Either: EitherTypeRef = {
   }
 }
 
-export function Right<L, R>(value: R): Either<L, R> {
+export function Right<R, L = never>(value: R): Either<L, R> {
   return {
     __value: value,
     isLeft(): false {
@@ -150,7 +150,7 @@ export function Right<L, R>(value: R): Either<L, R> {
   }
 }
 
-export function Left<L, R>(value: L): Either<L, R> {
+export function Left<L, R = never>(value: L): Either<L, R> {
   return {
     __value: value,
     isLeft(): true {

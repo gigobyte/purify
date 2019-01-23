@@ -158,7 +158,7 @@ export function Just<T>(value: T): Maybe<T> {
       return Just(f(value))
     },
     ap<U>(maybeF: Maybe<(value: T) => U>): Maybe<U> {
-      return this.map(maybeF.__value)
+      return maybeF.isNothing() ? Nothing : this.map(maybeF.__value)
     },
     alt(_: Maybe<T>): Maybe<T> {
       return this
