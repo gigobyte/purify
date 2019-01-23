@@ -20,4 +20,10 @@ declare global {
   }
 }
 
+describe('Noop', () => {
+  test('', () => {
+    expect(true).toBe(true)
+  })
+})
+
 export {}

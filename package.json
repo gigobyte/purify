@@ -14,7 +14,7 @@
     "test": "jest"
   },
   "jest": {
-    "setupTestFrameworkScriptFile": "./src/setupTest.ts",
+    "setupTestFrameworkScriptFile": "./src/setup.test.ts",
     "transform": {
       ".(ts|tsx)": "ts-jest"
     },
