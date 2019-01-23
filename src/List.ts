@@ -1,5 +1,5 @@
-import { Tuple } from '../adts/Tuple'
-import { Maybe, Just, Nothing } from '../adts/Maybe'
+import { Tuple } from './Tuple'
+import { Maybe, Just, Nothing } from './Maybe'
 
 /** Returns Just the first element of an array or Nothing if there is none. If you don't want to work with a Maybe but still keep type safety, check out `NonEmptyList` */
 export const head = <T>(list: T[]): Maybe<T> =>

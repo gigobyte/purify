@@ -1,5 +1,3 @@
-import { Show } from '../typeclasses/Show'
-
 export interface TupleTypeRef {
   <F, S>(fst: F, snd: S): Tuple<F, S>
   fanout<F, S, T>(f: (value: T) => F, g: (value: T) => S, value: T): Tuple<F, S>
@@ -13,7 +11,7 @@ export interface TupleTypeRef {
   fromArray<F, S>([fst, snd]: [F, S]): Tuple<F, S>
 }
 
-export interface Tuple<F, S> extends Show, Iterable<F | S>, ArrayLike<F | S> {
+export interface Tuple<F, S> extends Iterable<F | S>, ArrayLike<F | S> {
   0: F
   1: S
   [index: number]: F | S

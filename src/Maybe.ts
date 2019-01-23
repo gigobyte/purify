@@ -1,6 +1,4 @@
 import { Either, Left, Right } from './Either'
-import { Show } from '../typeclasses/Show'
-import { Unsafe } from '../typeclasses/Unsafe'
 
 export type MaybePatterns<T, U> =
   | { Just: (value: T) => U; Nothing: () => U }
@@ -10,7 +8,7 @@ interface AlwaysJust {
   kind: '$$MaybeAlwaysJust'
 }
 
-export interface Maybe<T> extends Show, Unsafe {
+export interface Maybe<T> {
   /** Internal property and subject to breaking changes, please use some of the available methods on the object if you want to access it */
   __value: T
   /** Returns true if `this` is `Just`, otherwise it returns false */

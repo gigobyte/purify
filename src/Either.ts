@@ -1,12 +1,10 @@
-import { Show } from '../typeclasses/Show'
-import { Unsafe } from '../typeclasses/Unsafe'
 import { Maybe, Just, Nothing } from './Maybe'
 
 export type EitherPatterns<L, R, T> =
   | { Left: (l: L) => T; Right: (r: R) => T }
   | { _: () => T }
 
-export interface Either<L, R> extends Show, Unsafe {
+export interface Either<L, R> {
   __value: L | R
   isLeft(): this is Either<L, never>
   isRight(): this is Either<never, R>

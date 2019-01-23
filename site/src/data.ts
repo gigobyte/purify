@@ -71,9 +71,7 @@ const data: Data = {
       examples: [
         {
           title: 'How to import',
-          content: [
-            `import { Maybe, Just, Nothing } from 'purify-ts/adts/Maybe'`,
-          ],
+          content: [`import { Maybe, Just, Nothing } from 'purify-ts/Maybe'`],
         },
         {
           title: 'Without Maybe',
@@ -523,9 +521,7 @@ const data: Data = {
       examples: [
         {
           title: 'How to import',
-          content: [
-            `import { Either, Left, Right } from 'purify-ts/adts/Either'`,
-          ],
+          content: [`import { Either, Left, Right } from 'purify-ts/Either'`],
         },
         {
           title: 'Without Either',
@@ -996,7 +992,7 @@ const data: Data = {
       examples: [
         {
           title: 'How to import',
-          content: [`import { Tuple } from 'purify-ts/adts/Tuple'`],
+          content: [`import { Tuple } from 'purify-ts/Tuple'`],
         },
       ],
       guides: [],
@@ -1158,9 +1154,7 @@ const data: Data = {
       examples: [
         {
           title: 'How to import',
-          content: [
-            `import { NonEmptyList } from 'purify-ts/adts/NonEmptyList'`,
-          ],
+          content: [`import { NonEmptyList } from 'purify-ts/NonEmptyList'`],
         },
       ],
       guides: [],
@@ -1253,7 +1247,7 @@ const data: Data = {
       description:
         'This module contains type-safe functions for working with arrays.',
       example: {
-        import: `import { head, last, tail, init, uncons } from 'purify-ts/utils/List'`,
+        import: `import { head, last, tail, init, uncons } from 'purify-ts/List'`,
       },
       methods: [
         {
