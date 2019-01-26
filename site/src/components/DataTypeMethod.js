@@ -113,6 +113,8 @@ const MethodExampleColumn = styled.div`
 `
 
 const MethodDescription = styled.div`
+  width: 70%;
+
   @media only screen and (max-width: 768px) {
     padding: 10px 0;
   }

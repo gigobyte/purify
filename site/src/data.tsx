@@ -1,6 +1,9 @@
+import * as React from 'react'
+type Content = string | JSX.Element
+
 export interface MethodExample {
-  input: string
-  output: string
+  input: Content
+  output: Content
 }
 
 export interface DataTypeExample {
@@ -15,7 +18,7 @@ export interface DataTypeGuide {
 
 export interface Method {
   name: string
-  description: string
+  description: Content
   signatureML?: string
   signatureTS?: string
   examples: MethodExample[]
@@ -25,7 +28,7 @@ export interface DataType {
   name: string
   implements: string[]
   guides: DataTypeGuide[]
-  description: string
+  description: Content
   examples: DataTypeExample[]
   constructors: Method[]
   staticMethods: Method[]
@@ -35,7 +38,7 @@ export interface DataType {
 
 export interface Util {
   name: string
-  description: string
+  description: Content
   example: {
     import: string
     before?: string[]
@@ -498,6 +501,159 @@ const data: Data = {
             {
               input: `Nothing.ifNothing(() => console.log('failure'))`,
               output: '// failure',
+            },
+          ],
+        },
+      ],
+    },
+    {
+      name: 'MaybeAsync',
+      implements: ['Functor', 'Chain'],
+      guides: [{ title: 'MaybeAsync for Haskellers', link: '/' }],
+      description:
+        'MaybeAsync is a wrapper around Promise<Maybe<T>> that allows you to process asynchronous missing values or, on a more technical level, allows you to seemlessly chain Promises that resolve to Maybe. The API of MaybeAsync is heavily influenced by monad transformers, but the implementation under the hood is nothing like that. Despite that little piece of trivia, no prior knowledge of monad transformers is required.',
+      examples: [
+        {
+          title: 'How to import',
+          content: [`import { MaybeAsync } from 'purify-ts/MaybeAsync'`],
+        },
+        {
+          title: 'Example usage',
+          content: [
+            `declare function validateModel(model: Model): Maybe<Model>`,
+            `declare function getUser(userId: number): Promise<Maybe<User>>`,
+            `declare function insert(user: User): Promise<Document>`,
+            '',
+            'cosnt processRegistration = (model: Model): MaybeAsync<Document> =>',
+            '    MaybeAsync(async ({ liftMaybe, fromPromise }) => {',
+            '        const validatedModel: Model = await liftMaybe(validatedModel(model))',
+            '        const user: User = await fromPromise(getUser(validatedModel.userId))',
+            '',
+            '        return await insert(user)',
+            '    })',
+            '',
+            '// Now to unwrap',
+            'const promise: Promise<Maybe<Document>> = processRegistration(model).run()',
+          ],
+        },
+      ],
+      constructors: [
+        {
+          name: 'MaybeAsync',
+          description:
+            'Constructs a MaybeAsync object from a function that takes an object full of helpers that let you lift things into the MaybeAsync context and returns a Promise',
+          examples: [
+            {
+              input:
+                'MaybeAsync(({ liftMaybe, fromPromise }) => Promise.resolve(5))',
+              output: 'MaybeAsync<number>',
+            },
+          ],
+          signatureML: '(MaybeAsyncHelpers -> IO a) -> MaybeAsync a',
+          signatureTS: `<T>(runPromise: (helpers: MaybeAsyncHelpers) => PromiseLike<T>): MaybeAsync<T>`,
+        },
+      ],
+      staticMethods: [],
+      instanceMethods: [
+        {
+          name: 'run',
+          signatureML: 'MaybeAsync a ~> IO (Maybe a)',
+          signatureTS: 'run(): Promise<Maybe<T>>',
+          description: (
+            <div>
+              It's important to remember how `run` will behave because in an
+              async context there are other ways for a function to fail other
+              than to return a Nothing, for example:
+              <br />
+              If any of the computations inside MaybeAsync resolved to Nothing,
+              `run` will return a Promise resolved to Nothing.<br />
+              If any of the promises were to be rejected then `run` will return
+              a Promise resolved to Nothing.<br />
+              If an exception is thrown then `run` will return a Promise
+              resolved to Nothing.<br />
+              If none of the above happen then a promise resolved to the
+              returned value wrapped in a Just will be returned.
+            </div>
+          ),
+          examples: [
+            {
+              input:
+                'MaybeAsync(async ({ liftMaybe }) => { return await liftMaybe(Nothing) }).run()',
+              output: 'Promise {<resolved>: Nothing}',
+            },
+            {
+              input: 'MaybeAsync(() => Promise.reject()).run()',
+              output: 'Promise {<resolved>: Nothing}',
+            },
+            {
+              input: `MaybeAsync(() => { throw new Error('Something happened') }).run()`,
+              output: 'Promise {<resolved>: Nothing}',
+            },
+            {
+              input: 'MaybeAsync(() => Promise.resolve(5)).run()',
+              output: 'Promise {<resolved>: Just(5)}',
+            },
+          ],
+        },
+        {
+          name: 'map',
+          description:
+            "Transforms the value inside `this` with a given function. If the MaybeAsync that is being mapped resolves to Nothing then the mapping function won't be called and `run` will resolve the whole thing to Nothing, just like the regular Maybe#map.",
+          signatureML: 'MaybeAsync a ~> (a -> b) -> MaybeAsync b',
+          signatureTS: '<U>(f: (value: T) => U): MaybeAsync<U>',
+          examples: [
+            {
+              input:
+                'MaybeAsync(() => Promise.resolve(5)).map(x => x + 1).run()',
+              output: 'Promise {<resolved>: Just(6)}',
+            },
+          ],
+        },
+        {
+          name: 'chain',
+          description:
+            'Transforms `this` with a function that returns a `MaybeAsync`. Behaviour is the same as the regular Maybe#chain.',
+          signatureML: 'MaybeAsync a ~> (a -> b) -> MaybeAsync b',
+          signatureTS: '<U>(f: (value: T) => U): MaybeAsync<U>',
+          examples: [
+            {
+              input: `MaybeAsync(() => Promise.resolve(5))
+  .chain(x => MaybeAsync(() => Promise.resolve(x + 1)))
+  .run()`,
+              output: 'Promise {<resolved>: Just(6)}',
+            },
+          ],
+        },
+      ],
+      helperMethods: [
+        {
+          name: 'liftMaybe',
+          description:
+            'This helper is passed to the function given to the MaybeAsync constructor. It allows you to take a regular Maybe value and lift it to the MaybeAsync context. Awaiting a lifted Maybe will give you the value inside. If the Maybe is Nothing then the function will exit immediately and MaybeAsync will resolve to Nothing after running it.',
+          signatureML: 'Maybe a -> MaybeAsyncValue a',
+          signatureTS: '<T>(maybe: Maybe<T>): MaybeAsyncValue<T>',
+          examples: [
+            {
+              input: `MaybeAsync(async ({ liftMaybe }) => {
+  const value: number = await liftMaybe(Just(5))
+}).run()`,
+              output: 'Promise {<resolved>: Just(5)}',
+            },
+          ],
+        },
+        {
+          name: 'fromPromise',
+          description:
+            'This helper is passed to the function given to the MaybeAsync constructor. It allows you to take a Maybe inside a Promise and lift it to the MaybeAsync context. Awaiting a lifted Promise<Maybe> will give you the value inside the Maybe. If the Maybe is Nothing or the Promise is rejected then the function will exit immediately and MaybeAsync will resolve to Nothing after running it.',
+          signatureML: 'IO (Maybe a) -> MaybeAsyncValue a',
+          signatureTS:
+            '<T>(promise: PromiseLike<Maybe<T>>): MaybeAsyncValue<T>',
+          examples: [
+            {
+              input: `MaybeAsync(async ({ fromPromise }) => {
+const value: number = await fromPromise(Promise.resolve(Just(5)))
+}).run()`,
+              output: 'Promise {<resolved>: Just(5)}',
             },
           ],
         },
