@@ -58,12 +58,5 @@ const register = (rawBody: string): Promise<Maybe<InsertedUser>> =>
     const body = await liftMaybe(parseBody(rawBody))
     const user = await of(getUser(body, dateNow))
 
-    return await insertUser(user)
+    return insertUser(user)
   }).run()
-
-const registerChain = (rawBody: string): Promise<Maybe<InsertedUser>> =>
-  MaybeAsync(({ liftMaybe, of }) =>
-    Promise.all([getCurrentTime(), liftMaybe(parseBody(rawBody))])
-      .then(([dateNow, body]) => of(getUser(body, dateNow)))
-      .then(insertUser)
-  ).run()
