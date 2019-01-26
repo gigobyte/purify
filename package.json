@@ -11,7 +11,8 @@
   "scripts": {
     "build": "tsc",
     "docs": "typedoc --out documentation/ src/ --theme minimal",
-    "test": "jest"
+    "test": "jest",
+    "test-watch": "jest --watch"
   },
   "jest": {
     "transform": {
