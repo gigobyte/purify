@@ -15,7 +15,7 @@ interface MaybeAsync<T> {
 
 interface MaybeAsyncInstances {
   liftMaybe<T>(maybe: Maybe<T>): PromiseLike<T>
-  of<T>(promise: PromiseLike<Maybe<T>>): PromiseLike<T>
+  fromPromise<T>(promise: PromiseLike<Maybe<T>>): PromiseLike<T>
 }
 
 const maybeAsyncInstances: MaybeAsyncInstances = {
@@ -27,7 +27,7 @@ const maybeAsyncInstances: MaybeAsyncInstances = {
     return Promise.resolve(maybe.__value)
   },
 
-  of<T>(promise: PromiseLike<Maybe<T>>): PromiseLike<T> {
+  fromPromise<T>(promise: PromiseLike<Maybe<T>>): PromiseLike<T> {
     return promise.then(maybeAsyncInstances.liftMaybe)
   }
 }
@@ -53,10 +53,10 @@ const insertUser = (user: User): Promise<InsertedUser> =>
   Promise.resolve({ ...user, __id: '' })
 
 const register = (rawBody: string): Promise<Maybe<InsertedUser>> =>
-  MaybeAsync(async ({ liftMaybe, of }) => {
+  MaybeAsync(async ({ liftMaybe, fromPromise }) => {
     const dateNow = await getCurrentTime()
     const body = await liftMaybe(parseBody(rawBody))
-    const user = await of(getUser(body, dateNow))
+    const user = await fromPromise(getUser(body, dateNow))
 
     return insertUser(user)
   }).run()
