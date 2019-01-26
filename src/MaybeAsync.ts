@@ -1,25 +1,20 @@
 import { Maybe, Just, Nothing } from './Maybe'
 
-interface User {
-  id: number
-  createdOn: number
-}
-
-interface InsertedUser extends User {
-  __id: string
-}
-
-interface MaybeAsync<T> {
+export interface MaybeAsync<T> {
   run(): Promise<Maybe<T>>
+  map<U>(f: (value: T) => U): MaybeAsync<U>
+  chain<U>(f: (value: T) => MaybeAsync<U>): MaybeAsync<U>
 }
 
-interface MaybeAsyncInstances {
-  liftMaybe<T>(maybe: Maybe<T>): PromiseLike<T>
-  fromPromise<T>(promise: PromiseLike<Maybe<T>>): PromiseLike<T>
+export interface MaybeAsyncValue<T> extends PromiseLike<T> {}
+
+export interface MaybeAsyncHelpers {
+  liftMaybe<T>(maybe: Maybe<T>): MaybeAsyncValue<T>
+  fromPromise<T>(promise: PromiseLike<Maybe<T>>): MaybeAsyncValue<T>
 }
 
-const maybeAsyncInstances: MaybeAsyncInstances = {
-  liftMaybe<T>(maybe: Maybe<T>): PromiseLike<T> {
+const helpers: MaybeAsyncHelpers = {
+  liftMaybe<T>(maybe: Maybe<T>): MaybeAsyncValue<T> {
     if (maybe.isNothing()) {
       throw Nothing
     }
@@ -27,36 +22,28 @@ const maybeAsyncInstances: MaybeAsyncInstances = {
     return Promise.resolve(maybe.__value)
   },
 
-  fromPromise<T>(promise: PromiseLike<Maybe<T>>): PromiseLike<T> {
-    return promise.then(maybeAsyncInstances.liftMaybe)
+  fromPromise<T>(promise: PromiseLike<Maybe<T>>): MaybeAsyncValue<T> {
+    return promise.then(helpers.liftMaybe) as any
   }
 }
 
-const MaybeAsync = <T>(
-  promise: (maybeAsyncInstances: MaybeAsyncInstances) => Promise<T>
+export const MaybeAsync = <T>(
+  runPromise: (helpers: MaybeAsyncHelpers) => PromiseLike<T>
 ): MaybeAsync<T> => ({
   async run(): Promise<Maybe<T>> {
     try {
-      return Just(await promise(maybeAsyncInstances))
+      return Just(await runPromise(helpers))
     } catch {
       return Nothing
     }
+  },
+  map<U>(f: (value: T) => U): MaybeAsync<U> {
+    return MaybeAsync(helpers => runPromise(helpers).then(f))
+  },
+  chain<U>(f: (value: T) => MaybeAsync<U>): MaybeAsync<U> {
+    return MaybeAsync(async helpers => {
+      const value = await runPromise(helpers)
+      return await helpers.fromPromise(f(value).run())
+    })
   }
 })
-
-const getCurrentTime = (): Promise<number> => Promise.resolve(Date.now())
-const parseBody = (usrId: string): Maybe<number> =>
-  Maybe.fromFalsy(Number(usrId))
-const getUser = (userId: number, dateNow: number): Promise<Maybe<User>> =>
-  Promise.resolve(Maybe.of({ id: userId, createdOn: dateNow }))
-const insertUser = (user: User): Promise<InsertedUser> =>
-  Promise.resolve({ ...user, __id: '' })
-
-const register = (rawBody: string): Promise<Maybe<InsertedUser>> =>
-  MaybeAsync(async ({ liftMaybe, fromPromise }) => {
-    const dateNow = await getCurrentTime()
-    const body = await liftMaybe(parseBody(rawBody))
-    const user = await fromPromise(getUser(body, dateNow))
-
-    return insertUser(user)
-  }).run()
