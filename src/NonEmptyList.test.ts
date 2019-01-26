@@ -1,3 +1,4 @@
+import './customMatchers'
 import { Just, Nothing } from './Maybe'
 import { Tuple } from './Tuple'
 import { NonEmptyList } from './NonEmptyList'

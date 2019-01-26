@@ -1,3 +1,4 @@
+import './customMatchers'
 import { Nothing, Just } from './Maybe'
 import { Either, Left, Right } from './Either'
 

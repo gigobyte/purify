@@ -1,3 +1,4 @@
+import './customMatchers'
 import { Tuple } from './Tuple'
 
 describe('Tuple', () => {
