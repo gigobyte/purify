@@ -22,6 +22,9 @@ export interface MaybeAsync<T> {
   chain<U>(f: (value: T) => MaybeAsync<U>): MaybeAsync<U>
   /** Converts `this` to a EitherAsync with a default error value */
   toEitherAsync<L>(error: L): EitherAsync<L, T>
+
+  'fantasy-land/map'<U>(f: (value: T) => U): MaybeAsync<U>
+  'fantasy-land/chain'<U>(f: (value: T) => MaybeAsync<U>): MaybeAsync<U>
 }
 
 export interface MaybeAsyncValue<T> extends PromiseLike<T> {}
@@ -41,7 +44,6 @@ const helpers: MaybeAsyncHelpers = {
 
     return Promise.resolve(maybe.__value)
   },
-
   fromPromise<T>(promise: PromiseLike<Maybe<T>>): MaybeAsyncValue<T> {
     return promise.then(helpers.liftMaybe) as any
   }
@@ -72,5 +74,12 @@ export const MaybeAsync = <T>(
       const maybe = await this.run()
       return liftEither(maybe.toEither(error))
     })
+  },
+
+  'fantasy-land/map'<U>(f: (value: T) => U): MaybeAsync<U> {
+    return this.map(f)
+  },
+  'fantasy-land/chain'<U>(f: (value: T) => MaybeAsync<U>): MaybeAsync<U> {
+    return this.chain(f)
   }
 })

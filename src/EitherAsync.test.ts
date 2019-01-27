@@ -28,16 +28,24 @@ describe('EitherAsync', () => {
 
   test('map', async () => {
     const newEitherAsync = EitherAsync(() => Promise.resolve(5)).map(_ => 'val')
+    const newEitherAsync2 = EitherAsync(() => Promise.resolve(5))[
+      'fantasy-land/map'
+    ](_ => 'val')
 
     expect(await newEitherAsync.run()).toEqualStringified(Right('val'))
+    expect(await newEitherAsync2.run()).toEqualStringified(Right('val'))
   })
 
   test('chain', async () => {
     const newEitherAsync = EitherAsync(() => Promise.resolve(5)).chain(_ =>
       EitherAsync(() => Promise.resolve('val'))
     )
+    const newEitherAsync2 = EitherAsync(() => Promise.resolve(5))[
+      'fantasy-land/chain'
+    ](_ => EitherAsync(() => Promise.resolve('val')))
 
     expect(await newEitherAsync.run()).toEqualStringified(Right('val'))
+    expect(await newEitherAsync2.run()).toEqualStringified(Right('val'))
   })
 
   test('toMaybeAsync', async () => {
