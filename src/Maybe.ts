@@ -9,6 +9,7 @@ interface AlwaysJust {
 }
 
 export interface Maybe<T> {
+  constructor: typeof Maybe
   /** Internal property and subject to breaking changes, please use some of the available methods on the object if you want to access it */
   __value: T
   /** Returns true if `this` is `Just`, otherwise it returns false */
@@ -158,6 +159,7 @@ export const Maybe: MaybeTypeRef = {
 /** Constructs a Just. Respents an optional value that exists. */
 export function Just<T>(value: T): Maybe<T> {
   return {
+    constructor: Maybe,
     __value: value,
     isJust: () => {
       return true
@@ -267,6 +269,7 @@ export function Just<T>(value: T): Maybe<T> {
 
 /** Represents a missing value, you can think of it as a smart 'null'. */
 export const Nothing: Maybe<never> = {
+  constructor: Maybe,
   __value: null as never,
   isJust: () => {
     return false

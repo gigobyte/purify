@@ -2,6 +2,7 @@ import { Either, Left, Right } from './Either'
 import { MaybeAsync } from './MaybeAsync'
 
 export interface EitherAsync<L, R> {
+  constructor: typeof EitherAsync
   /**
    * It's important to remember how `run` will behave because in an
    * async context there are other ways for a function to fail other
@@ -60,6 +61,7 @@ const helpers: EitherAsyncHelpers<any> = {
 export const EitherAsync = <L, R>(
   runPromise: (helpers: EitherAsyncHelpers<L>) => PromiseLike<R>
 ): EitherAsync<L, R> => ({
+  constructor: EitherAsync,
   async run(): Promise<Either<L, R>> {
     try {
       return Right(await runPromise(helpers))

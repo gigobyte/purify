@@ -14,6 +14,7 @@ export interface TupleTypeRef {
 }
 
 export interface Tuple<F, S> extends Iterable<F | S>, ArrayLike<F | S> {
+  constructor: typeof Tuple
   0: F
   1: S
   [index: number]: F | S
@@ -56,6 +57,7 @@ export interface Tuple<F, S> extends Iterable<F | S>, ArrayLike<F | S> {
 }
 
 const TupleConstructor = <F, S>(fst: F, snd: S): Tuple<F, S> => ({
+  constructor: Tuple,
   0: fst,
   1: snd,
   length: 2,

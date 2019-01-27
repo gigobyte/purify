@@ -2,6 +2,7 @@ import { Maybe, Just, Nothing } from './Maybe'
 import { EitherAsync } from './EitherAsync'
 
 export interface MaybeAsync<T> {
+  constructor: typeof MaybeAsync
   /**
    * It's important to remember how `run` will behave because in an
    * async context there are other ways for a function to fail other
@@ -53,6 +54,7 @@ const helpers: MaybeAsyncHelpers = {
 export const MaybeAsync = <T>(
   runPromise: (helpers: MaybeAsyncHelpers) => PromiseLike<T>
 ): MaybeAsync<T> => ({
+  constructor: MaybeAsync,
   async run(): Promise<Maybe<T>> {
     try {
       return Just(await runPromise(helpers))
