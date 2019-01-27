@@ -210,7 +210,7 @@ const IndexPage = props => (
 const getUsers = (country?: Country): User[] =>
     Maybe.fromNullable(country)
          .chain(getUsersByCountry)
-         .toList()`}
+         .orDefault([])`}
           </SyntaxHighlighter>
         </RefactoringContainer>
       </Content>
