@@ -1,4 +1,5 @@
 import { Either, Left, Right } from './Either'
+import { MaybeAsync } from './MaybeAsync'
 
 export interface EitherAsync<L, R> {
   /**
@@ -19,6 +20,8 @@ export interface EitherAsync<L, R> {
   map<R2>(f: (value: R) => R2): EitherAsync<L, R2>
   /** Transforms `this` with a function that returns a `EitherAsync`. Behaviour is the same as the regular Either#chain */
   chain<R2>(f: (value: R) => EitherAsync<L, R2>): EitherAsync<L, R2>
+  /** Convert `this` to a MaybeAsync, discarding any error values */
+  toMaybeAsync(): MaybeAsync<R>
 }
 
 export interface EitherAsyncValue<R> extends PromiseLike<R> {}
@@ -68,6 +71,12 @@ export const EitherAsync = <L, R>(
     return EitherAsync(async helpers => {
       const value = await runPromise(helpers)
       return await helpers.fromPromise(f(value).run())
+    })
+  },
+  toMaybeAsync(): MaybeAsync<R> {
+    return MaybeAsync(async ({ liftMaybe }) => {
+      const either = await this.run()
+      return liftMaybe(either.toMaybe())
     })
   }
 })

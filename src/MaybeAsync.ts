@@ -70,7 +70,6 @@ export const MaybeAsync = <T>(
   toEitherAsync<L>(error: L): EitherAsync<L, T> {
     return EitherAsync(async ({ liftEither }) => {
       const maybe = await this.run()
-
       return liftEither(maybe.toEither(error))
     })
   }

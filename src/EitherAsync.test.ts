@@ -1,6 +1,7 @@
 import './customMatchers'
 import { EitherAsync } from './EitherAsync'
 import { Left, Right, Either } from './Either'
+import { Nothing, Just } from './Maybe'
 
 describe('EitherAsync', () => {
   test('liftEither', () => {
@@ -37,6 +38,16 @@ describe('EitherAsync', () => {
     )
 
     expect(await newEitherAsync.run()).toEqualStringified(Right('val'))
+  })
+
+  test('toMaybeAsync', async () => {
+    const ma = EitherAsync(({ liftEither }) => liftEither(Left('123')))
+
+    expect(await ma.toMaybeAsync().run()).toEqual(Nothing)
+
+    const ma2 = EitherAsync(({ liftEither }) => liftEither(Right(5)))
+
+    expect(await ma2.toMaybeAsync().run()).toEqualStringified(Just(5))
   })
 
   describe('run', () => {

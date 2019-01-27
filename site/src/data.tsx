@@ -1277,6 +1277,14 @@ const data: Data = {
             },
           ],
         },
+        {
+          name: 'toMaybeAsync',
+          description:
+            'Convert `this` to a MaybeAsync, discarding any error values',
+          signatureML: 'EitherAsync a b ~> MaybeAsync b',
+          signatureTS: '(): MaybeAsync<R>',
+          examples: [],
+        },
       ],
       helperMethods: [
         {
