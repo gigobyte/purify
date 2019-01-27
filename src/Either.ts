@@ -82,13 +82,14 @@ export interface Either<L, R> {
 interface EitherTypeRef {
   /** Takes a value and wraps it in a `Right` */
   of<L, R>(value: R): Either<L, R>
-  'fantasy-land/of'<L, R>(value: R): Either<L, R>
   /** Takes a list of eithers and returns a list of all `Left` values */
   lefts<L, R>(list: Either<L, R>[]): L[]
   /** Takes a list of eithers and returns a list of all `Right` values */
   rights<L, R>(list: Either<L, R>[]): R[]
   /** Calls a function and returns a `Right` with the return value or an exception wrapped in a `Left` in case of failure */
   encase<L extends Error, R>(throwsF: () => R): Either<L, R>
+
+  'fantasy-land/of'<L, R>(value: R): Either<L, R>
 }
 
 export const Either: EitherTypeRef = {
@@ -108,6 +109,7 @@ export const Either: EitherTypeRef = {
       return Left(e)
     }
   },
+
   'fantasy-land/of'<L, R>(value: R): Either<L, R> {
     return Either.of(value)
   }
@@ -197,6 +199,7 @@ export function Right<R, L = never>(value: R): Either<L, R> {
     extract(): L | R {
       return value
     },
+
     'fantasy-land/bimap'<L2, R2>(
       f: (value: L) => L2,
       g: (value: R) => R2
@@ -314,6 +317,7 @@ export function Left<L, R = never>(value: L): Either<L, R> {
     extract(): L | R {
       return value
     },
+
     'fantasy-land/bimap'<L2, R2>(
       f: (value: L) => L2,
       g: (value: R) => R2

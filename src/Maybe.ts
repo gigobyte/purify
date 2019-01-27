@@ -60,6 +60,17 @@ export interface Maybe<T> {
   ifNothing(effect: () => any): this
   /** Takes a predicate function and returns `this` if the predicate returns true or Nothing if it returns false */
   filter(pred: (value: T) => boolean): Maybe<T>
+
+  'fantasy-land/equals'(other: Maybe<T>): boolean
+  'fantasy-land/map'<U>(f: (value: T) => U): Maybe<U>
+  'fantasy-land/ap'<U>(maybeF: Maybe<(value: T) => U>): Maybe<U>
+  'fantasy-land/alt'(other: Maybe<T>): Maybe<T>
+  'fantasy-land/chain'<U>(f: (value: T) => Maybe<U>): Maybe<U>
+  'fantasy-land/reduce'<U>(
+    reducer: (accumulator: U, value: T) => U,
+    initialValue: U
+  ): U
+  'fantasy-land/extend'<U>(f: (value: Maybe<T>) => U): Maybe<U>
 }
 
 interface MaybeTypeRef {
@@ -84,6 +95,10 @@ interface MaybeTypeRef {
   mapMaybe<T, U>(f: (value: T) => Maybe<U>, list: T[]): U[]
   /** Calls a function that may throw and wraps the result in a `Just` if successful or `Nothing` if an error is caught */
   encase<T>(thunk: () => T): Maybe<T>
+
+  'fantasy-land/of'<T>(value: T): Maybe<T>
+  'fantasy-land/empty'(): typeof Nothing
+  'fantasy-land/zero'(): typeof Nothing
 }
 
 export const Maybe: MaybeTypeRef = {
@@ -127,6 +142,16 @@ export const Maybe: MaybeTypeRef = {
     } catch {
       return Nothing
     }
+  },
+
+  'fantasy-land/of'<T>(value: T): Maybe<T> {
+    return this.of(value)
+  },
+  'fantasy-land/empty'(): typeof Nothing {
+    return this.empty()
+  },
+  'fantasy-land/zero'(): typeof Nothing {
+    return this.zero()
   }
 }
 
@@ -211,6 +236,31 @@ export function Just<T>(value: T): Maybe<T> {
     },
     filter(pred: (value: T) => boolean): Maybe<T> {
       return pred(value) ? Just(value) : Nothing
+    },
+
+    'fantasy-land/equals'(other: Maybe<T>): boolean {
+      return this.equals(other)
+    },
+    'fantasy-land/map'<U>(f: (value: T) => U): Maybe<U> {
+      return this.map(f)
+    },
+    'fantasy-land/ap'<U>(maybeF: Maybe<(value: T) => U>): Maybe<U> {
+      return this.ap(maybeF)
+    },
+    'fantasy-land/alt'(other: Maybe<T>): Maybe<T> {
+      return this.alt(other)
+    },
+    'fantasy-land/chain'<U>(f: (value: T) => Maybe<U>): Maybe<U> {
+      return this.chain(f)
+    },
+    'fantasy-land/reduce'<U>(
+      reducer: (accumulator: U, value: T) => U,
+      initialValue: U
+    ): U {
+      return this.reduce(reducer, initialValue)
+    },
+    'fantasy-land/extend'<U>(f: (value: Maybe<T>) => U): Maybe<U> {
+      return this.extend(f)
     }
   }
 }
@@ -295,5 +345,30 @@ export const Nothing: Maybe<never> = {
   },
   filter<T>(_: (value: T) => boolean): Maybe<T> {
     return Nothing
+  },
+
+  'fantasy-land/equals'(other: Maybe<never>): boolean {
+    return this.equals(other)
+  },
+  'fantasy-land/map'<T, U>(f: (value: T) => U): Maybe<U> {
+    return this.map(f)
+  },
+  'fantasy-land/ap'<T, U>(maybeF: Maybe<(value: T) => U>): Maybe<U> {
+    return this.ap(maybeF)
+  },
+  'fantasy-land/alt'(other: Maybe<never>): Maybe<never> {
+    return this.alt(other)
+  },
+  'fantasy-land/chain'<T, U>(f: (value: T) => Maybe<U>): Maybe<U> {
+    return this.chain(f)
+  },
+  'fantasy-land/reduce'<T, U>(
+    reducer: (accumulator: U, value: T) => U,
+    initialValue: U
+  ): U {
+    return this.reduce(reducer, initialValue)
+  },
+  'fantasy-land/extend'<T, U>(f: (value: Maybe<T>) => U): Maybe<U> {
+    return this.extend(f)
   }
 }

@@ -5,6 +5,7 @@ import { Left, Right } from './Either'
 describe('Maybe', () => {
   test('of', () => {
     expect(Maybe.of(5)).toEqualStringified(Just(5))
+    expect(Maybe['fantasy-land/of'](5)).toEqualStringified(Just(5))
   })
 
   test('fromNullable', () => {
@@ -28,10 +29,12 @@ describe('Maybe', () => {
 
   test('empty', () => {
     expect(Maybe.empty()).toEqualStringified(Nothing)
+    expect(Maybe['fantasy-land/empty']()).toEqualStringified(Nothing)
   })
 
   test('zero', () => {
     expect(Maybe.zero()).toEqualStringified(Nothing)
+    expect(Maybe['fantasy-land/zero']()).toEqualStringified(Nothing)
   })
 
   test('catMaybes', () => {
@@ -77,11 +80,15 @@ describe('Maybe', () => {
     expect(Just(5).equals(Nothing)).toEqualStringified(false)
     expect(Nothing.equals(Just(5 as never))).toEqualStringified(false)
     expect(Nothing.equals(Nothing)).toEqualStringified(true)
+
+    expect(Just(5)['fantasy-land/equals'](Just(5))).toEqualStringified(true)
   })
 
   test('map', () => {
     expect(Just(5).map(x => x + 1)).toEqualStringified(Just(6))
     expect(Nothing.map(x => x + 1)).toEqualStringified(Nothing)
+
+    expect(Just(5)['fantasy-land/map'](x => x + 1)).toEqualStringified(Just(6))
   })
 
   test('ap', () => {
@@ -89,6 +96,8 @@ describe('Maybe', () => {
     expect(Just(5).ap(Nothing)).toEqualStringified(Nothing)
     expect(Nothing.ap(Just((x: number) => x + 1))).toEqualStringified(Nothing)
     expect(Nothing.ap(Nothing)).toEqualStringified(Nothing)
+
+    expect(Just(5)['fantasy-land/ap'](Nothing)).toEqualStringified(Nothing)
   })
 
   test('alt', () => {
@@ -96,11 +105,17 @@ describe('Maybe', () => {
     expect(Just(5).alt(Nothing)).toEqualStringified(Just(5))
     expect(Nothing.alt(Just(5 as never))).toEqualStringified(Just(5))
     expect(Nothing.alt(Nothing)).toEqualStringified(Nothing)
+
+    expect(Just(5)['fantasy-land/alt'](Nothing)).toEqualStringified(Just(5))
   })
 
   test('chain', () => {
     expect(Just(5).chain(x => Just(x + 1))).toEqualStringified(Just(6))
     expect(Nothing.chain(x => Just(x + 1))).toEqualStringified(Nothing)
+
+    expect(Just(5)['fantasy-land/chain'](x => Just(x + 1))).toEqualStringified(
+      Just(6)
+    )
   })
 
   test('chainNullable', () => {
@@ -119,11 +134,19 @@ describe('Maybe', () => {
   test('reduce', () => {
     expect(Just(5).reduce((acc, x) => x * acc, 2)).toEqualStringified(10)
     expect(Nothing.reduce((acc, x) => x * acc, 0)).toEqualStringified(0)
+
+    expect(
+      Just(5)['fantasy-land/reduce']((acc, x) => x * acc, 2)
+    ).toEqualStringified(10)
   })
 
   test('extend', () => {
     expect(Just(5).extend(x => x.isJust())).toEqualStringified(Just(true))
     expect(Nothing.extend(x => x.isJust())).toEqualStringified(Nothing)
+
+    expect(Just(5)['fantasy-land/extend'](x => x.isJust())).toEqualStringified(
+      Just(true)
+    )
   })
 
   test('unsafeCoerce', () => {
