@@ -44,6 +44,7 @@ const helpers: MaybeAsyncHelpers = {
   }
 }
 
+/** Constructs a MaybeAsync object from a function that takes an object full of helpers that let you lift things into the MaybeAsync context and returns a Promise */
 export const MaybeAsync = <T>(
   runPromise: (helpers: MaybeAsyncHelpers) => PromiseLike<T>
 ): MaybeAsync<T> => ({

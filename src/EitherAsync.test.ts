@@ -40,7 +40,7 @@ describe('EitherAsync', () => {
 
     it('resolves to a Left with the rejected value if there is a rejected promise', async () => {
       expect(
-        await EitherAsync(({ fromPromise }) =>
+        await EitherAsync<void, never>(({ fromPromise }) =>
           fromPromise(Promise.reject('Some error'))
         ).run()
       ).toEqualStringified(Left('Some error'))
