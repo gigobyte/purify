@@ -33,7 +33,6 @@ export interface Either<L, R> {
   /** Returns the first `Right` between `this` and another `Either` or the `Left` in the argument if both `this` and the argument are `Left` */
   alt(other: Either<L, R>): Either<L, R>
   /** Takes a reducer and a initial value and returns the initial value if `this` is `Left` or the result of applying the function to the initial value and the value inside `this` */
-  reduce<T>(reducer: (accumulator: T, value: R) => T, initialValue: T): T
   /** Returns `this` if it\'s a `Left`, otherwise it returns the result of applying the function argument to `this` and wrapping it in a `Right` */
   extend<R2>(f: (value: Either<L, R>) => R2): Either<L, R2>
   /** Returns the value inside `this` or throws an error if `this` is a `Left` */
@@ -62,11 +61,28 @@ export interface Either<L, R> {
   either<T>(ifLeft: (value: L) => T, ifRight: (value: R) => T): T
   /** Extracts the value out of `this` */
   extract(): L | R
+
+  'fantasy-land/bimap'<L2, R2>(
+    f: (value: L) => L2,
+    g: (value: R) => R2
+  ): Either<L2, R2>
+  'fantasy-land/map'<R2>(f: (value: R) => R2): Either<L, R2>
+  'fantasy-land/ap'<R2>(other: Either<L, (value: R) => R2>): Either<L, R2>
+  'fantasy-land/equals'(other: Either<L, R>): boolean
+  'fantasy-land/chain'<R2>(f: (value: R) => Either<L, R2>): Either<L, R2>
+  'fantasy-land/alt'(other: Either<L, R>): Either<L, R>
+  reduce<T>(reducer: (accumulator: T, value: R) => T, initialValue: T): T
+  'fantasy-land/reduce'<T>(
+    reducer: (accumulator: T, value: R) => T,
+    initialValue: T
+  ): T
+  'fantasy-land/extend'<R2>(f: (value: Either<L, R>) => R2): Either<L, R2>
 }
 
 interface EitherTypeRef {
   /** Takes a value and wraps it in a `Right` */
   of<L, R>(value: R): Either<L, R>
+  'fantasy-land/of'<L, R>(value: R): Either<L, R>
   /** Takes a list of eithers and returns a list of all `Left` values */
   lefts<L, R>(list: Either<L, R>[]): L[]
   /** Takes a list of eithers and returns a list of all `Right` values */
@@ -91,6 +107,9 @@ export const Either: EitherTypeRef = {
     } catch (e) {
       return Left(e)
     }
+  },
+  'fantasy-land/of'<L, R>(value: R): Either<L, R> {
+    return Either.of(value)
   }
 }
 
@@ -177,6 +196,36 @@ export function Right<R, L = never>(value: R): Either<L, R> {
     },
     extract(): L | R {
       return value
+    },
+    'fantasy-land/bimap'<L2, R2>(
+      f: (value: L) => L2,
+      g: (value: R) => R2
+    ): Either<L2, R2> {
+      return this.bimap(f, g)
+    },
+    'fantasy-land/map'<R2>(f: (value: R) => R2): Either<L, R2> {
+      return this.map(f)
+    },
+    'fantasy-land/ap'<R2>(other: Either<L, (value: R) => R2>): Either<L, R2> {
+      return this.ap(other)
+    },
+    'fantasy-land/equals'(other: Either<L, R>): boolean {
+      return this.equals(other)
+    },
+    'fantasy-land/chain'<R2>(f: (value: R) => Either<L, R2>): Either<L, R2> {
+      return this.chain(f)
+    },
+    'fantasy-land/alt'(other: Either<L, R>): Either<L, R> {
+      return this.alt(other)
+    },
+    'fantasy-land/reduce'<T>(
+      reducer: (accumulator: T, value: R) => T,
+      initialValue: T
+    ): T {
+      return this.reduce(reducer, initialValue)
+    },
+    'fantasy-land/extend'<R2>(f: (value: Either<L, R>) => R2): Either<L, R2> {
+      return this.extend(f)
     }
   }
 }
@@ -264,6 +313,36 @@ export function Left<L, R = never>(value: L): Either<L, R> {
     },
     extract(): L | R {
       return value
+    },
+    'fantasy-land/bimap'<L2, R2>(
+      f: (value: L) => L2,
+      g: (value: R) => R2
+    ): Either<L2, R2> {
+      return this.bimap(f, g)
+    },
+    'fantasy-land/map'<R2>(f: (value: R) => R2): Either<L, R2> {
+      return this.map(f)
+    },
+    'fantasy-land/ap'<R2>(other: Either<L, (value: R) => R2>): Either<L, R2> {
+      return this.ap(other)
+    },
+    'fantasy-land/equals'(other: Either<L, R>): boolean {
+      return this.equals(other)
+    },
+    'fantasy-land/chain'<R2>(f: (value: R) => Either<L, R2>): Either<L, R2> {
+      return this.chain(f)
+    },
+    'fantasy-land/alt'(other: Either<L, R>): Either<L, R> {
+      return this.alt(other)
+    },
+    'fantasy-land/reduce'<T>(
+      reducer: (accumulator: T, value: R) => T,
+      initialValue: T
+    ): T {
+      return this.reduce(reducer, initialValue)
+    },
+    'fantasy-land/extend'<R2>(f: (value: Either<L, R>) => R2): Either<L, R2> {
+      return this.extend(f)
     }
   }
 }

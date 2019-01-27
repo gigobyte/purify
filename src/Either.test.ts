@@ -7,6 +7,7 @@ const anything = Math.random()
 describe('Either', () => {
   test('of', () => {
     expect(Either.of(5)).toEqualStringified(Right(5))
+    expect(Either['fantasy-land/of'](5)).toEqualStringified(Right(5))
   })
 
   test('lefts', () => {
@@ -47,11 +48,19 @@ describe('Either', () => {
     expect(Right(5).bimap(x => x + '!', x => x + 1)).toEqualStringified(
       Right(6)
     )
+
+    expect(
+      Right(5)['fantasy-land/bimap'](x => x + '!', x => x + 1)
+    ).toEqualStringified(Right(6))
   })
 
   test('map', () => {
     expect(Left('Error').map(x => x + 1)).toEqualStringified(Left('Error'))
     expect(Right(5).map(x => x + 1)).toEqualStringified(Right(6))
+
+    expect(Right(5)['fantasy-land/map'](x => x + 1)).toEqualStringified(
+      Right(6)
+    )
   })
 
   test('mapLeft', () => {
@@ -74,6 +83,10 @@ describe('Either', () => {
     expect(Left('Error').ap(Left('Function Error'))).toEqualStringified(
       Left('Function Error')
     )
+
+    expect(
+      Right(5)['fantasy-land/ap'](Right((x: number) => x + 1))
+    ).toEqualStringified(Right(6))
   })
 
   test('equals', () => {
@@ -85,6 +98,8 @@ describe('Either', () => {
     expect(Right(5).equals(Right(5))).toEqualStringified(true)
     expect(Right(5).equals(Right(6))).toEqualStringified(false)
     expect(Right(5).equals(Left('Error') as any)).toEqualStringified(false)
+
+    expect(Right(5)['fantasy-land/equals'](Right(5))).toEqualStringified(true)
   })
 
   test('chain', () => {
@@ -92,6 +107,10 @@ describe('Either', () => {
       Left('Error')
     )
     expect(Right(5).chain(x => Right(x + 1))).toEqualStringified(Right(6))
+
+    expect(
+      Right(5)['fantasy-land/chain'](x => Right(x + 1))
+    ).toEqualStringified(Right(6))
   })
 
   test('join', () => {
@@ -104,11 +123,17 @@ describe('Either', () => {
     expect(Left('Error').alt(Right(5) as any)).toEqualStringified(Right(5))
     expect(Right(5).alt(Left('Error') as any)).toEqualStringified(Right(5))
     expect(Right(5).alt(Right(6))).toEqualStringified(Right(5))
+
+    expect(Right(5)['fantasy-land/alt'](Right(6))).toEqualStringified(Right(5))
   })
 
   test('reduce', () => {
     expect(Right(5).reduce((acc, x) => x * acc, 2)).toEqualStringified(10)
     expect(Left('Error').reduce((acc, x) => x * acc, 0)).toEqualStringified(0)
+
+    expect(
+      Right(5)['fantasy-land/reduce']((acc, x) => x * acc, 2)
+    ).toEqualStringified(10)
   })
 
   test('extend', () => {
@@ -116,6 +141,10 @@ describe('Either', () => {
       Left('Error')
     )
     expect(Right(5).extend(x => x.isRight())).toEqualStringified(Right(true))
+
+    expect(
+      Right(5)['fantasy-land/extend'](x => x.isRight())
+    ).toEqualStringified(Right(true))
   })
 
   test('unsafeCoerce', () => {
