@@ -55,9 +55,28 @@ const TypeclassBadge = styled.span`
   margin-right: 4px;
   margin-bottom: 5px;
   text-decoration: none;
+`
 
-  &:hover {
-    text-decoration: underline;
+const TypeclassTooltip = styled.div`
+  background-color: #975ce7;
+  border-radius: 100%;
+  width: 17px;
+  position: relative;
+  height: 17px;
+  margin-top: 1px;
+  margin-left: 4px;
+
+  &::after {
+    content: '?';
+    color: white;
+    position: absolute;
+    left: 5px;
+    top: -2px;
+    font-size: 13px;
+  }
+
+  @media (hover: none) {
+    display: none;
   }
 `
 
@@ -94,6 +113,7 @@ const DataTypeContent = adt => props => (
         {adt.implements.map(typeclass => (
           <TypeclassBadge key={typeclass}>{typeclass}</TypeclassBadge>
         ))}
+        <TypeclassTooltip title="The badges on the left list all available fantasy-land instances for this data type" />
       </TypeclassBadges>
       <Description>{adt.description}</Description>
       <ExamplesContainer>
