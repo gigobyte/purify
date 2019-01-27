@@ -96,7 +96,7 @@ adt.caseOf({ _: () => 0 })`}
 
     <Topic>Tuple support for more array behaviour</Topic>
     <TopicDescription>
-      Tuples now implement the Iterable, ArrayLike and Foldable interfaces.
+      Tuples now implement the Iterable and ArrayLike interfaces.
     </TopicDescription>
 
     <SyntaxHighlighter language="javascript" style={highlightStyle}>
