@@ -79,11 +79,10 @@ const data: Data = {
         {
           title: 'Without Maybe',
           content: [
-            'let port: number',
-            'let config: Config | null = getConfig()',
-            '',
             `// Hard to chain additional transformations`,
             `// Doesn't protect against falsy values like empty string or 0`,
+            '',
+            'const config: Config | null = getConfig()',
             '',
             'const port = config && config.port',
             '    ? parseInt(config.port)',
@@ -1163,7 +1162,7 @@ const data: Data = {
             `declare function getUser(userId: number): Promise<Maybe<User>>`,
             `declare function insert(user: User): Promise<Document>`,
             '',
-            'const processRegistration = (model: Model): EitherAsync<Document> =>',
+            'const processRegistration = model =>',
             '    EitherAsync<Error, Document>(async ({ liftEither, fromPromise }) => {',
             '        const validatedModel: Model = await liftEither(validateModel(model))',
             '',
