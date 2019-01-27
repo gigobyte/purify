@@ -168,9 +168,10 @@ const IndexPage = props => (
         </Heading>
         <FeaturesContainer>
           <Feature>
-            <FeatureTitle>Utility functions</FeatureTitle>
-            Purify provides implementations for common typeclasses like Functor
-            and Monad, along with utility functions that operate on them
+            <FeatureTitle>Not just a port</FeatureTitle>
+            For purify, bringing popular patterns doesn't mean copying the
+            implementation down to the last details, it means expressing ideas
+            in the cleanest way possible using the tools of the language
           </Feature>
           <Feature>
             <FeatureTitle>Algebraic Data Types</FeatureTitle>
