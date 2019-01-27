@@ -1,6 +1,6 @@
 import './customMatchers'
 import { EitherAsync } from './EitherAsync'
-import { Left, Right } from './Either'
+import { Left, Right, Either } from './Either'
 
 describe('EitherAsync', () => {
   test('liftEither', () => {
@@ -13,6 +13,16 @@ describe('EitherAsync', () => {
     EitherAsync(async ({ fromPromise }) => {
       const value: 5 = await fromPromise(Promise.resolve(Right<5>(5)))
     })
+  })
+
+  test('throwE', async () => {
+    const ea = EitherAsync<string, number>(async ({ liftEither, throwE }) => {
+      const value: 5 = await liftEither(Right<5>(5))
+      throwE('Test')
+      return value
+    })
+
+    expect(await ea.run()).toEqualStringified(Left('Test'))
   })
 
   test('map', async () => {

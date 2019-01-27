@@ -1276,7 +1276,7 @@ const data: Data = {
           description:
             'This helper is passed to the function given to the EitherAsync constructor. It allows you to take a regular Either value and lift it to the EitherAsync context. Awaiting a lifted Either will give you the `Right` value inside. If the Either is Left then the function will exit immediately and EitherAsync will resolve to that Left after running it.',
           signatureML: 'Either a b -> EitherAsyncValue b',
-          signatureTS: '<R>(either: Either<L, R>): EitherAsyncValue<R>',
+          signatureTS: '<L, R>(either: Either<L, R>): EitherAsyncValue<R>',
           examples: [
             {
               input: `EitherAsync(async ({ liftEither }) => {
@@ -1290,15 +1290,31 @@ const data: Data = {
           name: 'fromPromise',
           description:
             'This helper is passed to the function given to the EitherAsync constructor. It allows you to take an Either inside a Promise and lift it to the EitherAsync context. Awaiting a lifted Promise<Either> will give you the `Right` value inside the Either. If the Either is Left or the Promise is rejected then the function will exit immediately and MaybeAsync will resolve to that Left or the rejection value after running it.',
-          signatureML: 'IO (Maybe a) -> MaybeAsyncValue a',
+          signatureML: 'IO (Either a b) -> EitherAsyncValue b',
           signatureTS:
-            '<T>(promise: PromiseLike<Maybe<T>>): MaybeAsyncValue<T>',
+            '<L, R>(promise: PromiseLike<Either<L, R>>): EitherAsyncValue<R>',
           examples: [
             {
-              input: `MaybeAsync(async ({ fromPromise }) => {
-const value: number = await fromPromise(Promise.resolve(Just(5)))
+              input: `EitherAsync(async ({ fromPromise }) => {
+  const value: number = await fromPromise(Promise.resolve(Right(5)))
 }).run()`,
-              output: 'Promise {<resolved>: Just(5)}',
+              output: 'Promise {<resolved>: Right(5)}',
+            },
+          ],
+        },
+        {
+          name: 'throwE',
+          description:
+            'This helper is passed to the function given to the EitherAsync constructor. A type safe version of throwing an exception. Unlike the Error constructor, which will take anything, `throwE` only accepts values of the same type as the Left part of the Either',
+          signatureTS: '(error: L): never',
+          examples: [
+            {
+              input: `EitherAsync<string, number>(async ({ liftEither, throwE })
+  const value: number = await liftEither(Right(5))
+  throwE('Test')
+  return value
+}).run()`,
+              output: `Promise {<resolved>: Left('Test')}`,
             },
           ],
         },

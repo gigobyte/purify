@@ -28,6 +28,8 @@ export interface EitherAsyncHelpers<L> {
   liftEither<R>(either: Either<L, R>): EitherAsyncValue<R>
   /** Allows you to take an Either inside a Promise and lift it to the EitherAsync context. Awaiting a lifted Promise<Either> will give you the `Right` value inside the Either. If the Either is Left or the Promise is rejected then the function will exit immediately and MaybeAsync will resolve to that Left or the rejection value after running it */
   fromPromise<R>(promise: PromiseLike<Either<L, R>>): EitherAsyncValue<R>
+  /** A type safe version of throwing an exception. Unlike the Error constructor, which will take anything, throwE only accepts values of the same type as the Left part of the Either */
+  throwE(error: L): never
 }
 
 const helpers: EitherAsyncHelpers<any> = {
@@ -41,6 +43,10 @@ const helpers: EitherAsyncHelpers<any> = {
 
   fromPromise<L, R>(promise: PromiseLike<Either<L, R>>): EitherAsyncValue<R> {
     return promise.then(helpers.liftEither) as any
+  },
+
+  throwE<L>(error: L): never {
+    throw error
   }
 }
 
