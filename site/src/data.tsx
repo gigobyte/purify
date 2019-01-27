@@ -509,7 +509,10 @@ const data: Data = {
       name: 'MaybeAsync',
       implements: ['Functor', 'Chain'],
       guides: [
-        { title: 'MaybeAsync and EitherAsync for Haskellers', link: '/' },
+        {
+          title: 'MaybeAsync and EitherAsync for Haskellers',
+          link: '/guides/maybeasync-eitherasync-for-haskellers',
+        },
       ],
       description:
         'MaybeAsync is a wrapper around Promise<Maybe<T>> that allows you to process asynchronous missing values or, on a more technical level, allows you to seemlessly chain Promises that resolve to Maybe. The API of MaybeAsync is heavily influenced by monad transformers, but the implementation under the hood is nothing like that. Despite that little piece of trivia, no prior knowledge of monad transformers is required.',
@@ -1154,7 +1157,10 @@ const data: Data = {
       name: 'EitherAsync',
       implements: ['Functor', 'Chain'],
       guides: [
-        { title: 'MaybeAsync and EitherAsync for Haskellers', link: '/' },
+        {
+          title: 'MaybeAsync and EitherAsync for Haskellers',
+          link: '/guides/maybeasync-eitherasync-for-haskellers',
+        },
       ],
       description:
         "It is recommended to have your promises resolve to Either wherever error handling is needed instead of rejecting them and handling errors in the catch method. EitherAsync lets you do that seemlessly, it's a wrapper around Promise<Either<L, R>> that allows you to process asynchronous values while also having error handling via Either. The API of EitherAsync is heavily influenced by monad transformers, but the implementation under the hood is nothing like that. Despite that little piece of trivia, no prior knowledge of monad transformers is required.",
