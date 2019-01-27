@@ -105,6 +105,15 @@ myMaybe.chainNullable(transform)`}
       Don't be afraid to start returning or expecing Maybe values in functions,
       you'll notice some benefits you haven't considered before!
     </Note>
+    <h3>Scenario #2 - I'm not sure how to check if a value exists or not</h3>
+    *WIP*
+    <h3>Scenario #3 - I want to transform the value inside the Maybe</h3>
+    *WIP*
+    <h3>
+      Scenario #4 - I work with arrays a lot, are there any methods to help me
+      with that?
+    </h3>
+    *WIP*
   </Layout>
 )
 
