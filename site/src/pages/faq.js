@@ -47,8 +47,8 @@ const FAQ = props => (
       </li>
       <li>
         <h3>Q: Should I expect breaking changes?</h3>
-        Even though the library is in pre-v1 stage, breaking changes are
-        actively avoided. That doesn't mean that they will never happen. <br />
+        The library is in pre-v1 stage, breaking changes are certainly possible.{' '}
+        <br />
         Situations in which you can expect breaking changes are: <br />
         There is a new TypeScript release that allows for more type safety<br />
         There is a new TypeScript release that makes expressing certain
