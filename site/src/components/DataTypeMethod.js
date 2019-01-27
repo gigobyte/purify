@@ -121,7 +121,7 @@ const MethodDescription = styled.div`
 `
 
 const Highlight = ({ children }) => (
-  <SyntaxHighlighter language="typescript" style={highlightStyle}>
+  <SyntaxHighlighter language="javascript" style={highlightStyle}>
     {children}
   </SyntaxHighlighter>
 )

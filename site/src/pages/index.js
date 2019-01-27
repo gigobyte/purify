@@ -187,7 +187,7 @@ const IndexPage = props => (
         </FeaturesContainer>
         <RefactoringContainer>
           <RefactoringText>Turn</RefactoringText>
-          <SyntaxHighlighter language="typescript" style={highlightStyle}>
+          <SyntaxHighlighter language="javascript" style={highlightStyle}>
             {`const getUsers = (country?: Country): User[] => {
     if (!country) {
         return []
@@ -203,7 +203,7 @@ const IndexPage = props => (
 }`}
           </SyntaxHighlighter>
           <RefactoringText>into</RefactoringText>
-          <SyntaxHighlighter language="typescript" style={highlightStyle} show>
+          <SyntaxHighlighter language="javascript" style={highlightStyle} show>
             {`import { Maybe } from 'purify-ts/adts/Maybe'
 
 const getUsers = (country?: Country): User[] =>

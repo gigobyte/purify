@@ -61,14 +61,14 @@ const UtilContent = util => props => (
       <ExamplesContainer>
         <Example>
           <ExampleHeader>How to import</ExampleHeader>
-          <SyntaxHighlighter language="typescript" style={highlightStyle}>
+          <SyntaxHighlighter language="javascript" style={highlightStyle}>
             {util.example.import}
           </SyntaxHighlighter>
         </Example>
         {util.example.before && (
           <Example>
             <ExampleHeader>Without {util.name}</ExampleHeader>
-            <SyntaxHighlighter language="typescript" style={highlightStyle}>
+            <SyntaxHighlighter language="javascript" style={highlightStyle}>
               {util.example.before.join('\n')}
             </SyntaxHighlighter>
           </Example>
@@ -76,7 +76,7 @@ const UtilContent = util => props => (
         {util.example.after && (
           <Example>
             <ExampleHeader>With {util.name}</ExampleHeader>
-            <SyntaxHighlighter language="typescript" style={highlightStyle}>
+            <SyntaxHighlighter language="javascript" style={highlightStyle}>
               {util.example.after.join('\n')}
             </SyntaxHighlighter>
           </Example>

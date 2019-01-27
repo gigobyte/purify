@@ -100,7 +100,7 @@ const DataTypeContent = adt => props => (
         {adt.examples.map(example => (
           <Example>
             <ExampleHeader>{example.title}</ExampleHeader>
-            <SyntaxHighlighter language="typescript" style={highlightStyle}>
+            <SyntaxHighlighter language="javascript" style={highlightStyle}>
               {example.content.join('\n')}
             </SyntaxHighlighter>
           </Example>

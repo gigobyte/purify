@@ -42,7 +42,7 @@ const v011 = props => (
       value. Because of it's utility there is an implementation of this data
       structure in pretty much all ML languages, which is why it's now a part of
       purify too. Let's look at some example code:
-      <SyntaxHighlighter language="typescript" style={highlightStyle}>
+      <SyntaxHighlighter language="javascript" style={highlightStyle}>
         {`import { NonEmptyList, head } from 'purify-ts/adts/NonEmptyList'
 
 // Create functions with a contract - the caller has to verify that the input is valid instead of the callee
@@ -68,7 +68,7 @@ const randEl: Maybe<number> = NonEmptyList.fromArray(numbers).map(getRandomEleme
       v0.11 makes a lot of improvements to type safety. Using one of
       TypeScript's more unique features - type predicates, the compiler can now
       know when it's safe to extract a value from a Maybe or Either.
-      <SyntaxHighlighter language="typescript" style={highlightStyle}>
+      <SyntaxHighlighter language="javascript" style={highlightStyle}>
         {`const sometimesValue: Maybe<number> = ...
 
 sometimesValue.extract() // number | null
@@ -85,7 +85,7 @@ if (sometimesValue.isJust()) {
     <TopicDescription>
       You can now use a wildcard when pattern matching a Maybe, Either or any
       other ADT that supports pattern matching.
-      <SyntaxHighlighter language="typescript" style={highlightStyle}>
+      <SyntaxHighlighter language="javascript" style={highlightStyle}>
         {` // v0.10
 adt.caseOf({ Just: value => 0, Nothing: () => 0})
 
@@ -99,7 +99,7 @@ adt.caseOf({ _: () => 0 })`}
       Tuples now implement the Iterable, ArrayLike and Foldable interfaces.
     </TopicDescription>
 
-    <SyntaxHighlighter language="typescript" style={highlightStyle}>
+    <SyntaxHighlighter language="javascript" style={highlightStyle}>
       {` const [ fst, snd ] = Tuple(1, 2)`}
     </SyntaxHighlighter>
 
@@ -124,7 +124,7 @@ adt.caseOf({ _: () => 0 })`}
       constructor name. Keep in mind that this behaviour is strictly for pretty
       printing, in the case of <HL>JSON.stringify</HL> it strips out any ADT
       info and leaves only relevant JSON data.
-      <SyntaxHighlighter language="typescript" style={highlightStyle}>
+      <SyntaxHighlighter language="javascript" style={highlightStyle}>
         {`const val = Just(5)
 console.log(val.toString()) // "Just(5)"
 console.log(JSON.stringify(val)) // "5"`}

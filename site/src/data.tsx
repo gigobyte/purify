@@ -526,7 +526,7 @@ const data: Data = {
             `declare function getUser(userId: number): Promise<Maybe<User>>`,
             `declare function insert(user: User): Promise<Document>`,
             '',
-            'cosnt processRegistration = (model: Model): MaybeAsync<Document> =>',
+            'const processRegistration = (model: Model): MaybeAsync<Document> =>',
             '    MaybeAsync(async ({ liftMaybe, fromPromise }) => {',
             '        const validatedModel: Model = await liftMaybe(validatedMode(model))',
             '        const user: User = await fromPromise(getUser(validatedModel.userId))',
@@ -653,7 +653,7 @@ const data: Data = {
           examples: [
             {
               input: `MaybeAsync(async ({ fromPromise }) => {
-const value: number = await fromPromise(Promise.resolve(Just(5)))
+  const value: number = await fromPromise(Promise.resolve(Just(5)))
 }).run()`,
               output: 'Promise {<resolved>: Just(5)}',
             },
@@ -1221,7 +1221,7 @@ const value: number = await fromPromise(Promise.resolve(Just(5)))
           ),
           examples: [
             {
-              input: `EitherAsync<string, never>(async ({ liftEither }) => { return await liftEither(Left('Error')) }).run()`,
+              input: `EitherAsync<string, never>(({ liftEither }) => liftEither(Left('Error'))).run()`,
               output: `Promise {<resolved>: Left('Error')}`,
             },
             {

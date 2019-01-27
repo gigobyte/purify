@@ -65,7 +65,7 @@ const MaybeApiGuide = props => (
     from a function that may throw an exception. <br />
     `fromPredicate` is on the list because it can be used to cover all kinds of
     complicated checks, for example:
-    <SyntaxHighlighter language="typescript" style={highlightStyle}>
+    <SyntaxHighlighter language="javascript" style={highlightStyle}>
       {`const _ = Maybe.fromPredicate(x => x && x.length > 0, value)`}
     </SyntaxHighlighter>
     <MethodName href="/adts/Maybe/#chainNullable">chainNullable</MethodName>
@@ -76,14 +76,14 @@ const MaybeApiGuide = props => (
     If you are already familiar with the <HL>chain</HL> method (a.k.a.{' '}
     <HL>bind</HL>, <HL>flatMap</HL> or <HL>>>=</HL>) you may think of using it
     in combination with any of the methods mentioned above: <br />
-    <SyntaxHighlighter language="typescript" style={highlightStyle}>
+    <SyntaxHighlighter language="javascript" style={highlightStyle}>
       {`myMaybe.chain(x => Maybe.fromNullable(transform(x)))`}
     </SyntaxHighlighter>
     There's nothing wrong with that approach, but there's a helper method called
     `chainNullable` that does exactly the same thing <br />
     without you having to manually construct a Maybe out of the return value of
     the transformation function. <br />
-    <SyntaxHighlighter language="typescript" style={highlightStyle}>
+    <SyntaxHighlighter language="javascript" style={highlightStyle}>
       {`myMaybe.chainNullable(x => transform(x))
 // or just straight up
 myMaybe.chainNullable(transform)`}
