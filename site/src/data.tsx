@@ -625,6 +625,14 @@ const data: Data = {
             },
           ],
         },
+        {
+          name: 'toEitherAsync',
+          description:
+            'Converts `this` to a EitherAsync with a default error value',
+          signatureML: 'MaybeAsync b ~> a -> EitherAsync a b',
+          signatureTS: '<L>(error: L): EitherAsync<L, T>',
+          examples: [],
+        },
       ],
       helperMethods: [
         {
