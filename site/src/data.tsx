@@ -1618,7 +1618,7 @@ const data: Data = {
       description:
         'This module contains type-safe functions for working with arrays.',
       example: {
-        import: `import { head, last, tail, init, uncons } from 'purify-ts/List'`,
+        import: `import { List } from 'purify-ts/List'`,
       },
       methods: [
         {
@@ -1627,8 +1627,8 @@ const data: Data = {
           signatureML: 'Integer -> [a] -> Maybe a',
           signatureTS: '<T>(index: number, list: T[]): Maybe<T>',
           examples: [
-            { input: 'at(0, [1, 2])', output: 'Just(1)' },
-            { input: 'at(2, [1, 2])', output: 'Nothing' },
+            { input: 'List.at(0, [1, 2])', output: 'Just(1)' },
+            { input: 'List.at(2, [1, 2])', output: 'Nothing' },
           ],
         },
         {
@@ -1637,8 +1637,8 @@ const data: Data = {
           signatureML: '[a] -> Maybe a',
           signatureTS: '<T>(list: T[]): Maybe<T>',
           examples: [
-            { input: 'head([1])', output: 'Just(1)' },
-            { input: 'head([])', output: 'Nothing' },
+            { input: 'List.head([1])', output: 'Just(1)' },
+            { input: 'List.head([])', output: 'Nothing' },
           ],
         },
         {
@@ -1648,8 +1648,8 @@ const data: Data = {
           signatureML: '[a] -> Maybe a',
           signatureTS: '<T>(list: T[]): Maybe<T>',
           examples: [
-            { input: 'last([1, 2, 3])', output: 'Just(3)' },
-            { input: 'last([])', output: 'Nothing' },
+            { input: 'List.last([1, 2, 3])', output: 'Just(3)' },
+            { input: 'List.last([])', output: 'Nothing' },
           ],
         },
         {
@@ -1658,9 +1658,9 @@ const data: Data = {
           signatureML: '[a] -> Maybe [a]',
           signatureTS: '<T>(list: T[]): Maybe<T[]>',
           examples: [
-            { input: 'tail([1, 2, 3])', output: 'Just([2, 3])' },
-            { input: 'tail([1])', output: 'Just([])' },
-            { input: 'tail([])', output: 'Nothing' },
+            { input: 'List.tail([1, 2, 3])', output: 'Just([2, 3])' },
+            { input: 'List.tail([1])', output: 'Just([])' },
+            { input: 'List.tail([])', output: 'Nothing' },
           ],
         },
         {
@@ -1669,9 +1669,9 @@ const data: Data = {
           signatureML: '[a] -> Maybe [a]',
           signatureTS: ' <T>(list: T[]): Maybe<T[]>',
           examples: [
-            { input: 'init([1, 2, 3])', output: 'Just([1, 2])' },
-            { input: 'init([1])', output: 'Just([])' },
-            { input: 'init([])', output: 'Nothing' },
+            { input: 'List.init([1, 2, 3])', output: 'Just([1, 2])' },
+            { input: 'List.init([1])', output: 'Just([])' },
+            { input: 'List.init([])', output: 'Nothing' },
           ],
         },
         {
@@ -1680,9 +1680,12 @@ const data: Data = {
           signatureML: '[a] -> Maybe (a, [a]) ',
           signatureTS: '<T>(list: T[]): Maybe<Tuple<T, T[]>>',
           examples: [
-            { input: 'uncons([1, 2, 3])', output: 'Just(Tuple(1, [2, 3]))' },
-            { input: 'uncons([1])', output: 'Just(Tuple(1, []))' },
-            { input: 'uncons([])', output: 'Nothing' },
+            {
+              input: 'List.uncons([1, 2, 3])',
+              output: 'Just(Tuple(1, [2, 3]))',
+            },
+            { input: 'List.uncons([1])', output: 'Just(Tuple(1, []))' },
+            { input: 'List.uncons([])', output: 'Nothing' },
           ],
         },
       ],

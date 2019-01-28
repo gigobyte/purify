@@ -1,5 +1,5 @@
 import './customMatchers'
-import * as List from './List'
+import { List } from './List'
 import { Just, Nothing } from './Maybe'
 import { Tuple } from './Tuple'
 
