@@ -17,8 +17,8 @@ const FAQ = props => (
         Here's a preview on what's currently being worked on and when to
         anticipate it:<br />
         <br />
-        0.13 - Data structures! ZipList, List, IO - there are just some of the
-        many future possibilities<br />
+        0.13 - Data structures! ZipList, List, IO, Validation - there are just
+        some of the many future possibilities<br />
         0.14 - General functional utilies (identity, const etc)<br />
         Future - Lens? Parser combinators?
       </li>

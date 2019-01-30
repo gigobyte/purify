@@ -41,6 +41,14 @@ const Changelog = props => (
     <div>
       <h1>Choose version:</h1>
       <VersionContainer>
+        <Version to="/changelog/0.12">0.12</Version>
+        <Description>
+          Complete rewrite, Async for all and more fantasy-land support
+        </Description>
+        <Date>January 2019</Date>
+      </VersionContainer>
+
+      <VersionContainer>
         <Version to="/changelog/0.11">0.11</Version>
         <Description>
           NonEmptyList, Tuple destructuring, Improved pretty printing and more
