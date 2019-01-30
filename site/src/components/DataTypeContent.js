@@ -113,7 +113,9 @@ const DataTypeContent = adt => props => (
         {adt.implements.map(typeclass => (
           <TypeclassBadge key={typeclass}>{typeclass}</TypeclassBadge>
         ))}
-        <TypeclassTooltip title="The badges on the left list all available fantasy-land instances for this data type" />
+        {adt.implements.length > 0 && (
+          <TypeclassTooltip title="The badges on the left list all available fantasy-land instances for this data type" />
+        )}
       </TypeclassBadges>
       <Description>{adt.description}</Description>
       <ExamplesContainer>
