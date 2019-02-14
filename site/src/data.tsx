@@ -1546,7 +1546,7 @@ const data: Data = {
         {
           name: 'fromArray',
           description:
-            'Return a `Just NonEmptyList` if the parameter has one or more elements, otherwise it returns `Nothing`.',
+            'Returns a `Just NonEmptyList` if the parameter has one or more elements, otherwise it returns `Nothing`.',
           signatureML: '[a] -> Maybe (NonEmptyList a)',
           signatureTS: '<T>(source: T[]): Maybe<NonEmptyList<T>>',
           examples: [
