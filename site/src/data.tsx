@@ -1675,6 +1675,32 @@ const data: Data = {
           ],
         },
         {
+          name: 'find',
+          description:
+            'Returns the first element which satisfies a predicate. A more typesafe version of the already existing List.prototype.find',
+          signatureML: '(a -> Int -> [a] -> Bool) -> [a] -> Maybe a',
+          signatureTS:
+            '<T>(f: (x: T, index: number, arr: T[]) => boolean, list: T[]): Maybe<T>',
+          examples: [
+            { input: 'List.find(x => x > 5, [1,3,7,9])', output: 'Just(7)' },
+            { input: 'List.find(x => x > 5)([1,3,7,9])', output: 'Just(7)' },
+            { input: 'List.find(x => x > 10, [1,3,7,9])', output: 'Nothing' },
+          ],
+        },
+        {
+          name: 'findIndex',
+          description:
+            'Returns the index of the first element which satisfies a predicate. A more typesafe version of the already existing List.prototype.findIndex',
+          signatureML: '(a -> Int -> [a] -> Bool) -> [a] -> Maybe Int',
+          signatureTS:
+            '<T>(f: (x: T, index: number, arr: T[]) => boolean, list: T[]): Maybe<number>',
+          examples: [
+            { input: 'List.find(x => x > 5, [1,3,7,9])', output: 'Just(2)' },
+            { input: 'List.find(x => x > 5)([1,3,7,9])', output: 'Just(2)' },
+            { input: 'List.find(x => x > 10, [1,3,7,9])', output: 'Nothing' },
+          ],
+        },
+        {
           name: 'uncons',
           description: `Returns a tuple of an array's head and tail.`,
           signatureML: '[a] -> Maybe (a, [a]) ',

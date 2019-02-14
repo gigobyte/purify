@@ -39,4 +39,22 @@ describe('List', () => {
     expect(List.uncons([1, 2])).toEqualStringified(Just(Tuple(1, [2])))
     expect(List.uncons([1, 2, 3])).toEqualStringified(Just(Tuple(1, [2, 3])))
   })
+
+  test('find', () => {
+    expect(List.find(x => x == 5)([1, 2, 3, 5])).toEqualStringified(Just(5))
+    expect(List.find(x => x == 5, [1, 2, 3, 5])).toEqualStringified(Just(5))
+    expect(List.find(x => x == 0, [1, 2, 3, 5])).toEqualStringified(Nothing)
+  })
+
+  test('findIndex', () => {
+    expect(List.findIndex(x => x == 5)([1, 2, 3, 5])).toEqualStringified(
+      Just(3)
+    )
+    expect(List.findIndex(x => x == 5, [1, 2, 3, 5])).toEqualStringified(
+      Just(3)
+    )
+    expect(List.findIndex(x => x == 0, [1, 2, 3, 5])).toEqualStringified(
+      Nothing
+    )
+  })
 })
