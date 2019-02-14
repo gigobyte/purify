@@ -1690,6 +1690,32 @@ const data: Data = {
         },
       ],
     },
+    {
+      name: 'Function',
+      description: 'This module contains some basic function utilities',
+      example: {
+        import: "import { id, always } from 'purify-ts/Function'",
+      },
+      methods: [
+        {
+          name: 'identity',
+          description: 'The identity function, returns the value it was given.',
+          examples: [],
+          signatureML: 'a -> a',
+          signatureTS: '<T>(x: T): T',
+        },
+        {
+          name: 'always',
+          description:
+            'Returns a function that always returns the same value. Also known as `const` in other languages.',
+          signatureML: 'a -> b -> a',
+          signatureTS: '<T>(x: T): <U>(y: U) => T',
+          examples: [
+            { input: '[1, 2, 3, 4].map(always(0))', output: '[0, 0, 0, 0]' },
+          ],
+        },
+      ],
+    },
   ],
 }
 
