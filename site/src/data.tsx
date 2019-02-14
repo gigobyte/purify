@@ -530,7 +530,7 @@ const data: Data = {
             '',
             'const processRegistration = (model: Model): MaybeAsync<Document> =>',
             '    MaybeAsync(async ({ liftMaybe, fromPromise }) => {',
-            '        const validatedModel: Model = await liftMaybe(validatedMode(model))',
+            '        const validatedModel: Model = await liftMaybe(validateMode(model))',
             '        const user: User = await fromPromise(getUser(validatedModel.userId))',
             '',
             '        return await insert(user)',
