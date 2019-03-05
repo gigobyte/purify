@@ -205,7 +205,7 @@ const IndexPage = props => (
           </SyntaxHighlighter>
           <RefactoringText>into</RefactoringText>
           <SyntaxHighlighter language="javascript" style={highlightStyle} show>
-            {`import { Maybe } from 'purify-ts/adts/Maybe'
+            {`import { Maybe } from 'purify-ts/Maybe'
 
 const getUsers = (country?: Country): User[] =>
     Maybe.fromNullable(country)
