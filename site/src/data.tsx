@@ -1624,7 +1624,7 @@ const data: Data = {
         {
           name: 'at',
           description: 'Returns the element at a given index of a list',
-          signatureML: 'Integer -> [a] -> Maybe a',
+          signatureML: 'Int -> [a] -> Maybe a',
           signatureTS: '<T>(index: number, list: T[]): Maybe<T>',
           examples: [
             { input: 'List.at(0, [1, 2])', output: 'Just(1)' },
@@ -1712,6 +1712,16 @@ const data: Data = {
             },
             { input: 'List.uncons([1])', output: 'Just(Tuple(1, []))' },
             { input: 'List.uncons([])', output: 'Nothing' },
+          ],
+        },
+        {
+          name: 'sum',
+          description: 'Returns the sum of all numbers inside an array.',
+          signatureML: '[Int] -> Int',
+          signatureTS: '(list: number[]): number',
+          examples: [
+            { input: 'List.sum([])', output: '0' },
+            { input: 'List.sum([1, 2, 3])', output: '6' },
           ],
         },
       ],

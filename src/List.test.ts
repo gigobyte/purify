@@ -40,6 +40,11 @@ describe('List', () => {
     expect(List.uncons([1, 2, 3])).toEqualStringified(Just(Tuple(1, [2, 3])))
   })
 
+  test('sum', () => {
+    expect(List.sum([])).toEqual(0)
+    expect(List.sum([1, 2, 3])).toEqual(6)
+  })
+
   test('find', () => {
     expect(List.find(x => x == 5)([1, 2, 3, 5])).toEqualStringified(Just(5))
     expect(List.find(x => x == 5, [1, 2, 3, 5])).toEqualStringified(Just(5))
