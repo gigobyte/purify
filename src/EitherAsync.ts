@@ -2,7 +2,6 @@ import { Either, Left, Right } from './Either'
 import { MaybeAsync } from './MaybeAsync'
 
 export interface EitherAsync<L, R> {
-  constructor: typeof EitherAsync
   /**
    * It's important to remember how `run` will behave because in an
    * async context there are other ways for a function to fail other
@@ -57,40 +56,49 @@ const helpers: EitherAsyncHelpers<any> = {
   }
 }
 
-/** Constructs a EitherAsync object from a function that takes an object full of helpers that let you lift things into the EitherAsync context and returns a Promise */
-export const EitherAsync = <L, R>(
-  runPromise: (helpers: EitherAsyncHelpers<L>) => PromiseLike<R>
-): EitherAsync<L, R> => ({
-  constructor: EitherAsync,
+class EitherAsyncImpl<L, R> implements EitherAsync<L, R> {
+  constructor(
+    private runPromise: (helpers: EitherAsyncHelpers<L>) => PromiseLike<R>
+  ) {}
+
   async run(): Promise<Either<L, R>> {
     try {
-      return Right(await runPromise(helpers))
+      return Right(await this.runPromise(helpers))
     } catch (e) {
       return Left(e)
     }
-  },
+  }
+
   map<R2>(f: (value: R) => R2): EitherAsync<L, R2> {
-    return EitherAsync(helpers => runPromise(helpers).then(f))
-  },
+    return EitherAsync(helpers => this.runPromise(helpers).then(f))
+  }
+
   chain<R2>(f: (value: R) => EitherAsync<L, R2>): EitherAsync<L, R2> {
     return EitherAsync(async helpers => {
-      const value = await runPromise(helpers)
+      const value = await this.runPromise(helpers)
       return await helpers.fromPromise(f(value).run())
     })
-  },
+  }
+
   toMaybeAsync(): MaybeAsync<R> {
     return MaybeAsync(async ({ liftMaybe }) => {
       const either = await this.run()
       return liftMaybe(either.toMaybe())
     })
-  },
+  }
 
   'fantasy-land/map'<R2>(f: (value: R) => R2): EitherAsync<L, R2> {
     return this.map(f)
-  },
+  }
+
   'fantasy-land/chain'<R2>(
     f: (value: R) => EitherAsync<L, R2>
   ): EitherAsync<L, R2> {
     return this.chain(f)
   }
-})
+}
+
+/** Constructs a EitherAsync object from a function that takes an object full of helpers that let you lift things into the EitherAsync context and returns a Promise */
+export const EitherAsync = <L, R>(
+  runPromise: (helpers: EitherAsyncHelpers<L>) => PromiseLike<R>
+): EitherAsync<L, R> => new EitherAsyncImpl(runPromise)

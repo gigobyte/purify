@@ -1,4 +1,3 @@
-import './customMatchers'
 import { MaybeAsync } from './MaybeAsync'
 import { Just, Nothing } from './Maybe'
 import { Left, Right } from './Either'
@@ -22,8 +21,8 @@ describe('MaybeAsync', () => {
       'fantasy-land/map'
     ](_ => 'val')
 
-    expect(await newMaybeAsync.run()).toEqualStringified(Just('val'))
-    expect(await newMaybeAsync2.run()).toEqualStringified(Just('val'))
+    expect(await newMaybeAsync.run()).toEqual(Just('val'))
+    expect(await newMaybeAsync2.run()).toEqual(Just('val'))
   })
 
   test('chain', async () => {
@@ -34,20 +33,18 @@ describe('MaybeAsync', () => {
       'fantasy-land/chain'
     ](_ => MaybeAsync(() => Promise.resolve('val')))
 
-    expect(await newMaybeAsync.run()).toEqualStringified(Just('val'))
-    expect(await newMaybeAsync2.run()).toEqualStringified(Just('val'))
+    expect(await newMaybeAsync.run()).toEqual(Just('val'))
+    expect(await newMaybeAsync2.run()).toEqual(Just('val'))
   })
 
   test('toEitherAsync', async () => {
     const ma = MaybeAsync(({ liftMaybe }) => liftMaybe(Nothing))
 
-    expect(await ma.toEitherAsync('Error').run()).toEqualStringified(
-      Left('Error')
-    )
+    expect(await ma.toEitherAsync('Error').run()).toEqual(Left('Error'))
 
     const ma2 = MaybeAsync(({ liftMaybe }) => liftMaybe(Just(5)))
 
-    expect(await ma2.toEitherAsync('Error').run()).toEqualStringified(Right(5))
+    expect(await ma2.toEitherAsync('Error').run()).toEqual(Right(5))
   })
 
   describe('run', () => {
@@ -74,7 +71,7 @@ describe('MaybeAsync', () => {
         await MaybeAsync(({ fromPromise }) =>
           fromPromise(Promise.resolve(Just(5)))
         ).run()
-      ).toEqualStringified(Just(5))
+      ).toEqual(Just(5))
     })
   })
 })

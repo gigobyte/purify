@@ -95,7 +95,7 @@ interface EitherTypeRef {
 
 export const Either: EitherTypeRef = {
   of<L, R>(value: R): Either<L, R> {
-    return Right(value)
+    return right(value)
   },
   lefts<L, R>(list: Either<L, R>[]): L[] {
     return list.filter(x => x.isLeft()).map(x => x.__value as L)
@@ -105,9 +105,9 @@ export const Either: EitherTypeRef = {
   },
   encase<L extends Error, R>(throwsF: () => R): Either<L, R> {
     try {
-      return Right(throwsF())
+      return right(throwsF())
     } catch (e) {
-      return Left(e)
+      return left(e)
     }
   },
 
@@ -116,240 +116,319 @@ export const Either: EitherTypeRef = {
   }
 }
 
-export function Right<R, L = never>(value: R): Either<L, R> {
-  return {
-    constructor: Either,
-    __value: value,
-    isLeft(): false {
-      return false
-    },
-    isRight(): true {
-      return true
-    },
-    toJSON(): R {
-      return value
-    },
-    inspect(): string {
-      return `Right(${value})`
-    },
-    toString(): string {
-      return this.inspect()
-    },
-    bimap<L2, R2>(_: (value: L) => L2, g: (value: R) => R2): Either<L2, R2> {
-      return Right(g(value))
-    },
-    map<R2>(f: (value: R) => R2): Either<L, R2> {
-      return Right(f(value))
-    },
-    mapLeft<L2>(_: (value: L) => L2): Either<L2, R> {
-      return this as any
-    },
-    ap<R2>(other: Either<L, (value: R) => R2>): Either<L, R2> {
-      return other.isLeft() ? other : this.map(other.__value as any)
-    },
-    equals(other: Either<L, R>): boolean {
-      return other.isRight() ? value === other.__value : false
-    },
-    chain<R2>(f: (value: R) => Either<L, R2>): Either<L, R2> {
-      return f(value)
-    },
-    join<R2>(this: Either<L, Either<L, R2>>): Either<L, R2> {
-      return value as any
-    },
-    alt(_: Either<L, R>): Either<L, R> {
-      return this
-    },
-    reduce<T>(reducer: (accumulator: T, value: R) => T, initialValue: T): T {
-      return reducer(initialValue, value)
-    },
-    extend<R2>(f: (value: Either<L, R>) => R2): Either<L, R2> {
-      return Right(f(this))
-    },
-    unsafeCoerce(): R {
-      return value
-    },
-    caseOf<T>(patterns: EitherPatterns<L, R, T>): T {
-      return '_' in patterns ? patterns._() : patterns.Right(value)
-    },
-    leftOrDefault(defaultValue: L): L {
-      return defaultValue
-    },
-    orDefault(_: R): R {
-      return value
-    },
-    orDefaultLazy(_: () => R): R {
-      return value
-    },
-    leftOrDefaultLazy(getDefaultValue: () => L): L {
-      return getDefaultValue()
-    },
-    ifLeft(_: (value: L) => any): Either<L, R> {
-      return this
-    },
-    ifRight(effect: (value: R) => any): Either<L, R> {
-      return effect(value), this
-    },
-    toMaybe(): Maybe<R> {
-      return Just(value)
-    },
-    leftToMaybe(): Maybe<L> {
-      return Nothing
-    },
-    either<T>(_: (value: L) => T, ifRight: (value: R) => T): T {
-      return ifRight(value)
-    },
-    extract(): L | R {
-      return value
-    },
+class Right<R, L = never> implements Either<L, R> {
+  'constructor' = Either
 
-    'fantasy-land/bimap'<L2, R2>(
-      f: (value: L) => L2,
-      g: (value: R) => R2
-    ): Either<L2, R2> {
-      return this.bimap(f, g)
-    },
-    'fantasy-land/map'<R2>(f: (value: R) => R2): Either<L, R2> {
-      return this.map(f)
-    },
-    'fantasy-land/ap'<R2>(other: Either<L, (value: R) => R2>): Either<L, R2> {
-      return this.ap(other)
-    },
-    'fantasy-land/equals'(other: Either<L, R>): boolean {
-      return this.equals(other)
-    },
-    'fantasy-land/chain'<R2>(f: (value: R) => Either<L, R2>): Either<L, R2> {
-      return this.chain(f)
-    },
-    'fantasy-land/alt'(other: Either<L, R>): Either<L, R> {
-      return this.alt(other)
-    },
-    'fantasy-land/reduce'<T>(
-      reducer: (accumulator: T, value: R) => T,
-      initialValue: T
-    ): T {
-      return this.reduce(reducer, initialValue)
-    },
-    'fantasy-land/extend'<R2>(f: (value: Either<L, R>) => R2): Either<L, R2> {
-      return this.extend(f)
-    }
+  __value: R
+
+  constructor(value: R) {
+    this.__value = value
+  }
+
+  isLeft(): false {
+    return false
+  }
+
+  isRight(): true {
+    return true
+  }
+
+  toJSON(): R {
+    return this.__value
+  }
+
+  inspect(): string {
+    return `Right(${this.__value})`
+  }
+
+  toString(): string {
+    return this.inspect()
+  }
+
+  bimap<L2, R2>(_: (value: L) => L2, g: (value: R) => R2): Either<L2, R2> {
+    return right(g(this.__value))
+  }
+
+  map<R2>(f: (value: R) => R2): Either<L, R2> {
+    return right(f(this.__value))
+  }
+
+  mapLeft<L2>(_: (value: L) => L2): Either<L2, R> {
+    return this as any
+  }
+
+  ap<R2>(other: Either<L, (value: R) => R2>): Either<L, R2> {
+    return other.isLeft() ? other : this.map(other.__value as any)
+  }
+
+  equals(other: Either<L, R>): boolean {
+    return other.isRight() ? this.__value === other.__value : false
+  }
+
+  chain<R2>(f: (value: R) => Either<L, R2>): Either<L, R2> {
+    return f(this.__value)
+  }
+
+  join<R2>(this: Either<L, Either<L, R2>>): Either<L, R2> {
+    return this.__value as any
+  }
+
+  alt(_: Either<L, R>): Either<L, R> {
+    return this
+  }
+
+  reduce<T>(reducer: (accumulator: T, value: R) => T, initialValue: T): T {
+    return reducer(initialValue, this.__value)
+  }
+
+  extend<R2>(f: (value: Either<L, R>) => R2): Either<L, R2> {
+    return right(f(this))
+  }
+
+  unsafeCoerce(): R {
+    return this.__value
+  }
+
+  caseOf<T>(patterns: EitherPatterns<L, R, T>): T {
+    return '_' in patterns ? patterns._() : patterns.Right(this.__value)
+  }
+
+  leftOrDefault(defaultValue: L): L {
+    return defaultValue
+  }
+
+  orDefault(_: R): R {
+    return this.__value
+  }
+
+  orDefaultLazy(_: () => R): R {
+    return this.__value
+  }
+
+  leftOrDefaultLazy(getDefaultValue: () => L): L {
+    return getDefaultValue()
+  }
+
+  ifLeft(_: (value: L) => any): this {
+    return this
+  }
+
+  ifRight(effect: (value: R) => any): this {
+    return effect(this.__value), this
+  }
+
+  toMaybe(): Maybe<R> {
+    return Just(this.__value)
+  }
+
+  leftToMaybe(): Maybe<L> {
+    return Nothing
+  }
+
+  either<T>(_: (value: L) => T, ifRight: (value: R) => T): T {
+    return ifRight(this.__value)
+  }
+
+  extract(): L | R {
+    return this.__value
+  }
+
+  'fantasy-land/bimap'<L2, R2>(
+    f: (value: L) => L2,
+    g: (value: R) => R2
+  ): Either<L2, R2> {
+    return this.bimap(f, g)
+  }
+
+  'fantasy-land/map'<R2>(f: (value: R) => R2): Either<L, R2> {
+    return this.map(f)
+  }
+
+  'fantasy-land/ap'<R2>(other: Either<L, (value: R) => R2>): Either<L, R2> {
+    return this.ap(other)
+  }
+
+  'fantasy-land/equals'(other: Either<L, R>): boolean {
+    return this.equals(other)
+  }
+
+  'fantasy-land/chain'<R2>(f: (value: R) => Either<L, R2>): Either<L, R2> {
+    return this.chain(f)
+  }
+
+  'fantasy-land/alt'(other: Either<L, R>): Either<L, R> {
+    return this.alt(other)
+  }
+
+  'fantasy-land/reduce'<T>(
+    reducer: (accumulator: T, value: R) => T,
+    initialValue: T
+  ): T {
+    return this.reduce(reducer, initialValue)
+  }
+
+  'fantasy-land/extend'<R2>(f: (value: Either<L, R>) => R2): Either<L, R2> {
+    return this.extend(f)
   }
 }
 
-export function Left<L, R = never>(value: L): Either<L, R> {
-  return {
-    constructor: Either,
-    __value: value,
-    isLeft(): true {
-      return true
-    },
-    isRight(): false {
-      return false
-    },
-    toJSON(): L {
-      return value
-    },
-    inspect(): string {
-      return `Left(${value})`
-    },
-    toString(): string {
-      return this.inspect()
-    },
-    bimap<L2, R2>(f: (value: L) => L2, _: (value: R) => R2): Either<L2, R2> {
-      return Left(f(value))
-    },
-    map<R2>(_: (value: R) => R2): Either<L, R2> {
-      return this as any
-    },
-    mapLeft<L2>(f: (value: L) => L2): Either<L2, R> {
-      return Left(f(value))
-    },
-    ap<R2>(other: Either<L, (value: R) => R2>): Either<L, R2> {
-      return other.isLeft() ? other : (this as any)
-    },
-    equals(other: Either<L, R>): boolean {
-      return other.isLeft() ? other.__value === value : false
-    },
-    chain<R2>(_: (value: R) => Either<L, R2>): Either<L, R2> {
-      return this as any
-    },
-    join<R2>(this: Either<L, Either<L, R2>>): Either<L, R2> {
-      return this as any
-    },
-    alt(other: Either<L, R>): Either<L, R> {
-      return other
-    },
-    reduce<T>(_: (accumulator: T, value: R) => T, initialValue: T): T {
-      return initialValue
-    },
-    extend<R2>(_: (value: Either<L, R>) => R2): Either<L, R2> {
-      return this as any
-    },
-    unsafeCoerce(): never {
-      throw new Error('Either got coerced to a Left')
-    },
-    caseOf<T>(patterns: EitherPatterns<L, R, T>): T {
-      return '_' in patterns ? patterns._() : patterns.Left(value)
-    },
-    leftOrDefault(_: L): L {
-      return value
-    },
-    orDefault(defaultValue: R): R {
-      return defaultValue
-    },
-    orDefaultLazy(getDefaultValue: () => R): R {
-      return getDefaultValue()
-    },
-    leftOrDefaultLazy(_: () => L): L {
-      return value
-    },
-    ifLeft(effect: (value: L) => any): Either<L, R> {
-      return effect(value), this
-    },
-    ifRight(_: (value: R) => any): Either<L, R> {
-      return this
-    },
-    toMaybe(): Maybe<R> {
-      return Nothing
-    },
-    leftToMaybe(): Maybe<L> {
-      return Just(value)
-    },
-    either<T>(ifLeft: (value: L) => T, _: (value: R) => T): T {
-      return ifLeft(value)
-    },
-    extract(): L | R {
-      return value
-    },
+class Left<L, R = never> implements Either<L, R> {
+  'constructor' = Either
+  __value: L
 
-    'fantasy-land/bimap'<L2, R2>(
-      f: (value: L) => L2,
-      g: (value: R) => R2
-    ): Either<L2, R2> {
-      return this.bimap(f, g)
-    },
-    'fantasy-land/map'<R2>(f: (value: R) => R2): Either<L, R2> {
-      return this.map(f)
-    },
-    'fantasy-land/ap'<R2>(other: Either<L, (value: R) => R2>): Either<L, R2> {
-      return this.ap(other)
-    },
-    'fantasy-land/equals'(other: Either<L, R>): boolean {
-      return this.equals(other)
-    },
-    'fantasy-land/chain'<R2>(f: (value: R) => Either<L, R2>): Either<L, R2> {
-      return this.chain(f)
-    },
-    'fantasy-land/alt'(other: Either<L, R>): Either<L, R> {
-      return this.alt(other)
-    },
-    'fantasy-land/reduce'<T>(
-      reducer: (accumulator: T, value: R) => T,
-      initialValue: T
-    ): T {
-      return this.reduce(reducer, initialValue)
-    },
-    'fantasy-land/extend'<R2>(f: (value: Either<L, R>) => R2): Either<L, R2> {
-      return this.extend(f)
-    }
+  constructor(value: L) {
+    this.__value = value
+  }
+
+  isLeft(): true {
+    return true
+  }
+
+  isRight(): false {
+    return false
+  }
+
+  toJSON(): L {
+    return this.__value
+  }
+
+  inspect(): string {
+    return `Left(${this.__value})`
+  }
+
+  toString(): string {
+    return this.inspect()
+  }
+
+  bimap<L2, R2>(f: (value: L) => L2, _: (value: R) => R2): Either<L2, R2> {
+    return left(f(this.__value))
+  }
+
+  map<R2>(_: (value: R) => R2): Either<L, R2> {
+    return this as any
+  }
+
+  mapLeft<L2>(f: (value: L) => L2): Either<L2, R> {
+    return left(f(this.__value))
+  }
+
+  ap<R2>(other: Either<L, (value: R) => R2>): Either<L, R2> {
+    return other.isLeft() ? other : (this as any)
+  }
+
+  equals(other: Either<L, R>): boolean {
+    return other.isLeft() ? other.__value === this.__value : false
+  }
+
+  chain<R2>(_: (value: R) => Either<L, R2>): Either<L, R2> {
+    return this as any
+  }
+
+  join<R2>(this: Either<L, Either<L, R2>>): Either<L, R2> {
+    return this as any
+  }
+
+  alt(other: Either<L, R>): Either<L, R> {
+    return other
+  }
+
+  reduce<T>(_: (accumulator: T, value: R) => T, initialValue: T): T {
+    return initialValue
+  }
+
+  extend<R2>(_: (value: Either<L, R>) => R2): Either<L, R2> {
+    return this as any
+  }
+
+  unsafeCoerce(): never {
+    throw new Error('Either got coerced to a Left')
+  }
+
+  caseOf<T>(patterns: EitherPatterns<L, R, T>): T {
+    return '_' in patterns ? patterns._() : patterns.Left(this.__value)
+  }
+
+  leftOrDefault(_: L): L {
+    return this.__value
+  }
+
+  orDefault(defaultValue: R): R {
+    return defaultValue
+  }
+
+  orDefaultLazy(getDefaultValue: () => R): R {
+    return getDefaultValue()
+  }
+
+  leftOrDefaultLazy(_: () => L): L {
+    return this.__value
+  }
+
+  ifLeft(effect: (value: L) => any): this {
+    return effect(this.__value), this
+  }
+
+  ifRight(_: (value: R) => any): this {
+    return this
+  }
+
+  toMaybe(): Maybe<R> {
+    return Nothing
+  }
+
+  leftToMaybe(): Maybe<L> {
+    return Just(this.__value)
+  }
+
+  either<T>(ifLeft: (value: L) => T, _: (value: R) => T): T {
+    return ifLeft(this.__value)
+  }
+
+  extract(): L | R {
+    return this.__value
+  }
+
+  'fantasy-land/bimap'<L2, R2>(
+    f: (value: L) => L2,
+    g: (value: R) => R2
+  ): Either<L2, R2> {
+    return this.bimap(f, g)
+  }
+
+  'fantasy-land/map'<R2>(f: (value: R) => R2): Either<L, R2> {
+    return this.map(f)
+  }
+
+  'fantasy-land/ap'<R2>(other: Either<L, (value: R) => R2>): Either<L, R2> {
+    return this.ap(other)
+  }
+
+  'fantasy-land/equals'(other: Either<L, R>): boolean {
+    return this.equals(other)
+  }
+
+  'fantasy-land/chain'<R2>(f: (value: R) => Either<L, R2>): Either<L, R2> {
+    return this.chain(f)
+  }
+
+  'fantasy-land/alt'(other: Either<L, R>): Either<L, R> {
+    return this.alt(other)
+  }
+
+  'fantasy-land/reduce'<T>(
+    reducer: (accumulator: T, value: R) => T,
+    initialValue: T
+  ): T {
+    return this.reduce(reducer, initialValue)
+  }
+
+  'fantasy-land/extend'<R2>(f: (value: Either<L, R>) => R2): Either<L, R2> {
+    return this.extend(f)
   }
 }
+
+const left = <L, R = never>(value: L): Either<L, R> => new Left(value)
+
+const right = <R, L = never>(value: R): Either<L, R> => new Right(value)
+
+export { left as Left, right as Right }

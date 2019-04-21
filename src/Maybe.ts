@@ -15,7 +15,7 @@ export interface Maybe<T> {
   /** Returns true if `this` is `Just`, otherwise it returns false */
   isJust(): this is AlwaysJust
   /** Returns true if `this` is `Nothing`, otherwise it returns false */
-  isNothing(): this is typeof Nothing
+  isNothing(): this is Nothing
   inspect(): string
   toString(): string
   toJSON(): T
@@ -78,9 +78,9 @@ interface MaybeTypeRef {
   /** Takes a value and wraps it in a `Just` */
   of<T>(value: T): Maybe<T>
   /** Returns `Nothing` */
-  empty(): typeof Nothing
+  empty(): Nothing
   /** Returns `Nothing` */
-  zero(): typeof Nothing
+  zero(): Nothing
 
   /** Takes a value and returns `Nothing` if the value is null or undefined, otherwise a `Just` is returned */
   fromNullable<T>(value: T | undefined | null | void): Maybe<T>
@@ -98,32 +98,32 @@ interface MaybeTypeRef {
   encase<T>(thunk: () => T): Maybe<T>
 
   'fantasy-land/of'<T>(value: T): Maybe<T>
-  'fantasy-land/empty'(): typeof Nothing
-  'fantasy-land/zero'(): typeof Nothing
+  'fantasy-land/empty'(): Nothing
+  'fantasy-land/zero'(): Nothing
 }
 
 export const Maybe: MaybeTypeRef = {
   of<T>(value: T): Maybe<T> {
-    return Just(value)
+    return just(value)
   },
-  empty(): typeof Nothing {
-    return Nothing
+  empty(): Nothing {
+    return nothing
   },
-  zero(): typeof Nothing {
-    return Nothing
+  zero(): Nothing {
+    return nothing
   },
   fromNullable<T>(value: T | undefined | null | void): Maybe<T> {
-    return value == null ? Nothing : Just(value)
+    return value == null ? nothing : just(value)
   },
   fromFalsy<T>(value: T | undefined | null | void): Maybe<T> {
-    return value ? Just(value) : Nothing
+    return value ? just(value) : nothing
   },
   fromPredicate<T>(pred: (value: T) => boolean, value?: T): any {
     switch (arguments.length) {
       case 1:
         return (value: T) => Maybe.fromPredicate(pred, value)
       default:
-        return pred(value!) ? Just(value!) : Nothing
+        return pred(value!) ? just(value!) : nothing
     }
   },
   mapMaybe<T, U>(f: (value: T) => Maybe<U>, list?: T[]): any {
@@ -139,239 +139,312 @@ export const Maybe: MaybeTypeRef = {
   },
   encase<T>(thunk: () => T): Maybe<T> {
     try {
-      return Just(thunk())
+      return just(thunk())
     } catch {
-      return Nothing
+      return nothing
     }
   },
 
   'fantasy-land/of'<T>(value: T): Maybe<T> {
     return this.of(value)
   },
-  'fantasy-land/empty'(): typeof Nothing {
+  'fantasy-land/empty'(): Nothing {
     return this.empty()
   },
-  'fantasy-land/zero'(): typeof Nothing {
+  'fantasy-land/zero'(): Nothing {
     return this.zero()
   }
 }
 
-/** Constructs a Just. Respents an optional value that exists. */
-export function Just<T>(value: T): Maybe<T> {
-  return {
-    constructor: Maybe,
-    __value: value,
-    isJust: () => {
-      return true
-    },
-    isNothing: () => {
-      return false
-    },
-    inspect(): string {
-      return `Just(${value})`
-    },
-    toString(): string {
-      return this.inspect()
-    },
-    toJSON(): T {
-      return value
-    },
-    equals(other: Maybe<T>): boolean {
-      return value === other.__value
-    },
-    map<U>(f: (value: T) => U): Maybe<U> {
-      return Just(f(value))
-    },
-    ap<U>(maybeF: Maybe<(value: T) => U>): Maybe<U> {
-      return maybeF.isNothing() ? Nothing : this.map(maybeF.__value)
-    },
-    alt(_: Maybe<T>): Maybe<T> {
-      return this
-    },
-    chain<U>(f: (value: T) => Maybe<U>): Maybe<U> {
-      return f(value)
-    },
-    chainNullable<U>(f: (value: T) => U | undefined | null | void): Maybe<U> {
-      return Maybe.fromNullable(f(value))
-    },
-    join<U>(this: Maybe<Maybe<U>>): Maybe<U> {
-      return this.__value
-    },
-    reduce<U>(reducer: (accumulator: U, value: T) => U, initialValue: U): U {
-      return reducer(initialValue, value)
-    },
-    extend<U>(f: (value: Maybe<T>) => U): Maybe<U> {
-      return Just(f(this))
-    },
-    unsafeCoerce(): T {
-      return value
-    },
-    caseOf<U>(patterns: MaybePatterns<T, U>): U {
-      return '_' in patterns ? patterns._() : patterns.Just(value)
-    },
-    orDefault(_: T): T {
-      return value
-    },
-    orDefaultLazy(_: () => T): T {
-      return value
-    },
-    toList(): T[] {
-      return [value]
-    },
-    mapOrDefault<U>(f: (value: T) => U, _: U): U {
-      return f(value)
-    },
-    extract(): T {
-      return value
-    },
-    extractNullable(): T {
-      return value
-    },
-    toEither<L>(_: L): Either<L, T> {
-      return Right(value)
-    },
-    ifJust(effect: (value: T) => any): Maybe<T> {
-      return effect(value), this
-    },
-    ifNothing(_: () => any): Maybe<T> {
-      return this
-    },
-    filter(pred: (value: T) => boolean): Maybe<T> {
-      return pred(value) ? Just(value) : Nothing
-    },
+class Just<T> implements Maybe<T> {
+  'constructor' = Maybe
 
-    'fantasy-land/equals'(other: Maybe<T>): boolean {
-      return this.equals(other)
-    },
-    'fantasy-land/map'<U>(f: (value: T) => U): Maybe<U> {
-      return this.map(f)
-    },
-    'fantasy-land/ap'<U>(maybeF: Maybe<(value: T) => U>): Maybe<U> {
-      return this.ap(maybeF)
-    },
-    'fantasy-land/alt'(other: Maybe<T>): Maybe<T> {
-      return this.alt(other)
-    },
-    'fantasy-land/chain'<U>(f: (value: T) => Maybe<U>): Maybe<U> {
-      return this.chain(f)
-    },
-    'fantasy-land/reduce'<U>(
-      reducer: (accumulator: U, value: T) => U,
-      initialValue: U
-    ): U {
-      return this.reduce(reducer, initialValue)
-    },
-    'fantasy-land/extend'<U>(f: (value: Maybe<T>) => U): Maybe<U> {
-      return this.extend(f)
-    }
+  __value: T
+
+  constructor(value: T) {
+    this.__value = value
   }
-}
 
-/** Represents a missing value, you can think of it as a smart 'null'. */
-export const Nothing: Maybe<never> = {
-  constructor: Maybe,
-  __value: null as never,
-  isJust: () => {
-    return false
-  },
-  isNothing: () => {
+  isJust(): boolean {
     return true
-  },
+  }
+
+  isNothing(): boolean {
+    return false
+  }
+
   inspect(): string {
-    return 'Nothing'
-  },
+    return `Just(${this.__value})`
+  }
+
   toString(): string {
     return this.inspect()
-  },
-  toJSON(): never {
-    return this.__value
-  },
-  equals<T>(other: Maybe<T>): boolean {
-    return this.__value === other.__value
-  },
-  map<T, U>(_: (value: T) => U): Maybe<U> {
-    return Nothing
-  },
-  ap<T, U>(_: Maybe<(value: T) => U>): Maybe<U> {
-    return Nothing
-  },
-  alt<T>(other: Maybe<T>): Maybe<T> {
-    return other
-  },
-  chain<T, U>(_: (value: T) => Maybe<U>): Maybe<U> {
-    return Nothing
-  },
-  chainNullable<T, U>(_: (value: T) => U | undefined | null | void): Maybe<U> {
-    return Nothing
-  },
-  join<U>(this: Maybe<Maybe<U>>): Maybe<U> {
-    return Nothing
-  },
-  reduce<U>(_: (accumulator: U, value: never) => U, initialValue: U): U {
-    return initialValue
-  },
-  extend<T, U>(_: (value: Maybe<T>) => U): Maybe<U> {
-    return Nothing
-  },
-  unsafeCoerce<T>(): T {
-    throw new Error('Maybe got coerced to a null')
-  },
-  caseOf<U>(patterns: MaybePatterns<never, U>): U {
-    return '_' in patterns ? patterns._() : patterns.Nothing()
-  },
-  orDefault<T>(defaultValue: T): T {
-    return defaultValue
-  },
-  orDefaultLazy<T>(getDefaultValue: () => T): T {
-    return getDefaultValue()
-  },
-  toList<T>(): T[] {
-    return []
-  },
-  mapOrDefault<T, U>(_: (value: T) => U, defaultValue: U): U {
-    return defaultValue
-  },
-  extract(): undefined {
-    return undefined
-  },
-  extractNullable(): null {
-    return null
-  },
-  toEither<L, T>(left: L): Either<L, T> {
-    return Left(left)
-  },
-  ifJust<T>(_: (value: T) => any): Maybe<T> {
-    return this
-  },
-  ifNothing<T>(effect: () => any): Maybe<T> {
-    return effect(), this
-  },
-  filter<T>(_: (value: T) => boolean): Maybe<T> {
-    return Nothing
-  },
+  }
 
-  'fantasy-land/equals'(other: Maybe<never>): boolean {
+  toJSON(): T {
+    return this.__value
+  }
+
+  equals(other: Maybe<T>): boolean {
+    return this.__value === other.__value
+  }
+
+  map<U>(f: (value: T) => U): Maybe<U> {
+    return just(f(this.__value))
+  }
+
+  ap<U>(maybeF: Maybe<(value: T) => U>): Maybe<U> {
+    return maybeF.isNothing() ? nothing : this.map(maybeF.__value)
+  }
+
+  alt(_: Maybe<T>): Maybe<T> {
+    return this
+  }
+
+  chain<U>(f: (value: T) => Maybe<U>): Maybe<U> {
+    return f(this.__value)
+  }
+  chainNullable<U>(f: (value: T) => U | undefined | null | void): Maybe<U> {
+    return Maybe.fromNullable(f(this.__value))
+  }
+
+  join<U>(this: Maybe<Maybe<U>>): Maybe<U> {
+    return this.__value
+  }
+
+  reduce<U>(reducer: (accumulator: U, value: T) => U, initialValue: U): U {
+    return reducer(initialValue, this.__value)
+  }
+
+  extend<U>(f: (value: Maybe<T>) => U): Maybe<U> {
+    return just(f(this))
+  }
+
+  unsafeCoerce(): T {
+    return this.__value
+  }
+
+  caseOf<U>(patterns: MaybePatterns<T, U>): U {
+    return '_' in patterns ? patterns._() : patterns.Just(this.__value)
+  }
+
+  orDefault(_: T) {
+    return this.__value
+  }
+
+  orDefaultLazy(_: () => T): T {
+    return this.__value
+  }
+
+  toList(): T[] {
+    return [this.__value]
+  }
+
+  mapOrDefault<U>(f: (value: T) => U, _: U): U {
+    return f(this.__value)
+  }
+
+  extract(): this extends AlwaysJust ? T : T | undefined {
+    return this.__value as this extends AlwaysJust ? T : T | undefined
+  }
+
+  extractNullable(): this extends AlwaysJust ? T : T | null {
+    return this.__value as this extends AlwaysJust ? T : T | null
+  }
+
+  toEither<L>(_: L): Either<L, T> {
+    return Right(this.__value)
+  }
+
+  ifJust(effect: (value: T) => any): this {
+    return effect(this.__value), this
+  }
+
+  ifNothing(_: () => any): this {
+    return this
+  }
+
+  filter(pred: (value: T) => boolean): Maybe<T> {
+    return pred(this.__value) ? just(this.__value) : nothing
+  }
+
+  'fantasy-land/equals'(other: Maybe<T>): boolean {
     return this.equals(other)
-  },
-  'fantasy-land/map'<T, U>(f: (value: T) => U): Maybe<U> {
+  }
+
+  'fantasy-land/map'<U>(f: (value: T) => U): Maybe<U> {
     return this.map(f)
-  },
-  'fantasy-land/ap'<T, U>(maybeF: Maybe<(value: T) => U>): Maybe<U> {
+  }
+
+  'fantasy-land/ap'<U>(maybeF: Maybe<(value: T) => U>): Maybe<U> {
     return this.ap(maybeF)
-  },
-  'fantasy-land/alt'(other: Maybe<never>): Maybe<never> {
+  }
+
+  'fantasy-land/alt'(other: Maybe<T>): Maybe<T> {
     return this.alt(other)
-  },
-  'fantasy-land/chain'<T, U>(f: (value: T) => Maybe<U>): Maybe<U> {
+  }
+
+  'fantasy-land/chain'<U>(f: (value: T) => Maybe<U>): Maybe<U> {
     return this.chain(f)
-  },
-  'fantasy-land/reduce'<T, U>(
+  }
+
+  'fantasy-land/reduce'<U>(
     reducer: (accumulator: U, value: T) => U,
     initialValue: U
   ): U {
     return this.reduce(reducer, initialValue)
-  },
-  'fantasy-land/extend'<T, U>(f: (value: Maybe<T>) => U): Maybe<U> {
+  }
+
+  'fantasy-land/extend'<U>(f: (value: Maybe<T>) => U): Maybe<U> {
     return this.extend(f)
   }
 }
+
+class Nothing implements Maybe<never> {
+  'constructor' = Maybe
+
+  __value!: never
+
+  isJust() {
+    return false
+  }
+
+  isNothing() {
+    return true
+  }
+
+  inspect(): string {
+    return 'Nothing'
+  }
+
+  toString(): string {
+    return this.inspect()
+  }
+
+  toJSON(): never {
+    return this.__value
+  }
+
+  equals<T>(other: Maybe<T>): boolean {
+    return this.__value === other.__value
+  }
+
+  map<U>(_: (value: never) => U): Maybe<U> {
+    return nothing
+  }
+
+  ap<U>(_: Maybe<(value: never) => U>): Maybe<U> {
+    return nothing
+  }
+
+  alt<T>(other: Maybe<T>): Maybe<T> {
+    return other
+  }
+
+  chain<U>(_: (value: never) => Maybe<U>): Maybe<U> {
+    return nothing
+  }
+
+  chainNullable<U>(_: (value: never) => U | undefined | null | void): Maybe<U> {
+    return nothing
+  }
+
+  join<U>(this: Maybe<Maybe<U>>): Maybe<U> {
+    return nothing
+  }
+
+  reduce<U>(_: (accumulator: U, value: never) => U, initialValue: U): U {
+    return initialValue
+  }
+
+  extend<U>(_: (value: Maybe<never>) => U): Maybe<U> {
+    return nothing
+  }
+
+  unsafeCoerce<T>(): T {
+    throw new Error('Maybe got coerced to a null')
+  }
+
+  caseOf<U>(patterns: MaybePatterns<never, U>): U {
+    return '_' in patterns ? patterns._() : patterns.Nothing()
+  }
+
+  orDefault<T>(defaultValue: T): T {
+    return defaultValue
+  }
+
+  orDefaultLazy<T>(getDefaultValue: () => T): T {
+    return getDefaultValue()
+  }
+
+  toList<T>(): T[] {
+    return []
+  }
+
+  mapOrDefault<U>(_: (value: never) => U, defaultValue: U): U {
+    return defaultValue
+  }
+
+  extract(): this extends AlwaysJust ? never : undefined {
+    return undefined as this extends AlwaysJust ? never : undefined
+  }
+
+  extractNullable(): this extends AlwaysJust ? never : null {
+    return null as this extends AlwaysJust ? never : null
+  }
+
+  toEither<L, T>(left: L): Either<L, T> {
+    return Left(left)
+  }
+
+  ifJust(_: (value: never) => any): this {
+    return this
+  }
+
+  ifNothing(effect: () => any): this {
+    return effect(), this
+  }
+
+  filter(_: (value: never) => boolean): Maybe<never> {
+    return nothing
+  }
+
+  'fantasy-land/equals'(other: Maybe<never>): boolean {
+    return this.equals(other)
+  }
+
+  'fantasy-land/map'<U>(f: (value: never) => U): Maybe<U> {
+    return this.map(f)
+  }
+
+  'fantasy-land/ap'<U>(maybeF: Maybe<(value: never) => U>): Maybe<U> {
+    return this.ap(maybeF)
+  }
+
+  'fantasy-land/alt'(other: Maybe<never>): Maybe<never> {
+    return this.alt(other)
+  }
+
+  'fantasy-land/chain'<U>(f: (value: never) => Maybe<U>): Maybe<U> {
+    return this.chain(f)
+  }
+
+  'fantasy-land/reduce'<U>(
+    reducer: (accumulator: U, value: never) => U,
+    initialValue: U
+  ): U {
+    return this.reduce(reducer, initialValue)
+  }
+
+  'fantasy-land/extend'<U>(f: (value: Maybe<never>) => U): Maybe<U> {
+    return this.extend(f)
+  }
+}
+
+/** Constructs a Just. Respents an optional value that exists. */
+const just = <T>(value: T): Just<T> => new Just(value)
+
+/** Represents a missing value, you can think of it as a smart 'null'. */
+const nothing = new Nothing()
+
+export { just as Just, nothing as Nothing }

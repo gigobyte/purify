@@ -1,4 +1,3 @@
-import './customMatchers'
 import { EitherAsync } from './EitherAsync'
 import { Left, Right, Either } from './Either'
 import { Nothing, Just } from './Maybe'
@@ -23,7 +22,7 @@ describe('EitherAsync', () => {
       return value
     })
 
-    expect(await ea.run()).toEqualStringified(Left('Test'))
+    expect(await ea.run()).toEqual(Left('Test'))
   })
 
   test('map', async () => {
@@ -32,8 +31,8 @@ describe('EitherAsync', () => {
       'fantasy-land/map'
     ](_ => 'val')
 
-    expect(await newEitherAsync.run()).toEqualStringified(Right('val'))
-    expect(await newEitherAsync2.run()).toEqualStringified(Right('val'))
+    expect(await newEitherAsync.run()).toEqual(Right('val'))
+    expect(await newEitherAsync2.run()).toEqual(Right('val'))
   })
 
   test('chain', async () => {
@@ -44,8 +43,8 @@ describe('EitherAsync', () => {
       'fantasy-land/chain'
     ](_ => EitherAsync(() => Promise.resolve('val')))
 
-    expect(await newEitherAsync.run()).toEqualStringified(Right('val'))
-    expect(await newEitherAsync2.run()).toEqualStringified(Right('val'))
+    expect(await newEitherAsync.run()).toEqual(Right('val'))
+    expect(await newEitherAsync2.run()).toEqual(Right('val'))
   })
 
   test('toMaybeAsync', async () => {
@@ -55,7 +54,7 @@ describe('EitherAsync', () => {
 
     const ma2 = EitherAsync(({ liftEither }) => liftEither(Right(5)))
 
-    expect(await ma2.toMaybeAsync().run()).toEqualStringified(Just(5))
+    expect(await ma2.toMaybeAsync().run()).toEqual(Just(5))
   })
 
   describe('run', () => {
@@ -64,7 +63,7 @@ describe('EitherAsync', () => {
         await EitherAsync(({ fromPromise }) =>
           fromPromise(Promise.resolve(Left('Error')))
         ).run()
-      ).toEqualStringified(Left('Error'))
+      ).toEqual(Left('Error'))
     })
 
     it('resolves to a Left with the rejected value if there is a rejected promise', async () => {
@@ -72,7 +71,7 @@ describe('EitherAsync', () => {
         await EitherAsync<void, never>(({ fromPromise }) =>
           fromPromise(Promise.reject('Some error'))
         ).run()
-      ).toEqualStringified(Left('Some error'))
+      ).toEqual(Left('Some error'))
     })
 
     it('resolves to Left with an exception if there is an exception thrown', async () => {
@@ -80,7 +79,7 @@ describe('EitherAsync', () => {
         await EitherAsync(() => {
           throw new Error('!')
         }).run()
-      ).toEqualStringified(Left(Error('!')))
+      ).toEqual(Left(Error('!')))
     })
 
     it('resolve to Right if the promise resolves successfully', async () => {
@@ -88,7 +87,7 @@ describe('EitherAsync', () => {
         await EitherAsync(({ fromPromise }) =>
           fromPromise(Promise.resolve(Right(5)))
         ).run()
-      ).toEqualStringified(Right(5))
+      ).toEqual(Right(5))
     })
   })
 })

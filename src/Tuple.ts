@@ -56,95 +56,119 @@ export interface Tuple<F, S> extends Iterable<F | S>, ArrayLike<F | S> {
   'fantasy-land/ap'<T, S2>(f: Tuple<T, (value: S) => S2>): Tuple<F, S2>
 }
 
-const TupleConstructor = <F, S>(fst: F, snd: S): Tuple<F, S> => ({
-  constructor: Tuple,
-  0: fst,
-  1: snd,
-  length: 2,
+class TupleImpl<F, S> implements Tuple<F, S> {
+  'constructor' = Tuple
+
+  0: F
+  1: S
+  [index: number]: F | S
+  length: 2 = 2
+
+  constructor(private first: F, private second: S) {
+    this[0] = first
+    this[1] = second
+  }
+
   *[Symbol.iterator]() {
-    yield fst
-    yield snd
-  },
+    yield this.first
+    yield this.second
+  }
+
   toJSON(): [F, S] {
     return this.toArray()
-  },
+  }
+
   inspect(): string {
-    return `Tuple(${fst}, ${snd})`
-  },
+    return `Tuple(${this.first}, ${this.second})`
+  }
+
   toString(): string {
     return this.inspect()
-  },
+  }
+
   fst(): F {
-    return fst
-  },
+    return this.first
+  }
+
   snd(): S {
-    return snd
-  },
+    return this.second
+  }
+
   equals(other: Tuple<F, S>): boolean {
-    return fst === other.fst() && snd === other.snd()
-  },
+    return this.first === other.fst() && this.second === other.snd()
+  }
+
   bimap<F2, S2>(f: (fst: F) => F2, g: (snd: S) => S2): Tuple<F2, S2> {
-    return Tuple(f(fst), g(snd))
-  },
+    return Tuple(f(this.first), g(this.second))
+  }
+
   mapFirst<F2>(f: (fst: F) => F2): Tuple<F2, S> {
-    return Tuple(f(fst), snd)
-  },
+    return Tuple(f(this.first), this.second)
+  }
+
   map<S2>(f: (snd: S) => S2): Tuple<F, S2> {
-    return Tuple(fst, f(snd))
-  },
+    return Tuple(this.first, f(this.second))
+  }
+
   reduce<T>(reducer: (accumulator: T, value: S) => T, initialValue: T): T {
-    return reducer(initialValue, snd)
-  },
+    return reducer(initialValue, this.second)
+  }
+
   toArray(): [F, S] {
-    return [fst, snd]
-  },
+    return [this.first, this.second]
+  }
+
   swap(): Tuple<S, F> {
-    return Tuple(snd, fst)
-  },
+    return Tuple(this.second, this.first)
+  }
+
   ap<T, S2>(f: Tuple<T, (value: S) => S2>): Tuple<F, S2> {
-    return Tuple(fst, f.snd()(snd))
-  },
+    return Tuple(this.first, f.snd()(this.second))
+  }
 
   'fantasy-land/equals'(other: Tuple<F, S>): boolean {
     return this.equals(other)
-  },
+  }
   'fantasy-land/bimap'<F2, S2>(
     f: (fst: F) => F2,
     g: (snd: S) => S2
   ): Tuple<F2, S2> {
     return this.bimap(f, g)
-  },
+  }
   'fantasy-land/map'<S2>(f: (snd: S) => S2): Tuple<F, S2> {
     return this.map(f)
-  },
+  }
   'fantasy-land/reduce'<T>(
     reducer: (accumulator: T, value: S) => T,
     initialValue: T
   ): T {
     return this.reduce(reducer, initialValue)
-  },
+  }
   'fantasy-land/ap'<T, S2>(f: Tuple<T, (value: S) => S2>): Tuple<F, S2> {
     return this.ap(f)
   }
-})
+}
 
-export const Tuple: TupleTypeRef = Object.assign(TupleConstructor, {
-  fromArray: <F, S>([fst, snd]: [F, S]): Tuple<F, S> => {
-    return Tuple(fst, snd)
-  },
-  fanout: <F, S, T>(
-    ...args: [(value: T) => F, ((value: T) => S)?, T?]
-  ): any => {
-    const [f, g, value] = args
+export const Tuple: TupleTypeRef = Object.assign(
+  <F, S>(fst: F, snd: S) => new TupleImpl(fst, snd),
+  {
+    fromArray: <F, S>([fst, snd]: [F, S]): Tuple<F, S> => {
+      return Tuple(fst, snd)
+    },
+    fanout: <F, S, T>(
+      ...args: [(value: T) => F, ((value: T) => S)?, T?]
+    ): any => {
+      const [f, g, value] = args
 
-    switch (args.length) {
-      case 3:
-        return Tuple(f(value!), g!(value!))
-      case 2:
-        return (value: T) => Tuple.fanout(f, g!, value)
-      default:
-        return <S>(g: (value: T) => S) => (value: T) =>
-          Tuple.fanout(f, g, value)
+      switch (args.length) {
+        case 3:
+          return Tuple(f(value!), g!(value!))
+        case 2:
+          return (value: T) => Tuple.fanout(f, g!, value)
+        default:
+          return <S>(g: (value: T) => S) => (value: T) =>
+            Tuple.fanout(f, g, value)
+      }
     }
   }
-})
+)

@@ -2,7 +2,6 @@ import { Maybe, Just, Nothing } from './Maybe'
 import { EitherAsync } from './EitherAsync'
 
 export interface MaybeAsync<T> {
-  constructor: typeof MaybeAsync
   /**
    * It's important to remember how `run` will behave because in an
    * async context there are other ways for a function to fail other
@@ -50,38 +49,47 @@ const helpers: MaybeAsyncHelpers = {
   }
 }
 
-/** Constructs a MaybeAsync object from a function that takes an object full of helpers that let you lift things into the MaybeAsync context and returns a Promise */
-export const MaybeAsync = <T>(
-  runPromise: (helpers: MaybeAsyncHelpers) => PromiseLike<T>
-): MaybeAsync<T> => ({
-  constructor: MaybeAsync,
+class MaybeAsyncImpl<T> implements MaybeAsync<T> {
+  constructor(
+    private runPromise: (helpers: MaybeAsyncHelpers) => PromiseLike<T>
+  ) {}
+
   async run(): Promise<Maybe<T>> {
     try {
-      return Just(await runPromise(helpers))
+      return Just(await this.runPromise(helpers))
     } catch {
       return Nothing
     }
-  },
+  }
+
   map<U>(f: (value: T) => U): MaybeAsync<U> {
-    return MaybeAsync(helpers => runPromise(helpers).then(f))
-  },
+    return MaybeAsync(helpers => this.runPromise(helpers).then(f))
+  }
+
   chain<U>(f: (value: T) => MaybeAsync<U>): MaybeAsync<U> {
     return MaybeAsync(async helpers => {
-      const value = await runPromise(helpers)
+      const value = await this.runPromise(helpers)
       return await helpers.fromPromise(f(value).run())
     })
-  },
+  }
+
   toEitherAsync<L>(error: L): EitherAsync<L, T> {
     return EitherAsync(async ({ liftEither }) => {
       const maybe = await this.run()
       return liftEither(maybe.toEither(error))
     })
-  },
+  }
 
   'fantasy-land/map'<U>(f: (value: T) => U): MaybeAsync<U> {
     return this.map(f)
-  },
+  }
+
   'fantasy-land/chain'<U>(f: (value: T) => MaybeAsync<U>): MaybeAsync<U> {
     return this.chain(f)
   }
-})
+}
+
+/** Constructs a MaybeAsync object from a function that takes an object full of helpers that let you lift things into the MaybeAsync context and returns a Promise */
+export const MaybeAsync = <T>(
+  runPromise: (helpers: MaybeAsyncHelpers) => PromiseLike<T>
+): MaybeAsync<T> => new MaybeAsyncImpl(runPromise)
