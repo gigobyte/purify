@@ -9,7 +9,6 @@ interface AlwaysJust {
 }
 
 export interface Maybe<T> {
-  constructor: typeof Maybe
   /** Internal property and subject to breaking changes, please use some of the available methods on the object if you want to access it */
   __value: T
   /** Returns true if `this` is `Just`, otherwise it returns false */
