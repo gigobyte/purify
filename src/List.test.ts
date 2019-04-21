@@ -1,6 +1,7 @@
 import { List } from './List'
 import { Just, Nothing } from './Maybe'
 import { Tuple } from './Tuple'
+import { compare } from './Function'
 
 describe('List', () => {
   test('at', () => {
@@ -54,5 +55,14 @@ describe('List', () => {
     expect(List.findIndex(x => x == 5)([1, 2, 3, 5])).toEqual(Just(3))
     expect(List.findIndex(x => x == 5, [1, 2, 3, 5])).toEqual(Just(3))
     expect(List.findIndex(x => x == 0, [1, 2, 3, 5])).toEqual(Nothing)
+  })
+
+  test('sort', () => {
+    const arr = [4, 3, 1000, 0]
+
+    expect(List.sort(compare, arr)).toEqual([0, 3, 4, 1000])
+    expect(List.sort(compare)(arr)).toEqual([0, 3, 4, 1000])
+    // immutability check
+    expect(List.sort(compare, arr)).not.toBe(arr)
   })
 })

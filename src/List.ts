@@ -1,5 +1,6 @@
 import { Tuple } from './Tuple'
 import { Maybe, Just, Nothing } from './Maybe'
+import { Order, orderToNumber } from './Function'
 
 /** Returns Just the first element of an array or Nothing if there is none. If you don't want to work with a Maybe but still keep type safety, check out `NonEmptyList` */
 const head = <T>(list: T[]): Maybe<T> =>
@@ -76,4 +77,27 @@ function at<T>(index: number, list?: T[]): any {
   }
 }
 
-export const List = { init, uncons, at, head, last, tail, find, findIndex, sum }
+/** Sorts an array with the given comparison function */
+function sort<T>(compare: (a: T, b: T) => Order, list: T[]): T[]
+function sort<T>(compare: (a: T, b: T) => Order): (list: T[]) => T[]
+function sort<T>(compare: (a: T, b: T) => Order, list?: T[]): any {
+  switch (arguments.length) {
+    case 1:
+      return (list: T[]) => sort(compare, list)
+    default:
+      return [...list!].sort((x, y) => orderToNumber(compare(x, y)))
+  }
+}
+
+export const List = {
+  init,
+  uncons,
+  at,
+  head,
+  last,
+  tail,
+  find,
+  findIndex,
+  sum,
+  sort
+}

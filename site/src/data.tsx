@@ -1724,6 +1724,25 @@ const data: Data = {
             { input: 'List.sum([1, 2, 3])', output: '6' },
           ],
         },
+        {
+          name: 'sort',
+          description: 'Sorts an array with the given comparison function.',
+          signatureML: '(a -> a -> Order) -> [a] -> [a]',
+          signatureTS: '<T>(compare: (a: T, b: T) => Order, list: T[]): T[]',
+          examples: [
+            {
+              input:
+                "import { compare } from 'purify-ts/Function'\nList.sort(compare, [1,100,-1]",
+              output: '[-1, 1, 100]',
+            },
+            {
+              input:
+                "import { Order } from 'purify-ts/Function'\nList.sort((x, y) => /* your own fn */, [0,102,-223]",
+              output:
+                '// Result depends on the returned Order enum value (Order.LT, Order.EQ or Order.GT)',
+            },
+          ],
+        },
       ],
     },
     {
@@ -1731,7 +1750,8 @@ const data: Data = {
       description:
         "This module contains some basic function utilities. Something to note is that purify doesn't expose a compose or pipe function - that is because in JavaScript/TypeScript using those functions is not ergonomic and is prone to type errors related to generics.",
       example: {
-        import: "import { id, always } from 'purify-ts/Function'",
+        import:
+          "import { Order, identity, always, ... } from 'purify-ts/Function'",
       },
       methods: [
         {
@@ -1749,6 +1769,30 @@ const data: Data = {
           signatureTS: '<T>(x: T): <U>(y: U) => T',
           examples: [
             { input: '[1, 2, 3, 4].map(always(0))', output: '[0, 0, 0, 0]' },
+          ],
+        },
+        {
+          name: 'compare',
+          description:
+            'Compares two values using the default "<" and ">" operators.',
+          signatureML: 'a -> b -> Order',
+          signatureTS: '<T>(x: T, y: T): Order',
+          examples: [
+            { input: 'compare(1, 10)', output: 'Order.LT' },
+            { input: "compare('a', 'a')", output: 'Order.EQ' },
+            { input: 'compare(10, 1)', output: 'Order.GT' },
+          ],
+        },
+        {
+          name: 'orderToNumber',
+          description:
+            'Maps the Order enum to the values expected by the standard ECMAScript library when doing comparison (Array.prototype.sort, for example).',
+          signatureML: 'Order -> Int',
+          signatureTS: '(order: Order): number',
+          examples: [
+            { input: 'orderToNumber(Order.LT)', output: '-1' },
+            { input: 'orderToNumber(Order.EQ)', output: '0' },
+            { input: 'orderToNumber(Order.GT)', output: '1' },
           ],
         },
       ],
