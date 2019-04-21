@@ -1728,7 +1728,8 @@ const data: Data = {
     },
     {
       name: 'Function',
-      description: 'This module contains some basic function utilities',
+      description:
+        "This module contains some basic function utilities. Something to note is that purify doesn't expose a compose or pipe function - that is because in JavaScript/TypeScript using those functions is not ergonomic and is prone to type errors related to generics.",
       example: {
         import: "import { id, always } from 'purify-ts/Function'",
       },
