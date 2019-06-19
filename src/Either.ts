@@ -5,7 +5,6 @@ export type EitherPatterns<L, R, T> =
   | { _: () => T }
 
 export interface Either<L, R> {
-  constructor: typeof Either
   /** Internal property and subject to breaking changes, please use some of the available methods on the object if you want to access it */
   __value: L | R
   /** Returns true if `this` is `Left`, otherwise it returns false */
@@ -117,8 +116,6 @@ export const Either: EitherTypeRef = {
 }
 
 class Right<R, L = never> implements Either<L, R> {
-  'constructor' = Either
-
   __value: R
 
   constructor(value: R) {
@@ -272,8 +269,9 @@ class Right<R, L = never> implements Either<L, R> {
   }
 }
 
+Right.prototype.constructor = Either as any
+
 class Left<L, R = never> implements Either<L, R> {
-  'constructor' = Either
   __value: L
 
   constructor(value: L) {
@@ -426,6 +424,8 @@ class Left<L, R = never> implements Either<L, R> {
     return this.extend(f)
   }
 }
+
+Left.prototype.constructor = Either as any
 
 const left = <L, R = never>(value: L): Either<L, R> => new Left(value)
 

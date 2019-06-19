@@ -156,8 +156,6 @@ export const Maybe: MaybeTypeRef = {
 }
 
 class Just<T> implements Maybe<T> {
-  'constructor' = Maybe
-
   __value: T
 
   constructor(value: T) {
@@ -299,9 +297,9 @@ class Just<T> implements Maybe<T> {
   }
 }
 
-class Nothing implements Maybe<never> {
-  'constructor' = Maybe
+Just.prototype.constructor = Maybe as any
 
+class Nothing implements Maybe<never> {
   __value!: never
 
   isJust() {
@@ -439,6 +437,8 @@ class Nothing implements Maybe<never> {
     return this.extend(f)
   }
 }
+
+Nothing.prototype.constructor = Maybe as any
 
 /** Constructs a Just. Respents an optional value that exists. */
 const just = <T>(value: T): Just<T> => new Just(value)

@@ -14,7 +14,6 @@ export interface TupleTypeRef {
 }
 
 export interface Tuple<F, S> extends Iterable<F | S>, ArrayLike<F | S> {
-  constructor: typeof Tuple
   0: F
   1: S
   [index: number]: F | S
@@ -57,8 +56,6 @@ export interface Tuple<F, S> extends Iterable<F | S>, ArrayLike<F | S> {
 }
 
 class TupleImpl<F, S> implements Tuple<F, S> {
-  'constructor' = Tuple
-
   0: F
   1: S
   [index: number]: F | S
@@ -172,3 +169,5 @@ export const Tuple: TupleTypeRef = Object.assign(
     }
   }
 )
+
+TupleImpl.prototype.constructor = Tuple as any
