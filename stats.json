@@ -33,8 +33,12 @@
       "path---changelog-0-11-a0e39f21c11f6a62c5ab.js.map"
     ],
     "component---src-pages-changelog-js": [
-      "component---src-pages-changelog-js-c7b8e861ffac31a44bb6.js",
-      "component---src-pages-changelog-js-c7b8e861ffac31a44bb6.js.map"
+      "component---src-pages-changelog-js-dca2b310ad91133fa2db.js",
+      "component---src-pages-changelog-js-dca2b310ad91133fa2db.js.map"
+    ],
+    "path---changelog-0-13": [
+      "path---changelog-0-13-a0e39f21c11f6a62c5ab.js",
+      "path---changelog-0-13-a0e39f21c11f6a62c5ab.js.map"
     ],
     "component---src-pages-changelog-0-12-js": [
       "component---src-pages-changelog-0-12-js-f5a381513e77b4715756.js",
@@ -119,8 +123,12 @@
       "path---utils-function-a0e39f21c11f6a62c5ab.js.map"
     ],
     "app": [
-      "app-8556715089cfbd49c0c9.js",
-      "app-8556715089cfbd49c0c9.js.map"
+      "app-d1d025c052bbec147082.js",
+      "app-d1d025c052bbec147082.js.map"
+    ],
+    "component---src-pages-changelog-0-13-js": [
+      "component---src-pages-changelog-0-13-js-830ca4f007a26d81e036.js",
+      "component---src-pages-changelog-0-13-js-830ca4f007a26d81e036.js.map"
     ],
     "component---src-pages-utils-list-js": [
       "component---src-pages-utils-list-js-6a090b918957060d6713.js",
