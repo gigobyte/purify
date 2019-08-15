@@ -26,7 +26,7 @@ const TopicDescription = styled.div`
   }
 `
 
-const v012 = props => (
+const v013 = props => (
   <Layout location={props.location}>
     <Title>Purify v0.13</Title>
     <Subtitle>August 15, 2019</Subtitle>
@@ -35,7 +35,7 @@ const v012 = props => (
       <Link to="/getting-started">Getting Started</Link> page. Not sure if you
       want to introduce purify as a dependency to your project? Check out the{' '}
       <Link to="/faq">FAQ</Link> page!<br />
-      This release is a small one, it includes mostly utilies and typesafe
+      This release is a small one, it includes mostly utilities and typesafe
       versions of already existing JavaScript functions.
     </div>
 
@@ -44,7 +44,7 @@ const v012 = props => (
       Purify now has a general utility module called Function, it includes
       things like the identity function. As of this release it's quite small but
       hopefully it grows as TypeScript starts supporting more and more
-      functional utilies like compose and pipe,{' '}
+      functional utilities like compose and pipe,{' '}
       <Link to="/utils/Function">check it out</Link>!<br />
     </TopicDescription>
 
@@ -67,4 +67,4 @@ const v012 = props => (
   </Layout>
 )
 
-export default v012
+export default v013
