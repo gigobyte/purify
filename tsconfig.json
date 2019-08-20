@@ -15,6 +15,7 @@
     "baseUrl": "./src/",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
+    "downlevelIteration": true,
     "strict": true
   },
   "exclude": ["site", "**/*.test.ts"]
