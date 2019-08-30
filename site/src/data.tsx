@@ -384,7 +384,7 @@ const data: Data = {
           signatureML: 'Maybe a ~ a -> a',
           signatureTS: '(defaultValue: T): T',
           description:
-            'Returns the default value if `this` is `Nothing`, otherwise it return the value inside `this`.',
+            'Returns the default value if `this` is `Nothing`, otherwise it returns the value inside `this`.',
           examples: [
             { input: 'Just(5).orDefault(0)', output: '5' },
             { input: 'Nothing.orDefault(0)', output: '0' },
@@ -1633,7 +1633,7 @@ const data: Data = {
         },
         {
           name: 'head',
-          description: `Returns Just the first element of an array or Nothing if there is none. If you don't want to work with a Maybe but still keep type safety, check out \`NonEmptyList\``,
+          description: `Returns Just the first element of an array or Nothing if there is none. If you don't want to work with a Maybe but still keep type safety, check out \`NonEmptyList\`.`,
           signatureML: '[a] -> Maybe a',
           signatureTS: '<T>(list: T[]): Maybe<T>',
           examples: [
@@ -1677,7 +1677,7 @@ const data: Data = {
         {
           name: 'find',
           description:
-            'Returns the first element which satisfies a predicate. A more typesafe version of the already existing List.prototype.find',
+            'Returns the first element which satisfies a predicate. A more typesafe version of the already existing List.prototype.find.',
           signatureML: '(a -> Int -> [a] -> Bool) -> [a] -> Maybe a',
           signatureTS:
             '<T>(f: (x: T, index: number, arr: T[]) => boolean, list: T[]): Maybe<T>',
@@ -1690,7 +1690,7 @@ const data: Data = {
         {
           name: 'findIndex',
           description:
-            'Returns the index of the first element which satisfies a predicate. A more typesafe version of the already existing List.prototype.findIndex',
+            'Returns the index of the first element which satisfies a predicate. A more typesafe version of the already existing List.prototype.findIndex.',
           signatureML: '(a -> Int -> [a] -> Bool) -> [a] -> Maybe Int',
           signatureTS:
             '<T>(f: (x: T, index: number, arr: T[]) => boolean, list: T[]): Maybe<number>',

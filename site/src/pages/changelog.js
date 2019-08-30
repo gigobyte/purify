@@ -42,7 +42,7 @@ const Changelog = props => (
       <h1>Choose version:</h1>
       <VersionContainer>
         <Version to="/changelog/0.13">0.13</Version>
-        <Description>Mostly quality of life utilies</Description>
+        <Description>Mostly quality of life utilities</Description>
         <Date>August 2019</Date>
       </VersionContainer>
 
