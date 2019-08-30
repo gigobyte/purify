@@ -1623,7 +1623,7 @@ const data: Data = {
       methods: [
         {
           name: 'at',
-          description: 'Returns the element at a given index of a list',
+          description: 'Returns the element at a given index of a list.',
           signatureML: 'Int -> [a] -> Maybe a',
           signatureTS: '<T>(index: number, list: T[]): Maybe<T>',
           examples: [
