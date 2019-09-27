@@ -173,7 +173,7 @@ class Just<T> implements Maybe<T> {
   }
 
   inspect(): string {
-    return `Just(${this.__value})`
+    return `Just(${JSON.stringify(this.__value)})`
   }
 
   toString(): string {

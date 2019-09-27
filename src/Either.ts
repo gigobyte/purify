@@ -135,7 +135,7 @@ class Right<R, L = never> implements Either<L, R> {
   }
 
   inspect(): string {
-    return `Right(${this.__value})`
+    return `Right(${JSON.stringify(this.__value)})`
   }
 
   toString(): string {
@@ -291,7 +291,7 @@ class Left<L, R = never> implements Either<L, R> {
   }
 
   inspect(): string {
-    return `Left(${this.__value})`
+    return `Left(${JSON.stringify(this.__value)})`
   }
 
   toString(): string {

@@ -76,7 +76,9 @@ class TupleImpl<F, S> implements Tuple<F, S> {
   }
 
   inspect(): string {
-    return `Tuple(${this.first}, ${this.second})`
+    return `Tuple(${JSON.stringify(this.first)}, ${JSON.stringify(
+      this.second
+    )})`
   }
 
   toString(): string {
