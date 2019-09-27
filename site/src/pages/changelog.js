@@ -10,6 +10,8 @@ const versionStyle = css`
   border-radius: 6px;
   text-decoration: none;
   color: #2877ad;
+  min-width: 42px;
+  text-align: center;
 `
 
 const Version = styled(Link)`
@@ -19,7 +21,8 @@ const Version = styled(Link)`
 `
 
 const VersionStatic = styled.div`
-  ${versionStyle} color: black;
+  ${versionStyle};
+  color: black;
 `
 
 const Description = styled.div`
@@ -40,6 +43,28 @@ const Changelog = props => (
   <Layout location={props.location}>
     <div>
       <h1>Choose version:</h1>
+      <VersionContainer>
+        <VersionStatic>0.13.2</VersionStatic>
+        <Description>
+          Check out the release on{' '}
+          <a href="https://github.com/gigobyte/purify/releases/tag/v0.13.2">
+            GitHub
+          </a>
+        </Description>
+        <Date>September 2019</Date>
+      </VersionContainer>
+
+      <VersionContainer>
+        <VersionStatic>0.13.1</VersionStatic>
+        <Description>
+          Check out the release on{' '}
+          <a href="https://github.com/gigobyte/purify/releases/tag/v0.13.1">
+            GitHub
+          </a>
+        </Description>
+        <Date>August 2019</Date>
+      </VersionContainer>
+
       <VersionContainer>
         <Version to="/changelog/0.13">0.13</Version>
         <Description>Mostly quality of life utilities</Description>
