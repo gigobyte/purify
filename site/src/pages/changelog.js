@@ -10,13 +10,13 @@ const versionStyle = css`
   border-radius: 6px;
   text-decoration: none;
   color: #2877ad;
-  min-width: 42px;
+  width: 42px;
   text-align: center;
+  height: 25px;
 `
 
 const Version = styled(Link)`
   display: block;
-  height: 25px;
   ${versionStyle};
 `
 
@@ -31,12 +31,20 @@ const Description = styled.div`
 
 const Date = styled.div`
   flex: 1;
+
+  @media only screen and (max-width: 768px) {
+    text-align: right;
+  }
 `
 
 const VersionContainer = styled.div`
   display: flex;
   width: 85%;
   padding-bottom: 10px;
+
+  @media only screen and (max-width: 768px) {
+    width: 100%;
+  }
 `
 
 const Changelog = props => (
