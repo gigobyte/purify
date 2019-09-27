@@ -8,6 +8,8 @@ interface AlwaysJust {
   kind: '$$MaybeAlwaysJust'
 }
 
+type ExtractMaybe<T, TDefault> = T extends never ? TDefault : T | TDefault
+
 export interface Maybe<T> {
   /** Internal property and subject to breaking changes, please use some of the available methods on the object if you want to access it */
   __value: T
@@ -49,9 +51,9 @@ export interface Maybe<T> {
   /** Maps over `this` and returns the resulting value or returns the default value if `this` is `Nothing` */
   mapOrDefault<U>(f: (value: T) => U, defaultValue: U): U
   /** Returns the value inside `this` or undefined if `this` is `Nothing`. Use `extractNullable` if you need a null returned instead */
-  extract(): this extends AlwaysJust ? T : T | undefined
+  extract(): this extends AlwaysJust ? T : ExtractMaybe<T, undefined>
   /** Returns the value inside `this` or null if `this` is `Nothing`. Use `extract` if you need an undefined returned instead */
-  extractNullable(): this extends AlwaysJust ? T : T | null
+  extractNullable(): this extends AlwaysJust ? T : ExtractMaybe<T, null>
   /** Constructs a `Right` from a `Just` or a `Left` with a provided left value if `this` is `Nothing` */
   toEither<L>(left: L): Either<L, T>
   /** Runs an effect if `this` is `Just`, returns `this` to make chaining other methods possible */
@@ -241,12 +243,14 @@ class Just<T> implements Maybe<T> {
     return f(this.__value)
   }
 
-  extract(): this extends AlwaysJust ? T : T | undefined {
-    return this.__value as this extends AlwaysJust ? T : T | undefined
+  extract(): this extends AlwaysJust ? T : ExtractMaybe<T, undefined> {
+    return this.__value as this extends AlwaysJust
+      ? T
+      : ExtractMaybe<T, undefined>
   }
 
-  extractNullable(): this extends AlwaysJust ? T : T | null {
-    return this.__value as this extends AlwaysJust ? T : T | null
+  extractNullable(): this extends AlwaysJust ? T : ExtractMaybe<T, null> {
+    return this.__value as this extends AlwaysJust ? T : ExtractMaybe<T, null>
   }
 
   toEither<L>(_: L): Either<L, T> {
@@ -382,12 +386,16 @@ class Nothing implements Maybe<never> {
     return defaultValue
   }
 
-  extract(): this extends AlwaysJust ? never : undefined {
-    return undefined as this extends AlwaysJust ? never : undefined
+  extract(): this extends AlwaysJust ? never : ExtractMaybe<never, undefined> {
+    return undefined as this extends AlwaysJust
+      ? never
+      : ExtractMaybe<never, undefined>
   }
 
-  extractNullable(): this extends AlwaysJust ? never : null {
-    return null as this extends AlwaysJust ? never : null
+  extractNullable(): this extends AlwaysJust
+    ? never
+    : ExtractMaybe<never, null> {
+    return null as this extends AlwaysJust ? never : ExtractMaybe<never, null>
   }
 
   toEither<L, T>(left: L): Either<L, T> {
