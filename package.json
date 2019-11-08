@@ -32,5 +32,8 @@
     "ts-jest": "^24.0.0",
     "typescript": "3.6.4"
   },
-  "dependencies": {}
+  "dependencies": {
+    "fp-ts": "^2.1.1",
+    "io-ts": "^2.0.1"
+  }
 }
