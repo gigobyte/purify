@@ -2,6 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import Layout from '../../components/layout'
 import HL from '../../components/HL'
+import Link from 'gatsby-link'
 import SyntaxHighlighter from 'react-syntax-highlighter'
 import highlightStyle from 'react-syntax-highlighter/styles/hljs/googlecode'
 
@@ -14,7 +15,7 @@ const Note = styled.div`
   margin: 10px 0;
 `
 
-const MethodName = styled.a`
+const MethodName = styled(Link)`
   font-size: 17px;
   font-weight: bold;
   color: #3b74d7;
@@ -52,36 +53,35 @@ const MaybeApiGuide = props => (
       to use nulls, there are already a lot of utility libraries like ramda and
       lodash that allow you to do that. <br />
       With purify you can start using ubiquitous data structures that come with
-      a lot of literature and examples in various programming languages <br />
+      a lot of literature and examples in various programming languages (in this
+      case Maybe) <br />
       without sacrificing coding style or ease of interop, that's why using it
       instead of other libraries might be a good idea.
     </Note>
     <br />
-    <MethodName href="/adts/Maybe/#fromNullable">
+    <MethodName to="/adts/Maybe/#fromNullable">
       Maybe.fromNullable
-    </MethodName>{' '}
-    / <MethodName href="/adts/Maybe/#fromFalsy">Maybe.fromFalsy</MethodName> /{' '}
-    <MethodName href="/adts/Maybe/#fromPredicate">
-      Maybe.fromPredicate
-    </MethodName>{' '}
-    / <MethodName href="/adts/Maybe/#encase">Maybe.encase</MethodName>
+    </MethodName> /{' '}
+    <MethodName to="/adts/Maybe/#fromFalsy">Maybe.fromFalsy</MethodName> /{' '}
+    <MethodName to="/adts/Maybe/#fromPredicate">Maybe.fromPredicate</MethodName>{' '}
+    / <MethodName to="/adts/Maybe/#encase">Maybe.encase</MethodName>
     <br />
     These methods allow you to construct Maybe values from, as the names
     suggest, nullable and falsy values or in the case of the{' '}
-    <SmallMethodName href="/adts/Maybe/#encase">encase</SmallMethodName> method
-    - from a function that may throw an exception. <br />
+    <SmallMethodName to="/adts/Maybe/#encase">encase</SmallMethodName> method -
+    from a function that may throw an exception. <br />
     `fromPredicate` is on the list because it can be used to cover all kinds of
     complicated checks, for example:
     <SyntaxHighlighter language="javascript" style={highlightStyle}>
       {`const _ = Maybe.fromPredicate(x => x && x.length > 0, value)`}
     </SyntaxHighlighter>
-    <MethodName href="/adts/Maybe/#chainNullable">chainNullable</MethodName>
+    <MethodName to="/adts/Maybe/#chainNullable">chainNullable</MethodName>
     <br />
     Now that you have constructed your Maybe out of an optional value, you may
     want to transform it with a function that returns yet another optional
     value. <br />
     If you are already familiar with the{' '}
-    <SmallMethodName href="/adts/Maybe/#chain">chain</SmallMethodName> method
+    <SmallMethodName to="/adts/Maybe/#chain">chain</SmallMethodName> method
     (a.k.a. <HL>bind</HL>, <HL>flatMap</HL> or <HL>>>=</HL>) you may think of
     using it in combination with any of the methods mentioned above: <br />
     <SyntaxHighlighter language="javascript" style={highlightStyle}>
@@ -96,9 +96,9 @@ const MaybeApiGuide = props => (
 // or just straight up
 myMaybe.chainNullable(transform)`}
     </SyntaxHighlighter>
-    <MethodName href="/adts/Maybe/#extract">extract</MethodName> /{' '}
-    <MethodName href="/adts/Maybe/#extractNullable">extractNullable</MethodName>{' '}
-    / <MethodName href="/adts/Maybe/#unsafeCoerce">unsafeCoerce</MethodName>
+    <MethodName to="/adts/Maybe/#extract">extract</MethodName> /{' '}
+    <MethodName to="/adts/Maybe/#extractNullable">extractNullable</MethodName> /{' '}
+    <MethodName to="/adts/Maybe/#unsafeCoerce">unsafeCoerce</MethodName>
     <br />
     Sometimes you have to interact with code that expects a nullable value, in
     that case you can just unwrap a Maybe down to a primitive value like null or
@@ -118,20 +118,18 @@ myMaybe.chainNullable(transform)`}
     to focus on the fact that you rarely need to do so explicitly.<br />
     Try to split up your code into functions and then find ways to combine them
     using many of the available transformation methods like<br />
-    <SmallMethodName href="/adts/Maybe/#map">Maybe#map</SmallMethodName> or{' '}
-    <SmallMethodName href="/adts/Maybe/#chain">Maybe#chain</SmallMethodName> or{' '}
-    <SmallMethodName href="/adts/Maybe/#extend">Maybe#extend</SmallMethodName>{' '}
-    or
-    <SmallMethodName href="/adts/Maybe/#filter">
-      Maybe#filter
-    </SmallMethodName>... you get the point.<br />
+    <SmallMethodName to="/adts/Maybe/#map">Maybe#map</SmallMethodName> or{' '}
+    <SmallMethodName to="/adts/Maybe/#chain">Maybe#chain</SmallMethodName> or{' '}
+    <SmallMethodName to="/adts/Maybe/#extend">Maybe#extend</SmallMethodName> or{' '}
+    <SmallMethodName to="/adts/Maybe/#filter">Maybe#filter</SmallMethodName>...
+    you get the point.<br />
     There are so many methods you can chain so that your code is nice and
     declarative that you'll almost never have to unpack a Maybe and check
     manually.<br />
     There are some cases where that is needed though, let's go through them:{' '}
     <br /> <br />
-    <MethodName href="/adts/Maybe/#isJust">Maybe#isJust</MethodName> /{' '}
-    <MethodName href="/adts/Maybe/#isNothing">Maybe#isNothing</MethodName>
+    <MethodName to="/adts/Maybe/#isJust">Maybe#isJust</MethodName> /{' '}
+    <MethodName to="/adts/Maybe/#isNothing">Maybe#isNothing</MethodName>
     <br />
     The most primitive of the bunch, these methods enable us to do JS-style
     checking if a value is missing or not.<br />
@@ -139,18 +137,17 @@ myMaybe.chainNullable(transform)`}
     details, but it's generally not recommend to use those methods.<br />
     Better choices are almost always available.<br />
     <br />
-    <MethodName href="/adts/Maybe/#caseOf">Maybe#caseOf</MethodName> /{' '}
-    <MethodName href="/adts/Maybe/#reduce">Maybe#reduce</MethodName>
+    <MethodName to="/adts/Maybe/#caseOf">Maybe#caseOf</MethodName> /{' '}
+    <MethodName to="/adts/Maybe/#reduce">Maybe#reduce</MethodName>
     <br />
-    <SmallMethodName href="/adts/Maybe/#caseOf">caseOf</SmallMethodName> is the
+    <SmallMethodName to="/adts/Maybe/#caseOf">caseOf</SmallMethodName> is the
     go-to choice when none of the other methods seem good enough.<br />
     Since pattern matching is still not available (yet) in JavaScript, caseOf
     tries to mimic this behaviour, allowing you to branch your logic by asking
     you for two functions that will handle each case.<br />
-    <SmallMethodName href="/adts/Maybe/#reduce">reduce</SmallMethodName> is
-    very, very similar, in fact it's so similar that it looks almost useless.
-    The goal of reduce is to provide an instance for the Foldable typeclass for
-    Maybe.<br />
+    <SmallMethodName to="/adts/Maybe/#reduce">reduce</SmallMethodName> is very,
+    very similar, in fact it's so similar that it looks almost useless. The goal
+    of reduce is to provide an instance for the Foldable typeclass for Maybe.<br />
     If you like the minimalism of reduce and you don't care about Foldable or
     you haven't heard of it - no problem, you can use it instead of caseOf just
     fine!<br />
