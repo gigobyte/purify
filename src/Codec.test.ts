@@ -3,7 +3,6 @@ import {
   number,
   string,
   oneOf,
-  GetInterface,
   nullType,
   undefinedType,
   boolean,
@@ -11,7 +10,6 @@ import {
   array,
   record,
   exactly,
-  lazy,
   maybe,
   nonEmptyList,
   tuple

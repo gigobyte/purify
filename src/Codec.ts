@@ -268,5 +268,3 @@ export const tuple = <TS extends [Codec<any>, ...Codec<any>[]]>(
     },
     encode: input => input.map((x, i) => codecs[i].encode(x))
   })
-
-const a = tuple([number, string, boolean])
