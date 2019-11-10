@@ -13,7 +13,8 @@ import {
   exactly,
   lazy,
   maybe,
-  nonEmptyList
+  nonEmptyList,
+  tuple
 } from './Codec'
 import { Left, Right } from './Either'
 import { Just, Nothing } from './Maybe'
@@ -318,5 +319,29 @@ describe('Codec', () => {
         4
       ])
     })
+  })
+
+  describe('tuple', () => {
+    test('decode', () => {
+      expect(tuple([number]).decode([])).toEqual(Left('fail'))
+      expect(tuple([number]).decode([''])).toEqual(Left('fail'))
+      expect(tuple([number]).decode([0, 1])).toEqual(Left('fail'))
+
+      expect(tuple([number]).decode([0])).toEqual(Right([0]))
+    })
+  })
+
+  test('encode', () => {
+    const mockCodec = Codec.custom<number>({
+      decode: number.decode,
+      encode: (input: number) => input + 1
+    })
+
+    const mockCodec2 = Codec.custom<number>({
+      decode: number.decode,
+      encode: (input: number) => input + 2
+    })
+
+    expect(tuple([mockCodec, mockCodec2]).encode([0, 0])).toEqual([1, 2])
   })
 })

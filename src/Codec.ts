@@ -238,3 +238,35 @@ export const nonEmptyList = <T>(codec: Codec<T>): Codec<NonEmptyList<T>> => {
     encode: arrayCodec.encode
   })
 }
+
+export const tuple = <TS extends [Codec<any>, ...Codec<any>[]]>(
+  codecs: TS
+): Codec<
+  {
+    [i in keyof TS]: TS[i] extends Codec<infer U> ? U : never
+  }
+> =>
+  Codec.custom({
+    decode: input => {
+      if (!Array.isArray(input) || codecs.length !== input.length) {
+        return Left('fail')
+      } else {
+        const result: any = []
+
+        for (let i = 0; i < codecs.length; i++) {
+          const decoded = codecs[i].decode(input[i])
+
+          if (decoded.isRight()) {
+            result.push(decoded.extract())
+          } else {
+            return Left('fail')
+          }
+        }
+
+        return Right(result)
+      }
+    },
+    encode: input => input.map((x, i) => codecs[i].encode(x))
+  })
+
+const a = tuple([number, string, boolean])
