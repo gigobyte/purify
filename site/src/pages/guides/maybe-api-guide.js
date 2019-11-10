@@ -13,6 +13,11 @@ export const Note = styled.div`
   border-left-width: 8px;
   padding: 10px;
   margin: 10px 0;
+  overflow-x: auto;
+
+  @media only screen and (max-width: 768px) {
+    display: block;
+  }
 `
 
 const MethodName = styled(Link)`
