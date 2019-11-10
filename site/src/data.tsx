@@ -742,8 +742,8 @@ const data: Data = {
                 constructors and returning them from a function please don't
                 forget to add a type annotation to that function.<br />
                 Otherwise TypeScript is not smart enough to figure out the
-                correct return type of the function and you won't be able to use
-                the return value as expected.<br />
+                correct return type and you won't be able to use the return
+                value as expected.<br />
                 <Highlight>
                   {`// randomEither: () => Either<never, number> | Either<string, never>
 const randomEither = () => Math.random() ? Right(1) : Left('Error')
