@@ -136,27 +136,12 @@ const DataTypeContent = adt => props => (
           </Example>
         )}
       </ExamplesContainer>
-      <TopicHeader>Constructors</TopicHeader>
-      {adt.constructors.map(DataTypeMethod)}
-      {adt.staticMethods.length > 0 && (
-        <div>
-          <TopicHeader>Static methods</TopicHeader>
-          {adt.staticMethods.map(DataTypeMethod)}
-        </div>
-      )}
-      {adt.instanceMethods.length > 0 && (
-        <div>
-          <TopicHeader>Instance methods</TopicHeader>
-          {adt.instanceMethods.map(DataTypeMethod)}
-        </div>
-      )}
-      {adt.helperMethods &&
-        adt.helperMethods.length > 0 && (
-          <div>
-            <TopicHeader>Helper methods</TopicHeader>
-            {adt.helperMethods.map(DataTypeMethod)}
-          </div>
-        )}
+      {adt.content.map(x => (
+        <>
+          <TopicHeader>{x.title}</TopicHeader>
+          {x.methods.map(DataTypeMethod)}
+        </>
+      ))}
     </Container>
   </Layout>
 )

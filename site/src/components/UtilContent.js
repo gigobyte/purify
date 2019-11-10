@@ -82,8 +82,12 @@ const UtilContent = util => props => (
           </Example>
         )}
       </ExamplesContainer>
-      <TopicHeader>Methods</TopicHeader>
-      {util.methods.map(DataTypeMethod)}
+      {util.content.map(x => (
+        <>
+          <TopicHeader>{x.title}</TopicHeader>
+          {x.methods.map(DataTypeMethod)}
+        </>
+      ))}
     </Container>
   </Layout>
 )
