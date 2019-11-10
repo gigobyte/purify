@@ -1,7 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import SyntaxHighlighter from 'react-syntax-highlighter'
-import highlightStyle from 'react-syntax-highlighter/styles/hljs/googlecode'
+import { Highlight } from './HL'
 
 const Container = styled.div`
   padding: 15px 0px;
@@ -123,12 +122,6 @@ const MethodDescription = styled.div`
     padding: 10px 0;
   }
 `
-
-const Highlight = ({ children }) => (
-  <SyntaxHighlighter language="javascript" style={highlightStyle}>
-    {children}
-  </SyntaxHighlighter>
-)
 
 const DataTypeMethod = method => (
   <Container key={method.name}>

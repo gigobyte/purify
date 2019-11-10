@@ -1,7 +1,7 @@
 import React from 'react'
 import Link from 'gatsby-link'
 import styled, { css } from 'styled-components'
-import Layout from '../components/layout'
+import Layout from '../components/Layout'
 
 const versionStyle = css`
   margin-right: 15px;

@@ -4,6 +4,7 @@
   "version": "1.0.0",
   "author": "Stanislav Iliev <s.iliev3@gmail.com>",
   "dependencies": {
+    "@types/react-syntax-highlighter": "^11.0.1",
     "babel-plugin-styled-components": "^1.0.0",
     "gatsby": "^2.0.0",
     "gatsby-link": "^2.0.0",

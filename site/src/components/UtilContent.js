@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import DataTypeMethod from './DataTypeMethod'
 import SyntaxHighlighter from 'react-syntax-highlighter'
 import highlightStyle from 'react-syntax-highlighter/styles/hljs/googlecode'
-import Layout from './layout'
+import Layout from './Layout'
 
 const Container = styled.div``
 

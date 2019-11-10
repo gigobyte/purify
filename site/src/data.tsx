@@ -1,9 +1,10 @@
 import * as React from 'react'
-type Content = string | JSX.Element
+import { Note } from './pages/guides/maybe-api-guide'
+import { Highlight } from './components/HL'
 
 export interface MethodExample {
-  input: Content
-  output: Content
+  input: React.ReactNode
+  output: React.ReactNode
 }
 
 export interface DataTypeExample {
@@ -18,7 +19,7 @@ export interface DataTypeGuide {
 
 export interface Method {
   name: string
-  description: Content
+  description: React.ReactNode
   signatureML?: string
   signatureTS?: string
   examples: MethodExample[]
@@ -28,7 +29,7 @@ export interface DataType {
   name: string
   implements: string[]
   guides: DataTypeGuide[]
-  description: Content
+  description: React.ReactNode
   examples: DataTypeExample[]
   constructors: Method[]
   staticMethods: Method[]
@@ -38,7 +39,7 @@ export interface DataType {
 
 export interface Util {
   name: string
-  description: Content
+  description: React.ReactNode
   example: {
     import: string
     before?: string[]
@@ -732,8 +733,29 @@ const data: Data = {
       constructors: [
         {
           name: 'Left',
-          description:
-            'Constructs a Left. Most commonly represents information about an operation that failed.',
+          description: (
+            <div>
+              Constructs a Left. Most commonly represents information about an
+              operation that failed.<br />
+              <Note>
+                When creating Either instances using the Left and Right
+                constructors and returning them from a function please don't
+                forget to add a type annotation to that function.<br />
+                Otherwise TypeScript is not smart enough to figure out the
+                correct return type of the function and you won't be able to use
+                the return value as expected.<br />
+                <Highlight>
+                  {`// randomEither: () => Either<never, number> | Either<string, never>
+const randomEither = () => Math.random() ? Right(1) : Left('Error')
+
+randomEither().map(x => x)
+//             ~~~
+//This expression is not callable.
+//Each member of the union type ... has signatures, but none of those signatures are compatible with each other.`}
+                </Highlight>
+              </Note>
+            </div>
+          ),
           signatureML: 'a -> Either a b',
           signatureTS: '<L>(value: L): Either<L, never>',
           examples: [

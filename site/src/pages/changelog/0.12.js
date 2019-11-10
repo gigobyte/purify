@@ -1,10 +1,8 @@
 import React from 'react'
 import styled from 'styled-components'
 import Link from 'gatsby-link'
-import SyntaxHighlighter from 'react-syntax-highlighter'
-import highlightStyle from 'react-syntax-highlighter/styles/hljs/googlecode'
 import Layout from '../../components/Layout'
-import HL from '../../components/HL'
+import { HL } from '../../components/HL'
 
 const Title = styled.h1`
   margin-bottom: 0;

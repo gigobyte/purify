@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import Meta from '../components/Meta'
 
 import Sidebar from '../components/Sidebar'
-import './layout.css'
+import './Layout.css'
 
 const Container = styled.div`
   min-height: 100vh;

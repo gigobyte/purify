@@ -1,31 +1,8 @@
 import React from 'react'
-import styled from 'styled-components'
-import Layout from '../../components/layout'
-import HL from '../../components/HL'
+import Layout from '../../components/Layout'
+import { HL } from '../../components/HL'
 import SyntaxHighlighter from 'react-syntax-highlighter'
 import highlightStyle from 'react-syntax-highlighter/styles/hljs/googlecode'
-
-const Note = styled.div`
-  display: inline-block;
-  background-color: #fcf4cd;
-  border: 0 solid #f7e070;
-  border-left-width: 8px;
-  padding: 10px;
-  margin: 10px 0;
-`
-
-const MethodName = styled.a`
-  font-size: 17px;
-  font-weight: bold;
-  color: #3b74d7;
-  margin-top: 5px;
-  display: inline-block;
-  text-decoration: none;
-
-  &:hover {
-    text-decoration: underline;
-  }
-`
 
 const MaybeApiGuide = props => (
   <Layout location={props.location}>

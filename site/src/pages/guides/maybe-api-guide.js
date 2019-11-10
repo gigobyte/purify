@@ -1,12 +1,12 @@
 import React from 'react'
 import styled from 'styled-components'
-import Layout from '../../components/layout'
-import HL from '../../components/HL'
+import Layout from '../../components/Layout'
+import { HL } from '../../components/HL'
 import Link from 'gatsby-link'
 import SyntaxHighlighter from 'react-syntax-highlighter'
 import highlightStyle from 'react-syntax-highlighter/styles/hljs/googlecode'
 
-const Note = styled.div`
+export const Note = styled.div`
   display: inline-block;
   background-color: #fcf4cd;
   border: 0 solid #f7e070;
