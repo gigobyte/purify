@@ -46,4 +46,3 @@ You can find the documentation on the [official site](https://gigobyte.github.io
 - [Haskell](https://haskell-lang.org/)
 - [Arrow - Functional companion to Kotlin's Standard Library](http://arrow-kt.io/)
 - [fp-ts - Functional programming in TypeScript](https://github.com/gcanti/fp-ts)
-- [typical - playground for type-level primitives in TypeScript](https://github.com/tycho01/typical/)
