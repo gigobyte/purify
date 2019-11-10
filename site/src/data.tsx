@@ -746,12 +746,14 @@ const data: Data = {
                 value as expected.<br />
                 <Highlight>
                   {`// randomEither: () => Either<never, number> | Either<string, never>
-const randomEither = () => Math.random() ? Right(1) : Left('Error')
+const randomEither = () =>
+    Math.random() > 0.5 ? Right(1) : Left('Error')
 
 randomEither().map(x => x)
 //             ~~~
-//This expression is not callable.
-//Each member of the union type ... has signatures, but none of those signatures are compatible with each other.`}
+// This expression is not callable.
+// Each member of the union type ... has signatures,
+// but none of those signatures are compatible with each other.`}
                 </Highlight>
               </Note>
             </div>
