@@ -1970,6 +1970,19 @@ const data: Data = {
         },
       ],
     },
+    {
+      name: 'Codec',
+      description: '',
+      example: {
+        import: `import { Codec, string, number ... } from 'purify-ts/Codec'`,
+      },
+      content: [
+        {
+          title: 'Constructors',
+          methods: [],
+        },
+      ],
+    },
   ],
 }
 
