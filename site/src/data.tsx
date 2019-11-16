@@ -1979,8 +1979,56 @@ const data: Data = {
       content: [
         {
           title: 'Constructors',
-          methods: [],
+          methods: [
+            {
+              name: 'interface',
+              signatureTS: '<T extends Record<string, Codec<any>>>(properties: T): Codec<{[k in keyof T]: GetInterface<T[k]>}>',
+              description: 'Creates a codec for any JSON object',
+              examples: [
+                {
+                  input: `Codec.interface({
+    username: string,
+    age: number
+})`, output: `Codec<{username: string; age: number}>`
+                }
+              ]
+            },
+            {
+              name: 'custom',
+              signatureTS: '<T>(config: { decode: (value: unknown) => Either<string, T> encode: (value: T) => any}): Codec<T>',
+              description: 'Creates a codec for any type, you can add your own deserialization/validation logic in the decode argument',
+              examples: [
+                {
+                  input: `//            ↓↓↓ It's important to specify the type argument
+Codec.custom<string>({
+    decode: input => (typeof input === 'string' ? Right(input) : Left('fail')),
+    encode: input => input // strings have no serialization logic
+})`, output: 'Codec<string>'
+                }
+              ]
+            }
+          ],
         },
+        {
+          title: 'Primitive codecs',
+          methods: [
+            {
+              name: 'string',
+              signatureTS: 'Codec<string>',
+              description: `A codec for any string value. Most of the time you will use it to implement an interface codec (see the Codec#interface example above)`,
+              examples: [
+                {
+                  input: `string.decode('a string')`,
+                  output: `Right('a string')`
+                },
+                {
+                  input: 'string.decode(3.14)',
+                  output: `Left('fail')`
+                }
+              ]
+            }
+          ]
+        }
       ],
     },
   ],
