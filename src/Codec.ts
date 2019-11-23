@@ -6,6 +6,7 @@ import { NonEmptyList } from './NonEmptyList'
 export interface Codec<T> {
   decode: (input: unknown) => Either<string, T>
   encode: (input: T) => T
+  unsafeDecode: (input: unknown) => T
 }
 
 export type GetInterface<T extends Codec<any>> = T extends Codec<infer U>
@@ -23,42 +24,43 @@ export const Codec = {
       [k in keyof T]: GetInterface<T[k]>
     }
   > {
-    return {
-      decode: (input: any) => {
-        if (!isObject(input)) {
+    const decode = (input: any) => {
+      if (!isObject(input)) {
+        return Left('fail')
+      }
+
+      const result = {} as { [k in keyof T]: GetInterface<T[k]> }
+      const keys = Object.keys(properties)
+
+      for (const key of keys) {
+        const decodedProperty = properties[key].decode((input as any)[key])
+
+        if (decodedProperty.isLeft()) {
           return Left('fail')
         }
 
-        const result = {} as { [k in keyof T]: GetInterface<T[k]> }
-        const keys = Object.keys(properties)
-
-        for (const key of keys) {
-          const decodedProperty = properties[key].decode((input as any)[key])
-
-          if (decodedProperty.isLeft()) {
-            return Left('fail')
-          }
-
-          result[key as keyof T] = decodedProperty.extract()
-        }
-
-        return Right(result)
-      },
-      encode: (input: any) => {
-        const result = {} as { [k in keyof T]: GetInterface<T[k]> }
-        const keys = Object.keys(properties)
-
-        for (const key of keys) {
-          result[key as keyof T] = properties[key].encode(input[key])
-        }
-
-        return result
+        result[key as keyof T] = decodedProperty.extract()
       }
-    } as Codec<
-      {
-        [k in keyof T]: GetInterface<T[k]>
+
+      return Right(result)
+    }
+
+    const encode = (input: any) => {
+      const result = {} as { [k in keyof T]: GetInterface<T[k]> }
+      const keys = Object.keys(properties)
+
+      for (const key of keys) {
+        result[key as keyof T] = properties[key].encode(input[key])
       }
-    >
+
+      return result
+    }
+
+    return {
+      decode,
+      encode,
+      unsafeDecode: input => decode(input).unsafeCoerce()
+    }
   },
 
   custom<T>({
@@ -70,8 +72,9 @@ export const Codec = {
   }): Codec<T> {
     return {
       decode,
-      encode
-    } as Codec<T>
+      encode,
+      unsafeDecode: input => decode(input).unsafeCoerce()
+    }
   }
 }
 
