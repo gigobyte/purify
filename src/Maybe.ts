@@ -449,7 +449,7 @@ class Nothing implements Maybe<never> {
 Nothing.prototype.constructor = Maybe as any
 
 /** Constructs a Just. Respents an optional value that exists. */
-const just = <T>(value: T): Just<T> => new Just(value)
+const just = <T>(value: T): Maybe<T> => new Just(value)
 
 /** Represents a missing value, you can think of it as a smart 'null'. */
 const nothing = new Nothing()
