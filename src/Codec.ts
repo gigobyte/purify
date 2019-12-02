@@ -16,6 +16,34 @@ export type GetInterface<T extends Codec<any>> = T extends Codec<infer U>
 const isObject = (obj: unknown): obj is object =>
   typeof obj === 'object' && obj !== null && !Array.isArray(obj)
 
+const reportError = (type: string, input: unknown): string => {
+  let receivedString: string = ''
+
+  switch (typeof input) {
+    case 'undefined':
+      receivedString = 'undefined'
+      break
+
+    case 'object':
+      receivedString =
+        input === null
+          ? 'null'
+          : Array.isArray(input)
+          ? 'an array with value ' + JSON.stringify(input)
+          : 'an object with value ' + JSON.stringify(input)
+      break
+
+    case 'boolean':
+      receivedString = 'a boolean'
+      break
+  }
+
+  receivedString =
+    receivedString || `a ${typeof input} with value ${JSON.stringify(input)}`
+
+  return `Expected ${type}, but received ${receivedString}`
+}
+
 export const Codec = {
   interface<T extends Record<string, Codec<any>>>(
     properties: T
@@ -26,17 +54,27 @@ export const Codec = {
   > {
     const decode = (input: any) => {
       if (!isObject(input)) {
-        return Left('fail')
+        return Left(reportError('an object', input))
       }
 
       const result = {} as { [k in keyof T]: GetInterface<T[k]> }
       const keys = Object.keys(properties)
 
       for (const key of keys) {
+        if (!input.hasOwnProperty(key)) {
+          return Left(
+            `Problem with property "${key}": it does not exist in received object ${JSON.stringify(
+              input
+            )}`
+          )
+        }
+
         const decodedProperty = properties[key].decode((input as any)[key])
 
         if (decodedProperty.isLeft()) {
-          return Left('fail')
+          return Left(
+            `Problem with the value of property "${key}": ${decodedProperty.extract()}`
+          )
         }
 
         result[key as keyof T] = decodedProperty.extract()
@@ -79,27 +117,40 @@ export const Codec = {
 }
 
 export const string = Codec.custom<string>({
-  decode: input => (typeof input === 'string' ? Right(input) : Left('fail')),
+  decode: input =>
+    typeof input === 'string'
+      ? Right(input)
+      : Left(reportError('a string', input)),
   encode: identity
 })
 
 export const number = Codec.custom<number>({
-  decode: input => (typeof input === 'number' ? Right(input) : Left('fail')),
+  decode: input =>
+    typeof input === 'number'
+      ? Right(input)
+      : Left(reportError('a number', input)),
   encode: identity
 })
 
 export const nullType = Codec.custom<null>({
-  decode: input => (input === null ? Right(input) : Left('fail')),
+  decode: input =>
+    input === null ? Right(input) : Left(reportError('a null', input)),
   encode: identity
 })
 
 export const undefinedType = Codec.custom<undefined>({
-  decode: input => (input === undefined ? Right(input) : Left('fail')),
+  decode: input =>
+    input === undefined
+      ? Right(input)
+      : Left(reportError('an undefined', input)),
   encode: identity
 })
 
 export const boolean = Codec.custom<boolean>({
-  decode: input => (typeof input === 'boolean' ? Right(input) : Left('fail')),
+  decode: input =>
+    typeof input === 'boolean'
+      ? Right(input)
+      : Left(reportError('a boolean', input)),
   encode: identity
 })
 
@@ -113,14 +164,22 @@ export const oneOf = <T extends Array<Codec<any>>>(
 ): Codec<GetInterface<T extends Array<infer U> ? U : never>> =>
   Codec.custom({
     decode: input => {
+      let errors: string[] = []
+
       for (const codec of codecs) {
         const res = codec.decode(input)
         if (res.isRight()) {
           return res
+        } else {
+          errors.push(res.extract())
         }
       }
 
-      return Left('fail')
+      return Left(
+        `One of the following problems occured: ${errors
+          .map((err, i) => `(${i}) ${err}`)
+          .join(', ')}`
+      )
     },
     encode: input => {
       for (const codec of codecs) {
@@ -138,17 +197,19 @@ export const array = <T>(codec: Codec<T>): Codec<Array<T>> =>
   Codec.custom({
     decode: input => {
       if (!Array.isArray(input)) {
-        return Left('fail')
+        return Left(reportError('an array', input))
       } else {
         const result: T[] = []
 
-        for (const e of input) {
-          const decoded = codec.decode(e)
+        for (let i = 0; i < input.length; i++) {
+          const decoded = codec.decode(input[i])
 
           if (decoded.isRight()) {
             result.push(decoded.extract())
           } else {
-            return Left('fail')
+            return Left(
+              `Problem with value at index ${i}: ${decoded.extract()}`
+            )
           }
         }
 
@@ -160,7 +221,11 @@ export const array = <T>(codec: Codec<T>): Codec<Array<T>> =>
 
 const numberString = Codec.custom<any>({
   decode: input =>
-    string.decode(input).chain(x => (isFinite(+x) ? Right(x) : Left('fail'))),
+    string
+      .decode(input)
+      .chain(x =>
+        isFinite(+x) ? Right(x) : Left(reportError('a number key', input))
+      ),
   encode: identity
 })
 
@@ -175,7 +240,7 @@ export const record = <K extends keyof any, V>(
         (keyCodec as any) === number ? numberString : keyCodec
 
       if (!isObject(input)) {
-        return Left('fail')
+        return Left(reportError('an object', input))
       }
 
       for (const key of Object.keys(input)) {
@@ -185,8 +250,14 @@ export const record = <K extends keyof any, V>(
 
           if (decodedKey.isRight() && decodedValue.isRight()) {
             result[decodedKey.extract()] = decodedValue.extract()
-          } else {
-            return Left('fail')
+          } else if (decodedKey.isLeft()) {
+            return Left(
+              `Problem with key type of property "${key}": ${decodedKey.extract()}`
+            )
+          } else if (decodedValue.isLeft()) {
+            return Left(
+              `Problem with value of property "${key}": ${decodedValue.extract()}`
+            )
           }
         }
       }
@@ -211,7 +282,20 @@ export const exactly = <T extends string | number | boolean>(
 ): Codec<T> =>
   Codec.custom({
     decode: input =>
-      input === expectedValue ? Right(expectedValue) : Left('fail'),
+      input === expectedValue
+        ? Right(expectedValue)
+        : Left(
+            typeof input === typeof expectedValue
+              ? `Expected a ${typeof input} with a value of exactly ${JSON.stringify(
+                  expectedValue
+                )}, the types match, but the received value is ${JSON.stringify(
+                  input
+                )}`
+              : reportError(
+                  `a ${typeof expectedValue} with a value of exactly ${expectedValue}`,
+                  input
+                )
+          ),
     encode: identity
   })
 
@@ -237,7 +321,11 @@ export const nonEmptyList = <T>(codec: Codec<T>): Codec<NonEmptyList<T>> => {
     decode: input =>
       arrayCodec
         .decode(input)
-        .chain(x => NonEmptyList.fromArray(x).toEither('fail')),
+        .chain(x =>
+          NonEmptyList.fromArray(x).toEither(
+            `Expected an array with one or more elements, but received an empty array`
+          )
+        ),
     encode: arrayCodec.encode
   })
 }
@@ -251,8 +339,12 @@ export const tuple = <TS extends [Codec<any>, ...Codec<any>[]]>(
 > =>
   Codec.custom({
     decode: input => {
-      if (!Array.isArray(input) || codecs.length !== input.length) {
-        return Left('fail')
+      if (!Array.isArray(input)) {
+        return Left(reportError('an array', input))
+      } else if (codecs.length !== input.length) {
+        return Left(
+          `Expected an array of length ${codecs.length}, but received an array with length of ${input.length}`
+        )
       } else {
         const result: any = []
 
@@ -262,7 +354,9 @@ export const tuple = <TS extends [Codec<any>, ...Codec<any>[]]>(
           if (decoded.isRight()) {
             result.push(decoded.extract())
           } else {
-            return Left('fail')
+            return Left(
+              `Problem with value at index ${i}: ${decoded.extract()}`
+            )
           }
         }
 

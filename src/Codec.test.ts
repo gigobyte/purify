@@ -12,7 +12,8 @@ import {
   exactly,
   maybe,
   nonEmptyList,
-  tuple
+  tuple,
+  lazy
 } from './Codec'
 import { Left, Right } from './Either'
 import { Just, Nothing } from './Maybe'
@@ -26,16 +27,41 @@ describe('Codec', () => {
     })
 
     test('decode', () => {
-      const failingInputs = [0, {}, undefined, null, false, { a: 0 }, { b: '' }]
-
-      failingInputs.forEach(input => {
-        expect(mockCodec.decode(input)).toEqual(Left('fail'))
-      })
+      expect(mockCodec.decode(0)).toEqual(
+        Left('Expected an object, but received a number with value 0')
+      )
+      expect(mockCodec.decode({})).toEqual(
+        Left(
+          'Problem with property "a": it does not exist in received object {}'
+        )
+      )
+      expect(mockCodec.decode({ a: 0 })).toEqual(
+        Left(
+          'Problem with property "b": it does not exist in received object {"a":0}'
+        )
+      )
+      expect(mockCodec.decode({ b: '' })).toEqual(
+        Left(
+          'Problem with property "a": it does not exist in received object {"b":""}'
+        )
+      )
+      expect(mockCodec.decode({ a: '', b: '' })).toEqual(
+        Left(
+          'Problem with the value of property "a": Expected a number, but received a string with value ""'
+        )
+      )
 
       expect(mockCodec.decode({ a: 0, b: '' })).toEqual(Right({ a: 0, b: '' }))
       expect(mockCodec.decode({ a: 0, b: '', c: '' })).toEqual(
         Right({ a: 0, b: '' })
       )
+    })
+
+    test('unsafeDecode', () => {
+      expect(() => mockCodec.unsafeDecode({})).toThrowError(
+        new Error('Either got coerced to a Left')
+      )
+      expect(() => mockCodec.unsafeDecode({ a: 0, b: '' })).not.toThrow()
     })
 
     test('encode', () => {
@@ -50,11 +76,21 @@ describe('Codec', () => {
 
   describe('string', () => {
     test('decode', () => {
-      const failingInputs = [0, {}, undefined, null, false]
-
-      failingInputs.forEach(input => {
-        expect(string.decode(input)).toEqual(Left('fail'))
-      })
+      expect(string.decode(0)).toEqual(
+        Left('Expected a string, but received a number with value 0')
+      )
+      expect(string.decode({})).toEqual(
+        Left('Expected a string, but received an object with value {}')
+      )
+      expect(string.decode(undefined)).toEqual(
+        Left('Expected a string, but received undefined')
+      )
+      expect(string.decode(null)).toEqual(
+        Left('Expected a string, but received null')
+      )
+      expect(string.decode(false)).toEqual(
+        Left('Expected a string, but received a boolean')
+      )
 
       expect(string.decode('')).toEqual(Right(''))
     })
@@ -66,12 +102,14 @@ describe('Codec', () => {
 
   describe('number', () => {
     test('decode', () => {
-      const failingInputs = ['', {}, undefined, null, false]
+      expect(number.decode('4')).toEqual(
+        Left('Expected a number, but received a string with value "4"')
+      )
+      expect(number.decode(null)).toEqual(
+        Left('Expected a number, but received null')
+      )
 
-      failingInputs.forEach(input => {
-        expect(number.decode(input)).toEqual(Left('fail'))
-      })
-
+      expect(number.decode(NaN)).toEqual(Right(NaN))
       expect(number.decode(0)).toEqual(Right(0))
     })
 
@@ -82,11 +120,12 @@ describe('Codec', () => {
 
   describe('null', () => {
     test('decode', () => {
-      const failingInputs = ['', {}, undefined, 0, false]
-
-      failingInputs.forEach(input => {
-        expect(nullType.decode(input)).toEqual(Left('fail'))
-      })
+      expect(nullType.decode(undefined)).toEqual(
+        Left('Expected a null, but received undefined')
+      )
+      expect(nullType.decode({})).toEqual(
+        Left('Expected a null, but received an object with value {}')
+      )
 
       expect(nullType.decode(null)).toEqual(Right(null))
     })
@@ -98,11 +137,12 @@ describe('Codec', () => {
 
   describe('undefined', () => {
     test('decode', () => {
-      const failingInputs = ['', {}, null, 0, false]
-
-      failingInputs.forEach(input => {
-        expect(undefinedType.decode(input)).toEqual(Left('fail'))
-      })
+      expect(undefinedType.decode(null)).toEqual(
+        Left('Expected an undefined, but received null')
+      )
+      expect(undefinedType.decode(false)).toEqual(
+        Left('Expected an undefined, but received a boolean')
+      )
 
       expect(undefinedType.decode(undefined)).toEqual(Right(undefined))
     })
@@ -114,11 +154,15 @@ describe('Codec', () => {
 
   describe('boolean', () => {
     test('decode', () => {
-      const failingInputs = ['', {}, null, 0, undefined]
-
-      failingInputs.forEach(input => {
-        expect(boolean.decode(input)).toEqual(Left('fail'))
-      })
+      expect(boolean.decode('')).toEqual(
+        Left('Expected a boolean, but received a string with value ""')
+      )
+      expect(boolean.decode(0)).toEqual(
+        Left('Expected a boolean, but received a number with value 0')
+      )
+      expect(boolean.decode(undefined)).toEqual(
+        Left('Expected a boolean, but received undefined')
+      )
 
       expect(boolean.decode(true)).toEqual(Right(true))
     })
@@ -146,12 +190,21 @@ describe('Codec', () => {
 
   describe('array', () => {
     test('decode', () => {
-      const failingInputs = ['', {}, null, 0, undefined, ['']]
       const numberArray = array(number)
 
-      failingInputs.forEach(input => {
-        expect(numberArray.decode(input)).toEqual(Left('fail'))
-      })
+      expect(numberArray.decode('')).toEqual(
+        Left('Expected an array, but received a string with value ""')
+      )
+      expect(numberArray.decode([''])).toEqual(
+        Left(
+          'Problem with value at index 0: Expected a number, but received a string with value ""'
+        )
+      )
+      expect(numberArray.decode([0, ''])).toEqual(
+        Left(
+          'Problem with value at index 1: Expected a number, but received a string with value ""'
+        )
+      )
 
       expect(numberArray.decode([])).toEqual(Right([]))
       expect(numberArray.decode([0])).toEqual(Right([0]))
@@ -170,12 +223,19 @@ describe('Codec', () => {
 
   describe('record', () => {
     test('decode', () => {
-      const failingInputs = ['', [], null, 0, undefined, { a: true }]
       const numberRecord = record(string, number)
 
-      failingInputs.forEach(input => {
-        expect(numberRecord.decode(input)).toEqual(Left('fail'))
-      })
+      expect(numberRecord.decode([])).toEqual(
+        Left('Expected an object, but received an array with value []')
+      )
+      expect(numberRecord.decode(null)).toEqual(
+        Left('Expected an object, but received null')
+      )
+      expect(numberRecord.decode({ a: true })).toEqual(
+        Left(
+          'Problem with value of property "a": Expected a number, but received a boolean'
+        )
+      )
 
       expect(numberRecord.decode({})).toEqual(Right({}))
       expect(numberRecord.decode({ a: 0 })).toEqual(Right({ a: 0 }))
@@ -185,7 +245,11 @@ describe('Codec', () => {
     test('decode with number key', () => {
       const numberRecord = record(number, number)
 
-      expect(numberRecord.decode({ a: 0 })).toEqual(Left('fail'))
+      expect(numberRecord.decode({ a: 0 })).toEqual(
+        Left(
+          'Problem with key type of property "a": Expected a number key, but received a string with value "a"'
+        )
+      )
       expect(numberRecord.decode({ 0: 0 })).toEqual(Right({ 0: 0 }))
     })
 
@@ -211,11 +275,16 @@ describe('Codec', () => {
     const mockCodec = oneOf([string, boolean])
 
     test('decode', () => {
-      const failingInputs = [{}, undefined, 0, []]
-
-      failingInputs.forEach(input => {
-        expect(mockCodec.decode(input)).toEqual(Left('fail'))
-      })
+      expect(mockCodec.decode(0)).toEqual(
+        Left(
+          'One of the following problems occured: (0) Expected a string, but received a number with value 0, (1) Expected a boolean, but received a number with value 0'
+        )
+      )
+      expect(mockCodec.decode([])).toEqual(
+        Left(
+          'One of the following problems occured: (0) Expected a string, but received an array with value [], (1) Expected a boolean, but received an array with value []'
+        )
+      )
 
       expect(mockCodec.decode('')).toEqual(Right(''))
       expect(mockCodec.decode(false)).toEqual(Right(false))
@@ -245,21 +314,42 @@ describe('Codec', () => {
 
   describe('exactly', () => {
     test('decode', () => {
-      expect(exactly(0).decode(10)).toEqual(Left('fail'))
-      expect(exactly(0).decode('')).toEqual(Left('fail'))
-      expect(exactly(0).decode(false)).toEqual(Left('fail'))
+      expect(exactly(0).decode(10)).toEqual(
+        Left(
+          'Expected a number with a value of exactly 0, the types match, but the received value is 10'
+        )
+      )
+      expect(exactly(0).decode('')).toEqual(
+        Left(
+          'Expected a number with a value of exactly 0, but received a string with value ""'
+        )
+      )
 
       expect(exactly(0).decode(0)).toEqual(Right(0))
 
-      expect(exactly('a').decode('b')).toEqual(Left('fail'))
-      expect(exactly('a').decode('')).toEqual(Left('fail'))
-      expect(exactly('a').decode(false)).toEqual(Left('fail'))
+      expect(exactly('a').decode('b')).toEqual(
+        Left(
+          'Expected a string with a value of exactly "a", the types match, but the received value is "b"'
+        )
+      )
+      expect(exactly('a').decode('')).toEqual(
+        Left(
+          'Expected a string with a value of exactly "a", the types match, but the received value is ""'
+        )
+      )
 
       expect(exactly('a').decode('a')).toEqual(Right('a'))
 
-      expect(exactly(true).decode(false)).toEqual(Left('fail'))
-      expect(exactly(true).decode('')).toEqual(Left('fail'))
-      expect(exactly(true).decode(0)).toEqual(Left('fail'))
+      expect(exactly(true).decode(false)).toEqual(
+        Left(
+          'Expected a boolean with a value of exactly true, the types match, but the received value is false'
+        )
+      )
+      expect(exactly(true).decode('')).toEqual(
+        Left(
+          'Expected a boolean with a value of exactly true, but received a string with value ""'
+        )
+      )
 
       expect(exactly(true).decode(true)).toEqual(Right(true))
     })
@@ -273,12 +363,14 @@ describe('Codec', () => {
 
   describe('maybe', () => {
     test('decode', () => {
-      const failingInputs = ['', {}, [], false]
       const maybeNumber = maybe(number)
 
-      failingInputs.forEach(input => {
-        expect(maybeNumber.decode(input)).toEqual(Left('fail'))
-      })
+      expect(maybeNumber.decode('4')).toEqual(
+        Left('Expected a number, but received a string with value "4"')
+      )
+      expect(maybeNumber.decode({})).toEqual(
+        Left('Expected a number, but received an object with value {}')
+      )
 
       expect(maybeNumber.decode(0)).toEqual(Right(Just(0)))
       expect(maybeNumber.decode(null)).toEqual(Right(Nothing))
@@ -295,12 +387,21 @@ describe('Codec', () => {
 
   describe('nonEmptyList', () => {
     test('decode', () => {
-      const failingInputs = ['', {}, null, 0, undefined, [''], []]
       const numberNEL = nonEmptyList(number)
 
-      failingInputs.forEach(input => {
-        expect(numberNEL.decode(input)).toEqual(Left('fail'))
-      })
+      expect(numberNEL.decode([])).toEqual(
+        Left(
+          'Expected an array with one or more elements, but received an empty array'
+        )
+      )
+      expect(numberNEL.decode([''])).toEqual(
+        Left(
+          'Problem with value at index 0: Expected a number, but received a string with value ""'
+        )
+      )
+      expect(numberNEL.decode(null)).toEqual(
+        Left('Expected an array, but received null')
+      )
 
       expect(numberNEL.decode([0])).toEqual(Right(NonEmptyList([0])))
     })
@@ -321,25 +422,66 @@ describe('Codec', () => {
 
   describe('tuple', () => {
     test('decode', () => {
-      expect(tuple([number]).decode([])).toEqual(Left('fail'))
-      expect(tuple([number]).decode([''])).toEqual(Left('fail'))
-      expect(tuple([number]).decode([0, 1])).toEqual(Left('fail'))
+      expect(tuple([number]).decode('')).toEqual(
+        Left('Expected an array, but received a string with value ""')
+      )
+      expect(tuple([number]).decode([])).toEqual(
+        Left(
+          'Expected an array of length 1, but received an array with length of 0'
+        )
+      )
+      expect(tuple([number]).decode([''])).toEqual(
+        Left(
+          'Problem with value at index 0: Expected a number, but received a string with value ""'
+        )
+      )
+      expect(tuple([number]).decode([0, 1])).toEqual(
+        Left(
+          'Expected an array of length 1, but received an array with length of 2'
+        )
+      )
 
       expect(tuple([number]).decode([0])).toEqual(Right([0]))
     })
+
+    test('encode', () => {
+      const mockCodec = Codec.custom<number>({
+        decode: number.decode,
+        encode: (input: number) => input + 1
+      })
+
+      const mockCodec2 = Codec.custom<number>({
+        decode: number.decode,
+        encode: (input: number) => input + 2
+      })
+
+      expect(tuple([mockCodec, mockCodec2]).encode([0, 0])).toEqual([1, 2])
+    })
   })
 
-  test('encode', () => {
-    const mockCodec = Codec.custom<number>({
-      decode: number.decode,
-      encode: (input: number) => input + 1
+  describe('lazy', () => {
+    interface TestInterface {
+      a: TestInterface | string
+    }
+
+    const recursiveCodec: Codec<TestInterface> = Codec.interface({
+      a: lazy(() => oneOf([recursiveCodec, string]))
     })
 
-    const mockCodec2 = Codec.custom<number>({
-      decode: number.decode,
-      encode: (input: number) => input + 2
+    test('decode', () => {
+      expect(recursiveCodec.decode({})).toEqual(
+        Left(
+          'Problem with property "a": it does not exist in received object {}'
+        )
+      )
+
+      expect(recursiveCodec.decode({ a: { a: { a: '' } } })).toEqual(
+        Right({ a: { a: { a: '' } } })
+      )
     })
 
-    expect(tuple([mockCodec, mockCodec2]).encode([0, 0])).toEqual([1, 2])
+    test('encode', () => {
+      expect(recursiveCodec.encode({ a: '' })).toEqual({ a: '' })
+    })
   })
 })
