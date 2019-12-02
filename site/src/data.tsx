@@ -613,11 +613,14 @@ const data: Data = {
                   other than to return a Nothing, for example:
                   <br />
                   If any of the computations inside MaybeAsync resolved to
-                  Nothing, `run` will return a Promise resolved to Nothing.<br />
+                  Nothing, `run` will return a Promise resolved to Nothing.
+                  <br />
                   If any of the promises were to be rejected then `run` will
-                  return a Promise resolved to Nothing.<br />
+                  return a Promise resolved to Nothing.
+                  <br />
                   If an exception is thrown then `run` will return a Promise
-                  resolved to Nothing.<br />
+                  resolved to Nothing.
+                  <br />
                   If none of the above happen then a promise resolved to the
                   returned value wrapped in a Just will be returned.
                 </div>
@@ -787,14 +790,17 @@ const data: Data = {
               description: (
                 <div>
                   Constructs a Left. Most commonly represents information about
-                  an operation that failed.<br />
+                  an operation that failed.
+                  <br />
                   <Note>
                     When creating Either instances using the Left and Right
                     constructors and returning them from a function please don't
-                    forget to add a type annotation to that function.<br />
+                    forget to add a type annotation to that function.
+                    <br />
                     Otherwise TypeScript is not smart enough to figure out the
                     correct return type and you won't be able to use the return
-                    value as expected.<br />
+                    value as expected.
+                    <br />
                     <Highlight>
                       {`// randomEither: () => Either<never, number> | Either<string, never>
     const randomEither = () =>
@@ -1330,12 +1336,15 @@ const data: Data = {
                   other than to return a Nothing, for example:
                   <br />
                   If any of the computations inside EitherAsync resolved to a
-                  Left, `run` will return a Promise resolved to that Left.<br />
+                  Left, `run` will return a Promise resolved to that Left.
+                  <br />
                   If any of the promises were to be rejected then `run` will
                   return a Promise resolved to a Left with the rejection value
-                  inside.<br />
+                  inside.
+                  <br />
                   If an exception is thrown then `run` will return a Promise
-                  resolved to a Left with the exception inside.<br />
+                  resolved to a Left with the exception inside.
+                  <br />
                   If none of the above happen then a promise resolved to the
                   returned value wrapped in a Right will be returned.
                 </div>
@@ -1364,7 +1373,7 @@ const data: Data = {
               name: 'map',
               description:
                 "Transforms the the `Right` value of `this` with a given function. If the EitherAsync that is being mapped resolves to a Left then the mapping function won't be called and `run` will resolve the whole thing to that Left, just like the regular Either#map.",
-              signatureML: 'EitherAsync a b ~> (b -> c) -> MaybeAsync a c',
+              signatureML: 'EitherAsync a b ~> (b -> c) -> EitherAsync a c',
               signatureTS: '<R2>(f: (value: R) => R2): EitherAsync<L, R2>',
               examples: [
                 {
@@ -1982,31 +1991,36 @@ const data: Data = {
           methods: [
             {
               name: 'interface',
-              signatureTS: '<T extends Record<string, Codec<any>>>(properties: T): Codec<{[k in keyof T]: GetInterface<T[k]>}>',
+              signatureTS:
+                '<T extends Record<string, Codec<any>>>(properties: T): Codec<{[k in keyof T]: GetInterface<T[k]>}>',
               description: 'Creates a codec for any JSON object',
               examples: [
                 {
                   input: `Codec.interface({
     username: string,
     age: number
-})`, output: `Codec<{username: string; age: number}>`
-                }
-              ]
+})`,
+                  output: `Codec<{username: string; age: number}>`,
+                },
+              ],
             },
             {
               name: 'custom',
-              signatureTS: '<T>(config: { decode: (value: unknown) => Either<string, T> encode: (value: T) => any}): Codec<T>',
-              description: 'Creates a codec for any type, you can add your own deserialization/validation logic in the decode argument',
+              signatureTS:
+                '<T>(config: { decode: (value: unknown) => Either<string, T> encode: (value: T) => any}): Codec<T>',
+              description:
+                'Creates a codec for any type, you can add your own deserialization/validation logic in the decode argument',
               examples: [
                 {
                   input: `//            ↓↓↓ It's important to specify the type argument
 Codec.custom<string>({
     decode: input => (typeof input === 'string' ? Right(input) : Left('fail')),
     encode: input => input // strings have no serialization logic
-})`, output: 'Codec<string>'
-                }
-              ]
-            }
+})`,
+                  output: 'Codec<string>',
+                },
+              ],
+            },
           ],
         },
         {
@@ -2019,16 +2033,16 @@ Codec.custom<string>({
               examples: [
                 {
                   input: `string.decode('a string')`,
-                  output: `Right('a string')`
+                  output: `Right('a string')`,
                 },
                 {
                   input: 'string.decode(3.14)',
-                  output: `Left('fail')`
-                }
-              ]
-            }
-          ]
-        }
+                  output: `Left('fail')`,
+                },
+              ],
+            },
+          ],
+        },
       ],
     },
   ],
