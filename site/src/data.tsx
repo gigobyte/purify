@@ -2032,12 +2032,12 @@ Codec.custom<string>({
               description: `A codec for any string value. Most of the time you will use it to implement an interface codec (see the Codec#interface example above)`,
               examples: [
                 {
-                  input: `string.decode('a string')`,
-                  output: `Right('a string')`,
+                  input: `string.decode('purify-ts')`,
+                  output: `Right('purify-ts')`,
                 },
                 {
                   input: 'string.decode(3.14)',
-                  output: `Left('fail')`,
+                  output: `Left('Expected a string, but received a number with value 3.14')`,
                 },
               ],
             },
