@@ -346,7 +346,7 @@ const data: Data = {
               signatureTS:
                 '<U>(f: (value: T) => U | undefined | null | void): Maybe<U>',
               description:
-                'Transforms `this` with a function that returns a nullable value. Equivalent to `m.chain(x => Maybe.fromNullable(f(x)))`',
+                'Transforms `this` with a function that returns a nullable value. Equivalent to `m.chain(x => Maybe.fromNullable(f(x)))`.',
               examples: [
                 {
                   input: 'Just({prop: null}).chainNullable(x => x.prop)',
@@ -586,7 +586,7 @@ const data: Data = {
             {
               name: 'MaybeAsync',
               description:
-                'Constructs a MaybeAsync object from a function that takes an object full of helpers that let you lift things into the MaybeAsync context and returns a Promise',
+                'Constructs a MaybeAsync object from a function that takes an object full of helpers that let you lift things into the MaybeAsync context and returns a Promise.',
               examples: [
                 {
                   input:
@@ -1993,7 +1993,7 @@ const data: Data = {
               name: 'interface',
               signatureTS:
                 '<T extends Record<string, Codec<any>>>(properties: T): Codec<{[k in keyof T]: GetInterface<T[k]>}>',
-              description: 'Creates a codec for any JSON object',
+              description: 'Creates a codec for any JSON object.',
               examples: [
                 {
                   input: `Codec.interface({
@@ -2009,7 +2009,7 @@ const data: Data = {
               signatureTS:
                 '<T>(config: { decode: (value: unknown) => Either<string, T> encode: (value: T) => any}): Codec<T>',
               description:
-                'Creates a codec for any type, you can add your own deserialization/validation logic in the decode argument',
+                'Creates a codec for any type, you can add your own deserialization/validation logic in the decode argument.',
               examples: [
                 {
                   input: `//            ↓↓↓ It's important to specify the type argument
@@ -2029,7 +2029,7 @@ Codec.custom<string>({
             {
               name: 'string',
               signatureTS: 'Codec<string>',
-              description: `A codec for any string value. Most of the time you will use it to implement an interface codec (see the Codec#interface example above)`,
+              description: `A codec for any string value. Most of the time you will use it to implement an interface codec (see the Codec#interface example above).`,
               examples: [
                 {
                   input: `string.decode('purify-ts')`,
@@ -2038,6 +2038,36 @@ Codec.custom<string>({
                 {
                   input: 'string.decode(3.14)',
                   output: `Left('Expected a string, but received a number with value 3.14')`,
+                },
+              ],
+            },
+            {
+              name: 'number',
+              signatureTS: 'Codec<number>',
+              description: `A codec for any number value. This includes anything that has a typeof number - NaN, Infinity etc`,
+              examples: [
+                {
+                  input: `number.decode(4.20)`,
+                  output: `Right(4.20)`,
+                },
+                {
+                  input: `number.decode(null)`,
+                  output: `Left('Expected a number, but received null')`,
+                },
+              ],
+            },
+            {
+              name: 'boolean',
+              signatureTS: 'Codec<boolean>',
+              description: `A codec for a boolean value.`,
+              examples: [
+                {
+                  input: `boolean.decode(true)`,
+                  output: `Right(true)`,
+                },
+                {
+                  input: `boolean.decode(0)`,
+                  output: `Left('Expected a boolean, but received a number with value 0')`,
                 },
               ],
             },
