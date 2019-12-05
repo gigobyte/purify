@@ -13,7 +13,8 @@ import {
   maybe,
   nonEmptyList,
   tuple,
-  lazy
+  lazy,
+  date
 } from './Codec'
 import { Left, Right } from './Either'
 import { Just, Nothing } from './Maybe'
@@ -482,6 +483,28 @@ describe('Codec', () => {
 
     test('encode', () => {
       expect(recursiveCodec.encode({ a: '' })).toEqual({ a: '' })
+    })
+  })
+
+  describe('date', () => {
+    const now = new Date()
+    const nowISOString = now.toISOString()
+
+    test('decode', () => {
+      expect(date.decode(null)).toEqual(
+        Left('Problem with date string: Expected a string, but received null')
+      )
+      expect(date.decode('')).toEqual(
+        Left(
+          'Expected a valid date string, but received a string that cannot be parsed'
+        )
+      )
+
+      expect(date.decode(nowISOString)).toEqual(Right(now))
+    })
+
+    test('encode', () => {
+      expect(date.encode(now)).toEqual(nowISOString)
     })
   })
 })

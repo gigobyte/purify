@@ -365,3 +365,18 @@ export const tuple = <TS extends [Codec<any>, ...Codec<any>[]]>(
     },
     encode: input => input.map((x, i) => codecs[i].encode(x))
   })
+
+export const date = Codec.custom<Date>({
+  decode: input =>
+    string
+      .decode(input)
+      .mapLeft(err => `Problem with date string: ${err}`)
+      .chain(x =>
+        Number.isNaN(Date.parse(x))
+          ? Left(
+              'Expected a valid date string, but received a string that cannot be parsed'
+            )
+          : Right(new Date(x))
+      ),
+  encode: input => input.toISOString()
+})
