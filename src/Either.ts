@@ -97,10 +97,26 @@ export const Either: EitherTypeRef = {
     return right(value)
   },
   lefts<L, R>(list: Either<L, R>[]): L[] {
-    return list.filter(x => x.isLeft()).map(x => x.__value as L)
+    let result = []
+
+    for (const x of list) {
+      if (x.isLeft()) {
+        result.push(x.extract())
+      }
+    }
+
+    return result
   },
   rights<L, R>(list: Either<L, R>[]): R[] {
-    return list.filter(x => x.isRight()).map(x => x.__value as R)
+    let result = []
+
+    for (const x of list) {
+      if (x.isRight()) {
+        result.push(x.extract())
+      }
+    }
+
+    return result
   },
   encase<L extends Error, R>(throwsF: () => R): Either<L, R> {
     try {
