@@ -18,5 +18,5 @@
     "downlevelIteration": true,
     "strict": true
   },
-  "exclude": ["site", "**/*.test.ts"]
+  "exclude": ["site", "**/*.test.ts", "lib"]
 }
