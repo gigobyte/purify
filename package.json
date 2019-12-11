@@ -9,7 +9,7 @@
   "license": "MIT",
   "sideEffects": false,
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && tsc -p tsconfig.es.json",
     "docs": "typedoc --out documentation/ src/ --theme minimal",
     "test": "jest",
     "test-watch": "jest --watch"
