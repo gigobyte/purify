@@ -1981,7 +1981,8 @@ const data: Data = {
     },
     {
       name: 'Codec',
-      description: '',
+      description:
+        "This module allows you to create a boundary on the outermost layer of your application, usually where you process back-end data or communicate with a third-party API. A codec consists of two parts - an encoder and a decoder, hence the name. Using a decoder you can validate your expectations regarding the structure and type of data you're receiving. An encoder, on the other hand, let's you make sure you're sending your application data in the correct format and can also act as a mapper from your custom domain objects to plain JSON values.",
       example: {
         import: `import { Codec, GetInterface, string, number ... } from 'purify-ts/Codec'`,
       },
