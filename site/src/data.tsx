@@ -1333,7 +1333,7 @@ const data: Data = {
                 <div>
                   It's important to remember how `run` will behave because in an
                   async context there are other ways for a function to fail
-                  other than to return a Nothing, for example:
+                  other than to return a Left, for example:
                   <br />
                   If any of the computations inside EitherAsync resolved to a
                   Left, `run` will return a Promise resolved to that Left.
@@ -1983,7 +1983,7 @@ const data: Data = {
       name: 'Codec',
       description: '',
       example: {
-        import: `import { Codec, string, number ... } from 'purify-ts/Codec'`,
+        import: `import { Codec, GetInterface, string, number ... } from 'purify-ts/Codec'`,
       },
       content: [
         {
@@ -1998,16 +1998,21 @@ const data: Data = {
                 {
                   input: `Codec.interface({
     username: string,
-    age: number
+    age: number,
+    coordinates: array(oneOf([string, number]))
 })`,
-                  output: `Codec<{username: string; age: number}>`,
+                  output: `Codec<{
+  username: string
+  age: number
+  coordinates: Array<string | number>
+}>`,
                 },
               ],
             },
             {
               name: 'custom',
               signatureTS:
-                '<T>(config: { decode: (value: unknown) => Either<string, T> encode: (value: T) => any}): Codec<T>',
+                '<T>(config: { decode: (value: unknown) => Either<string, T>, encode: (value: T) => any}): Codec<T>',
               description:
                 'Creates a codec for any type, you can add your own deserialization/validation logic in the decode argument.',
               examples: [
@@ -2024,12 +2029,62 @@ Codec.custom<string>({
           ],
         },
         {
+          title: 'Type helpers',
+          methods: [
+            {
+              name: 'GetInterface',
+              signatureTS:
+                'GetInterface<T extends Codec<any>> = T extends Codec<infer U>? U : never',
+              description:
+                'You can use this to get a free type from an interface codec.',
+              examples: [
+                {
+                  input: `const User = Codec.interface({
+  username: string,
+  age: number
+})
+
+type User = GetInterface<typeof User>`,
+                  output:
+                    '// type User will equal {username: string; age: number}',
+                },
+              ],
+            },
+          ],
+        },
+        {
+          title: 'Instance methods',
+          methods: [
+            {
+              name: 'decode',
+              signatureTS: '(input: unknown) => Either<string, T>',
+              description:
+                "Takes a JSON value and runs the decode function the codec was constructed with. All of purify's built-in codecs return a descriptive error message in case the decode fails.",
+              examples: [],
+            },
+            {
+              name: 'encode',
+              signatureTS: '(input: T) => unknown',
+              description:
+                "Takes a runtime value and turns it into a JSON value using the encode function the codec was constructed with. Most of purify's built-in codecs have no custom encode method and they just return the same value, but you could add custom serialization logic for your custom codecs.",
+              examples: [],
+            },
+            {
+              name: 'unsafeDecode',
+              signatureTS: '(input: unknown) => T',
+              description:
+                'The same as the decode method, but throws an exception on failure. Please only use as an escape hatch.',
+              examples: [],
+            },
+          ],
+        },
+        {
           title: 'Primitive codecs',
           methods: [
             {
               name: 'string',
               signatureTS: 'Codec<string>',
-              description: `A codec for any string value. Most of the time you will use it to implement an interface codec (see the Codec#interface example above).`,
+              description: `A codec for any string value. Most of the time you will use it to implement an interface codec (see the Codec#interface example above). Encoding a string acts like the identity function.`,
               examples: [
                 {
                   input: `string.decode('purify-ts')`,
@@ -2044,7 +2099,7 @@ Codec.custom<string>({
             {
               name: 'number',
               signatureTS: 'Codec<number>',
-              description: `A codec for any number value. This includes anything that has a typeof number - NaN, Infinity etc`,
+              description: `A codec for any number value. This includes anything that has a typeof number - NaN, Infinity etc. Encoding a number acts like the identity function.`,
               examples: [
                 {
                   input: `number.decode(4.20)`,
@@ -2068,6 +2123,239 @@ Codec.custom<string>({
                 {
                   input: `boolean.decode(0)`,
                   output: `Left('Expected a boolean, but received a number with value 0')`,
+                },
+              ],
+            },
+            {
+              name: 'nullType',
+              signatureTS: 'Codec<null>',
+              description:
+                'A codec for null only. Most of the time you will use it with the oneOf codec combinator to create a codec for a type like "string | null"',
+              examples: [
+                {
+                  input: 'nullType.decode(null)',
+                  output: 'Right(null)',
+                },
+              ],
+            },
+            {
+              name: 'undefinedType',
+              signatureTS: 'Codec<undefined>',
+              description: 'A codec for undefined only.',
+              examples: [
+                {
+                  input: 'undefinedType.decode(undefined)',
+                  output: 'Right(undefined)',
+                },
+              ],
+            },
+            {
+              name: 'unknown',
+              signatureTS: 'Codec<unknown>',
+              description:
+                'A codec that can never fail, but of course you get no type information. Encoding an unknown acts like the identity function.',
+              examples: [
+                {
+                  input: 'unknown.decode(0)',
+                  output: 'Right(0)',
+                },
+                {
+                  input: 'unknown.decode({someObject: true})',
+                  output: 'Right({someObject: true})',
+                },
+                {
+                  input: 'unknown.decode(false)',
+                  output: 'Right(false)',
+                },
+              ],
+            },
+            {
+              name: 'date',
+              signatureTS: 'Codec<Date>',
+              description:
+                'A codec for a parsable date string, on successful decoding it resolves to a Date object. The validity of the date string during decoding is decided by the browser implementation of Date.parse. Encode runs toISOString on the passed in date object.',
+              examples: [
+                {
+                  input: "date.decode('2019-12-15T20:34:25.052Z')",
+                  output: "Right(new Date('2019-12-15T20:34:25.052Z'))",
+                },
+                {
+                  input: `date.encode(new Date(2019, 2, 13))`,
+                  output: `'2019-03-12T22:00:00.000Z'`,
+                },
+              ],
+            },
+          ],
+        },
+        {
+          title: 'Complex codecs',
+          methods: [
+            {
+              name: 'oneOf',
+              signatureTS:
+                '<T extends Array<Codec<any>>>(codecs: T): Codec<GetInterface<T extends Array<infer U> ? U : never>>',
+              description:
+                'A codec combinator that receives a list of codecs and runs them one after another during decode and resolves to whichever returns Right or to Left if all fail. This module does not expose a "nullable" or "optional" codec combinators because it\'s trivial to implement/replace them using oneOf.',
+              examples: [
+                {
+                  input: `const nullable = <T>(codec: Codec<T>): Codec<T | null> =>
+  oneOf([codec, nullType])`,
+                  output:
+                    'Codec<T | null> // Personally, I would just use oneOf directly',
+                },
+                {
+                  input: 'oneOf([string, nullType])',
+                  output: 'Codec<string | null>',
+                },
+                {
+                  input: `oneOf([string, nullType]).decode('Well, hi!')`,
+                  output: `Right('Well, hi!')`,
+                },
+                {
+                  input: 'oneOf([string, nullType]).decode(null)',
+                  output: 'Right(null)',
+                },
+                {
+                  input: 'oneOf([boolean, undefinedType]).decode(123)',
+                  output: `Left('One of the following problems occured:
+      (0) Expected a boolean, but received a number with value 0,
+      (1) Expected an undefined, but received a number with value 0')"`,
+                },
+              ],
+            },
+            {
+              name: 'array',
+              signatureTS: '<T>(codec: Codec<T>): Codec<Array<T>>',
+              description: 'A codec for an array.',
+              examples: [
+                {
+                  input: 'array(number).decode([3.14, 2, 3])',
+                  output: 'Right([3.14, 2, 3])',
+                },
+                {
+                  input: `array(oneOf([string, number])).decode(['x', 0, 'y', 1])`,
+                  output: `['x', 0, 'y', 1]`,
+                },
+              ],
+            },
+            {
+              name: 'record',
+              signatureTS:
+                '<K extends keyof any, V>(keyCodec: Codec<K>, valueCodec: Codec<V>): Codec<Record<K, V>>',
+              description:
+                'A codec for an object without specific properties, its restrictions are equivalent to the Record<K, V> type so you can only check for number and string keys.',
+              examples: [
+                {
+                  input: 'record(string, boolean).decode({valid: true})',
+                  output:
+                    'Right({valid: true}) // but the type is Either<string, Record<string, boolean>>',
+                },
+                {
+                  input:
+                    "record(number, string).decode({0: 'user1', 1: 'user2'})",
+                  output: `Right({0: \'user1\', 1: \'user2\'})`,
+                },
+                {
+                  input: "record(number, string).decode({valid: 'yes'})",
+                  output:
+                    'Left(\'Problem with key type of property "a": Expected a number key, but received a string with value "valid"\')',
+                },
+              ],
+            },
+            {
+              name: 'tuple',
+              description:
+                'The same as the array decoder, but accepts a fixed amount of array elements and you can specify each element type, much like the tuple type.',
+              signatureTS:
+                '<TS extends [Codec<any>, ...Codec<any>[]]>(codecs: TS): Codec<{[i in keyof TS]: TS[i] extends Codec<infer U> ? U : never}>',
+              examples: [
+                {
+                  input: 'tuple([number]).decode([0, 1])',
+                  output: `Left('Expected an array of length 1, but received an array with length of 2')`,
+                },
+                {
+                  input: "tuple([number]).decode([''])",
+                  output: `Left('Problem with value at index 0: Expected a number, but received a string with value ""')`,
+                },
+              ],
+            },
+            {
+              name: 'exactly',
+              signatureTS:
+                '<T extends string | number | boolean>(expectedValue: T): Codec<T>',
+              description:
+                "A codec that only succeeds decoding when the value is exactly what you've constructed the codec with. It's useful when you're decoding an enum, for example.",
+              examples: [
+                {
+                  input: `exactly('').decode('non-empty string')`,
+                  output: `Left('Expected a string with a value of exactly "", but received a string with value "non-empty string"')`,
+                },
+                {
+                  input: `oneof([exactly('None'), exactly('Read'), exactly('Write')])`,
+                  output: `Codec<"None" | "Read" | "Write">`,
+                },
+              ],
+            },
+            {
+              name: 'lazy',
+              signatureTS: '<T>(getCodec: () => Codec<T>): Codec<T>',
+              description:
+                'A special codec used when dealing with recursive data structures, it allows a codec to be recursively defined by itself.',
+              examples: [
+                {
+                  input: `interface Comment {
+  content: string,
+  responses: Comment[]
+}
+
+const Comment: Codec<Comment> = Codec.interface({
+  content: string,
+  responses: lazy(() => array(Comment))
+})`,
+                  output: 'Codec<Comment>',
+                },
+              ],
+            },
+          ],
+        },
+        {
+          title: 'Purify-specific codecs',
+          methods: [
+            {
+              name: 'maybe',
+              signatureTS: '<T>(codec: Codec<T>): Codec<Maybe<T>>',
+              description: `A codec for purify's Maybe type. Encode runs Maybe#toJSON, which effectively returns the value inside if it's a Just or undefined if it's Nothing.`,
+              examples: [
+                {
+                  input: 'maybe(number).decode(undefined)',
+                  output: 'Right(Nothing)',
+                },
+                {
+                  input: 'maybe(number).decode(null)',
+                  output: 'Right(Nothing)',
+                },
+                {
+                  input: 'maybe(number).decode(123)',
+                  output: 'Right(Just(123))',
+                },
+                {
+                  input: 'maybe(number).encode(Just(0))',
+                  output: '0',
+                },
+              ],
+            },
+            {
+              name: 'nonEmptyList',
+              signatureTS: '<T>(codec: Codec<T>): Codec<NonEmptyList<T>>',
+              description: `A codec for purify's NEL type.`,
+              examples: [
+                {
+                  input: 'nonEmptyList(number).decode([])',
+                  output: `Left('Expected an array with one or more elements, but received an empty array')`,
+                },
+                {
+                  input: 'nonEmptyList(number).decode([0])',
+                  output: 'Right(NonEmptyList([0]))',
                 },
               ],
             },

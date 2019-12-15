@@ -5,7 +5,7 @@ import { NonEmptyList } from './NonEmptyList'
 
 export interface Codec<T> {
   decode: (input: unknown) => Either<string, T>
-  encode: (input: T) => T
+  encode: (input: T) => unknown
   unsafeDecode: (input: unknown) => T
 }
 
@@ -88,7 +88,7 @@ export const Codec = {
       const keys = Object.keys(properties)
 
       for (const key of keys) {
-        result[key as keyof T] = properties[key].encode(input[key])
+        result[key as keyof T] = properties[key].encode(input[key]) as any
       }
 
       return result
@@ -269,7 +269,7 @@ export const record = <K extends keyof any, V>(
 
       for (const key in input) {
         if (input.hasOwnProperty(key)) {
-          result[keyCodec.encode(key)] = valueCodec.encode(input[key])
+          result[keyCodec.encode(key) as K] = valueCodec.encode(input[key]) as V
         }
       }
 
