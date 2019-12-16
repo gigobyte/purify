@@ -1,0 +1,14 @@
+{
+  "version": "1.0",
+  "name": "purify-website",
+  "description": null,
+  "icons": {
+    "60": "/icons-d1ff8b7e89f65488f9d59d7405e2e8ef/firefox_app_60x60.png",
+    "128": "/icons-d1ff8b7e89f65488f9d59d7405e2e8ef/firefox_app_128x128.png",
+    "512": "/icons-d1ff8b7e89f65488f9d59d7405e2e8ef/firefox_app_512x512.png"
+  },
+  "developer": {
+    "name": null,
+    "url": null
+  }
+}
