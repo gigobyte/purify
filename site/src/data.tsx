@@ -96,7 +96,7 @@ const data: Data = {
         {
           title: 'Without Maybe (since TS 3.7 / ES2020)',
           content: [
-            `// Still hard to chain additional transformation`,
+            `// Still hard to chain additional transformations`,
             "// This is a valid alternative if you don't mind the syntax",
             '',
             'const port = parseInt(getConfig()?.port ?? 8080)',
