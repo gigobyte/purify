@@ -7,7 +7,6 @@
     "target": "esnext",
     "jsx": "react",
     "allowJs": true,
-    "checkJs": true,
     "lib": ["dom", "es2015", "es2017"]
   },
   "include": ["./src/**/*"]

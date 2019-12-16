@@ -52,6 +52,11 @@ const Changelog = props => (
     <div>
       <h1>Choose version:</h1>
       <VersionContainer>
+        <Version to="/changelog/0.14">0.14</Version>
+        <Description>JSON codecs and a new build</Description>
+        <Date>December 2019</Date>
+      </VersionContainer>
+      <VersionContainer>
         <VersionStatic>0.13.2</VersionStatic>
         <Description>
           Check out the release on{' '}

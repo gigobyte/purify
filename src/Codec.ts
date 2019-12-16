@@ -4,11 +4,15 @@ import { Maybe, Just, Nothing } from './Maybe'
 import { NonEmptyList } from './NonEmptyList'
 
 export interface Codec<T> {
+  /** Takes a JSON value and runs the decode function the codec was constructed with. All of purify's built-in codecs return a descriptive error message in case the decode fails */
   decode: (input: unknown) => Either<string, T>
+  /** Takes a runtime value and turns it into a JSON value using the encode function the codec was constructed with. Most of purify's built-in codecs have no custom encode method and they just return the same value, but you could add custom serialization logic for your custom codecs. */
   encode: (input: T) => unknown
+  /** The same as the decode method, but throws an exception on failure. Please only use as an escape hatch */
   unsafeDecode: (input: unknown) => T
 }
 
+/** You can use this to get a free type from an interface codec */
 export type GetInterface<T extends Codec<any>> = T extends Codec<infer U>
   ? U
   : never
@@ -45,6 +49,7 @@ const reportError = (type: string, input: unknown): string => {
 }
 
 export const Codec = {
+  /** Creates a codec for any JSON object */
   interface<T extends Record<string, Codec<any>>>(
     properties: T
   ): Codec<
@@ -101,6 +106,7 @@ export const Codec = {
     }
   },
 
+  /** Creates a codec for any type, you can add your own deserialization/validation logic in the decode argument */
   custom<T>({
     decode,
     encode
@@ -116,6 +122,7 @@ export const Codec = {
   }
 }
 
+/** A codec for any string value. Most of the time you will use it to implement an interface codec (see the Codec#interface example above). Encoding a string acts like the identity function */
 export const string = Codec.custom<string>({
   decode: input =>
     typeof input === 'string'
@@ -124,6 +131,7 @@ export const string = Codec.custom<string>({
   encode: identity
 })
 
+/** A codec for any number value. This includes anything that has a typeof number - NaN, Infinity etc. Encoding a number acts like the identity function */
 export const number = Codec.custom<number>({
   decode: input =>
     typeof input === 'number'
@@ -132,12 +140,14 @@ export const number = Codec.custom<number>({
   encode: identity
 })
 
+/** A codec for null only. Most of the time you will use it with the oneOf codec combinator to create a codec for a type like "string | null" */
 export const nullType = Codec.custom<null>({
   decode: input =>
     input === null ? Right(input) : Left(reportError('a null', input)),
   encode: identity
 })
 
+/** A codec for undefined only */
 export const undefinedType = Codec.custom<undefined>({
   decode: input =>
     input === undefined
@@ -146,6 +156,7 @@ export const undefinedType = Codec.custom<undefined>({
   encode: identity
 })
 
+/** A codec for a boolean value */
 export const boolean = Codec.custom<boolean>({
   decode: input =>
     typeof input === 'boolean'
@@ -154,11 +165,13 @@ export const boolean = Codec.custom<boolean>({
   encode: identity
 })
 
+/** A codec that can never fail, but of course you get no type information. Encoding an unknown acts like the identity function */
 export const unknown = Codec.custom<unknown>({
   decode: Right,
   encode: identity
 })
 
+/** A codec combinator that receives a list of codecs and runs them one after another during decode and resolves to whichever returns Right or to Left if all fail. This module does not expose a "nullable" or "optional" codec combinators because it\'s trivial to implement/replace them using oneOf */
 export const oneOf = <T extends Array<Codec<any>>>(
   codecs: T
 ): Codec<GetInterface<T extends Array<infer U> ? U : never>> =>
@@ -193,6 +206,7 @@ export const oneOf = <T extends Array<Codec<any>>>(
     }
   })
 
+/** A codec for an array */
 export const array = <T>(codec: Codec<T>): Codec<Array<T>> =>
   Codec.custom({
     decode: input => {
@@ -229,6 +243,7 @@ const numberString = Codec.custom<any>({
   encode: identity
 })
 
+/** A codec for an object without specific properties, its restrictions are equivalent to the Record<K, V> type so you can only check for number and string keys */
 export const record = <K extends keyof any, V>(
   keyCodec: Codec<K>,
   valueCodec: Codec<V>
@@ -277,6 +292,7 @@ export const record = <K extends keyof any, V>(
     }
   })
 
+/** A codec that only succeeds decoding when the value is exactly what you've constructed the codec with. It's useful when you're decoding an enum, for example */
 export const exactly = <T extends string | number | boolean>(
   expectedValue: T
 ): Codec<T> =>
@@ -299,12 +315,14 @@ export const exactly = <T extends string | number | boolean>(
     encode: identity
   })
 
+/** A special codec used when dealing with recursive data structures, it allows a codec to be recursively defined by itself */
 export const lazy = <T>(getCodec: () => Codec<T>): Codec<T> =>
   Codec.custom({
     decode: input => getCodec().decode(input),
     encode: input => getCodec().encode(input)
   })
 
+/** A codec for purify's Maybe type. Encode runs Maybe#toJSON, which effectively returns the value inside if it's a Just or undefined if it's Nothing */
 export const maybe = <T>(codec: Codec<T>): Codec<Maybe<T>> =>
   Codec.custom({
     decode: input =>
@@ -315,6 +333,7 @@ export const maybe = <T>(codec: Codec<T>): Codec<Maybe<T>> =>
     encode: input => input.toJSON()
   })
 
+/** A codec for purify's NEL type */
 export const nonEmptyList = <T>(codec: Codec<T>): Codec<NonEmptyList<T>> => {
   const arrayCodec = array(codec)
   return Codec.custom({
@@ -330,6 +349,7 @@ export const nonEmptyList = <T>(codec: Codec<T>): Codec<NonEmptyList<T>> => {
   })
 }
 
+/** The same as the array decoder, but accepts a fixed amount of array elements and you can specify each element type, much like the tuple type */
 export const tuple = <TS extends [Codec<any>, ...Codec<any>[]]>(
   codecs: TS
 ): Codec<
@@ -366,6 +386,7 @@ export const tuple = <TS extends [Codec<any>, ...Codec<any>[]]>(
     encode: input => input.map((x, i) => codecs[i].encode(x))
   })
 
+/** A codec for a parsable date string, on successful decoding it resolves to a Date object. The validity of the date string during decoding is decided by the browser implementation of Date.parse. Encode runs toISOString on the passed in date object */
 export const date = Codec.custom<Date>({
   decode: input =>
     string

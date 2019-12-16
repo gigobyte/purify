@@ -32,7 +32,8 @@ const v013 = props => (
       Not sure what purify is? Check out the{' '}
       <Link to="/getting-started">Getting Started</Link> page. Not sure if you
       want to introduce purify as a dependency to your project? Check out the{' '}
-      <Link to="/faq">FAQ</Link> page!<br />
+      <Link to="/faq">FAQ</Link> page!
+      <br />
       This release is a small one, it includes mostly utilities and typesafe
       versions of already existing JavaScript functions.
     </div>
@@ -49,7 +50,8 @@ const v013 = props => (
     <Topic>More List functions</Topic>
     <TopicDescription>
       The main goal of the List module is to provide typesafe alternatives of
-      the built-in Array.prototype methods.<br />
+      the built-in Array.prototype methods.
+      <br />
       With that in mind, List now includes <HL>find</HL>, <HL>findIndex</HL> and
       also immutable <HL>List.sort</HL>.
     </TopicDescription>
@@ -58,7 +60,8 @@ const v013 = props => (
     <TopicDescription>
       Purify went throught another redesign in this release, the new class-based
       solution is what the original rewrite of purify in{' '}
-      <Link to="/changelog/0.12">0.12</Link> should've been.<br />
+      <Link to="/changelog/0.12">0.12</Link> should've been.
+      <br />
       Like last time, this redesign does not affect the public API of the
       library.
     </TopicDescription>
