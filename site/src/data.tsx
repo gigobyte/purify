@@ -2264,7 +2264,7 @@ type User = GetInterface<typeof User>`,
                 },
                 {
                   input: `array(oneOf([string, number])).decode(['x', 0, 'y', 1])`,
-                  output: `['x', 0, 'y', 1]`,
+                  output: `Right(['x', 0, 'y', 1])`,
                 },
               ],
             },
