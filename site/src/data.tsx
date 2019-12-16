@@ -1982,7 +1982,7 @@ randomEither().map(x => x)
     {
       name: 'Codec',
       description:
-        "This module allows you to create a boundary on the outermost layer of your application, usually where you process back-end data or communicate with a third-party API. A codec consists of two parts - an encoder and a decoder, hence the name. Using a decoder you can validate your expectations regarding the structure and type of data you're receiving. An encoder, on the other hand, let's you make sure you're sending your application data in the correct format and can also act as a mapper from your custom domain objects to plain JSON values.",
+        "This module allows you to create a boundary on the outermost layer of your application, usually where you process back-end data or communicate with a third-party API. A codec consists of two parts - an encoder and a decoder, hence the name. Using a decoder you can validate your expectations regarding the structure and type of data you're receiving. An encoder, on the other hand, lets you make sure you're sending your application data in the correct format and can also act as a mapper from your custom domain objects to plain JSON values.",
       example: {
         import: `import { Codec, GetInterface, string, number ... } from 'purify-ts/Codec'`,
       },
@@ -2035,7 +2035,7 @@ Codec.custom<string>({
             {
               name: 'GetInterface',
               signatureTS:
-                'GetInterface<T extends Codec<any>> = T extends Codec<infer U>? U : never',
+                'GetInterface<T extends Codec<any>> = T extends Codec<infer U> ? U : never',
               description:
                 'You can use this to get a free type from an interface codec.',
               examples: [
