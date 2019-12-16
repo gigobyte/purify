@@ -99,7 +99,7 @@ const data: Data = {
             `// Still hard to chain additional transformations`,
             "// This is a valid alternative if you don't mind the syntax",
             '',
-            'const port = parseInt(getConfig()?.port ?? 8080)',
+            "const port = parseInt(getConfig()?.port ?? '8080')",
           ],
         },
         {
