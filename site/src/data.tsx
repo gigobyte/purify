@@ -1311,7 +1311,7 @@ randomEither().map(x => x)
           ],
         },
         {
-          title: 'Example usage',
+          title: 'Example usage in a real application',
           content: [
             `declare function validateModel(model: Model): Either<Error, ValidModel>`,
             `declare function getUser(userId: number):     Promise<Either<Error, User>>`,
