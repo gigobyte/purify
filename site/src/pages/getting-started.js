@@ -67,7 +67,7 @@ const GettingStarted = props => (
       contains a guide on how to start using it. <br />
       You can start by visiting the page about{' '}
       <Link to="/adts/Maybe">Maybe</Link>, one of the most popular data types.<br />
-      If you are worried about the future of the project, because perharps you
+      If you are worried about the future of the project, because perhaps you
       are evaluating its usage in a large project, consider checking out the{' '}
       <Link to="/faq">FAQ</Link>.
     </Container>
