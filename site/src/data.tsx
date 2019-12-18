@@ -1560,7 +1560,7 @@ randomEither().map(x => x)
             {
               name: '[Symbol.iterator]',
               description:
-                '`Tuple` implements the Iterator and ArrayLike interfaces, which means that you can destructure tuples like you would destructure arrays',
+                '`Tuple` implements the Iterator and ArrayLike interfaces, which means that you can destructure tuples like you would destructure arrays.',
               examples: [
                 {
                   input: `const [ fst, snd ] = Tuple(1, 'str')`,
@@ -1649,7 +1649,7 @@ randomEither().map(x => x)
             {
               name: 'reduce',
               description:
-                'A somewhat arbitraty implementation of Foldable for Tuple, the reducer will be passed the initial value and the second value insinde `this` as arguments',
+                'A somewhat arbitrary implementation of Foldable for Tuple, the reducer will be passed the initial value and the second value inside `this` as arguments.',
               signatureML: '(a, b) ~> (b -> a -> b) -> b -> b',
               signatureTS:
                 '<T>(reducer: (accumulator: T, value: S) => T, initialValue: T): T',
