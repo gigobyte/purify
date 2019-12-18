@@ -125,7 +125,7 @@ const data: Data = {
             {
               name: 'Just',
               description:
-                'Constructs a Just. Respents an optional value that exists.',
+                'Constructs a Just. Represents an optional value that exists.',
               signatureML: 'a -> Maybe a',
               signatureTS: '<T>(value: T): Maybe<T>',
               examples: [
@@ -384,7 +384,7 @@ const data: Data = {
               signatureTS:
                 '<U>(reducer: (accumulator: U, value: T) => U, initialValue: U): U',
               description:
-                'Takes a reducer and a initial value and returns the initial value if `this` is `Nothing` or the result of applying the function to the initial value and the value inside `this`.',
+                'Takes a reducer and an initial value and returns the initial value if `this` is `Nothing` or the result of applying the function to the initial value and the value inside `this`.',
               examples: [
                 {
                   input: 'Just(5).reduce((acc, x) => x * acc, 2)',
@@ -562,7 +562,7 @@ const data: Data = {
         },
       ],
       description:
-        'MaybeAsync is a wrapper around Promise<Maybe<T>> that allows you to process asynchronous missing values or, on a more technical level, allows you to seemlessly chain Promises that resolve to Maybe. The API of MaybeAsync is heavily influenced by monad transformers, but the implementation under the hood is nothing like that. Despite that little piece of trivia, no prior knowledge of monad transformers is required.',
+        'MaybeAsync is a wrapper around Promise<Maybe<T>> that allows you to process asynchronous missing values or, on a more technical level, allows you to seamlessly chain Promises that resolve to Maybe. The API of MaybeAsync is heavily influenced by monad transformers, but the implementation under the hood is nothing like that. Despite that little piece of trivia, no prior knowledge of monad transformers is required.',
       examples: [
         {
           title: 'How to import',
@@ -1095,7 +1095,7 @@ randomEither().map(x => x)
             {
               name: 'reduce',
               description:
-                'Takes a reducer and a initial value and returns the initial value if `this` is `Left` or the result of applying the function to the initial value and the value inside `this`.',
+                'Takes a reducer and an initial value and returns the initial value if `this` is `Left` or the result of applying the function to the initial value and the value inside `this`.',
               signatureML: 'Either a b ~> ((c, b) -> c, c) -> c',
               signatureTS:
                 '<T>(reducer: (accumulator: T, value: R) => T, initialValue: T): T',
@@ -1292,7 +1292,7 @@ randomEither().map(x => x)
         },
       ],
       description:
-        "It is recommended to have your promises resolve to Either wherever error handling is needed instead of rejecting them and handling errors in the catch method. EitherAsync lets you do that seemlessly, it's a wrapper around Promise<Either<L, R>> that allows you to process asynchronous values while also having error handling via Either. The API of EitherAsync is heavily influenced by monad transformers, but the implementation under the hood is nothing like that. Despite that little piece of trivia, no prior knowledge of monad transformers is required.",
+        "It is recommended to have your promises resolve to Either wherever error handling is needed instead of rejecting them and handling errors in the catch method. EitherAsync lets you do that seamlessly, it's a wrapper around Promise<Either<L, R>> that allows you to process asynchronous values while also having error handling via Either. The API of EitherAsync is heavily influenced by monad transformers, but the implementation under the hood is nothing like that. Despite that little piece of trivia, no prior knowledge of monad transformers is required.",
       examples: [
         {
           title: 'How to import',
@@ -1401,7 +1401,7 @@ randomEither().map(x => x)
             {
               name: 'map',
               description:
-                "Transforms the the `Right` value of `this` with a given function. If the EitherAsync that is being mapped resolves to a Left then the mapping function won't be called and `run` will resolve the whole thing to that Left, just like the regular Either#map.",
+                "Transforms the `Right` value of `this` with a given function. If the EitherAsync that is being mapped resolves to a Left then the mapping function won't be called and `run` will resolve the whole thing to that Left, just like the regular Either#map.",
               signatureML: 'EitherAsync a b ~> (b -> c) -> EitherAsync a c',
               signatureTS: '<R2>(f: (value: R) => R2): EitherAsync<L, R2>',
               examples: [
@@ -1432,7 +1432,7 @@ randomEither().map(x => x)
             {
               name: 'toMaybeAsync',
               description:
-                'Convert `this` to a MaybeAsync, discarding any error values',
+                'Converts `this` to a MaybeAsync, discarding any error values.',
               signatureML: 'EitherAsync a b ~> MaybeAsync b',
               signatureTS: '(): MaybeAsync<R>',
               examples: [],
@@ -1476,7 +1476,7 @@ randomEither().map(x => x)
             {
               name: 'throwE',
               description:
-                'This helper is passed to the function given to the EitherAsync constructor. A type safe version of throwing an exception. Unlike the Error constructor, which will take anything, `throwE` only accepts values of the same type as the Left part of the Either',
+                'This helper is passed to the function given to the EitherAsync constructor. A type safe version of throwing an exception. Unlike the Error constructor, which will take anything, `throwE` only accepts values of the same type as the Left part of the Either.',
               signatureTS: '(error: L): never',
               examples: [
                 {
@@ -1560,7 +1560,7 @@ randomEither().map(x => x)
             {
               name: '[Symbol.iterator]',
               description:
-                '`Tuple` implements the Iterator and ArrayLike interfaces, which means that you can destructure tuples like you would destructure arrays',
+                '`Tuple` implements the Iterator and ArrayLike interfaces, which means that you can destructure tuples like you would destructure arrays.',
               examples: [
                 {
                   input: `const [ fst, snd ] = Tuple(1, 'str')`,
@@ -1649,7 +1649,7 @@ randomEither().map(x => x)
             {
               name: 'reduce',
               description:
-                'A somewhat arbitraty implementation of Foldable for Tuple, the reducer will be passed the initial value and the second value insinde `this` as arguments',
+                'A somewhat arbitrary implementation of Foldable for Tuple, the reducer will be passed the initial value and the second value inside `this` as arguments.',
               signatureML: '(a, b) ~> (b -> a -> b) -> b -> b',
               signatureTS:
                 '<T>(reducer: (accumulator: T, value: S) => T, initialValue: T): T',

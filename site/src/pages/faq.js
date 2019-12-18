@@ -35,7 +35,7 @@ const FAQ = props => (
       </li>
       <li>
         <h3>
-          Q: If this library intended to be used on the front-end or the
+          Q: Is this library intended to be used on the front-end or the
           back-end?
         </h3>
         Purify is intended to be used both on the front-end and the back-end.
@@ -45,7 +45,7 @@ const FAQ = props => (
       </li>
       <li>
         <h3>
-          Q: Is this library intended to be part of a ecosystem of likeminded
+          Q: Is this library intended to be part of an ecosystem of likeminded
           libraries or handle additional functionality itself?
         </h3>
         Purify is intented to be a single library with a focus on general
@@ -57,7 +57,7 @@ const FAQ = props => (
       </li>
       <li>
         <h3>Q: What is the timeline for the new releases?</h3>
-        There are no exact dates for upcoming versions of purify.
+        There are no exact dates for upcoming versions of Purify.
         <br />I try to release a new version every couple of months, but there's
         no guarantee for that.
       </li>
