@@ -34,7 +34,7 @@ export interface Maybe<T> {
   chainNullable<U>(f: (value: T) => U | undefined | null | void): Maybe<U>
   /** Flattens nested Maybes. `m.join()` is equivalent to `m.chain(x => x)` */
   join<U>(this: Maybe<Maybe<U>>): Maybe<U>
-  /** Takes a reducer and a initial value and returns the initial value if `this` is `Nothing` or the result of applying the function to the initial value and the value inside `this` */
+  /** Takes a reducer and an initial value and returns the initial value if `this` is `Nothing` or the result of applying the function to the initial value and the value inside `this` */
   reduce<U>(reducer: (accumulator: U, value: T) => U, initialValue: U): U
   /** Returns `this` if it\'s `Nothing`, otherwise it returns the result of applying the function argument to `this` and wrapping it in a `Just` */
   extend<U>(f: (value: Maybe<T>) => U): Maybe<U>
@@ -448,10 +448,10 @@ class Nothing implements Maybe<never> {
 
 Nothing.prototype.constructor = Maybe as any
 
-/** Constructs a Just. Respents an optional value that exists. */
+/** Constructs a Just. Represents an optional value that exists */
 const just = <T>(value: T): Maybe<T> => new Just(value)
 
-/** Represents a missing value, you can think of it as a smart 'null'. */
+/** Represents a missing value, you can think of it as a smart 'null' */
 const nothing = new Nothing()
 
 export { just as Just, nothing as Nothing }

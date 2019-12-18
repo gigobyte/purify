@@ -16,11 +16,11 @@ export interface EitherAsync<L, R> {
    * returned value wrapped in a Right will be returned
    */
   run(): Promise<Either<L, R>>
-  /** Transforms the the `Right` value of `this` with a given function. If the EitherAsync that is being mapped resolves to a Left then the mapping function won't be called and `run` will resolve the whole thing to that Left, just like the regular Either#map */
+  /** Transforms the `Right` value of `this` with a given function. If the EitherAsync that is being mapped resolves to a Left then the mapping function won't be called and `run` will resolve the whole thing to that Left, just like the regular Either#map */
   map<R2>(f: (value: R) => R2): EitherAsync<L, R2>
   /** Transforms `this` with a function that returns a `EitherAsync`. Behaviour is the same as the regular Either#chain */
   chain<R2>(f: (value: R) => EitherAsync<L, R2>): EitherAsync<L, R2>
-  /** Convert `this` to a MaybeAsync, discarding any error values */
+  /** Converts `this` to a MaybeAsync, discarding any error values */
   toMaybeAsync(): MaybeAsync<R>
 
   'fantasy-land/map'<R2>(f: (value: R) => R2): EitherAsync<L, R2>

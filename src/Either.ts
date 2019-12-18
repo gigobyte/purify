@@ -32,7 +32,8 @@ export interface Either<L, R> {
   join<R2>(this: Either<L, Either<L, R2>>): Either<L, R2>
   /** Returns the first `Right` between `this` and another `Either` or the `Left` in the argument if both `this` and the argument are `Left` */
   alt(other: Either<L, R>): Either<L, R>
-  /** Takes a reducer and a initial value and returns the initial value if `this` is `Left` or the result of applying the function to the initial value and the value inside `this` */
+  /** Takes a reducer and an initial value and returns the initial value if `this` is `Left` or the result of applying the function to the initial value and the value inside `this` */
+  reduce<T>(reducer: (accumulator: T, value: R) => T, initialValue: T): T
   /** Returns `this` if it\'s a `Left`, otherwise it returns the result of applying the function argument to `this` and wrapping it in a `Right` */
   extend<R2>(f: (value: Either<L, R>) => R2): Either<L, R2>
   /** Returns the value inside `this` or throws an error if `this` is a `Left` */
@@ -71,7 +72,6 @@ export interface Either<L, R> {
   'fantasy-land/equals'(other: Either<L, R>): boolean
   'fantasy-land/chain'<R2>(f: (value: R) => Either<L, R2>): Either<L, R2>
   'fantasy-land/alt'(other: Either<L, R>): Either<L, R>
-  reduce<T>(reducer: (accumulator: T, value: R) => T, initialValue: T): T
   'fantasy-land/reduce'<T>(
     reducer: (accumulator: T, value: R) => T,
     initialValue: T

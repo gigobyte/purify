@@ -33,7 +33,7 @@ export interface Tuple<F, S> extends Iterable<F | S>, ArrayLike<F | S> {
   mapFirst<F2>(f: (fst: F) => F2): Tuple<F2, S>
   /** Applies a function to the second value of `this` */
   map<S2>(f: (snd: S) => S2): Tuple<F, S2>
-  /** A somewhat arbitraty implementation of Foldable for Tuple, the reducer will be passed the initial value and the second value insinde `this` as arguments */
+  /** A somewhat arbitrary implementation of Foldable for Tuple, the reducer will be passed the initial value and the second value inside `this` as arguments */
   reduce<T>(reducer: (accumulator: T, value: S) => T, initialValue: T): T
   /** Returns an array with 2 elements - the values inside `this` */
   toArray(): [F, S]
@@ -57,7 +57,7 @@ export interface Tuple<F, S> extends Iterable<F | S>, ArrayLike<F | S> {
 
 class TupleImpl<F, S> implements Tuple<F, S> {
   0: F
-  1: S
+  1: S;
   [index: number]: F | S
   length: 2 = 2
 
