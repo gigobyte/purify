@@ -562,7 +562,7 @@ const data: Data = {
         },
       ],
       description:
-        'MaybeAsync is a wrapper around Promise<Maybe<T>> that allows you to process asynchronous missing values or, on a more technical level, allows you to seemlessly chain Promises that resolve to Maybe. The API of MaybeAsync is heavily influenced by monad transformers, but the implementation under the hood is nothing like that. Despite that little piece of trivia, no prior knowledge of monad transformers is required.',
+        'MaybeAsync is a wrapper around Promise<Maybe<T>> that allows you to process asynchronous missing values or, on a more technical level, allows you to seamlessly chain Promises that resolve to Maybe. The API of MaybeAsync is heavily influenced by monad transformers, but the implementation under the hood is nothing like that. Despite that little piece of trivia, no prior knowledge of monad transformers is required.',
       examples: [
         {
           title: 'How to import',
@@ -1292,7 +1292,7 @@ randomEither().map(x => x)
         },
       ],
       description:
-        "It is recommended to have your promises resolve to Either wherever error handling is needed instead of rejecting them and handling errors in the catch method. EitherAsync lets you do that seemlessly, it's a wrapper around Promise<Either<L, R>> that allows you to process asynchronous values while also having error handling via Either. The API of EitherAsync is heavily influenced by monad transformers, but the implementation under the hood is nothing like that. Despite that little piece of trivia, no prior knowledge of monad transformers is required.",
+        "It is recommended to have your promises resolve to Either wherever error handling is needed instead of rejecting them and handling errors in the catch method. EitherAsync lets you do that seamlessly, it's a wrapper around Promise<Either<L, R>> that allows you to process asynchronous values while also having error handling via Either. The API of EitherAsync is heavily influenced by monad transformers, but the implementation under the hood is nothing like that. Despite that little piece of trivia, no prior knowledge of monad transformers is required.",
       examples: [
         {
           title: 'How to import',
