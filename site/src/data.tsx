@@ -1401,7 +1401,7 @@ randomEither().map(x => x)
             {
               name: 'map',
               description:
-                "Transforms the the `Right` value of `this` with a given function. If the EitherAsync that is being mapped resolves to a Left then the mapping function won't be called and `run` will resolve the whole thing to that Left, just like the regular Either#map.",
+                "Transforms the `Right` value of `this` with a given function. If the EitherAsync that is being mapped resolves to a Left then the mapping function won't be called and `run` will resolve the whole thing to that Left, just like the regular Either#map.",
               signatureML: 'EitherAsync a b ~> (b -> c) -> EitherAsync a c',
               signatureTS: '<R2>(f: (value: R) => R2): EitherAsync<L, R2>',
               examples: [
@@ -1432,7 +1432,7 @@ randomEither().map(x => x)
             {
               name: 'toMaybeAsync',
               description:
-                'Convert `this` to a MaybeAsync, discarding any error values',
+                'Converts `this` to a MaybeAsync, discarding any error values.',
               signatureML: 'EitherAsync a b ~> MaybeAsync b',
               signatureTS: '(): MaybeAsync<R>',
               examples: [],
@@ -1476,7 +1476,7 @@ randomEither().map(x => x)
             {
               name: 'throwE',
               description:
-                'This helper is passed to the function given to the EitherAsync constructor. A type safe version of throwing an exception. Unlike the Error constructor, which will take anything, `throwE` only accepts values of the same type as the Left part of the Either',
+                'This helper is passed to the function given to the EitherAsync constructor. A type safe version of throwing an exception. Unlike the Error constructor, which will take anything, `throwE` only accepts values of the same type as the Left part of the Either.',
               signatureTS: '(error: L): never',
               examples: [
                 {
