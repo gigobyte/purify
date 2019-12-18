@@ -1095,7 +1095,7 @@ randomEither().map(x => x)
             {
               name: 'reduce',
               description:
-                'Takes a reducer and a initial value and returns the initial value if `this` is `Left` or the result of applying the function to the initial value and the value inside `this`.',
+                'Takes a reducer and an initial value and returns the initial value if `this` is `Left` or the result of applying the function to the initial value and the value inside `this`.',
               signatureML: 'Either a b ~> ((c, b) -> c, c) -> c',
               signatureTS:
                 '<T>(reducer: (accumulator: T, value: R) => T, initialValue: T): T',
