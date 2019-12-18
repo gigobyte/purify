@@ -125,7 +125,7 @@ const data: Data = {
             {
               name: 'Just',
               description:
-                'Constructs a Just. Respents an optional value that exists.',
+                'Constructs a Just. Represents an optional value that exists.',
               signatureML: 'a -> Maybe a',
               signatureTS: '<T>(value: T): Maybe<T>',
               examples: [
@@ -384,7 +384,7 @@ const data: Data = {
               signatureTS:
                 '<U>(reducer: (accumulator: U, value: T) => U, initialValue: U): U',
               description:
-                'Takes a reducer and a initial value and returns the initial value if `this` is `Nothing` or the result of applying the function to the initial value and the value inside `this`.',
+                'Takes a reducer and an initial value and returns the initial value if `this` is `Nothing` or the result of applying the function to the initial value and the value inside `this`.',
               examples: [
                 {
                   input: 'Just(5).reduce((acc, x) => x * acc, 2)',
