@@ -105,7 +105,7 @@ const data: Data = {
         {
           title: 'With Maybe',
           content: [
-            'const port = getConfig()',
+            'const port = Maybe.fromNullable(getConfig())',
             '    .chain(x => x.port)',
             '    .map(parseInt)',
             '    .orDefault(8080)',
