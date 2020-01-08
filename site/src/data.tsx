@@ -592,7 +592,7 @@ const data: Data = {
             '        const validatedModel: ValidModel = await liftMaybe(validateModel(model))',
             '        const user: User = await fromPromise(getUser(validatedModel.userId))',
             '',
-            '        await insert(user)',
+            '        return insert(user)',
             '    })',
             '',
             '// Now to unwrap',
