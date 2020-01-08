@@ -1886,15 +1886,15 @@ randomEither().map(x => x)
                 '<T>(f: (x: T, index: number, arr: T[]) => boolean, list: T[]): Maybe<number>',
               examples: [
                 {
-                  input: 'List.find(x => x > 5, [1,3,7,9])',
+                  input: 'List.findIndex(x => x > 5, [1,3,7,9])',
                   output: 'Just(2)',
                 },
                 {
-                  input: 'List.find(x => x > 5)([1,3,7,9])',
+                  input: 'List.findIndex(x => x > 5)([1,3,7,9])',
                   output: 'Just(2)',
                 },
                 {
-                  input: 'List.find(x => x > 10, [1,3,7,9])',
+                  input: 'List.findIndex(x => x > 10, [1,3,7,9])',
                   output: 'Nothing',
                 },
               ],
