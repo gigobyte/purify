@@ -490,8 +490,8 @@ const data: Data = {
               description:
                 'Returns the value inside `this` or null if `this` is `Nothing`. Use `extract` if you need an undefined returned instead.',
               examples: [
-                { input: 'Just(5).extract()', output: '5' },
-                { input: 'Nothing.extract()', output: 'undefined' },
+                { input: 'Just(5).extractNullable()', output: '5' },
+                { input: 'Nothing.extractNullable()', output: 'null' },
               ],
             },
             {
@@ -592,7 +592,7 @@ const data: Data = {
             '        const validatedModel: ValidModel = await liftMaybe(validateModel(model))',
             '        const user: User = await fromPromise(getUser(validatedModel.userId))',
             '',
-            '        await insert(user)',
+            '        return insert(user)',
             '    })',
             '',
             '// Now to unwrap',
@@ -1318,11 +1318,11 @@ randomEither().map(x => x)
             `declare function insert(user: User):          Promise<Id<User>>`,
             '',
             'const processRegistration = model =>',
-            '    EitherAsync<Error, Document>(async ({ liftEither, fromPromise }) => {',
+            '    EitherAsync<Error, Id<User>>(async ({ liftEither, fromPromise }) => {',
             '       const validatedModel: ValidModel = await liftEither(validateModel(model))',
-            '       const user: User = await fromPromise(getUser(validatedModel.userId)',
+            '       const user: User = await fromPromise(getUser(validatedModel.userId))',
             '',
-            '       await insert(user)',
+            '       return insert(user)',
             '    })',
             '',
             '// Now to unwrap',
@@ -1886,15 +1886,15 @@ randomEither().map(x => x)
                 '<T>(f: (x: T, index: number, arr: T[]) => boolean, list: T[]): Maybe<number>',
               examples: [
                 {
-                  input: 'List.find(x => x > 5, [1,3,7,9])',
+                  input: 'List.findIndex(x => x > 5, [1,3,7,9])',
                   output: 'Just(2)',
                 },
                 {
-                  input: 'List.find(x => x > 5)([1,3,7,9])',
+                  input: 'List.findIndex(x => x > 5)([1,3,7,9])',
                   output: 'Just(2)',
                 },
                 {
-                  input: 'List.find(x => x > 10, [1,3,7,9])',
+                  input: 'List.findIndex(x => x > 10, [1,3,7,9])',
                   output: 'Nothing',
                 },
               ],
