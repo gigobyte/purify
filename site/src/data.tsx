@@ -490,8 +490,8 @@ const data: Data = {
               description:
                 'Returns the value inside `this` or null if `this` is `Nothing`. Use `extract` if you need an undefined returned instead.',
               examples: [
-                { input: 'Just(5).extract()', output: '5' },
-                { input: 'Nothing.extract()', output: 'undefined' },
+                { input: 'Just(5).extractNullable()', output: '5' },
+                { input: 'Nothing.extractNullable()', output: 'null' },
               ],
             },
             {
