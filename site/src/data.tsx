@@ -1932,12 +1932,12 @@ randomEither().map(x => x)
               examples: [
                 {
                   input:
-                    "import { compare } from 'purify-ts/Function'\nList.sort(compare, [1,100,-1]",
+                    "import { compare } from 'purify-ts/Function'\nList.sort(compare, [1,100,-1])",
                   output: '[-1, 1, 100]',
                 },
                 {
                   input:
-                    "import { Order } from 'purify-ts/Function'\nList.sort((x, y) => /* your own fn */, [0,102,-223]",
+                    "import { Order } from 'purify-ts/Function'\nList.sort((x, y) => /* your own fn */, [0,102,-223])",
                   output:
                     '// Result depends on the returned Order enum value (Order.LT, Order.EQ or Order.GT)',
                 },
