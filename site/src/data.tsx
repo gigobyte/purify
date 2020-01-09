@@ -1303,7 +1303,7 @@ randomEither().map(x => x)
           content: [
             `EitherAsync<Error, number>(async ({ liftEither, fromPromise }) => {`,
             '    // if you have Either<L, R> and you want to get R out',
-            '    const num: number = await liftMaybe(Right(1))',
+            '    const num: number = await liftEither(Right(1))',
             '',
             '    // if you have Promise<Either<L, R>> and you want to get R out',
             '    const num2: number = await fromPromise(Promise.resolve(Right(1)))',
