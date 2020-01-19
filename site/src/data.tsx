@@ -1062,6 +1062,24 @@ randomEither().map(x => x)
               ],
             },
             {
+              name: 'chainLeft',
+              description:
+                'The same as Either#chain but executes the transformation function only if the value is Left. Useful for recovering from errors.',
+              signatureML: 'Either a b ~> (a -> Either c b) -> Either c b',
+              signatureTS:
+                '<L2>(f: (value: L) => Either<L2, R>): Either<L2, R>',
+              examples: [
+                {
+                  input: `Left('Error').chain(x => Right(''))`,
+                  output: `Right('')`,
+                },
+                {
+                  input: `Right(5).chain(x => Right(999))`,
+                  output: `Right(5)`,
+                },
+              ],
+            },
+            {
               name: 'join',
               description:
                 'Flattens nested Eithers. `e.join()` is equivalent to `e.chain(x => x)`',

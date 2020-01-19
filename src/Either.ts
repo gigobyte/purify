@@ -28,6 +28,8 @@ export interface Either<L, R> {
   equals(other: Either<L, R>): boolean
   /** Transforms `this` with a function that returns an `Either`. Useful for chaining many computations that may fail */
   chain<R2>(f: (value: R) => Either<L, R2>): Either<L, R2>
+  /** The same as Either#chain but executes the transformation function only if the value is Left. Useful for recovering from errors */
+  chainLeft<L2>(f: (value: L) => Either<L2, R>): Either<L2, R>
   /** Flattens nested Eithers. `e.join()` is equivalent to `e.chain(x => x)` */
   join<R2>(this: Either<L, Either<L, R2>>): Either<L, R2>
   /** Returns the first `Right` between `this` and another `Either` or the `Left` in the argument if both `this` and the argument are `Left` */
@@ -180,6 +182,10 @@ class Right<R, L = never> implements Either<L, R> {
 
   chain<R2>(f: (value: R) => Either<L, R2>): Either<L, R2> {
     return f(this.__value)
+  }
+
+  chainLeft<L2>(_: (value: L) => Either<L2, R>): Either<L2, R> {
+    return this as any
   }
 
   join<R2>(this: Either<L, Either<L, R2>>): Either<L, R2> {
@@ -336,6 +342,10 @@ class Left<L, R = never> implements Either<L, R> {
 
   chain<R2>(_: (value: R) => Either<L, R2>): Either<L, R2> {
     return this as any
+  }
+
+  chainLeft<L2>(f: (value: L) => Either<L2, R>): Either<L2, R> {
+    return f(this.__value)
   }
 
   join<R2>(this: Either<L, Either<L, R2>>): Either<L, R2> {
