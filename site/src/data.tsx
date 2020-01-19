@@ -73,6 +73,7 @@ const data: Data = {
         'Monad',
         'Foldable',
         'Extend',
+        'Filterable',
       ],
       description: `The Maybe type is one of the most popular data types available. It is fundamental to learning about functional error handling and representing missing values. A Maybe value can be either Just a value or Nothing. The Just data constructor is used for wrapping present values while the Nothing constructor is used when a value is absent. Both constructors produce objects that share the same API which makes it easy to manipulate optional values without null checking or exception handling.`,
       examples: [

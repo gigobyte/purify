@@ -73,6 +73,7 @@ export interface Maybe<T> {
     initialValue: U
   ): U
   'fantasy-land/extend'<U>(f: (value: Maybe<T>) => U): Maybe<U>
+  'fantasy-land/filter'(pred: (value: T) => boolean): Maybe<T>
 }
 
 interface MaybeTypeRef {
@@ -299,6 +300,10 @@ class Just<T> implements Maybe<T> {
   'fantasy-land/extend'<U>(f: (value: Maybe<T>) => U): Maybe<U> {
     return this.extend(f)
   }
+
+  'fantasy-land/filter'(pred: (value: T) => boolean): Maybe<T> {
+    return this.filter(pred)
+  }
 }
 
 Just.prototype.constructor = Maybe as any
@@ -443,6 +448,10 @@ class Nothing implements Maybe<never> {
 
   'fantasy-land/extend'<U>(f: (value: Maybe<never>) => U): Maybe<U> {
     return this.extend(f)
+  }
+
+  'fantasy-land/filter'(pred: (value: never) => boolean): Maybe<never> {
+    return this.filter(pred)
   }
 }
 
