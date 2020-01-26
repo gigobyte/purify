@@ -52,6 +52,16 @@ const Changelog = props => (
     <div>
       <h1>Choose version:</h1>
       <VersionContainer>
+        <VersionStatic>0.14.1</VersionStatic>
+        <Description>
+          Check out the release on{' '}
+          <a href="https://github.com/gigobyte/purify/releases/tag/v0.14.1">
+            GitHub
+          </a>
+        </Description>
+        <Date>January 2020</Date>
+      </VersionContainer>
+      <VersionContainer>
         <Version to="/changelog/0.14">0.14</Version>
         <Description>JSON codecs and a new build</Description>
         <Date>December 2019</Date>
@@ -66,7 +76,6 @@ const Changelog = props => (
         </Description>
         <Date>September 2019</Date>
       </VersionContainer>
-
       <VersionContainer>
         <VersionStatic>0.13.1</VersionStatic>
         <Description>
@@ -77,13 +86,11 @@ const Changelog = props => (
         </Description>
         <Date>August 2019</Date>
       </VersionContainer>
-
       <VersionContainer>
         <Version to="/changelog/0.13">0.13</Version>
         <Description>Mostly quality of life utilities</Description>
         <Date>August 2019</Date>
       </VersionContainer>
-
       <VersionContainer>
         <Version to="/changelog/0.12">0.12</Version>
         <Description>
@@ -91,7 +98,6 @@ const Changelog = props => (
         </Description>
         <Date>January 2019</Date>
       </VersionContainer>
-
       <VersionContainer>
         <Version to="/changelog/0.11">0.11</Version>
         <Description>
@@ -99,7 +105,6 @@ const Changelog = props => (
         </Description>
         <Date>September 2018</Date>
       </VersionContainer>
-
       <VersionContainer>
         <VersionStatic>0.10</VersionStatic>
         <Description>Initial release</Description>
