@@ -12,7 +12,7 @@
 # What is purify?
 
 Purify is a library for functional programming in TypeScript.
-It's purpose is to allow developers to use popular patterns and abstractions that are available in most functional languages.
+Its purpose is to allow developers to use popular patterns and abstractions that are available in most functional languages.
 It is also <a href="https://github.com/fantasyland/fantasy-land">Fantasy Land</a> conformant.
 
 # Core values
