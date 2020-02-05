@@ -23,7 +23,7 @@ const GettingStarted = props => (
   <Layout location={props.location}>
     <Container>
       <h1>What is purify?</h1>
-      Purify is a library for functional programming in TypeScript. It's purpose
+      Purify is a library for functional programming in TypeScript. Its purpose
       is to allow developers to use popular patterns and abstractions that are
       available in most functional languages. It is also{' '}
       <a href="https://github.com/fantasyland/fantasy-land">
@@ -60,13 +60,13 @@ const GettingStarted = props => (
       Purify is available as a package on npm. You can install it with a package
       manager of your choice:
       <Console>
-        $ npm install purify-ts <br />
-        $ yarn add purify-ts
+        $ npm install purify-ts <br />$ yarn add purify-ts
       </Console>
       On the left sidebar you can find all of purify's contents, each page
       contains a guide on how to start using it. <br />
       You can start by visiting the page about{' '}
-      <Link to="/adts/Maybe">Maybe</Link>, one of the most popular data types.<br />
+      <Link to="/adts/Maybe">Maybe</Link>, one of the most popular data types.
+      <br />
       If you are worried about the future of the project, because perhaps you
       are evaluating its usage in a large project, consider checking out the{' '}
       <Link to="/faq">FAQ</Link>.
