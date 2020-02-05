@@ -2108,7 +2108,7 @@ type User = GetInterface<typeof User>`,
               name: 'decode',
               signatureTS: '(input: unknown) => Either<string, T>',
               description:
-                "Takes a JSON value and runs the decode function the codec was constructed with. All of purify's built-in codecs return a descriptive error message in case the decode fails.",
+                "Takes a JSON value (i.e. a plain JS object) and runs the decode function the codec was constructed with. All of purify's built-in codecs return a descriptive error message in case the decode fails.",
               examples: [],
             },
             {
@@ -2268,7 +2268,7 @@ type User = GetInterface<typeof User>`,
                   input: 'oneOf([boolean, undefinedType]).decode(123)',
                   output: `Left('One of the following problems occured:
       (0) Expected a boolean, but received a number with value 0,
-      (1) Expected an undefined, but received a number with value 0')"`,
+      (1) Expected an undefined, but received a number with value 0')`,
                 },
               ],
             },
