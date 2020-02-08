@@ -5,13 +5,13 @@ import { Left, Right } from './Either'
 describe('MaybeAsync', () => {
   test('liftMaybe', () => {
     MaybeAsync(async ({ liftMaybe }) => {
-      const value: 5 = await liftMaybe(Just<5>(5))
+      const _: 5 = await liftMaybe(Just<5>(5))
     })
   })
 
   test('fromPromise', () => {
     MaybeAsync(async ({ fromPromise }) => {
-      const value: 5 = await fromPromise(Promise.resolve(Just<5>(5)))
+      const _: 5 = await fromPromise(Promise.resolve(Just<5>(5)))
     })
   })
 

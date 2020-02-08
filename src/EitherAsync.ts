@@ -18,8 +18,12 @@ export interface EitherAsync<L, R> {
   run(): Promise<Either<L, R>>
   /** Transforms the `Right` value of `this` with a given function. If the EitherAsync that is being mapped resolves to a Left then the mapping function won't be called and `run` will resolve the whole thing to that Left, just like the regular Either#map */
   map<R2>(f: (value: R) => R2): EitherAsync<L, R2>
+  /** Maps the `Left` value of `this`, acts like an identity if `this` is `Right` */
+  mapLeft<L2>(f: (value: L) => L2): EitherAsync<L2, R>
   /** Transforms `this` with a function that returns a `EitherAsync`. Behaviour is the same as the regular Either#chain */
   chain<R2>(f: (value: R) => EitherAsync<L, R2>): EitherAsync<L, R2>
+  /** The same as EitherAsync#chain but executes the transformation function only if the value is Left. Useful for recovering from errors */
+  chainLeft<L2>(f: (value: L) => EitherAsync<L2, R>): EitherAsync<L2, R>
   /** Converts `this` to a MaybeAsync, discarding any error values */
   toMaybeAsync(): MaybeAsync<R>
 
@@ -73,10 +77,30 @@ class EitherAsyncImpl<L, R> implements EitherAsync<L, R> {
     return EitherAsync(helpers => this.runPromise(helpers).then(f))
   }
 
+  mapLeft<L2>(f: (value: L) => L2): EitherAsync<L2, R> {
+    return EitherAsync(async helpers => {
+      try {
+        return await this.runPromise((helpers as any) as EitherAsyncHelpers<L>)
+      } catch (e) {
+        throw f(e)
+      }
+    })
+  }
+
   chain<R2>(f: (value: R) => EitherAsync<L, R2>): EitherAsync<L, R2> {
     return EitherAsync(async helpers => {
       const value = await this.runPromise(helpers)
-      return await helpers.fromPromise(f(value).run())
+      return helpers.fromPromise(f(value).run())
+    })
+  }
+
+  chainLeft<L2>(f: (value: L) => EitherAsync<L2, R>): EitherAsync<L2, R> {
+    return EitherAsync(async helpers => {
+      try {
+        return await this.runPromise((helpers as any) as EitherAsyncHelpers<L>)
+      } catch (e) {
+        return helpers.fromPromise(f(e).run())
+      }
     })
   }
 

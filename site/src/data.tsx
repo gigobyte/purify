@@ -1379,22 +1379,28 @@ randomEither().map(x => x)
               signatureTS: 'run(): Promise<Either<L, R>>',
               description: (
                 <div>
-                  It's important to remember how `run` will behave because in an
-                  async context there are other ways for a function to fail
-                  other than to return a Left, for example:
-                  <br />
-                  If any of the computations inside EitherAsync resolved to a
-                  Left, `run` will return a Promise resolved to that Left.
-                  <br />
-                  If any of the promises were to be rejected then `run` will
-                  return a Promise resolved to a Left with the rejection value
-                  inside.
-                  <br />
-                  If an exception is thrown then `run` will return a Promise
-                  resolved to a Left with the exception inside.
-                  <br />
-                  If none of the above happen then a promise resolved to the
-                  returned value wrapped in a Right will be returned.
+                  <b>IMPORTANT: </b> The Promise returned from `run` will never
+                  be rejected, so there's no point in calling `catch` on it. If
+                  something goes wrong, here's how it's going to be handled:
+                  <ul>
+                    <li>
+                      If any of the computations inside EitherAsync resolved to
+                      a Left, `run` will return a Promise resolved to that Left.
+                    </li>
+                    <li>
+                      If any of the promises were to be rejected then `run` will
+                      return a Promise resolved to a Left with the rejection
+                      value inside.
+                    </li>
+                    <li>
+                      If an exception is thrown then `run` will return a Promise
+                      resolved to a Left with the exception inside.
+                    </li>
+                    <li>
+                      If none of the above happen then a promise resolved to the
+                      returned value wrapped in a Right will be returned.
+                    </li>
+                  </ul>
                 </div>
               ),
               examples: [
@@ -1432,17 +1438,53 @@ randomEither().map(x => x)
               ],
             },
             {
+              name: 'mapLeft',
+              description:
+                'Maps the `Left` value of `this`, acts like an identity if `this` is `Right`.',
+              signatureML: 'EitherAsync a b ~> (a -> c) -> EitherAsync c b',
+              signatureTS: '<L2>(f: (value: L) => L2): EitherAsync<L2, R>',
+              examples: [
+                {
+                  input:
+                    'EitherAsync(() => throw new Error()).mapLeft(_ => ({ status: 500 })).run()',
+                  output: 'Promise {<resolved>: Left({ status: 500 })}',
+                },
+                {
+                  input:
+                    'EitherAsync(() => Promise.resolve(5)).mapLeft(x => x + 1).run()',
+                  output: 'Promise {<resolved>: Right(5)}',
+                },
+              ],
+            },
+            {
               name: 'chain',
               description:
                 'Transforms `this` with a function that returns a `EitherAsync`. Behaviour is the same as the regular Either#chain.',
               signatureML:
-                'EitherAsync a b ~> (a -> EitherAsync a c) -> EitherAsync a c',
+                'EitherAsync a b ~> (b -> EitherAsync a c) -> EitherAsync a c',
               signatureTS:
                 '<R2>(f: (value: R) => EitherAsync<L, R2>): EitherAsync<L, R2>',
               examples: [
                 {
                   input: `EitherAsync(() => Promise.resolve(5))
       .chain(x => EitherAsync(() => Promise.resolve(x + 1)))
+      .run()`,
+                  output: 'Promise {<resolved>: Right(6)}',
+                },
+              ],
+            },
+            {
+              name: 'chainLeft',
+              description:
+                'The same as EitherAsync#chain but executes the transformation function only if the value is Left. Useful for recovering from errors asynchronously.',
+              signatureML:
+                'EitherAsync a b ~> (a -> EitherAsync c b) -> EitherAsync c b',
+              signatureTS:
+                '<L2>(f: (value: L) => EitherAsync<L2, R>): EitherAsync<L2, R>',
+              examples: [
+                {
+                  input: `EitherAsync(({ throwE }) => throwE(500))
+      .chainLeft(x => EitherAsync(() => Promise.resolve(x + 1)))
       .run()`,
                   output: 'Promise {<resolved>: Right(6)}',
                 },
@@ -2133,7 +2175,7 @@ type User = GetInterface<typeof User>`,
             {
               name: 'string',
               signatureTS: 'Codec<string>',
-              description: `A codec for any string value. Most of the time you will use it to implement an interface codec (see the Codec#interface example above). Encoding a string acts like the identity function.`,
+              description: `A codec for any string value. Most of the time you will use it to implement an interface codec (see the Codec.interface example above). Encoding a string acts like the identity function.`,
               examples: [
                 {
                   input: `string.decode('purify-ts')`,
