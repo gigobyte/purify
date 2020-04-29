@@ -66,7 +66,10 @@ export const Codec = {
       const keys = Object.keys(properties)
 
       for (const key of keys) {
-        if (!input.hasOwnProperty(key)) {
+        if (
+          !input.hasOwnProperty(key) &&
+          !(properties[key] as any)._isOptional
+        ) {
           return Left(
             `Problem with property "${key}": it does not exist in received object ${JSON.stringify(
               input
@@ -102,7 +105,7 @@ export const Codec = {
     return {
       decode,
       encode,
-      unsafeDecode: input => decode(input).unsafeCoerce()
+      unsafeDecode: (input) => decode(input).unsafeCoerce()
     }
   },
 
@@ -117,14 +120,14 @@ export const Codec = {
     return {
       decode,
       encode,
-      unsafeDecode: input => decode(input).unsafeCoerce()
+      unsafeDecode: (input) => decode(input).unsafeCoerce()
     }
   }
 }
 
 /** A codec for any string value. Most of the time you will use it to implement an interface codec (see the Codec#interface example above). Encoding a string acts like the identity function */
 export const string = Codec.custom<string>({
-  decode: input =>
+  decode: (input) =>
     typeof input === 'string'
       ? Right(input)
       : Left(reportError('a string', input)),
@@ -133,7 +136,7 @@ export const string = Codec.custom<string>({
 
 /** A codec for any number value. This includes anything that has a typeof number - NaN, Infinity etc. Encoding a number acts like the identity function */
 export const number = Codec.custom<number>({
-  decode: input =>
+  decode: (input) =>
     typeof input === 'number'
       ? Right(input)
       : Left(reportError('a number', input)),
@@ -142,23 +145,28 @@ export const number = Codec.custom<number>({
 
 /** A codec for null only. Most of the time you will use it with the oneOf codec combinator to create a codec for a type like "string | null" */
 export const nullType = Codec.custom<null>({
-  decode: input =>
+  decode: (input) =>
     input === null ? Right(input) : Left(reportError('a null', input)),
   encode: identity
 })
 
-/** A codec for undefined only */
-export const undefinedType = Codec.custom<undefined>({
-  decode: input =>
+const undefinedType = Codec.custom<undefined>({
+  decode: (input) =>
     input === undefined
       ? Right(input)
       : Left(reportError('an undefined', input)),
   encode: identity
 })
 
+export const optional = <T>(codec: Codec<T>): Codec<T | undefined> =>
+  ({
+    ...oneOf([codec, undefinedType]),
+    _isOptional: true
+  } as any)
+
 /** A codec for a boolean value */
 export const boolean = Codec.custom<boolean>({
-  decode: input =>
+  decode: (input) =>
     typeof input === 'boolean'
       ? Right(input)
       : Left(reportError('a boolean', input)),
@@ -176,7 +184,7 @@ export const oneOf = <T extends Array<Codec<any>>>(
   codecs: T
 ): Codec<GetInterface<T extends Array<infer U> ? U : never>> =>
   Codec.custom({
-    decode: input => {
+    decode: (input) => {
       let errors: string[] = []
 
       for (const codec of codecs) {
@@ -194,7 +202,7 @@ export const oneOf = <T extends Array<Codec<any>>>(
           .join(', ')}`
       )
     },
-    encode: input => {
+    encode: (input) => {
       for (const codec of codecs) {
         const res = codec.decode(input)
         if (res.isRight()) {
@@ -209,7 +217,7 @@ export const oneOf = <T extends Array<Codec<any>>>(
 /** A codec for an array */
 export const array = <T>(codec: Codec<T>): Codec<Array<T>> =>
   Codec.custom({
-    decode: input => {
+    decode: (input) => {
       if (!Array.isArray(input)) {
         return Left(reportError('an array', input))
       } else {
@@ -230,14 +238,14 @@ export const array = <T>(codec: Codec<T>): Codec<Array<T>> =>
         return Right(result)
       }
     },
-    encode: input => input.map(codec.encode)
+    encode: (input) => input.map(codec.encode)
   })
 
 const numberString = Codec.custom<any>({
-  decode: input =>
+  decode: (input) =>
     string
       .decode(input)
-      .chain(x =>
+      .chain((x) =>
         isFinite(+x) ? Right(x) : Left(reportError('a number key', input))
       ),
   encode: identity
@@ -249,7 +257,7 @@ export const record = <K extends keyof any, V>(
   valueCodec: Codec<V>
 ): Codec<Record<K, V>> =>
   Codec.custom({
-    decode: input => {
+    decode: (input) => {
       const result = {} as Record<K, V>
       const keyCodecOverride: Codec<K> =
         (keyCodec as any) === number ? numberString : keyCodec
@@ -279,7 +287,7 @@ export const record = <K extends keyof any, V>(
 
       return Right(result)
     },
-    encode: input => {
+    encode: (input) => {
       const result = {} as Record<K, V>
 
       for (const key in input) {
@@ -297,7 +305,7 @@ export const exactly = <T extends string | number | boolean>(
   expectedValue: T
 ): Codec<T> =>
   Codec.custom({
-    decode: input =>
+    decode: (input) =>
       input === expectedValue
         ? Right(expectedValue)
         : Left(
@@ -318,29 +326,29 @@ export const exactly = <T extends string | number | boolean>(
 /** A special codec used when dealing with recursive data structures, it allows a codec to be recursively defined by itself */
 export const lazy = <T>(getCodec: () => Codec<T>): Codec<T> =>
   Codec.custom({
-    decode: input => getCodec().decode(input),
-    encode: input => getCodec().encode(input)
+    decode: (input) => getCodec().decode(input),
+    encode: (input) => getCodec().encode(input)
   })
 
 /** A codec for purify's Maybe type. Encode runs Maybe#toJSON, which effectively returns the value inside if it's a Just or undefined if it's Nothing */
 export const maybe = <T>(codec: Codec<T>): Codec<Maybe<T>> =>
   Codec.custom({
-    decode: input =>
+    decode: (input) =>
       Maybe.fromNullable(input).caseOf({
-        Just: x => codec.decode(x).map(Just),
+        Just: (x) => codec.decode(x).map(Just),
         Nothing: () => Right(Nothing)
       }),
-    encode: input => input.toJSON()
+    encode: (input) => input.toJSON()
   })
 
 /** A codec for purify's NEL type */
 export const nonEmptyList = <T>(codec: Codec<T>): Codec<NonEmptyList<T>> => {
   const arrayCodec = array(codec)
   return Codec.custom({
-    decode: input =>
+    decode: (input) =>
       arrayCodec
         .decode(input)
-        .chain(x =>
+        .chain((x) =>
           NonEmptyList.fromArray(x).toEither(
             `Expected an array with one or more elements, but received an empty array`
           )
@@ -358,7 +366,7 @@ export const tuple = <TS extends [Codec<any>, ...Codec<any>[]]>(
   }
 > =>
   Codec.custom({
-    decode: input => {
+    decode: (input) => {
       if (!Array.isArray(input)) {
         return Left(reportError('an array', input))
       } else if (codecs.length !== input.length) {
@@ -383,21 +391,21 @@ export const tuple = <TS extends [Codec<any>, ...Codec<any>[]]>(
         return Right(result)
       }
     },
-    encode: input => input.map((x, i) => codecs[i].encode(x))
+    encode: (input) => input.map((x, i) => codecs[i].encode(x))
   })
 
 /** A codec for a parsable date string, on successful decoding it resolves to a Date object. The validity of the date string during decoding is decided by the browser implementation of Date.parse. Encode runs toISOString on the passed in date object */
 export const date = Codec.custom<Date>({
-  decode: input =>
+  decode: (input) =>
     string
       .decode(input)
-      .mapLeft(err => `Problem with date string: ${err}`)
-      .chain(x =>
+      .mapLeft((err) => `Problem with date string: ${err}`)
+      .chain((x) =>
         Number.isNaN(Date.parse(x))
           ? Left(
               'Expected a valid date string, but received a string that cannot be parsed'
             )
           : Right(new Date(x))
       ),
-  encode: input => input.toISOString()
+  encode: (input) => input.toISOString()
 })

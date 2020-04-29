@@ -4,7 +4,6 @@ import {
   string,
   oneOf,
   nullType,
-  undefinedType,
   boolean,
   unknown,
   array,
@@ -14,7 +13,8 @@ import {
   nonEmptyList,
   tuple,
   lazy,
-  date
+  date,
+  optional
 } from './Codec'
 import { Left, Right } from './Either'
 import { Just, Nothing } from './Maybe'
@@ -24,7 +24,8 @@ describe('Codec', () => {
   describe('interface', () => {
     const mockCodec = Codec.interface({
       a: number,
-      b: string
+      b: string,
+      c: optional(string)
     })
 
     test('decode', () => {
@@ -54,8 +55,9 @@ describe('Codec', () => {
 
       expect(mockCodec.decode({ a: 0, b: '' })).toEqual(Right({ a: 0, b: '' }))
       expect(mockCodec.decode({ a: 0, b: '', c: '' })).toEqual(
-        Right({ a: 0, b: '' })
+        Right({ a: 0, b: '', c: '' })
       )
+      expect(mockCodec)
     })
 
     test('unsafeDecode', () => {
@@ -66,8 +68,12 @@ describe('Codec', () => {
     })
 
     test('encode', () => {
-      expect(mockCodec.encode({ a: 0, b: '' })).toEqual({ a: 0, b: '' })
-      expect(mockCodec.encode({ a: 0, b: '', c: '' } as any)).toEqual({
+      expect(mockCodec.encode({ a: 0, b: '', c: undefined })).toEqual({
+        a: 0,
+        b: '',
+        c: undefined
+      })
+      expect(mockCodec.encode({ a: 0, b: '', d: '' } as any)).toEqual({
         a: 0,
         b: ''
       })
@@ -136,20 +142,24 @@ describe('Codec', () => {
     })
   })
 
-  describe('undefined', () => {
+  describe('optional', () => {
     test('decode', () => {
-      expect(undefinedType.decode(null)).toEqual(
-        Left('Expected an undefined, but received null')
+      expect(optional(number).decode(null)).toEqual(
+        Left(
+          'One of the following problems occured: (0) Expected a number, but received null, (1) Expected an undefined, but received null'
+        )
       )
-      expect(undefinedType.decode(false)).toEqual(
-        Left('Expected an undefined, but received a boolean')
+      expect(optional(number).decode(false)).toEqual(
+        Left(
+          'One of the following problems occured: (0) Expected a number, but received a boolean, (1) Expected an undefined, but received a boolean'
+        )
       )
 
-      expect(undefinedType.decode(undefined)).toEqual(Right(undefined))
+      expect(optional(number).decode(undefined)).toEqual(Right(undefined))
     })
 
     test('encode', () => {
-      expect(undefinedType.encode(undefined)).toEqual(undefined)
+      expect(optional(number).encode(undefined)).toEqual(undefined)
     })
   })
 
@@ -177,13 +187,13 @@ describe('Codec', () => {
     const inputs = ['', {}, null, 0, undefined, false]
 
     test('decode', () => {
-      inputs.forEach(input => {
+      inputs.forEach((input) => {
         expect(unknown.decode(input)).toEqual(Right(input))
       })
     })
 
     test('encode', () => {
-      inputs.forEach(input => {
+      inputs.forEach((input) => {
         expect(unknown.encode(input)).toEqual(input)
       })
     })
@@ -257,7 +267,7 @@ describe('Codec', () => {
     test('encode', () => {
       const mockKeyCodec = Codec.custom<string>({
         decode: string.decode,
-        encode: _ => 'haha'
+        encode: (_) => 'haha'
       })
 
       const mockValueCodec = Codec.custom<number>({
@@ -297,12 +307,12 @@ describe('Codec', () => {
 
       const fancyStringCodec = Codec.custom<string>({
         decode: string.decode,
-        encode: _ => 'always!'
+        encode: (_) => 'always!'
       })
 
       const fancyNumberCodec = Codec.custom<number>({
         decode: number.decode,
-        encode: input => input + 1
+        encode: (input) => input + 1
       })
 
       const fancyMockCodec = oneOf([fancyStringCodec, fancyNumberCodec])
