@@ -37,14 +37,14 @@ describe('NonEmptyList', () => {
   })
 
   it('Should handle all Array.prototype methods', () => {
-    expect(NonEmptyList([1]).map(_ => 'always string')).toEqual(
+    expect(NonEmptyList([1]).map((_) => 'always string')).toEqual(
       NonEmptyList(['always string'])
     )
-    expect(NonEmptyList([1]).filter(_ => true)).toEqual(NonEmptyList([1]))
+    expect(NonEmptyList([1]).filter((_) => true)).toEqual(NonEmptyList([1]))
   })
 
   it('Should not lose type info when using Array.prototype methoids', () => {
-    const a: NonEmptyList<string> = NonEmptyList([1]).map(_ => '')
+    const a: NonEmptyList<string> = NonEmptyList([1]).map((_) => '')
     const b: NonEmptyList<number> = NonEmptyList([1]).reverse()
   })
 })

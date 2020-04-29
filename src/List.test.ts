@@ -46,15 +46,15 @@ describe('List', () => {
   })
 
   test('find', () => {
-    expect(List.find(x => x == 5)([1, 2, 3, 5])).toEqual(Just(5))
-    expect(List.find(x => x == 5, [1, 2, 3, 5])).toEqual(Just(5))
-    expect(List.find(x => x == 0, [1, 2, 3, 5])).toEqual(Nothing)
+    expect(List.find((x) => x == 5)([1, 2, 3, 5])).toEqual(Just(5))
+    expect(List.find((x) => x == 5, [1, 2, 3, 5])).toEqual(Just(5))
+    expect(List.find((x) => x == 0, [1, 2, 3, 5])).toEqual(Nothing)
   })
 
   test('findIndex', () => {
-    expect(List.findIndex(x => x == 5)([1, 2, 3, 5])).toEqual(Just(3))
-    expect(List.findIndex(x => x == 5, [1, 2, 3, 5])).toEqual(Just(3))
-    expect(List.findIndex(x => x == 0, [1, 2, 3, 5])).toEqual(Nothing)
+    expect(List.findIndex((x) => x == 5)([1, 2, 3, 5])).toEqual(Just(3))
+    expect(List.findIndex((x) => x == 5, [1, 2, 3, 5])).toEqual(Just(3))
+    expect(List.findIndex((x) => x == 0, [1, 2, 3, 5])).toEqual(Nothing)
   })
 
   test('sort', () => {

@@ -63,11 +63,11 @@ class MaybeAsyncImpl<T> implements MaybeAsync<T> {
   }
 
   map<U>(f: (value: T) => U): MaybeAsync<U> {
-    return MaybeAsync(helpers => this.runPromise(helpers).then(f))
+    return MaybeAsync((helpers) => this.runPromise(helpers).then(f))
   }
 
   chain<U>(f: (value: T) => MaybeAsync<U>): MaybeAsync<U> {
-    return MaybeAsync(async helpers => {
+    return MaybeAsync(async (helpers) => {
       const value = await this.runPromise(helpers)
       return await helpers.fromPromise(f(value).run())
     })

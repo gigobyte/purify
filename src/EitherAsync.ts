@@ -74,11 +74,11 @@ class EitherAsyncImpl<L, R> implements EitherAsync<L, R> {
   }
 
   map<R2>(f: (value: R) => R2): EitherAsync<L, R2> {
-    return EitherAsync(helpers => this.runPromise(helpers).then(f))
+    return EitherAsync((helpers) => this.runPromise(helpers).then(f))
   }
 
   mapLeft<L2>(f: (value: L) => L2): EitherAsync<L2, R> {
-    return EitherAsync(async helpers => {
+    return EitherAsync(async (helpers) => {
       try {
         return await this.runPromise((helpers as any) as EitherAsyncHelpers<L>)
       } catch (e) {
@@ -88,14 +88,14 @@ class EitherAsyncImpl<L, R> implements EitherAsync<L, R> {
   }
 
   chain<R2>(f: (value: R) => EitherAsync<L, R2>): EitherAsync<L, R2> {
-    return EitherAsync(async helpers => {
+    return EitherAsync(async (helpers) => {
       const value = await this.runPromise(helpers)
       return helpers.fromPromise(f(value).run())
     })
   }
 
   chainLeft<L2>(f: (value: L) => EitherAsync<L2, R>): EitherAsync<L2, R> {
-    return EitherAsync(async helpers => {
+    return EitherAsync(async (helpers) => {
       try {
         return await this.runPromise((helpers as any) as EitherAsyncHelpers<L>)
       } catch (e) {

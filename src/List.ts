@@ -61,7 +61,7 @@ function findIndex<T>(
     case 1:
       return (list: T[]) => findIndex(f, list)
     default:
-      return Maybe.fromPredicate(x => x !== -1, list!.findIndex(f))
+      return Maybe.fromPredicate((x) => x !== -1, list!.findIndex(f))
   }
 }
 

@@ -24,9 +24,9 @@ describe('Maybe', () => {
   })
 
   test('fromPredicate', () => {
-    expect(Maybe.fromPredicate(x => x > 0, 0)).toEqual(Nothing)
-    expect(Maybe.fromPredicate(x => x === 0, 0)).toEqual(Just(0))
-    expect(Maybe.fromPredicate<number>(x => x > 0)(0)).toEqual(Nothing)
+    expect(Maybe.fromPredicate((x) => x > 0, 0)).toEqual(Nothing)
+    expect(Maybe.fromPredicate((x) => x === 0, 0)).toEqual(Just(0))
+    expect(Maybe.fromPredicate<number>((x) => x > 0)(0)).toEqual(Nothing)
   })
 
   test('empty', () => {
@@ -49,7 +49,7 @@ describe('Maybe', () => {
       Maybe.mapMaybe((x: number) => (x > 5 ? Just(x) : Nothing))([3, 7, 8, 9])
     ).toEqual([7, 8, 9])
     expect(
-      Maybe.mapMaybe(x => (x > 5 ? Just(x) : Nothing), [1, 2, 3, 7, 8, 9])
+      Maybe.mapMaybe((x) => (x > 5 ? Just(x) : Nothing), [1, 2, 3, 7, 8, 9])
     ).toEqual([7, 8, 9])
   })
 
@@ -84,16 +84,16 @@ describe('Maybe', () => {
   })
 
   test('map', () => {
-    expect(Just(5).map(x => x + 1)).toEqual(Just(6))
-    expect(Nothing.map(x => x + 1)).toEqual(Nothing)
+    expect(Just(5).map((x) => x + 1)).toEqual(Just(6))
+    expect(Nothing.map((x) => x + 1)).toEqual(Nothing)
 
-    expect(Just(5)['fantasy-land/map'](x => x + 1)).toEqual(Just(6))
+    expect(Just(5)['fantasy-land/map']((x) => x + 1)).toEqual(Just(6))
   })
 
   test('ap', () => {
-    expect(Just(5).ap(Just(x => x + 1))).toEqual(Just(6))
+    expect(Just(5).ap(Just((x) => x + 1))).toEqual(Just(6))
     expect(Just(5).ap(Nothing)).toEqual(Nothing)
-    expect(Nothing.ap(Just(x => x + 1))).toEqual(Nothing)
+    expect(Nothing.ap(Just((x) => x + 1))).toEqual(Nothing)
     expect(Nothing.ap(Nothing)).toEqual(Nothing)
 
     expect(Just(5)['fantasy-land/ap'](Nothing)).toEqual(Nothing)
@@ -109,16 +109,16 @@ describe('Maybe', () => {
   })
 
   test('chain', () => {
-    expect(Just(5).chain(x => Just(x + 1))).toEqual(Just(6))
-    expect(Nothing.chain(x => Just(x + 1))).toEqual(Nothing)
+    expect(Just(5).chain((x) => Just(x + 1))).toEqual(Just(6))
+    expect(Nothing.chain((x) => Just(x + 1))).toEqual(Nothing)
 
-    expect(Just(5)['fantasy-land/chain'](x => Just(x + 1))).toEqual(Just(6))
+    expect(Just(5)['fantasy-land/chain']((x) => Just(x + 1))).toEqual(Just(6))
   })
 
   test('chainNullable', () => {
-    expect(Just(5).chainNullable(x => x + 1)).toEqual(Just(6))
-    expect(Nothing.chainNullable(x => x + 1)).toEqual(Nothing)
-    expect(Just({ prop: null }).chainNullable(x => x.prop)).toEqual(Nothing)
+    expect(Just(5).chainNullable((x) => x + 1)).toEqual(Just(6))
+    expect(Nothing.chainNullable((x) => x + 1)).toEqual(Nothing)
+    expect(Just({ prop: null }).chainNullable((x) => x.prop)).toEqual(Nothing)
   })
 
   test('join', () => {
@@ -134,10 +134,12 @@ describe('Maybe', () => {
   })
 
   test('extend', () => {
-    expect(Just(5).extend(x => x.isJust())).toEqual(Just(true))
-    expect(Nothing.extend(x => x.isJust())).toEqual(Nothing)
+    expect(Just(5).extend((x) => x.isJust())).toEqual(Just(true))
+    expect(Nothing.extend((x) => x.isJust())).toEqual(Nothing)
 
-    expect(Just(5)['fantasy-land/extend'](x => x.isJust())).toEqual(Just(true))
+    expect(Just(5)['fantasy-land/extend']((x) => x.isJust())).toEqual(
+      Just(true)
+    )
   })
 
   test('unsafeCoerce', () => {
@@ -146,8 +148,8 @@ describe('Maybe', () => {
   })
 
   test('caseOf', () => {
-    expect(Just(5).caseOf({ Just: x => x + 1, Nothing: () => 0 })).toEqual(6)
-    expect(Nothing.caseOf({ Just: x => x + 1, Nothing: () => 0 })).toEqual(0)
+    expect(Just(5).caseOf({ Just: (x) => x + 1, Nothing: () => 0 })).toEqual(6)
+    expect(Nothing.caseOf({ Just: (x) => x + 1, Nothing: () => 0 })).toEqual(0)
     expect(Just(10).caseOf({ _: () => 99 })).toEqual(99)
     expect(Nothing.caseOf({ _: () => 99 })).toEqual(99)
   })
@@ -168,8 +170,8 @@ describe('Maybe', () => {
   })
 
   test('mapOrDefault', () => {
-    expect(Just(5).mapOrDefault(x => x + 1, 0)).toEqual(6)
-    expect(Nothing.mapOrDefault(x => x + 1, 0)).toEqual(0)
+    expect(Just(5).mapOrDefault((x) => x + 1, 0)).toEqual(6)
+    expect(Nothing.mapOrDefault((x) => x + 1, 0)).toEqual(0)
   })
 
   test('extract', () => {
@@ -216,8 +218,8 @@ describe('Maybe', () => {
   })
 
   test('filter', () => {
-    expect(Just(5).filter(x => x > 10)).toEqual(Nothing)
-    expect(Just(5).filter(x => x > 0)).toEqual(Just(5))
-    expect(Nothing.filter(x => x > 0)).toEqual(Nothing)
+    expect(Just(5).filter((x) => x > 10)).toEqual(Nothing)
+    expect(Just(5).filter((x) => x > 0)).toEqual(Just(5))
+    expect(Nothing.filter((x) => x > 0)).toEqual(Nothing)
   })
 })

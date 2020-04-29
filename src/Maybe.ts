@@ -137,7 +137,7 @@ export const Maybe: MaybeTypeRef = {
     }
   },
   catMaybes<T>(list: Maybe<T>[]): T[] {
-    return list.filter(x => x.isJust()).map(x => x.__value)
+    return list.filter((x) => x.isJust()).map((x) => x.__value)
   },
   encase<T>(thunk: () => T): Maybe<T> {
     try {

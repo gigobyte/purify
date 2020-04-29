@@ -45,37 +45,48 @@ describe('Either', () => {
   })
 
   test('bimap', () => {
-    expect(Left('Error').bimap(x => x + '!', x => x + 1)).toEqual(
-      Left('Error!')
-    )
-    expect(Right(5).bimap(x => x + '!', x => x + 1)).toEqual(Right(6))
+    expect(
+      Left('Error').bimap(
+        (x) => x + '!',
+        (x) => x + 1
+      )
+    ).toEqual(Left('Error!'))
+    expect(
+      Right(5).bimap(
+        (x) => x + '!',
+        (x) => x + 1
+      )
+    ).toEqual(Right(6))
 
-    expect(Right(5)['fantasy-land/bimap'](x => x + '!', x => x + 1)).toEqual(
-      Right(6)
-    )
+    expect(
+      Right(5)['fantasy-land/bimap'](
+        (x) => x + '!',
+        (x) => x + 1
+      )
+    ).toEqual(Right(6))
   })
 
   test('map', () => {
-    expect(Left('Error').map(x => x + 1)).toEqual(Left('Error'))
-    expect(Right(5).map(x => x + 1)).toEqual(Right(6))
+    expect(Left('Error').map((x) => x + 1)).toEqual(Left('Error'))
+    expect(Right(5).map((x) => x + 1)).toEqual(Right(6))
 
-    expect(Right(5)['fantasy-land/map'](x => x + 1)).toEqual(Right(6))
+    expect(Right(5)['fantasy-land/map']((x) => x + 1)).toEqual(Right(6))
   })
 
   test('mapLeft', () => {
-    expect(Left('Error').mapLeft(x => x + '!')).toEqual(Left('Error!'))
-    expect(Right(5).mapLeft(x => x + '!')).toEqual(Right(5))
+    expect(Left('Error').mapLeft((x) => x + '!')).toEqual(Left('Error!'))
+    expect(Right(5).mapLeft((x) => x + '!')).toEqual(Right(5))
   })
 
   test('ap', () => {
-    expect(Right(5).ap(Right(x => x + 1))).toEqual(Right(6))
+    expect(Right(5).ap(Right((x) => x + 1))).toEqual(Right(6))
     expect(Right(5).ap(Left('Error' as never))).toEqual(Left('Error'))
-    expect(Left('Error').ap(Right(x => x + 1))).toEqual(Left('Error'))
+    expect(Left('Error').ap(Right((x) => x + 1))).toEqual(Left('Error'))
     expect(Left('Error').ap(Left('Function Error'))).toEqual(
       Left('Function Error')
     )
 
-    expect(Right(5)['fantasy-land/ap'](Right(x => x + 1))).toEqual(Right(6))
+    expect(Right(5)['fantasy-land/ap'](Right((x) => x + 1))).toEqual(Right(6))
   })
 
   test('equals', () => {
@@ -90,10 +101,12 @@ describe('Either', () => {
   })
 
   test('chain', () => {
-    expect(Left('Error').chain(x => Right(x + 1))).toEqual(Left('Error'))
-    expect(Right(5).chain(x => Right(x + 1))).toEqual(Right(6))
+    expect(Left('Error').chain((x) => Right(x + 1))).toEqual(Left('Error'))
+    expect(Right(5).chain((x) => Right(x + 1))).toEqual(Right(6))
 
-    expect(Right(5)['fantasy-land/chain'](x => Right(x + 1))).toEqual(Right(6))
+    expect(Right(5)['fantasy-land/chain']((x) => Right(x + 1))).toEqual(
+      Right(6)
+    )
   })
 
   test('join', () => {
@@ -118,10 +131,10 @@ describe('Either', () => {
   })
 
   test('extend', () => {
-    expect(Left('Error').extend(x => x.isRight())).toEqual(Left('Error'))
-    expect(Right(5).extend(x => x.isRight())).toEqual(Right(true))
+    expect(Left('Error').extend((x) => x.isRight())).toEqual(Left('Error'))
+    expect(Right(5).extend((x) => x.isRight())).toEqual(Right(true))
 
-    expect(Right(5)['fantasy-land/extend'](x => x.isRight())).toEqual(
+    expect(Right(5)['fantasy-land/extend']((x) => x.isRight())).toEqual(
       Right(true)
     )
   })
@@ -133,9 +146,9 @@ describe('Either', () => {
 
   test('caseOf', () => {
     expect(
-      Left('Error').caseOf({ Left: x => x, Right: () => 'No error' })
+      Left('Error').caseOf({ Left: (x) => x, Right: () => 'No error' })
     ).toEqual('Error')
-    expect(Right(6).caseOf({ Left: _ => 0, Right: x => x + 1 })).toEqual(7)
+    expect(Right(6).caseOf({ Left: (_) => 0, Right: (x) => x + 1 })).toEqual(7)
     expect(Right(6).caseOf({ _: () => 0 })).toEqual(0)
     expect(Left('Error').caseOf({ _: () => 0 })).toEqual(0)
   })
@@ -201,8 +214,18 @@ describe('Either', () => {
   })
 
   test('either', () => {
-    expect(Right(5).either(_ => 0, x => x + 1)).toEqual(6)
-    expect(Left('Error').either(x => x + '!', _ => '')).toEqual('Error!')
+    expect(
+      Right(5).either(
+        (_) => 0,
+        (x) => x + 1
+      )
+    ).toEqual(6)
+    expect(
+      Left('Error').either(
+        (x) => x + '!',
+        (_) => ''
+      )
+    ).toEqual('Error!')
   })
 
   test('extract', () => {

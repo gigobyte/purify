@@ -16,22 +16,22 @@ describe('MaybeAsync', () => {
   })
 
   test('map', async () => {
-    const newMaybeAsync = MaybeAsync(() => Promise.resolve(5)).map(_ => 'val')
+    const newMaybeAsync = MaybeAsync(() => Promise.resolve(5)).map((_) => 'val')
     const newMaybeAsync2 = MaybeAsync(() => Promise.resolve(5))[
       'fantasy-land/map'
-    ](_ => 'val')
+    ]((_) => 'val')
 
     expect(await newMaybeAsync.run()).toEqual(Just('val'))
     expect(await newMaybeAsync2.run()).toEqual(Just('val'))
   })
 
   test('chain', async () => {
-    const newMaybeAsync = MaybeAsync(() => Promise.resolve(5)).chain(_ =>
+    const newMaybeAsync = MaybeAsync(() => Promise.resolve(5)).chain((_) =>
       MaybeAsync(() => Promise.resolve('val'))
     )
     const newMaybeAsync2 = MaybeAsync(() => Promise.resolve(5))[
       'fantasy-land/chain'
-    ](_ => MaybeAsync(() => Promise.resolve('val')))
+    ]((_) => MaybeAsync(() => Promise.resolve('val')))
 
     expect(await newMaybeAsync.run()).toEqual(Just('val'))
     expect(await newMaybeAsync2.run()).toEqual(Just('val'))

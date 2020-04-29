@@ -8,11 +8,20 @@ describe('Tuple', () => {
   })
 
   test('fanout', () => {
-    expect(Tuple.fanout(x => x[0], x => x.length, 'sss')).toEqual(Tuple('s', 3))
-    expect(Tuple.fanout((x: string) => x[0], x => x.length)('sss')).toEqual(
-      Tuple('s', 3)
-    )
-    expect(Tuple.fanout((x: string) => x[0])(x => x.length)('sss')).toEqual(
+    expect(
+      Tuple.fanout(
+        (x) => x[0],
+        (x) => x.length,
+        'sss'
+      )
+    ).toEqual(Tuple('s', 3))
+    expect(
+      Tuple.fanout(
+        (x: string) => x[0],
+        (x) => x.length
+      )('sss')
+    ).toEqual(Tuple('s', 3))
+    expect(Tuple.fanout((x: string) => x[0])((x) => x.length)('sss')).toEqual(
       Tuple('s', 3)
     )
   })
@@ -39,23 +48,29 @@ describe('Tuple', () => {
   })
 
   test('bimap', () => {
-    expect(Tuple(5, 'Error').bimap(x => x + 1, x => x + '!')).toEqual(
-      Tuple(6, 'Error!')
-    )
+    expect(
+      Tuple(5, 'Error').bimap(
+        (x) => x + 1,
+        (x) => x + '!'
+      )
+    ).toEqual(Tuple(6, 'Error!'))
 
     expect(
-      Tuple(5, 'Error')['fantasy-land/bimap'](x => x + 1, x => x + '!')
+      Tuple(5, 'Error')['fantasy-land/bimap'](
+        (x) => x + 1,
+        (x) => x + '!'
+      )
     ).toEqual(Tuple(6, 'Error!'))
   })
 
   test('mapFirst', () => {
-    expect(Tuple(5, 5).mapFirst(x => x + 1)).toEqual(Tuple(6, 5))
+    expect(Tuple(5, 5).mapFirst((x) => x + 1)).toEqual(Tuple(6, 5))
   })
 
   test('map', () => {
-    expect(Tuple(5, 5).map(x => x + 1)).toEqual(Tuple(5, 6))
+    expect(Tuple(5, 5).map((x) => x + 1)).toEqual(Tuple(5, 6))
 
-    expect(Tuple(5, 5)['fantasy-land/map'](x => x + 1)).toEqual(Tuple(5, 6))
+    expect(Tuple(5, 5)['fantasy-land/map']((x) => x + 1)).toEqual(Tuple(5, 6))
   })
 
   test('reduce', () => {
@@ -75,9 +90,9 @@ describe('Tuple', () => {
   })
 
   test('ap', () => {
-    expect(Tuple(5, 10).ap(Tuple(0, x => x + 1))).toEqual(Tuple(5, 11))
+    expect(Tuple(5, 10).ap(Tuple(0, (x) => x + 1))).toEqual(Tuple(5, 11))
 
-    expect(Tuple(5, 10)['fantasy-land/ap'](Tuple(0, x => x + 1))).toEqual(
+    expect(Tuple(5, 10)['fantasy-land/ap'](Tuple(0, (x) => x + 1))).toEqual(
       Tuple(5, 11)
     )
   })
