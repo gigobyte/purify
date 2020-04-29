@@ -1,4 +1,9 @@
-import { EitherAsync } from './EitherAsync'
+import {
+  EitherAsync,
+  fromPromise,
+  liftPromise,
+  liftEither
+} from './EitherAsync'
 import { Left, Right, Either } from './Either'
 import { Nothing, Just } from './Maybe'
 
@@ -23,6 +28,18 @@ describe('EitherAsync', () => {
     })
 
     expect(await ea.run()).toEqual(Left('Test'))
+  })
+
+  test('try/catch', async () => {
+    const ea = EitherAsync<string, void>(async ({ fromPromise, throwE }) => {
+      try {
+        await fromPromise(Promise.reject('shouldnt show'))
+      } catch {
+        throwE('should show')
+      }
+    })
+
+    expect(await ea.run()).toEqual(Left('should show'))
   })
 
   test('map', async () => {
@@ -116,5 +133,22 @@ describe('EitherAsync', () => {
         ).run()
       ).toEqual(Right(5))
     })
+  })
+
+  test('fromPromise export', async () => {
+    expect(await fromPromise(() => Promise.resolve(Right(5))).run()).toEqual(
+      Right(5)
+    )
+    expect(await fromPromise(() => Promise.reject(5)).run()).toEqual(Left(5))
+  })
+
+  test('liftPromise export', async () => {
+    expect(await liftPromise(() => Promise.resolve(5)).run()).toEqual(Right(5))
+    expect(await liftPromise(() => Promise.reject(5)).run()).toEqual(Left(5))
+  })
+
+  test('liftEither export', async () => {
+    expect(await liftEither(Right(5)).run()).toEqual(Right(5))
+    expect(await liftEither(Left(5)).run()).toEqual(Left(5))
   })
 })

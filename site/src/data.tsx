@@ -691,8 +691,8 @@ const data: Data = {
               examples: [
                 {
                   input: `MaybeAsync(() => Promise.resolve(5))
-      .chain(x => MaybeAsync(() => Promise.resolve(x + 1)))
-      .run()`,
+  .chain(x => MaybeAsync(() => Promise.resolve(x + 1)))
+  .run()`,
                   output: 'Promise {<resolved>: Just(6)}',
                 },
               ],
@@ -719,8 +719,8 @@ const data: Data = {
               examples: [
                 {
                   input: `MaybeAsync(async ({ liftMaybe }) => {
-      const value: number = await liftMaybe(Just(5))
-    }).run()`,
+  const value: number = await liftMaybe(Just(5))
+}).run()`,
                   output: 'Promise {<resolved>: Just(5)}',
                 },
               ],
@@ -735,8 +735,8 @@ const data: Data = {
               examples: [
                 {
                   input: `MaybeAsync(async ({ fromPromise }) => {
-      const value: number = await fromPromise(Promise.resolve(Just(5)))
-    }).run()`,
+  const value: number = await fromPromise(Promise.resolve(Just(5)))
+}).run()`,
                   output: 'Promise {<resolved>: Just(5)}',
                 },
               ],
@@ -1311,40 +1311,56 @@ randomEither().map(x => x)
         },
       ],
       description:
-        "It is recommended to have your promises resolve to Either wherever error handling is needed instead of rejecting them and handling errors in the catch method. EitherAsync lets you do that seamlessly, it's a wrapper around Promise<Either<L, R>> that allows you to process asynchronous values while also having error handling via Either. The API of EitherAsync is heavily influenced by monad transformers, but the implementation under the hood is nothing like that. Despite that little piece of trivia, no prior knowledge of monad transformers is required.",
+        "It is recommended to have your promises resolve to Either wherever error handling is needed instead of rejecting them and handling errors in the catch method, because unfortunately errors in Promises are not typechecked. EitherAsync lets you do that seamlessly, it's a wrapper around Promise<Either<L, R>> that allows you to process asynchronous values while also having error handling via Either. That said, there are 2 ways of working with EitherAsync, just like there are two ways of working with Promises - async/await and chaining together transformations. The API of EitherAsync is heavily influenced by monad transformers, so you can read up on that if you are interested.",
       examples: [
         {
           title: 'How to import',
-          content: [`import { EitherAsync } from 'purify-ts/EitherAsync'`],
-        },
-        {
-          title: 'Quick guide',
           content: [
-            `EitherAsync<Error, number>(async ({ liftEither, fromPromise }) => {`,
-            '    // if you have Either<L, R> and you want to get R out',
-            '    const num: number = await liftEither(Right(1))',
-            '',
-            '    // if you have Promise<Either<L, R>> and you want to get R out',
-            '    const num2: number = await fromPromise(Promise.resolve(Right(1)))',
-            '})',
+            `import { EitherAsync, liftEither, fromPromise } from 'purify-ts/EitherAsync'`,
           ],
         },
         {
-          title: 'Example usage in a real application',
+          title: 'Given the following functions, examples below',
           content: [
-            `declare function validateModel(model: Model): Either<Error, ValidModel>`,
-            `declare function getUser(userId: number):     Promise<Either<Error, User>>`,
-            `declare function insert(user: User):          Promise<Id<User>>`,
+            `function validateRequest(req: Request): Either<Error, DeleteUserRequest>`,
+            `function getUser(userId: number):     Promise<Either<Error, User>>`,
+            `function delete(user: User):          Promise<Id<User>>`,
+          ],
+        },
+        {
+          title: 'Example usage (async/await)',
+          content: [
+            'const deleteUser = (req): EitherAsync<Error, Id<User>> =>',
+            '    EitherAsync(async ({ liftEither, fromPromise, throwE }) => {',
+            '       // when you have Either<L, R> and you want to get R out',
+            '       const request = await liftEither(validateRequest(req))',
             '',
-            'const processRegistration = model =>',
-            '    EitherAsync<Error, Id<User>>(async ({ liftEither, fromPromise }) => {',
-            '       const validatedModel: ValidModel = await liftEither(validateModel(model))',
-            '       const user: User = await fromPromise(getUser(validatedModel.userId))',
+            '       try {',
+            '           // when you have Promise<Either<L, R>> and you want to get R out',
+            '           const user = await fromPromise(getUser(request.userId))',
+            '       } catch {',
+            '           throwE(Error.UserDoesNotExist)',
+            '       }',
             '',
-            '       return insert(user)',
+            '       return delete(user)',
             '    })',
             '',
-            '// Now to unwrap',
+            'const promise: Promise<Either<Error, Id<User>>> =',
+            '   processRegistration(model).run()',
+          ],
+        },
+        {
+          title: 'Example usage (chaining)',
+          content: [
+            'const deleteUser = (req): EitherAsync<Error, Id<User>> =>',
+            '    liftEither(validateRequest(req))',
+            '        // when you have Promise<Either<L, R>> and you want to chain it',
+            '        .chain(request => fromPromise(() => getUser(request.userId)))',
+            '        .mapLeft(_ => Error.UserDoesNotExist)',
+            '',
+            '        // when you have Promise<T> and you want to chain it',
+            '        .chain(user  => liftPromise(() => delete(user)))',
+            '',
             'const promise: Promise<Either<Error, Id<User>>> =',
             '   processRegistration(model).run()',
           ],
@@ -1357,7 +1373,7 @@ randomEither().map(x => x)
             {
               name: 'EitherAsync',
               description:
-                'Constructs a EitherAsync object from a function that takes an object full of helpers that let you lift things into the EitherAsync context and returns a Promise',
+                'Constructs an EitherAsync object from a function that takes an object full of helpers that let you lift things into the EitherAsync context and returns a Promise.',
               examples: [
                 {
                   input:
@@ -1366,7 +1382,45 @@ randomEither().map(x => x)
                 },
               ],
               signatureML: '(EitherAsyncHelpers -> IO a) -> EitherAsync a b',
-              signatureTS: ` <L, R>(runPromise: (helpers: EitherAsyncHelpers<L>) => PromiseLike<R>): EitherAsync<L, R>`,
+              signatureTS: `<L, R>(runPromise: (helpers: EitherAsyncHelpers<L>) => PromiseLike<R>): EitherAsync<L, R>`,
+            },
+            {
+              name: 'fromPromise',
+              description:
+                'Constructs an EitherAsync object from a function that returns an Either wrapped in a Promise.',
+              examples: [
+                {
+                  input: 'fromPromise(() => Promise.resolve(Right(5)))',
+                  output: 'EitherAsync<number>',
+                },
+              ],
+              signatureML: '(() -> IO (Either a b)) -> EitherAsync a b',
+              signatureTS: `<L, R>(f: () => Promise<Either<L, R>>): EitherAsync<L, R>`,
+            },
+            {
+              name: 'liftPromise',
+              description:
+                'Constructs an EitherAsync object from a function that returns a Promise. The left type is defaulted to the built-in Error type.',
+              examples: [
+                {
+                  input: 'liftPromise(() => Promise.resolve(5))',
+                  output: 'EitherAsync<number>',
+                },
+              ],
+              signatureML: '(() -> IO b) -> EitherAsync Error b',
+              signatureTS: `<R, L = Error>(f: () => Promise<R>): EitherAsync<L, R>`,
+            },
+            {
+              name: 'liftEither',
+              description: 'Constructs an EitherAsync object from an Either.',
+              examples: [
+                {
+                  input: 'liftEither(Right(5))',
+                  output: 'EitherAsync<number>',
+                },
+              ],
+              signatureML: 'Either a b -> EitherAsync a b',
+              signatureTS: `<L, R>(either: Either<L, R>): EitherAsync<L, R>`,
             },
           ],
         },
@@ -1467,8 +1521,8 @@ randomEither().map(x => x)
               examples: [
                 {
                   input: `EitherAsync(() => Promise.resolve(5))
-      .chain(x => EitherAsync(() => Promise.resolve(x + 1)))
-      .run()`,
+  .chain(x => EitherAsync(() => Promise.resolve(x + 1)))
+  .run()`,
                   output: 'Promise {<resolved>: Right(6)}',
                 },
               ],
@@ -1484,8 +1538,8 @@ randomEither().map(x => x)
               examples: [
                 {
                   input: `EitherAsync(({ throwE }) => throwE(500))
-      .chainLeft(x => EitherAsync(() => Promise.resolve(x + 1)))
-      .run()`,
+  .chainLeft(x => EitherAsync(() => Promise.resolve(x + 1)))
+  .run()`,
                   output: 'Promise {<resolved>: Right(6)}',
                 },
               ],
@@ -1501,7 +1555,7 @@ randomEither().map(x => x)
           ],
         },
         {
-          title: 'Methods passed to the EitherAsync callback',
+          title: 'Methods passed to the EitherAsync async/await callback',
           methods: [
             {
               name: 'liftEither',
@@ -1512,8 +1566,8 @@ randomEither().map(x => x)
               examples: [
                 {
                   input: `EitherAsync(async ({ liftEither }) => {
-      const value: number = await liftEither(Right(5))
-    }).run()`,
+  const value: number = await liftEither(Right(5))
+}).run()`,
                   output: 'Promise {<resolved>: Right(5)}',
                 },
               ],
@@ -1528,8 +1582,8 @@ randomEither().map(x => x)
               examples: [
                 {
                   input: `EitherAsync(async ({ fromPromise }) => {
-      const value: number = await fromPromise(Promise.resolve(Right(5)))
-    }).run()`,
+  const value: number = await fromPromise(Promise.resolve(Right(5)))
+}).run()`,
                   output: 'Promise {<resolved>: Right(5)}',
                 },
               ],
@@ -1542,10 +1596,10 @@ randomEither().map(x => x)
               examples: [
                 {
                   input: `EitherAsync<string, number>(async ({ liftEither, throwE })
-      const value: number = await liftEither(Right(5))
-      throwE('Test')
-      return value
-    }).run()`,
+  const value: number = await liftEither(Right(5))
+  throwE('Test')
+  return value
+}).run()`,
                   output: `Promise {<resolved>: Left('Test')}`,
                 },
               ],
@@ -2230,17 +2284,6 @@ type User = GetInterface<typeof User>`,
               ],
             },
             {
-              name: 'undefinedType',
-              signatureTS: 'Codec<undefined>',
-              description: 'A codec for undefined only.',
-              examples: [
-                {
-                  input: 'undefinedType.decode(undefined)',
-                  output: 'Right(undefined)',
-                },
-              ],
-            },
-            {
               name: 'unknown',
               signatureTS: 'Codec<unknown>',
               description:
@@ -2311,6 +2354,22 @@ type User = GetInterface<typeof User>`,
                   output: `Left('One of the following problems occured:
       (0) Expected a boolean, but received a number with value 0,
       (1) Expected an undefined, but received a number with value 0')`,
+                },
+              ],
+            },
+            {
+              name: 'optional',
+              signatureTS: '<T>(codec: Codec<T>): Codec<T | undefined>',
+              description:
+                'A codec for a value T or undefined. Mostly used for optional properties inside an object, hence the name.',
+              examples: [
+                {
+                  input: 'optional(number).decode(undefined)',
+                  output: 'Right(undefined)',
+                },
+                {
+                  input: 'Codec.interface({ a: optional(number) }).decode({})',
+                  output: 'Right({})',
                 },
               ],
             },

@@ -122,7 +122,21 @@ class EitherAsyncImpl<L, R> implements EitherAsync<L, R> {
   }
 }
 
-/** Constructs a EitherAsync object from a function that takes an object full of helpers that let you lift things into the EitherAsync context and returns a Promise */
+/** Constructs an EitherAsync object from a function that takes an object full of helpers that let you lift things into the EitherAsync context and returns a Promise */
 export const EitherAsync = <L, R>(
   runPromise: (helpers: EitherAsyncHelpers<L>) => PromiseLike<R>
 ): EitherAsync<L, R> => new EitherAsyncImpl(runPromise)
+
+/** Constructs an EitherAsync object from a function that returns an Either wrapped in a Promise */
+export const fromPromise = <L, R>(
+  f: () => Promise<Either<L, R>>
+): EitherAsync<L, R> => EitherAsync(({ fromPromise: fP }) => fP(f()))
+
+/** Constructs an EitherAsync object from a function that returns a Promise */
+export const liftPromise = <R, L = Error>(
+  f: () => Promise<R>
+): EitherAsync<L, R> => EitherAsync(f)
+
+/** Constructs an EitherAsync object from an Either */
+export const liftEither = <L, R>(either: Either<L, R>): EitherAsync<L, R> =>
+  EitherAsync(({ liftEither }) => liftEither(either))
