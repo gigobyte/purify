@@ -563,41 +563,51 @@ const data: Data = {
         },
       ],
       description:
-        'MaybeAsync is a wrapper around Promise<Maybe<T>> that allows you to process asynchronous missing values or, on a more technical level, allows you to seamlessly chain Promises that resolve to Maybe. The API of MaybeAsync is heavily influenced by monad transformers, but the implementation under the hood is nothing like that. Despite that little piece of trivia, no prior knowledge of monad transformers is required.',
+        'MaybeAsync is a wrapper around Promise<Maybe<T>> that allows you to process asynchronous missing values or, on a more technical level, allows you to seamlessly chain Promises that resolve to Maybe. There are 2 ways of working with MaybeAsync, just like there are two ways of working with Promises - async/await and chaining together transformations. The API of MaybeAsync is heavily influenced by monad transformers, so you can read up on that if you are interested.',
       examples: [
         {
           title: 'How to import',
-          content: [`import { MaybeAsync } from 'purify-ts/MaybeAsync'`],
-        },
-        {
-          title: 'Quick guide',
           content: [
-            `MaybeAsync(async ({ liftMaybe, fromPromise }) => {`,
-            '    // if you have Maybe<T> and you want to get T out',
-            '    const num: number = await liftMaybe(Just(1))',
-            '',
-            '    // if you have Promise<Maybe<T>> and you want to get T out',
-            '    const num2: number = await fromPromise(Promise.resolve(Just(1)))',
-            '})',
+            `import { MaybeAsync, liftMaybe, fromPromise } from 'purify-ts/MaybeAsync'`,
           ],
         },
         {
-          title: 'Example usage in a real application',
+          title: 'Given the following functions, examples below',
           content: [
-            `declare function validateModel(model: Model): Maybe<ValidModel>`,
-            `declare function getUser(userId: number):     Promise<Maybe<User>>`,
-            `declare function insert(user: User):          Promise<Id<User>>`,
-            '',
-            'const processRegistration = (model: Model): MaybeAsync<Id<User>> =>',
+            `function validateRequest(req: Request): Maybe<DeleteUserRequest>`,
+            `function getUser(userId: number):       Promise<Maybe<User>>`,
+            `function deleteUserDb(user: User):      Promise<Id<User>>`,
+          ],
+        },
+        {
+          title: 'Example usage (async/await)',
+          content: [
+            'const deleteUser = (req): MaybeAsync<Id<User>> =>',
             '    MaybeAsync(async ({ liftMaybe, fromPromise }) => {',
-            '        const validatedModel: ValidModel = await liftMaybe(validateModel(model))',
-            '        const user: User = await fromPromise(getUser(validatedModel.userId))',
+            '        // when you have Maybe<T> and you want to get T out',
+            '        const request = await liftMaybe(validateRequest(req))',
             '',
-            '        return insert(user)',
+            '        // when you have Promise<Maybe<T>> and you want to get T out',
+            '        const user    = await fromPromise(getUser(request.userId))',
+            '',
+            '        return deleteUserDb(user)',
             '    })',
             '',
-            '// Now to unwrap',
-            'const promise: Promise<Maybe<Id<User>>> = processRegistration(model).run()',
+            'const promise: Promise<Maybe<Id<User>>> = deleteUser(req).run()',
+          ],
+        },
+        {
+          title: 'Example usage (chaining)',
+          content: [
+            'const deleteUser = (req): MaybeAsync<Id<User>> =>',
+            '    liftMaybe(validateRequest(req))',
+            '        // when you have Promise<Maybe<T>> and you want to chain it',
+            '        .chain(request => fromPromise(() => getUser(request.userId)))',
+            '',
+            '        // when you have Promise<T> and you want to chain it',
+            '        .chain(user    => liftPromise(() => deleteUserDb(user)))',
+            '',
+            'const promise: Promise<Maybe<Id<User>>> = deleteUser(req).run()',
           ],
         },
       ],
@@ -618,6 +628,44 @@ const data: Data = {
               ],
               signatureML: '(MaybeAsyncHelpers -> IO a) -> MaybeAsync a',
               signatureTS: `<T>(runPromise: (helpers: MaybeAsyncHelpers) => PromiseLike<T>): MaybeAsync<T>`,
+            },
+            {
+              name: 'fromPromise',
+              description:
+                'Constructs an MaybeAsync object from a function that returns a Maybe wrapped in a Promise.',
+              examples: [
+                {
+                  input: 'fromPromise(() => Promise.resolve(Just(5)))',
+                  output: 'MaybeAsync<number>',
+                },
+              ],
+              signatureML: '(() -> IO (Maybe a)) -> MaybeAsync a',
+              signatureTS: `<T>(f: () => Promise<Maybe<T>>): MaybeAsync<T>`,
+            },
+            {
+              name: 'liftPromise',
+              description:
+                'Constructs an MaybeAsync object from a function that returns a Promise.',
+              examples: [
+                {
+                  input: 'liftPromise(() => Promise.resolve(5))',
+                  output: 'MaybeAsync<number>',
+                },
+              ],
+              signatureML: '(() -> IO b) -> MaybeAsync a',
+              signatureTS: `<T>(f: () => Promise<T>): MaybeAsync<T>`,
+            },
+            {
+              name: 'liftMaybe',
+              description: 'Constructs an MaybeAsync object from a Maybe.',
+              examples: [
+                {
+                  input: 'liftMaybe(Just(5))',
+                  output: 'MaybeAsync<number>',
+                },
+              ],
+              signatureML: 'Maybe a -> MaybeAsync a',
+              signatureTS: `<T>(maybe: Maybe<T>): MaybeAsync<T>`,
             },
           ],
         },
@@ -1323,8 +1371,8 @@ randomEither().map(x => x)
           title: 'Given the following functions, examples below',
           content: [
             `function validateRequest(req: Request): Either<Error, DeleteUserRequest>`,
-            `function getUser(userId: number):     Promise<Either<Error, User>>`,
-            `function delete(user: User):          Promise<Id<User>>`,
+            `function getUser(userId: number):       Promise<Either<Error, User>>`,
+            `function deleteUserDb(user: User):      Promise<Id<User>>`,
           ],
         },
         {
@@ -1342,11 +1390,11 @@ randomEither().map(x => x)
             '           throwE(Error.UserDoesNotExist)',
             '       }',
             '',
-            '       return delete(user)',
+            '       return deleteUserDb(user)',
             '    })',
             '',
             'const promise: Promise<Either<Error, Id<User>>> =',
-            '   processRegistration(model).run()',
+            '   deleteUser(req).run()',
           ],
         },
         {
@@ -1356,13 +1404,13 @@ randomEither().map(x => x)
             '    liftEither(validateRequest(req))',
             '        // when you have Promise<Either<L, R>> and you want to chain it',
             '        .chain(request => fromPromise(() => getUser(request.userId)))',
-            '        .mapLeft(_ => Error.UserDoesNotExist)',
+            '        .mapLeft(_     => Error.UserDoesNotExist)',
             '',
             '        // when you have Promise<T> and you want to chain it',
-            '        .chain(user  => liftPromise(() => delete(user)))',
+            '        .chain(user    => liftPromise(() => deleteUserDb(user)))',
             '',
             'const promise: Promise<Either<Error, Id<User>>> =',
-            '   processRegistration(model).run()',
+            '   deleteUser(req).run()',
           ],
         },
       ],
@@ -1378,7 +1426,7 @@ randomEither().map(x => x)
                 {
                   input:
                     'EitherAsync<Error, number>(({ liftEither, fromPromise }) => Promise.resolve(5))',
-                  output: 'EitherAsync<number>',
+                  output: 'EitherAsync<Error, number>',
                 },
               ],
               signatureML: '(EitherAsyncHelpers -> IO a) -> EitherAsync a b',
@@ -1391,7 +1439,7 @@ randomEither().map(x => x)
               examples: [
                 {
                   input: 'fromPromise(() => Promise.resolve(Right(5)))',
-                  output: 'EitherAsync<number>',
+                  output: 'EitherAsync<never, number>',
                 },
               ],
               signatureML: '(() -> IO (Either a b)) -> EitherAsync a b',
@@ -1404,7 +1452,7 @@ randomEither().map(x => x)
               examples: [
                 {
                   input: 'liftPromise(() => Promise.resolve(5))',
-                  output: 'EitherAsync<number>',
+                  output: 'EitherAsync<never, number>',
                 },
               ],
               signatureML: '(() -> IO b) -> EitherAsync Error b',
@@ -1416,7 +1464,7 @@ randomEither().map(x => x)
               examples: [
                 {
                   input: 'liftEither(Right(5))',
-                  output: 'EitherAsync<number>',
+                  output: 'EitherAsync<never, number>',
                 },
               ],
               signatureML: 'Either a b -> EitherAsync a b',

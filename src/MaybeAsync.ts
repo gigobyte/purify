@@ -93,3 +93,15 @@ class MaybeAsyncImpl<T> implements MaybeAsync<T> {
 export const MaybeAsync = <T>(
   runPromise: (helpers: MaybeAsyncHelpers) => PromiseLike<T>
 ): MaybeAsync<T> => new MaybeAsyncImpl(runPromise)
+
+/** Constructs an MaybeAsync object from a function that returns a Maybe wrapped in a Promise */
+export const fromPromise = <T>(f: () => Promise<Maybe<T>>): MaybeAsync<T> =>
+  MaybeAsync(({ fromPromise: fP }) => fP(f()))
+
+/** Constructs an MaybeAsync object from a function that returns a Promise */
+export const liftPromise = <T>(f: () => Promise<T>): MaybeAsync<T> =>
+  MaybeAsync(f)
+
+/** Constructs an MaybeAsync object from a Maybe */
+export const liftMaybe = <T>(maybe: Maybe<T>): MaybeAsync<T> =>
+  MaybeAsync(({ liftMaybe }) => liftMaybe(maybe))

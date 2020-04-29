@@ -1,4 +1,4 @@
-import { MaybeAsync } from './MaybeAsync'
+import { MaybeAsync, liftPromise, fromPromise, liftMaybe } from './MaybeAsync'
 import { Just, Nothing } from './Maybe'
 import { Left, Right } from './Either'
 
@@ -73,5 +73,22 @@ describe('MaybeAsync', () => {
         ).run()
       ).toEqual(Just(5))
     })
+  })
+
+  test('fromPromise export', async () => {
+    expect(await fromPromise(() => Promise.resolve(Just(5))).run()).toEqual(
+      Just(5)
+    )
+    expect(await fromPromise(() => Promise.reject()).run()).toEqual(Nothing)
+  })
+
+  test('liftPromise export', async () => {
+    expect(await liftPromise(() => Promise.resolve(5)).run()).toEqual(Just(5))
+    expect(await liftPromise(() => Promise.reject()).run()).toEqual(Nothing)
+  })
+
+  test('liftEither export', async () => {
+    expect(await liftMaybe(Just(5)).run()).toEqual(Just(5))
+    expect(await liftMaybe(Nothing).run()).toEqual(Nothing)
   })
 })

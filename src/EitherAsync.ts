@@ -132,7 +132,7 @@ export const fromPromise = <L, R>(
   f: () => Promise<Either<L, R>>
 ): EitherAsync<L, R> => EitherAsync(({ fromPromise: fP }) => fP(f()))
 
-/** Constructs an EitherAsync object from a function that returns a Promise */
+/** Constructs an EitherAsync object from a function that returns a Promise. The left type is defaulted to the built-in Error type */
 export const liftPromise = <R, L = Error>(
   f: () => Promise<R>
 ): EitherAsync<L, R> => EitherAsync(f)
