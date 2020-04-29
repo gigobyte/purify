@@ -1345,6 +1345,17 @@ randomEither().map(x => x)
                 { input: `Left('Error').extract()`, output: `'Error'` },
               ],
             },
+            {
+              name: 'swap',
+              description:
+                'Returns `Right` if `this` is `Left` and vice versa.',
+              signatureTS: '(): Either<R, L>',
+              signatureML: 'Either a b ~> Either b a',
+              examples: [
+                { input: 'Right(5).swap()', output: 'Left(5)' },
+                { input: 'Left(5).swap()', output: 'Right(5)' },
+              ],
+            },
           ],
         },
       ],

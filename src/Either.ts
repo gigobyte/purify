@@ -64,6 +64,8 @@ export interface Either<L, R> {
   either<T>(ifLeft: (value: L) => T, ifRight: (value: R) => T): T
   /** Extracts the value out of `this` */
   extract(): L | R
+  /** Returns `Right` if `this` is `Left` and vice versa */
+  swap(): Either<R, L>
 
   'fantasy-land/bimap'<L2, R2>(
     f: (value: L) => L2,
@@ -252,6 +254,10 @@ class Right<R, L = never> implements Either<L, R> {
     return this.__value
   }
 
+  swap(): Either<R, L> {
+    return left(this.__value)
+  }
+
   'fantasy-land/bimap'<L2, R2>(
     f: (value: L) => L2,
     g: (value: R) => R2
@@ -410,6 +416,10 @@ class Left<L, R = never> implements Either<L, R> {
 
   extract(): L | R {
     return this.__value
+  }
+
+  swap(): Either<R, L> {
+    return right(this.__value)
   }
 
   'fantasy-land/bimap'<L2, R2>(

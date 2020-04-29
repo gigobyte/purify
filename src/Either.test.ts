@@ -232,4 +232,9 @@ describe('Either', () => {
     expect(Right(5).extract()).toEqual(5)
     expect(Left('Error').extract()).toEqual('Error')
   })
+
+  test('swap', () => {
+    expect(Right(5).swap()).toEqual(Left(5))
+    expect(Left(5).swap()).toEqual(Right(5))
+  })
 })
