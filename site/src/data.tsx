@@ -632,7 +632,7 @@ const data: Data = {
             {
               name: 'fromPromise',
               description:
-                'Constructs an MaybeAsync object from a function that returns a Maybe wrapped in a Promise.',
+                'Constructs an MaybeAsync object from a function that returns a Maybe wrapped in a Promise. It is recommended to stick to one style of using MaybeAsync only as you will run into nasty variable shadowing if you use the helpers for async/await while you have any of the constructors imported.',
               examples: [
                 {
                   input: 'fromPromise(() => Promise.resolve(Just(5)))',
@@ -1435,7 +1435,7 @@ randomEither().map(x => x)
             {
               name: 'fromPromise',
               description:
-                'Constructs an EitherAsync object from a function that returns an Either wrapped in a Promise.',
+                'Constructs an EitherAsync object from a function that returns an Either wrapped in a Promise. It is recommended to stick to one style of using EitherAsync only as you will run into nasty variable shadowing if you use the helpers for async/await while you have any of the constructors imported.',
               examples: [
                 {
                   input: 'fromPromise(() => Promise.resolve(Right(5)))',
