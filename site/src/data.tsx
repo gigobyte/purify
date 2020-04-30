@@ -678,21 +678,27 @@ const data: Data = {
               signatureTS: 'run(): Promise<Maybe<T>>',
               description: (
                 <div>
-                  It's important to remember how `run` will behave because in an
-                  async context there are other ways for a function to fail
-                  other than to return a Nothing, for example:
-                  <br />
-                  If any of the computations inside MaybeAsync resolved to
-                  Nothing, `run` will return a Promise resolved to Nothing.
-                  <br />
-                  If any of the promises were to be rejected then `run` will
-                  return a Promise resolved to Nothing.
-                  <br />
-                  If an exception is thrown then `run` will return a Promise
-                  resolved to Nothing.
-                  <br />
-                  If none of the above happen then a promise resolved to the
-                  returned value wrapped in a Just will be returned.
+                  <b>IMPORTANT: </b> The Promise returned from `run` will never
+                  be rejected, so there's no point in calling `catch` on it. If
+                  something goes wrong, here's how it's going to be handled:
+                  <ul>
+                    <li>
+                      If any of the computations inside MaybeAsync resolved to
+                      Nothing, `run` will return a Promise resolved to Nothing.
+                    </li>
+                    <li>
+                      If any of the promises were to be rejected then `run` will
+                      return a Promise resolved to Nothing.
+                    </li>
+                    <li>
+                      If an exception is thrown then `run` will return a Promise
+                      resolved to Nothing.
+                    </li>
+                    <li>
+                      If none of the above happen then a promise resolved to the
+                      returned value wrapped in a Just will be returned.
+                    </li>
+                  </ul>
                 </div>
               ),
               examples: [
@@ -756,7 +762,7 @@ const data: Data = {
           ],
         },
         {
-          title: 'Methods passed to the MaybeAsync callback',
+          title: 'Methods passed to the MaybeAsync async/await callback',
           methods: [
             {
               name: 'liftMaybe',
