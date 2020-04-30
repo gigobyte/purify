@@ -19,10 +19,8 @@ const FAQ = props => (
         anticipate it:
         <br />
         <br />
-        0.15 - EitherAsync/MaybeAsync improvements. Also hopefully bringing even
-        more typesafe versions of existing JavaScript APIs.
-        <br />
-        0.16 - Data structures? Zipper is very likely to be included.
+        0.16 - Data structures? Zipper is very likely to be included. RemoteData
+        is also a good candidate for this library.
         <br />
         Future / To research - Parser combinators?
       </li>
@@ -51,8 +49,8 @@ const FAQ = props => (
         Purify is intented to be a single library with a focus on general
         purpose API.
         <br />
-        Bindings to popular libraries like React, Angular, Express etc. are not
-        planned and most likely won't happen.
+        Official bindings to popular libraries like React, Angular, Express etc.
+        are not planned and most likely won't happen.
         <br />
       </li>
       <li>
@@ -65,7 +63,8 @@ const FAQ = props => (
         <h3>Q: Should I expect breaking changes?</h3>
         The library is in pre-v1 stage, breaking changes are certainly possible.{' '}
         <br />
-        Situations in which you can expect breaking changes are: <br />
+        Situations in which you can definitely expect breaking changes are:{' '}
+        <br />
         There is a new TypeScript release that allows for more type safety
         <br />
         There is a new TypeScript release that makes expressing certain
