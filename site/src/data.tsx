@@ -1291,8 +1291,8 @@ randomEither().map(x => x)
               signatureML: 'Either a b ~> Maybe a',
               signatureTS: '(): Maybe<L>',
               examples: [
-                { input: `Left('Error').toMaybe()`, output: `Just('Error')` },
-                { input: `Right(5).toMaybe()`, output: 'Nothing' },
+                { input: `Left('Error').leftToMaybe()`, output: `Just('Error')` },
+                { input: `Right(5).leftToMaybe()`, output: 'Nothing' },
               ],
             },
             {
