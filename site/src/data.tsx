@@ -1125,11 +1125,11 @@ randomEither().map(x => x)
                 '<L2>(f: (value: L) => Either<L2, R>): Either<L2, R>',
               examples: [
                 {
-                  input: `Left('Error').chain(x => Right(''))`,
+                  input: `Left('Error').chainLeft(x => Right(''))`,
                   output: `Right('')`,
                 },
                 {
-                  input: `Right(5).chain(x => Right(999))`,
+                  input: `Right(5).chainLeft(x => Right(999))`,
                   output: `Right(5)`,
                 },
               ],
