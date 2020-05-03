@@ -20,6 +20,7 @@ export interface NonEmptyListTypeRef {
   isNonEmpty<T>(list: T[]): list is NonEmptyList<T>
   head<T>(list: NonEmptyList<T>): T
   last<T>(list: NonEmptyList<T>): T
+  tail<T>(list: NonEmptyList<T>): T[]
 }
 
 const NonEmptyListConstructor = <T extends NonEmptyListCompliant<T[number]>>(
@@ -41,6 +42,7 @@ export const NonEmptyList: NonEmptyListTypeRef = Object.assign(
       NonEmptyList(source.toArray()),
     head: <T>(list: NonEmptyList<T>): T => list[0],
     last: <T>(list: NonEmptyList<T>): T => list[list.length - 1],
-    isNonEmpty: <T>(list: T[]): list is NonEmptyList<T> => list.length > 0
+    isNonEmpty: <T>(list: T[]): list is NonEmptyList<T> => list.length > 0,
+    tail: <T>(list: NonEmptyList<T>): T[] => list.slice(1)
   }
 )

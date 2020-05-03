@@ -31,6 +31,11 @@ describe('NonEmptyList', () => {
     expect(NonEmptyList.last(NonEmptyList([1]))).toEqual(1)
   })
 
+  test('tail', () => {
+    expect(NonEmptyList.tail(NonEmptyList([1, 2, 3]))).toEqual([2, 3])
+    expect(NonEmptyList.tail(NonEmptyList([1]))).toEqual([])
+  })
+
   test('unsafeCoerce', () => {
     expect(() => NonEmptyList.unsafeCoerce([])).toThrow()
     expect(NonEmptyList.unsafeCoerce([1])).toEqual(NonEmptyList([1]))

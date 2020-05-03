@@ -1965,6 +1965,13 @@ randomEither().map(x => x)
               description: `The same function as \`List#last\`, but it doesn't return a Maybe as a NonEmptyList will always have a last element.`,
               examples: [],
             },
+            {
+              name: 'tail',
+              signatureML: 'NonEmptyList a -> [a]',
+              signatureTS: '<T>(list: NonEmptyList<T>): T[]',
+              description: `The same function as \`List#tail\`, but it doesn't return a Maybe as a NonEmptyList will always have a tail (although it may be of length 0).`,
+              examples: [],
+            },
           ],
         },
       ],
