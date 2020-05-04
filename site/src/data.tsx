@@ -1617,6 +1617,22 @@ randomEither().map(x => x)
               signatureTS: '(): MaybeAsync<R>',
               examples: [],
             },
+            {
+              name: 'swap',
+              description: 'Returns `Right` if `this` is `Left` and vice versa.',
+              signatureTS: '(): EitherAsync<R, L>',
+              signatureML: 'EitherAsync a b ~> EitherAsync b a',
+              examples: [
+                {
+                  input: 'EitherAsync<string, number>(() => Promise.resolve(5)).swap().run()',
+                  output: 'Promise {<resolved>: Left(5)}'
+                },
+                {
+                  input: `EitherAsync(() => Promise.reject('Something happened')).swap().run()`,
+                  output: `Promise {<resolved>: Right('Something happened')}`,
+                },
+              ],
+            },
           ],
         },
         {
