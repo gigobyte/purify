@@ -460,13 +460,3 @@ export const date = Codec.custom<Date>({
   encode: (input) => input.toISOString(),
   schema: () => ({ type: 'string', format: 'date-time' })
 })
-
-console.dir(
-  Codec.interface({
-    username: string,
-    age: number,
-    coordinates: array(oneOf([string, number])),
-    gender: optional(string)
-  }).schema(),
-  { depth: null }
-)
