@@ -10,6 +10,7 @@ export interface Codec<T> {
   encode: (input: T) => unknown
   /** The same as the decode method, but throws an exception on failure. Please only use as an escape hatch */
   unsafeDecode: (input: unknown) => T
+  schema: () => object
 }
 
 /** You can use this to get a free type from an interface codec */
@@ -57,13 +58,14 @@ export const Codec = {
       [k in keyof T]: GetInterface<T[k]>
     }
   > {
+    const keys = Object.keys(properties)
+
     const decode = (input: any) => {
       if (!isObject(input)) {
         return Left(reportError('an object', input))
       }
 
       const result = {} as { [k in keyof T]: GetInterface<T[k]> }
-      const keys = Object.keys(properties)
 
       for (const key of keys) {
         if (
@@ -93,7 +95,6 @@ export const Codec = {
 
     const encode = (input: any) => {
       const result = {} as { [k in keyof T]: GetInterface<T[k]> }
-      const keys = Object.keys(properties)
 
       for (const key of keys) {
         result[key as keyof T] = properties[key].encode(input[key]) as any
@@ -105,22 +106,42 @@ export const Codec = {
     return {
       decode,
       encode,
-      unsafeDecode: (input) => decode(input).unsafeCoerce()
+      unsafeDecode: (input) => decode(input).unsafeCoerce(),
+      schema: () =>
+        keys.reduce(
+          (acc, key) => {
+            if (!(properties[key] as any)._isOptional) {
+              acc.required.push(key)
+            }
+
+            acc.properties[key] = properties[key].schema()
+
+            return acc
+          },
+          {
+            type: 'object',
+            properties: {} as Record<string, unknown>,
+            required: [] as string[]
+          }
+        )
     }
   },
 
   /** Creates a codec for any type, you can add your own deserialization/validation logic in the decode argument */
   custom<T>({
     decode,
-    encode
+    encode,
+    schema
   }: {
     decode: (value: unknown) => Either<string, T>
     encode: (value: T) => any
+    schema?: () => object
   }): Codec<T> {
     return {
       decode,
       encode,
-      unsafeDecode: (input) => decode(input).unsafeCoerce()
+      unsafeDecode: (input) => decode(input).unsafeCoerce(),
+      schema: schema ?? (() => ({}))
     }
   }
 }
@@ -131,7 +152,8 @@ export const string = Codec.custom<string>({
     typeof input === 'string'
       ? Right(input)
       : Left(reportError('a string', input)),
-  encode: identity
+  encode: identity,
+  schema: () => ({ type: 'string' })
 })
 
 /** A codec for any number value. This includes anything that has a typeof number - NaN, Infinity etc. Encoding a number acts like the identity function */
@@ -140,14 +162,16 @@ export const number = Codec.custom<number>({
     typeof input === 'number'
       ? Right(input)
       : Left(reportError('a number', input)),
-  encode: identity
+  encode: identity,
+  schema: () => ({ type: 'number' })
 })
 
 /** A codec for null only. Most of the time you will use it with the oneOf codec combinator to create a codec for a type like "string | null" */
 export const nullType = Codec.custom<null>({
   decode: (input) =>
     input === null ? Right(input) : Left(reportError('a null', input)),
-  encode: identity
+  encode: identity,
+  schema: () => ({ type: 'null' })
 })
 
 const undefinedType = Codec.custom<undefined>({
@@ -155,7 +179,8 @@ const undefinedType = Codec.custom<undefined>({
     input === undefined
       ? Right(input)
       : Left(reportError('an undefined', input)),
-  encode: identity
+  encode: identity,
+  schema: () => ({})
 })
 
 export const optional = <T>(codec: Codec<T>): Codec<T | undefined> =>
@@ -170,13 +195,15 @@ export const boolean = Codec.custom<boolean>({
     typeof input === 'boolean'
       ? Right(input)
       : Left(reportError('a boolean', input)),
-  encode: identity
+  encode: identity,
+  schema: () => ({ type: 'boolean' })
 })
 
 /** A codec that can never fail, but of course you get no type information. Encoding an unknown acts like the identity function */
 export const unknown = Codec.custom<unknown>({
   decode: Right,
-  encode: identity
+  encode: identity,
+  schema: () => ({})
 })
 
 /** A codec combinator that receives a list of codecs and runs them one after another during decode and resolves to whichever returns Right or to Left if all fail. This module does not expose a "nullable" or "optional" codec combinators because it\'s trivial to implement/replace them using oneOf */
@@ -211,7 +238,8 @@ export const oneOf = <T extends Array<Codec<any>>>(
       }
 
       return input
-    }
+    },
+    schema: () => ({ oneOf: codecs.map((x) => x.schema()).filter(Boolean) })
   })
 
 /** A codec for an array */
@@ -238,7 +266,11 @@ export const array = <T>(codec: Codec<T>): Codec<Array<T>> =>
         return Right(result)
       }
     },
-    encode: (input) => input.map(codec.encode)
+    encode: (input) => input.map(codec.encode),
+    schema: () => ({
+      type: 'array',
+      items: codec.schema() ? [codec.schema()] : []
+    })
   })
 
 const numberString = Codec.custom<any>({
@@ -248,7 +280,8 @@ const numberString = Codec.custom<any>({
       .chain((x) =>
         isFinite(+x) ? Right(x) : Left(reportError('a number key', input))
       ),
-  encode: identity
+  encode: identity,
+  schema: number.schema
 })
 
 /** A codec for an object without specific properties, its restrictions are equivalent to the Record<K, V> type so you can only check for number and string keys */
@@ -297,7 +330,11 @@ export const record = <K extends keyof any, V>(
       }
 
       return result
-    }
+    },
+    schema: () => ({
+      type: 'object',
+      additionalProperties: valueCodec.schema()
+    })
   })
 
 /** A codec that only succeeds decoding when the value is exactly what you've constructed the codec with. It's useful when you're decoding an enum, for example */
@@ -320,7 +357,8 @@ export const exactly = <T extends string | number | boolean>(
                   input
                 )
           ),
-    encode: identity
+    encode: identity,
+    schema: () => ({ type: typeof expectedValue, enum: [expectedValue] })
   })
 
 /** A special codec used when dealing with recursive data structures, it allows a codec to be recursively defined by itself */
@@ -333,13 +371,17 @@ export const lazy = <T>(getCodec: () => Codec<T>): Codec<T> =>
 /** A codec for purify's Maybe type. Encode runs Maybe#toJSON, which effectively returns the value inside if it's a Just or undefined if it's Nothing */
 export const maybe = <T>(codec: Codec<T>): Codec<Maybe<T>> =>
   Codec.custom({
-    decode: (input) =>
+    decode: (input: unknown) =>
       Maybe.fromNullable(input).caseOf({
         Just: (x) => codec.decode(x).map(Just),
         Nothing: () => Right(Nothing)
       }),
-    encode: (input) => input.toJSON()
-  })
+    encode: (input: Maybe<T>) => input.toJSON(),
+    schema: () => ({
+      oneOf: codec.schema() ? [codec.schema(), { type: 'null' }] : []
+    }),
+    _isOptional: true
+  } as any)
 
 /** A codec for purify's NEL type */
 export const nonEmptyList = <T>(codec: Codec<T>): Codec<NonEmptyList<T>> => {
@@ -353,7 +395,8 @@ export const nonEmptyList = <T>(codec: Codec<T>): Codec<NonEmptyList<T>> => {
             `Expected an array with one or more elements, but received an empty array`
           )
         ),
-    encode: arrayCodec.encode
+    encode: arrayCodec.encode,
+    schema: () => ({ ...arrayCodec.schema(), minItems: 1 })
   })
 }
 
@@ -391,7 +434,14 @@ export const tuple = <TS extends [Codec<any>, ...Codec<any>[]]>(
         return Right(result)
       }
     },
-    encode: (input) => input.map((x, i) => codecs[i].encode(x))
+    encode: (input) => input.map((x, i) => codecs[i].encode(x)),
+    schema: () => ({
+      type: 'array',
+      items: codecs.map((x) => x.schema()).filter(Boolean),
+      additionalItems: false,
+      minItems: codecs.length,
+      maxItems: codecs.length
+    })
   })
 
 /** A codec for a parsable date string, on successful decoding it resolves to a Date object. The validity of the date string during decoding is decided by the browser implementation of Date.parse. Encode runs toISOString on the passed in date object */
@@ -407,5 +457,16 @@ export const date = Codec.custom<Date>({
             )
           : Right(new Date(x))
       ),
-  encode: (input) => input.toISOString()
+  encode: (input) => input.toISOString(),
+  schema: () => ({ type: 'string', format: 'date-time' })
 })
+
+console.dir(
+  Codec.interface({
+    username: string,
+    age: number,
+    coordinates: array(oneOf([string, number])),
+    gender: optional(string)
+  }).schema(),
+  { depth: null }
+)
