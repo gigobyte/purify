@@ -101,6 +101,14 @@ describe('EitherAsync', () => {
     expect(await ma2.toMaybeAsync().run()).toEqual(Just(5))
   })
 
+  test('swap', async () => {
+    const eitherAsyncRight = EitherAsync(() => Promise.resolve(5))
+    expect(await eitherAsyncRight.swap().run()).toEqual(Left(5))
+
+    const eitherAsyncLeft = EitherAsync(async () => Promise.reject('fail'))
+    expect(await eitherAsyncLeft.swap().run()).toEqual(Right('fail'))
+  })
+
   describe('run', () => {
     it('resolves to Left if any of the async Eithers are Left', async () => {
       expect(

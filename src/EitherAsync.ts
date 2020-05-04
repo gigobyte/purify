@@ -26,6 +26,8 @@ export interface EitherAsync<L, R> {
   chainLeft<L2>(f: (value: L) => EitherAsync<L2, R>): EitherAsync<L2, R>
   /** Converts `this` to a MaybeAsync, discarding any error values */
   toMaybeAsync(): MaybeAsync<R>
+  /** Returns `Right` if `this` is `Left` and vice versa */
+  swap(): EitherAsync<R, L>
 
   'fantasy-land/map'<R2>(f: (value: R) => R2): EitherAsync<L, R2>
   'fantasy-land/chain'<R2>(
@@ -108,6 +110,14 @@ class EitherAsyncImpl<L, R> implements EitherAsync<L, R> {
     return MaybeAsync(async ({ liftMaybe }) => {
       const either = await this.run()
       return liftMaybe(either.toMaybe())
+    })
+  }
+
+  swap(): EitherAsync<R, L> {
+    return EitherAsync(async (helpers) => {
+      const either = await this.run()
+      if (either.isRight()) helpers.throwE(either.extract() as R)
+      return helpers.liftEither(Right(either.extract() as L))
     })
   }
 
