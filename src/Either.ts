@@ -137,6 +137,7 @@ export const Either: EitherTypeRef = {
 
 class Right<R, L = never> implements Either<L, R> {
   __value: R
+  private _ = 'R'
 
   constructor(value: R) {
     this.__value = value
@@ -301,6 +302,7 @@ Right.prototype.constructor = Either as any
 
 class Left<L, R = never> implements Either<L, R> {
   __value: L
+  private _ = 'L'
 
   constructor(value: L) {
     this.__value = value
