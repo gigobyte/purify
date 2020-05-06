@@ -1291,7 +1291,10 @@ randomEither().map(x => x)
               signatureML: 'Either a b ~> Maybe a',
               signatureTS: '(): Maybe<L>',
               examples: [
-                { input: `Left('Error').leftToMaybe()`, output: `Just('Error')` },
+                {
+                  input: `Left('Error').leftToMaybe()`,
+                  output: `Just('Error')`,
+                },
                 { input: `Right(5).leftToMaybe()`, output: 'Nothing' },
               ],
             },
@@ -1619,13 +1622,15 @@ randomEither().map(x => x)
             },
             {
               name: 'swap',
-              description: 'Returns `Right` if `this` is `Left` and vice versa.',
+              description:
+                'Returns `Right` if `this` is `Left` and vice versa.',
               signatureTS: '(): EitherAsync<R, L>',
               signatureML: 'EitherAsync a b ~> EitherAsync b a',
               examples: [
                 {
-                  input: 'EitherAsync<string, number>(() => Promise.resolve(5)).swap().run()',
-                  output: 'Promise {<resolved>: Left(5)}'
+                  input:
+                    'EitherAsync<string, number>(() => Promise.resolve(5)).swap().run()',
+                  output: 'Promise {<resolved>: Left(5)}',
                 },
                 {
                   input: `EitherAsync(() => Promise.reject('Something happened')).swap().run()`,
@@ -2214,7 +2219,7 @@ randomEither().map(x => x)
     {
       name: 'Codec',
       description:
-        "This module allows you to create a boundary on the outermost layer of your application, usually where you process back-end data or communicate with a third-party API. A codec consists of two parts - an encoder and a decoder, hence the name. Using a decoder you can validate your expectations regarding the structure and type of data you're receiving. An encoder, on the other hand, lets you make sure you're sending your application data in the correct format and can also act as a mapper from your custom domain objects to plain JSON values.",
+        "This module allows you to create a boundary on the outermost layer of your application, usually where you process back-end data or communicate with a third-party API. A codec consists of two parts - an encoder and a decoder, hence the name. Using a decoder you can validate your expectations regarding the structure and type of data you're receiving. An encoder, on the other hand, lets you make sure you're sending your application data in the correct format and can also act as a mapper from your custom domain objects to plain JSON values. In case your infrastructure supports JSON schema you can also generate one from your codecs so that you don't have to deal with the error handling.",
       example: {
         import: `import { Codec, GetInterface, string, number ... } from 'purify-ts/Codec'`,
       },
@@ -2232,12 +2237,14 @@ randomEither().map(x => x)
                   input: `Codec.interface({
     username: string,
     age: number,
-    coordinates: array(oneOf([string, number]))
+    email: optional(string),
+    followers: array(number)
 })`,
                   output: `Codec<{
   username: string
   age: number
-  coordinates: Array<string | number>
+  email?: string
+  followers: Array<number>
 }>`,
                 },
               ],
@@ -2308,6 +2315,31 @@ type User = GetInterface<typeof User>`,
               description:
                 'The same as the decode method, but throws an exception on failure. Please only use as an escape hatch.',
               examples: [],
+            },
+            {
+              name: 'schema',
+              signatureTS: '() => JSONSchema6',
+              description: '',
+              examples: [
+                {
+                  input: `Codec.interface({
+  username: string,
+  age: number,
+  email: optional(optional(oneOf([oneOf[string]]))),
+  followers: array(number)
+}).schema()`,
+                  output: `{
+  type: 'object',
+  properties: {
+    username: { type: 'string' },
+    age: { type: 'number' },
+    email: { type: 'string' }, // Schema is optimized
+    followers: { type: 'array', items: [ { type: 'number' } ] }
+  },
+  required: [ 'username', 'age', 'followers' ]
+}`,
+                },
+              ],
             },
           ],
         },
@@ -2417,13 +2449,13 @@ type User = GetInterface<typeof User>`,
               signatureTS:
                 '<T extends Array<Codec<any>>>(codecs: T): Codec<GetInterface<T extends Array<infer U> ? U : never>>',
               description:
-                'A codec combinator that receives a list of codecs and runs them one after another during decode and resolves to whichever returns Right or to Left if all fail. This module does not expose a "nullable" or "optional" codec combinators because it\'s trivial to implement/replace them using oneOf.',
+                'A codec combinator that receives a list of codecs and runs them one after another during decode and resolves to whichever returns Right or to Left if all fail. This module does not expose a "nullable" codec combinator because it\'s trivial to implement/replace them using oneOf.',
               examples: [
                 {
                   input: `const nullable = <T>(codec: Codec<T>): Codec<T | null> =>
   oneOf([codec, nullType])`,
                   output:
-                    'Codec<T | null> // Personally, I would just use oneOf directly',
+                    'Codec<T | null> // Personally, I would just use oneOf',
                 },
                 {
                   input: 'oneOf([string, nullType])',
@@ -2436,12 +2468,6 @@ type User = GetInterface<typeof User>`,
                 {
                   input: 'oneOf([string, nullType]).decode(null)',
                   output: 'Right(null)',
-                },
-                {
-                  input: 'oneOf([boolean, undefinedType]).decode(123)',
-                  output: `Left('One of the following problems occured:
-      (0) Expected a boolean, but received a number with value 0,
-      (1) Expected an undefined, but received a number with value 0')`,
                 },
               ],
             },
@@ -2494,7 +2520,7 @@ type User = GetInterface<typeof User>`,
                   output: `Right({0: \'user1\', 1: \'user2\'})`,
                 },
                 {
-                  input: "record(number, string).decode({valid: 'yes'})",
+                  input: "record(number, string).decode({valid: 'no'})",
                   output:
                     'Left(\'Problem with key type of property "a": Expected a number key, but received a string with value "valid"\')',
                 },

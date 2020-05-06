@@ -50,6 +50,35 @@ const reportError = (type: string, input: unknown): string => {
   return `Expected ${type}, but received ${receivedString}`
 }
 
+const optimizeSchema = (
+  schema: JSONSchema6,
+  isOptional: boolean
+): JSONSchema6 => {
+  if (Array.isArray(schema.oneOf)) {
+    for (let i = 0; i < schema.oneOf.length; i++) {
+      const e = schema.oneOf[i]
+      if (typeof e === 'object' && e.oneOf) {
+        delete schema.oneOf[i]
+        schema.oneOf.push(...e.oneOf)
+        return optimizeSchema(schema, isOptional)
+      }
+    }
+  }
+
+  if (isOptional) {
+    schema.oneOf = schema.oneOf?.filter((x) =>
+      typeof x === 'boolean' ? true : x.type !== 'null'
+    )
+  }
+
+  if (schema.oneOf?.length === 1 && typeof schema.oneOf[0] === 'object') {
+    schema = { ...schema, ...schema.oneOf[0] }
+    delete schema.oneOf
+  }
+
+  return schema
+}
+
 export const Codec = {
   /** Creates a codec for any JSON object */
   interface<T extends Record<string, Codec<any>>>(
@@ -111,11 +140,16 @@ export const Codec = {
       schema: () =>
         keys.reduce(
           (acc, key) => {
-            if (!(properties[key] as any)._isOptional?.()) {
+            const isOptional = (properties[key] as any)._isOptional?.()
+
+            if (!isOptional) {
               acc.required.push(key)
             }
 
-            acc.properties[key] = properties[key].schema()
+            acc.properties[key] = optimizeSchema(
+              properties[key].schema(),
+              isOptional
+            )
 
             return acc
           },
@@ -181,7 +215,7 @@ const undefinedType = Codec.custom<undefined>({
       ? Right(input)
       : Left(reportError('an undefined', input)),
   encode: identity,
-  schema: () => ({})
+  schema: nullType.schema
 })
 
 export const optional = <T>(codec: Codec<T>): Codec<T | undefined> =>
@@ -207,7 +241,7 @@ export const unknown = Codec.custom<unknown>({
   schema: () => ({})
 })
 
-/** A codec combinator that receives a list of codecs and runs them one after another during decode and resolves to whichever returns Right or to Left if all fail. This module does not expose a "nullable" or "optional" codec combinators because it\'s trivial to implement/replace them using oneOf */
+/** A codec combinator that receives a list of codecs and runs them one after another during decode and resolves to whichever returns Right or to Left if all fail. This module does not expose a "nullable" codec combinator because it\'s trivial to implement/replace them using oneOf */
 export const oneOf = <T extends Array<Codec<any>>>(
   codecs: T
 ): Codec<GetInterface<T extends Array<infer U> ? U : never>> =>
@@ -464,3 +498,10 @@ export const date = Codec.custom<Date>({
   encode: (input) => input.toISOString(),
   schema: () => ({ type: 'string', format: 'date-time' })
 })
+
+console.dir(
+  Codec.interface({
+    email: optional(optional(oneOf([string])))
+  }).schema(),
+  { depth: null }
+)
