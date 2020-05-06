@@ -2,6 +2,7 @@ import { Either, Right, Left } from './Either'
 import { identity } from './Function'
 import { Maybe, Just, Nothing } from './Maybe'
 import { NonEmptyList } from './NonEmptyList'
+import { JSONSchema6 } from 'json-schema'
 
 export interface Codec<T> {
   /** Takes a JSON value and runs the decode function the codec was constructed with. All of purify's built-in codecs return a descriptive error message in case the decode fails */
@@ -10,7 +11,7 @@ export interface Codec<T> {
   encode: (input: T) => unknown
   /** The same as the decode method, but throws an exception on failure. Please only use as an escape hatch */
   unsafeDecode: (input: unknown) => T
-  schema: () => object
+  schema: () => JSONSchema6
 }
 
 /** You can use this to get a free type from an interface codec */
@@ -70,7 +71,7 @@ export const Codec = {
       for (const key of keys) {
         if (
           !input.hasOwnProperty(key) &&
-          !(properties[key] as any)._isOptional
+          !(properties[key] as any)._isOptional?.()
         ) {
           return Left(
             `Problem with property "${key}": it does not exist in received object ${JSON.stringify(
@@ -110,7 +111,7 @@ export const Codec = {
       schema: () =>
         keys.reduce(
           (acc, key) => {
-            if (!(properties[key] as any)._isOptional) {
+            if (!(properties[key] as any)._isOptional?.()) {
               acc.required.push(key)
             }
 
@@ -120,7 +121,7 @@ export const Codec = {
           },
           {
             type: 'object',
-            properties: {} as Record<string, unknown>,
+            properties: {} as Record<string, JSONSchema6>,
             required: [] as string[]
           }
         )
@@ -186,7 +187,7 @@ const undefinedType = Codec.custom<undefined>({
 export const optional = <T>(codec: Codec<T>): Codec<T | undefined> =>
   ({
     ...oneOf([codec, undefinedType]),
-    _isOptional: true
+    _isOptional: () => true
   } as any)
 
 /** A codec for a boolean value */
@@ -364,9 +365,13 @@ export const exactly = <T extends string | number | boolean>(
 /** A special codec used when dealing with recursive data structures, it allows a codec to be recursively defined by itself */
 export const lazy = <T>(getCodec: () => Codec<T>): Codec<T> =>
   Codec.custom({
-    decode: (input) => getCodec().decode(input),
-    encode: (input) => getCodec().encode(input)
-  })
+    decode: (input: unknown) => getCodec().decode(input),
+    encode: (input: T) => getCodec().encode(input),
+    schema: () => ({
+      $comment: 'Lazy codecs are not supported when generating a JSON schema'
+    }),
+    _isOptional: () => (getCodec() as any)._isOptional?.()
+  } as any)
 
 /** A codec for purify's Maybe type. Encode runs Maybe#toJSON, which effectively returns the value inside if it's a Just or undefined if it's Nothing */
 export const maybe = <T>(codec: Codec<T>): Codec<Maybe<T>> =>
@@ -380,7 +385,7 @@ export const maybe = <T>(codec: Codec<T>): Codec<Maybe<T>> =>
     schema: () => ({
       oneOf: codec.schema() ? [codec.schema(), { type: 'null' }] : []
     }),
-    _isOptional: true
+    _isOptional: () => true
   } as any)
 
 /** A codec for purify's NEL type */

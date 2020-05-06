@@ -33,5 +33,7 @@
     "ts-jest": "^25.0.0",
     "typescript": "3.8.3"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@types/json-schema": "^7.0.4"
+  }
 }
