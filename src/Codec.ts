@@ -498,10 +498,3 @@ export const date = Codec.custom<Date>({
   encode: (input) => input.toISOString(),
   schema: () => ({ type: 'string', format: 'date-time' })
 })
-
-console.dir(
-  Codec.interface({
-    email: optional(optional(oneOf([string])))
-  }).schema(),
-  { depth: null }
-)
