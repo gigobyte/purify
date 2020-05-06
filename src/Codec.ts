@@ -369,9 +369,8 @@ export const lazy = <T>(getCodec: () => Codec<T>): Codec<T> =>
     encode: (input: T) => getCodec().encode(input),
     schema: () => ({
       $comment: 'Lazy codecs are not supported when generating a JSON schema'
-    }),
-    _isOptional: () => (getCodec() as any)._isOptional?.()
-  } as any)
+    })
+  })
 
 /** A codec for purify's Maybe type. Encode runs Maybe#toJSON, which effectively returns the value inside if it's a Just or undefined if it's Nothing */
 export const maybe = <T>(codec: Codec<T>): Codec<Maybe<T>> =>
