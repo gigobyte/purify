@@ -117,7 +117,11 @@ export const Codec = {
           )
         }
 
-        result[key as keyof T] = decodedProperty.extract()
+        const value = decodedProperty.extract()
+
+        if (value !== undefined) {
+          result[key as keyof T] = value
+        }
       }
 
       return Right(result)
