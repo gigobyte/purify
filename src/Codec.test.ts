@@ -57,7 +57,6 @@ describe('Codec', () => {
       expect(mockCodec.decode({ a: 0, b: '', c: '' })).toEqual(
         Right({ a: 0, b: '', c: '' })
       )
-      expect(mockCodec)
     })
 
     test('unsafeDecode', () => {
