@@ -41,6 +41,8 @@ export interface Tuple<F, S> extends Iterable<F | S>, ArrayLike<F | S> {
   swap(): Tuple<S, F>
   /** Applies the second value of a tuple to the second value of `this` */
   ap<T, S2>(f: Tuple<T, (value: S) => S2>): Tuple<F, S2>
+  every(pred: (value: F | S) => boolean): boolean
+  some(pred: (value: F | S) => boolean): boolean
 
   'fantasy-land/equals'(other: Tuple<F, S>): boolean
   'fantasy-land/bimap'<F2, S2>(
@@ -123,6 +125,14 @@ class TupleImpl<F, S> implements Tuple<F, S> {
 
   ap<T, S2>(f: Tuple<T, (value: S) => S2>): Tuple<F, S2> {
     return Tuple(this.first, f.snd()(this.second))
+  }
+
+  every(pred: (value: F | S) => boolean): boolean {
+    return pred(this.first) && pred(this.second)
+  }
+
+  some(pred: (value: F | S) => boolean): boolean {
+    return pred(this.first) || pred(this.second)
   }
 
   'fantasy-land/equals'(other: Tuple<F, S>): boolean {

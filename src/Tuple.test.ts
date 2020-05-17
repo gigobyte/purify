@@ -96,4 +96,15 @@ describe('Tuple', () => {
       Tuple(5, 11)
     )
   })
+
+  test('every', () => {
+    expect(Tuple(5, 10).every((x) => x > 0)).toEqual(true)
+    expect(Tuple(-5, 10).every((x) => x > 0)).toEqual(false)
+  })
+
+  test('some', () => {
+    expect(Tuple(5, 10).some((x) => x === 10)).toEqual(true)
+    expect(Tuple(-5, 10).some((x) => x > 0)).toEqual(true)
+    expect(Tuple('abc', 'bcd').some((x) => x.includes('x'))).toEqual(false)
+  })
 })
