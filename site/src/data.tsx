@@ -1882,6 +1882,22 @@ randomEither().map(x => x)
                 },
               ],
             },
+            {
+              name: 'some',
+              description:
+                'Tests whether at least one element in the tuple passes the test implemented by the provided function.',
+              signatureTS: '(pred: (value: F | S) => boolean): boolean',
+              signatureML: '(a, a) ~> (a -> Bool) -> Bool',
+              examples: [],
+            },
+            {
+              name: 'every',
+              description:
+                'Tests whether both elements in the tuple pass the test implemented by the provided function.',
+              signatureTS: '(pred: (value: F | S) => boolean): boolean',
+              signatureML: '(a, a) ~> (a -> Bool) -> Bool',
+              examples: [],
+            },
           ],
         },
       ],
