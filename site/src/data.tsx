@@ -2410,8 +2410,7 @@ type User = GetInterface<typeof User>`,
             {
               name: 'nullType',
               signatureTS: 'Codec<null>',
-              description:
-                'A codec for null only. Most of the time you will use it with the oneOf codec combinator to create a codec for a type like "string | null"',
+              description: 'A codec for null only.',
               examples: [
                 {
                   input: 'nullType.decode(null)',
@@ -2465,17 +2464,12 @@ type User = GetInterface<typeof User>`,
               signatureTS:
                 '<T extends Array<Codec<any>>>(codecs: T): Codec<GetInterface<T extends Array<infer U> ? U : never>>',
               description:
-                'A codec combinator that receives a list of codecs and runs them one after another during decode and resolves to whichever returns Right or to Left if all fail. This module does not expose a "nullable" codec combinator because it\'s trivial to implement/replace them using oneOf.',
+                'A codec combinator that receives a list of codecs and runs them one after another during decode and resolves to whichever returns Right or to Left if all fail.',
               examples: [
                 {
                   input: `const nullable = <T>(codec: Codec<T>): Codec<T | null> =>
   oneOf([codec, nullType])`,
-                  output:
-                    'Codec<T | null> // Personally, I would just use oneOf',
-                },
-                {
-                  input: 'oneOf([string, nullType])',
-                  output: 'Codec<string | null>',
+                  output: 'Codec<T | null>',
                 },
                 {
                   input: `oneOf([string, nullType]).decode('Well, hi!')`,
@@ -2500,6 +2494,18 @@ type User = GetInterface<typeof User>`,
                 {
                   input: 'Codec.interface({ a: optional(number) }).decode({})',
                   output: 'Right({})',
+                },
+              ],
+            },
+            {
+              name: 'nullable',
+              signatureTS: '<T>(codec: Codec<T>): Codec<T | null>',
+              description:
+                'A codec for a value T or null. Keep in mind if you use `nullable` inside `Codec.interface` the property will still be required.',
+              examples: [
+                {
+                  input: 'nullable(number).decode(null)',
+                  output: 'Right(null)',
                 },
               ],
             },
@@ -2564,15 +2570,29 @@ type User = GetInterface<typeof User>`,
               signatureTS:
                 '<T extends string | number | boolean>(expectedValue: T): Codec<T>',
               description:
-                "A codec that only succeeds decoding when the value is exactly what you've constructed the codec with. It's useful when you're decoding an enum, for example.",
+                "A codec that only succeeds decoding when the value is exactly what you've constructed the codec with.",
               examples: [
                 {
                   input: `exactly('').decode('non-empty string')`,
                   output: `Left('Expected a string with a value of exactly "", but received a string with value "non-empty string"')`,
                 },
                 {
-                  input: `oneof([exactly('None'), exactly('Read'), exactly('Write')])`,
+                  input: `oneof(['None', 'Read', 'Write'].map(exactly))`,
                   output: `Codec<"None" | "Read" | "Write">`,
+                },
+              ],
+            },
+            {
+              name: 'enumeration',
+              signatureTS:
+                '<T extends Record<string, string | number>>(e: T): Codec<T[keyof T]>',
+              description: 'A codec for a TypeScript enum.',
+              examples: [
+                {
+                  input: `enum Mode { Read, Write, ReadWrite }
+                  
+enumeration(Mode).decode(0)`,
+                  output: `Right(Mode.Read)`,
                 },
               ],
             },
@@ -2596,6 +2616,21 @@ const Comment: Codec<Comment> = Codec.interface({
                 },
               ],
             },
+            {
+              name: 'intersect',
+              signatureTS: '<T, U>(t: Codec<T>, u: Codec<U>): Codec<T & U>',
+              description:
+                'Creates an intersection between two codecs. If the provided codecs are not for an object, the second decode result will be returned.',
+              examples: [
+                {
+                  input: `intersect(
+  Codec.interface({a: number}),
+  Codec.interface({b: string})
+).decode({a: 5, b: ''})`,
+                  output: `Right({a: 5, b: ''})`,
+                },
+              ],
+            },
           ],
         },
         {
@@ -2608,7 +2643,8 @@ const Comment: Codec<Comment> = Codec.interface({
               examples: [
                 {
                   input: 'maybe(number).decode(undefined)',
-                  output: 'Right(Nothing)',
+                  output:
+                    'Right(Nothing) // Also works with missing properties inside an object',
                 },
                 {
                   input: 'maybe(number).decode(null)',

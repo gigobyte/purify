@@ -41,7 +41,9 @@ export interface Tuple<F, S> extends Iterable<F | S>, ArrayLike<F | S> {
   swap(): Tuple<S, F>
   /** Applies the second value of a tuple to the second value of `this` */
   ap<T, S2>(f: Tuple<T, (value: S) => S2>): Tuple<F, S2>
+  /** Tests whether both elements in the tuple pass the test implemented by the provided function */
   every(pred: (value: F | S) => boolean): boolean
+  /** Tests whether at least one element in the tuple passes the test implemented by the provided function */
   some(pred: (value: F | S) => boolean): boolean
 
   'fantasy-land/equals'(other: Tuple<F, S>): boolean

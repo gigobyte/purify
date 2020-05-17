@@ -210,7 +210,7 @@ export const number = Codec.custom<number>({
   schema: () => ({ type: 'number' })
 })
 
-/** A codec for null only. Most of the time you will use it with the oneOf codec combinator to create a codec for a type like "string | null" */
+/** A codec for null only */
 export const nullType = Codec.custom<null>({
   decode: (input) =>
     input === null ? Right(input) : Left(reportError('a null', input)),
@@ -233,6 +233,7 @@ export const optional = <T>(codec: Codec<T>): Codec<T | undefined> =>
     _isOptional: () => true
   } as any)
 
+/** A codec for a value T or null. Keep in mind if you use `nullable` inside `Codec.interface` the property will still be required */
 export const nullable = <T>(codec: Codec<T>): Codec<T | null> =>
   oneOf([codec, nullType])
 
@@ -253,6 +254,7 @@ export const unknown = Codec.custom<unknown>({
   schema: () => ({})
 })
 
+/** A codec for a TypeScript enum */
 export const enumeration = <T extends Record<string, string | number>>(
   e: T
 ): Codec<T[keyof T]> => {
@@ -275,7 +277,7 @@ export const enumeration = <T extends Record<string, string | number>>(
   })
 }
 
-/** A codec combinator that receives a list of codecs and runs them one after another during decode and resolves to whichever returns Right or to Left if all fail. This module does not expose a "nullable" codec combinator because it\'s trivial to implement/replace them using oneOf */
+/** A codec combinator that receives a list of codecs and runs them one after another during decode and resolves to whichever returns Right or to Left if all fail */
 export const oneOf = <T extends Array<Codec<any>>>(
   codecs: T
 ): Codec<GetInterface<T extends Array<infer U> ? U : never>> =>
@@ -406,7 +408,7 @@ export const record = <K extends keyof any, V>(
     })
   })
 
-/** A codec that only succeeds decoding when the value is exactly what you've constructed the codec with. It's useful when you're decoding an enum, for example */
+/** A codec that only succeeds decoding when the value is exactly what you've constructed the codec with */
 export const exactly = <T extends string | number | boolean>(
   expectedValue: T
 ): Codec<T> =>
@@ -533,6 +535,7 @@ export const date = Codec.custom<Date>({
   schema: () => ({ type: 'string', format: 'date-time' })
 })
 
+/** Creates an intersection between two codecs. If the provided codecs are not for an object, the second decode result will be returned */
 export const intersect = <T, U>(t: Codec<T>, u: Codec<U>): Codec<T & U> =>
   Codec.custom({
     decode: (input) => {
