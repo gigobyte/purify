@@ -50,31 +50,39 @@ const reportError = (type: string, input: unknown): string => {
   return `Expected ${type}, but received ${receivedString}`
 }
 
-const optimizeSchema = (
-  schema: JSONSchema6,
-  isOptional: boolean
-): JSONSchema6 => {
+const removeOneOfWithSingleElement = (schema: JSONSchema6): JSONSchema6 => {
+  const schemaKeys = Object.keys(schema)
+
+  if (
+    schemaKeys.length === 1 &&
+    schema.oneOf?.length === 1 &&
+    typeof schema.oneOf[0] === 'object'
+  ) {
+    Object.assign(schema, schema.oneOf[0])
+    delete schema.oneOf
+  }
+
+  return schema
+}
+
+const flattenNestedOneOf = (schema: JSONSchema6): JSONSchema6 => {
   if (Array.isArray(schema.oneOf)) {
     for (let i = 0; i < schema.oneOf.length; i++) {
       const e = schema.oneOf[i]
       if (typeof e === 'object' && e.oneOf) {
-        delete schema.oneOf[i]
+        schema.oneOf.splice(i, 1)
         schema.oneOf.push(...e.oneOf)
-        return optimizeSchema(schema, isOptional)
+        return optimizeSchema(schema)
       }
     }
   }
 
-  if (isOptional) {
-    schema.oneOf = schema.oneOf?.filter((x) =>
-      typeof x === 'boolean' ? true : x.type !== 'null'
-    )
-  }
+  return schema
+}
 
-  if (schema.oneOf?.length === 1 && typeof schema.oneOf[0] === 'object') {
-    schema = { ...schema, ...schema.oneOf[0] }
-    delete schema.oneOf
-  }
+const optimizeSchema = (schema: JSONSchema6): JSONSchema6 => {
+  flattenNestedOneOf(schema)
+  removeOneOfWithSingleElement(schema)
 
   return schema
 }
@@ -150,10 +158,7 @@ export const Codec = {
               acc.required.push(key)
             }
 
-            acc.properties[key] = optimizeSchema(
-              properties[key].schema(),
-              isOptional
-            )
+            acc.properties[key] = optimizeSchema(properties[key].schema())
 
             return acc
           },
@@ -218,15 +223,18 @@ const undefinedType = Codec.custom<undefined>({
     input === undefined
       ? Right(input)
       : Left(reportError('an undefined', input)),
-  encode: identity,
-  schema: nullType.schema
+  encode: identity
 })
 
 export const optional = <T>(codec: Codec<T>): Codec<T | undefined> =>
   ({
     ...oneOf([codec, undefinedType]),
+    schema: codec.schema,
     _isOptional: () => true
   } as any)
+
+export const nullable = <T>(codec: Codec<T>): Codec<T | null> =>
+  oneOf([codec, nullType])
 
 /** A codec for a boolean value */
 export const boolean = Codec.custom<boolean>({
@@ -244,6 +252,28 @@ export const unknown = Codec.custom<unknown>({
   encode: identity,
   schema: () => ({})
 })
+
+export const enumeration = <T extends Record<string, string | number>>(
+  e: T
+): Codec<T[keyof T]> => {
+  const enumValues = Object.values(e)
+
+  return Codec.custom({
+    decode: (input) => {
+      if (typeof input !== 'string' && typeof input !== 'number') {
+        return Left(reportError('a string or number', input))
+      }
+
+      const enumIndex = enumValues.indexOf(input)
+
+      return enumIndex !== -1
+        ? Right(enumValues[enumIndex] as T[keyof T])
+        : Left(reportError('an enum member', input))
+    },
+    encode: identity,
+    schema: () => ({ enum: enumValues })
+  })
+}
 
 /** A codec combinator that receives a list of codecs and runs them one after another during decode and resolves to whichever returns Right or to Left if all fail. This module does not expose a "nullable" codec combinator because it\'s trivial to implement/replace them using oneOf */
 export const oneOf = <T extends Array<Codec<any>>>(

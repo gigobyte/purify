@@ -14,7 +14,9 @@ import {
   tuple,
   lazy,
   date,
-  optional
+  optional,
+  nullable,
+  enumeration
 } from './Codec'
 import { Left, Right } from './Either'
 import { Just, Nothing } from './Maybe'
@@ -514,6 +516,121 @@ describe('Codec', () => {
 
     test('encode', () => {
       expect(date.encode(now)).toEqual(nowISOString)
+    })
+  })
+
+  describe('nullable', () => {
+    test('decode', () => {
+      expect(nullable(string).decode('')).toEqual(Right(''))
+      expect(nullable(string).decode(null)).toEqual(Right(null))
+      expect(nullable(string).decode(0)).toEqual(
+        Left(
+          'One of the following problems occured: (0) Expected a string, but received a number with value 0, (1) Expected a null, but received a number with value 0'
+        )
+      )
+    })
+
+    test('encode', () => {
+      expect(nullable(string).encode('')).toEqual('')
+      expect(nullable(string).encode(null)).toEqual(null)
+    })
+  })
+
+  describe('enumeration', () => {
+    enum Test {
+      Test1 = 'Test1',
+      Test2 = 'Test2'
+    }
+
+    enum NumTest {
+      NumTest1,
+      NumTest2
+    }
+
+    test('decode', () => {
+      expect(enumeration(Test).decode('Test1')).toEqual(Right(Test.Test1))
+      expect(enumeration(NumTest).decode(0)).toEqual(Right(NumTest.NumTest1))
+
+      expect(enumeration(Test).decode(0)).toEqual(
+        Left('Expected an enum member, but received a number with value 0')
+      )
+      expect(enumeration(Test).decode(null)).toEqual(
+        Left('Expected a string or number, but received null')
+      )
+    })
+
+    test('encode', () => {
+      expect(enumeration(Test).encode(Test.Test1)).toEqual('Test1')
+      expect(enumeration(NumTest).encode(NumTest.NumTest1)).toEqual(0)
+    })
+  })
+
+  describe('JSON schema', () => {
+    enum E {
+      E1 = 'E1',
+      E2 = 'E2'
+    }
+
+    const God = Codec.interface({
+      a: string,
+      b: Codec.interface({
+        c: number,
+        d: nullType,
+        e: nullable(string),
+        f: optional(boolean)
+      }),
+      u: unknown,
+      en: enumeration(E),
+      on: oneOf([array(string), record(string, string)]),
+      optimal: oneOf([oneOf([oneOf([optional(optional(string))])])]),
+      e: exactly('SSS'),
+      m: maybe(tuple([number, number])),
+      n: nonEmptyList(date)
+    })
+
+    expect(God.schema()).toEqual({
+      type: 'object',
+      properties: {
+        a: { type: 'string' },
+        b: {
+          type: 'object',
+          properties: {
+            c: { type: 'number' },
+            d: { type: 'null' },
+            e: { oneOf: [{ type: 'string' }, { type: 'null' }] },
+            f: { type: 'boolean' }
+          },
+          required: ['c', 'd', 'e']
+        },
+        u: {},
+        en: { enum: ['E1', 'E2'] },
+        on: {
+          oneOf: [
+            { type: 'array', items: [{ type: 'string' }] },
+            { type: 'object', additionalProperties: { type: 'string' } }
+          ]
+        },
+        optimal: { type: 'string' },
+        e: { type: 'string', enum: ['SSS'] },
+        m: {
+          oneOf: [
+            {
+              type: 'array',
+              items: [{ type: 'number' }, { type: 'number' }],
+              additionalItems: false,
+              minItems: 2,
+              maxItems: 2
+            },
+            { type: 'null' }
+          ]
+        },
+        n: {
+          type: 'array',
+          items: [{ type: 'string', format: 'date-time' }],
+          minItems: 1
+        }
+      },
+      required: ['a', 'b', 'u', 'en', 'on', 'optimal', 'e', 'm', 'n']
     })
   })
 })
