@@ -16,7 +16,8 @@ import {
   date,
   optional,
   nullable,
-  enumeration
+  enumeration,
+  intersect
 } from './Codec'
 import { Left, Right } from './Either'
 import { Just, Nothing } from './Maybe'
@@ -565,72 +566,122 @@ describe('Codec', () => {
     })
   })
 
+  describe('interect', () => {
+    const a = Codec.interface({ a: number })
+    const b = Codec.interface({ b: string })
+
+    test('decode', () => {
+      expect(intersect(a, b).decode({ a: 5, b: '' })).toEqual(
+        Right({ a: 5, b: '' })
+      )
+      expect(intersect(a, b).decode({ a: 5 })).toEqual(
+        Left(
+          'Problem with property "b": it does not exist in received object {"a":5}'
+        )
+      )
+      expect(intersect(a, b).decode({ b: '' })).toEqual(
+        Left(
+          'Problem with property "a": it does not exist in received object {"b":""}'
+        )
+      )
+    })
+
+    test('encode', () => {
+      expect(intersect(a, b).encode({ a: 5, b: '' })).toEqual({ a: 5, b: '' })
+    })
+  })
+
   describe('JSON schema', () => {
     enum E {
       E1 = 'E1',
       E2 = 'E2'
     }
 
-    const God = Codec.interface({
-      a: string,
-      b: Codec.interface({
-        c: number,
-        d: nullType,
-        e: nullable(string),
-        f: optional(boolean)
-      }),
-      u: unknown,
-      en: enumeration(E),
-      on: oneOf([array(string), record(string, string)]),
-      optimal: oneOf([oneOf([oneOf([optional(optional(string))])])]),
-      e: exactly('SSS'),
-      m: maybe(tuple([number, number])),
-      n: nonEmptyList(date)
+    interface Dog {
+      dog: Dog
+    }
+
+    const Dog: Codec<Dog> = Codec.interface({
+      dog: lazy(() => Dog)
     })
 
+    const God = intersect(
+      Codec.interface({
+        a: string,
+        b: Codec.interface({
+          c: number,
+          d: nullType,
+          e: nullable(string),
+          f: optional(boolean)
+        }),
+        u: unknown,
+        en: enumeration(E),
+        on: oneOf([array(string), record(string, string)]),
+        optimal: oneOf([oneOf([oneOf([optional(optional(string))])])]),
+        e: exactly('SSS'),
+        m: maybe(tuple([number, number])),
+        n: nonEmptyList(date)
+      }),
+      Dog
+    )
+
     expect(God.schema()).toEqual({
-      type: 'object',
-      properties: {
-        a: { type: 'string' },
-        b: {
+      allOf: [
+        {
           type: 'object',
           properties: {
-            c: { type: 'number' },
-            d: { type: 'null' },
-            e: { oneOf: [{ type: 'string' }, { type: 'null' }] },
-            f: { type: 'boolean' }
-          },
-          required: ['c', 'd', 'e']
-        },
-        u: {},
-        en: { enum: ['E1', 'E2'] },
-        on: {
-          oneOf: [
-            { type: 'array', items: [{ type: 'string' }] },
-            { type: 'object', additionalProperties: { type: 'string' } }
-          ]
-        },
-        optimal: { type: 'string' },
-        e: { type: 'string', enum: ['SSS'] },
-        m: {
-          oneOf: [
-            {
-              type: 'array',
-              items: [{ type: 'number' }, { type: 'number' }],
-              additionalItems: false,
-              minItems: 2,
-              maxItems: 2
+            a: { type: 'string' },
+            b: {
+              type: 'object',
+              properties: {
+                c: { type: 'number' },
+                d: { type: 'null' },
+                e: { oneOf: [{ type: 'string' }, { type: 'null' }] },
+                f: { type: 'boolean' }
+              },
+              required: ['c', 'd', 'e']
             },
-            { type: 'null' }
-          ]
+            u: {},
+            en: { enum: ['E1', 'E2'] },
+            on: {
+              oneOf: [
+                { type: 'array', items: [{ type: 'string' }] },
+                { type: 'object', additionalProperties: { type: 'string' } }
+              ]
+            },
+            optimal: { type: 'string' },
+            e: { type: 'string', enum: ['SSS'] },
+            m: {
+              oneOf: [
+                {
+                  type: 'array',
+                  items: [{ type: 'number' }, { type: 'number' }],
+                  additionalItems: false,
+                  minItems: 2,
+                  maxItems: 2
+                },
+                { type: 'null' }
+              ]
+            },
+            n: {
+              type: 'array',
+              items: [{ type: 'string', format: 'date-time' }],
+              minItems: 1
+            }
+          },
+          required: ['a', 'b', 'u', 'en', 'on', 'optimal', 'e', 'm', 'n']
         },
-        n: {
-          type: 'array',
-          items: [{ type: 'string', format: 'date-time' }],
-          minItems: 1
+        {
+          properties: {
+            dog: {
+              $comment:
+                'Lazy codecs are not supported when generating a JSON schema'
+            }
+          },
+          required: ['dog'],
+          type: 'object'
         }
-      },
-      required: ['a', 'b', 'u', 'en', 'on', 'optimal', 'e', 'm', 'n']
+      ]
     })
   })
 })

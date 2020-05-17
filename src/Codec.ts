@@ -433,8 +433,8 @@ export const exactly = <T extends string | number | boolean>(
 /** A special codec used when dealing with recursive data structures, it allows a codec to be recursively defined by itself */
 export const lazy = <T>(getCodec: () => Codec<T>): Codec<T> =>
   Codec.custom({
-    decode: (input: unknown) => getCodec().decode(input),
-    encode: (input: T) => getCodec().encode(input),
+    decode: (input) => getCodec().decode(input),
+    encode: (input) => getCodec().encode(input),
     schema: () => ({
       $comment: 'Lazy codecs are not supported when generating a JSON schema'
     })
@@ -532,3 +532,35 @@ export const date = Codec.custom<Date>({
   encode: (input) => input.toISOString(),
   schema: () => ({ type: 'string', format: 'date-time' })
 })
+
+export const intersect = <T, U>(t: Codec<T>, u: Codec<U>): Codec<T & U> =>
+  Codec.custom({
+    decode: (input) => {
+      const et = t.decode(input)
+      if (et.isLeft()) {
+        return et
+      }
+
+      const eu = u.decode(input)
+
+      if (eu.isLeft()) {
+        return eu
+      }
+
+      const valuet = et.extract() as T
+      const valueu = eu.extract() as U
+
+      return isObject(valuet) && isObject(valueu)
+        ? Right(Object.assign(valuet, valueu))
+        : Right(valueu as T & U)
+    },
+    encode: (x) => {
+      const valuet = t.encode(x)
+      const valueu = u.encode(x)
+
+      return isObject(valuet) && isObject(valueu)
+        ? Object.assign(valuet, valueu)
+        : valueu
+    },
+    schema: () => ({ allOf: [t, u].map((x) => x.schema()).filter(Boolean) })
+  })
