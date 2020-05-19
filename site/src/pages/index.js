@@ -3,8 +3,6 @@ import Link from 'gatsby-link'
 import styled from 'styled-components'
 import Meta from '../components/Meta'
 import Layout from '../components/Layout'
-import SyntaxHighlighter from 'react-syntax-highlighter'
-import highlightStyle from 'react-syntax-highlighter/styles/hljs/tomorrow'
 
 const Container = styled.div`
   display: flex;
@@ -121,28 +119,6 @@ const Footer = styled.div`
 
 const FeatureTitle = styled.h3``
 
-const RefactoringContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  padding-top: 25px;
-
-  pre {
-    text-align: left;
-    align-self: center;
-    font-size: 12px;
-    background-color: rgba(0, 0, 0, 0.02) !important;
-    border-radius: 5px;
-    padding: 1em !important;
-  }
-`
-
-const RefactoringText = styled.div`
-  align-self: center;
-  font-size: 27px;
-  padding: 0 20px;
-`
-
 const IndexPage = props => (
   <Layout location={props.location}>
     <Container>
@@ -186,33 +162,7 @@ const IndexPage = props => (
             <Link to="/getting-started">docs</Link> section of this site.
           </Feature>
         </FeaturesContainer>
-        <RefactoringContainer>
-          <RefactoringText>Turn</RefactoringText>
-          <SyntaxHighlighter language="javascript" style={highlightStyle}>
-            {`const getUsers = (country?: Country): User[] => {
-    if (!country) {
-        return []
-    }
-
-    const users = getUsersByCountry(country)
-
-    if (!users) {
-        return []
-    }
-
-    return users
-}`}
-          </SyntaxHighlighter>
-          <RefactoringText>into</RefactoringText>
-          <SyntaxHighlighter language="javascript" style={highlightStyle} show>
-            {`import { Maybe } from 'purify-ts/Maybe'
-
-const getUsers = (country?: Country): User[] =>
-    Maybe.fromNullable(country)
-         .chain(getUsersByCountry)
-         .orDefault([])`}
-          </SyntaxHighlighter>
-        </RefactoringContainer>
+        In production:
       </Content>
       <Footer>
         Purify is developed and maintained by Stanislav Iliev, distributed under
