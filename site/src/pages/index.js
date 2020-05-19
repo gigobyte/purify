@@ -3,6 +3,7 @@ import Link from 'gatsby-link'
 import styled from 'styled-components'
 import Meta from '../components/Meta'
 import Layout from '../components/Layout'
+import ScaleLeap from '../assets/scaleleap'
 
 const Container = styled.div`
   display: flex;
@@ -104,12 +105,16 @@ const Feature = styled.div`
 `
 
 const Footer = styled.div`
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  background-color: white;
   text-align: center;
-  height: 40px;
-  line-height: 40px;
+  height: 94px;
   font-size: 14px;
 
   @media only screen and (max-width: 768px) {
+    position: relative;
     background-color: #fbfbfb;
     height: initial;
     line-height: initial;
@@ -118,6 +123,11 @@ const Footer = styled.div`
 `
 
 const FeatureTitle = styled.h3``
+
+const WhoIsUsing = styled.h4`
+  margin: 0;
+  padding: 12px 0;
+`
 
 const IndexPage = props => (
   <Layout location={props.location}>
@@ -137,6 +147,7 @@ const IndexPage = props => (
             <img
               src="https://raw.githubusercontent.com/gigobyte/purify/master/assets/logo.png"
               alt="Purify"
+              title="Purify is developed and maintained by Stanislav Iliev, distributed under the ISC License."
             />
           </Title>
           <Subtitle>Functional programming library for TypeScript</Subtitle>
@@ -162,11 +173,12 @@ const IndexPage = props => (
             <Link to="/getting-started">docs</Link> section of this site.
           </Feature>
         </FeaturesContainer>
-        In production:
       </Content>
       <Footer>
-        Purify is developed and maintained by Stanislav Iliev, distributed under
-        the ISC License.
+        <WhoIsUsing>Who's using purify?</WhoIsUsing>
+        <a href="https://www.scaleleap.com/">
+          <ScaleLeap />
+        </a>
       </Footer>
     </Container>
   </Layout>
