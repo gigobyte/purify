@@ -1472,7 +1472,7 @@ randomEither().map(x => x)
               examples: [
                 {
                   input: 'liftPromise(() => Promise.resolve(5))',
-                  output: 'EitherAsync<never, number>',
+                  output: 'EitherAsync<Error, number>',
                 },
               ],
               signatureML: '(() -> IO b) -> EitherAsync Error b',
