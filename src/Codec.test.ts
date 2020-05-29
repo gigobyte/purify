@@ -669,7 +669,7 @@ describe('Codec', () => {
               minItems: 1
             }
           },
-          required: ['a', 'b', 'u', 'en', 'on', 'optimal', 'e', 'm', 'n']
+          required: ['a', 'b', 'u', 'en', 'on', 'optimal', 'e', 'n']
         },
         {
           properties: {
