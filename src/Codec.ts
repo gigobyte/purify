@@ -443,8 +443,8 @@ export const lazy = <T>(getCodec: () => Codec<T>): Codec<T> =>
   })
 
 /** A codec for purify's Maybe type. Encode runs Maybe#toJSON, which effectively returns the value inside if it's a Just or undefined if it's Nothing */
-export const maybe = <T>(codec: Codec<T>): Codec<Maybe<T>> =>
-  Codec.custom({
+export const maybe = <T>(codec: Codec<T>): Codec<Maybe<T>> => {
+  const baseCodec = Codec.custom({
     decode: (input: unknown) =>
       Maybe.fromNullable(input).caseOf({
         Just: (x) => codec.decode(x).map(Just),
@@ -453,9 +453,13 @@ export const maybe = <T>(codec: Codec<T>): Codec<Maybe<T>> =>
     encode: (input: Maybe<T>) => input.toJSON(),
     schema: () => ({
       oneOf: codec.schema() ? [codec.schema(), { type: 'null' }] : []
-    }),
+    })
+  });
+  return ({
+    ...baseCodec,
     _isOptional: () => true
-  } as any)
+  } as any);
+}
 
 /** A codec for purify's NEL type */
 export const nonEmptyList = <T>(codec: Codec<T>): Codec<NonEmptyList<T>> => {
