@@ -19,6 +19,9 @@ export type GetInterface<T extends Codec<any>> = T extends Codec<infer U>
   ? U
   : never
 
+const isEmptySchema = (schema: JSONSchema6): boolean =>
+  Object.keys(schema).length === 0
+
 const isObject = (obj: unknown): obj is object =>
   typeof obj === 'object' && obj !== null && !Array.isArray(obj)
 
@@ -340,7 +343,7 @@ export const array = <T>(codec: Codec<T>): Codec<Array<T>> =>
     encode: (input) => input.map(codec.encode),
     schema: () => ({
       type: 'array',
-      items: codec.schema() ? [codec.schema()] : []
+      items: [codec.schema()]
     })
   })
 
@@ -452,13 +455,15 @@ export const maybe = <T>(codec: Codec<T>): Codec<Maybe<T>> => {
       }),
     encode: (input: Maybe<T>) => input.toJSON(),
     schema: () => ({
-      oneOf: codec.schema() ? [codec.schema(), { type: 'null' }] : []
+      oneOf: isEmptySchema(codec.schema())
+        ? []
+        : [codec.schema(), { type: 'null' }]
     })
-  });
-  return ({
+  })
+  return {
     ...baseCodec,
     _isOptional: () => true
-  } as any);
+  } as any
 }
 
 /** A codec for purify's NEL type */

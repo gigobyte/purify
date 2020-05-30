@@ -390,6 +390,20 @@ describe('Codec', () => {
       expect(maybeNumber.decode(undefined)).toEqual(Right(Nothing))
     })
 
+    test('decode inside object', () => {
+      const obj = Codec.interface({
+        a: maybe(number)
+      })
+
+      expect(obj.decode({})).toEqual(Right({ a: Nothing }))
+      expect(obj.decode({ a: 5 })).toEqual(Right({ a: Just(5) }))
+      expect(obj.decode({ a: '' })).toEqual(
+        Left(
+          'Problem with the value of property "a": Expected a number, but received a string with value ""'
+        )
+      )
+    })
+
     test('encode', () => {
       const maybeNumber = maybe(number)
 
