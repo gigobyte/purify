@@ -41,6 +41,10 @@ $ yarn add purify-ts
 
 You can find the documentation on the [official site](https://gigobyte.github.io/purify/).
 
+# Ecosystem
+
+- [purify-ts-extra-codec](https://github.com/airtoxin/purify-ts-extra-codec)
+
 # Inspired by
 
 - [Elm](https://elm-lang.org/)
