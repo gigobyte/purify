@@ -313,7 +313,7 @@ export const oneOf = <T extends Array<Codec<any>>>(
 
       return input
     },
-    schema: () => ({ oneOf: codecs.map((x) => x.schema()).filter(Boolean) })
+    schema: () => ({ oneOf: codecs.map((x) => x.schema()) })
   })
 
 /** A codec for an array */
@@ -520,7 +520,7 @@ export const tuple = <TS extends [Codec<any>, ...Codec<any>[]]>(
     encode: (input) => input.map((x, i) => codecs[i].encode(x)),
     schema: () => ({
       type: 'array',
-      items: codecs.map((x) => x.schema()).filter(Boolean),
+      items: codecs.map((x) => x.schema()),
       additionalItems: false,
       minItems: codecs.length,
       maxItems: codecs.length
@@ -574,5 +574,5 @@ export const intersect = <T, U>(t: Codec<T>, u: Codec<U>): Codec<T & U> =>
         ? Object.assign(valuet, valueu)
         : valueu
     },
-    schema: () => ({ allOf: [t, u].map((x) => x.schema()).filter(Boolean) })
+    schema: () => ({ allOf: [t, u].map((x) => x.schema()) })
   })
