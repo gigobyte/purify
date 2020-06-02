@@ -92,6 +92,8 @@ interface EitherTypeRef {
   rights<L, R>(list: Either<L, R>[]): R[]
   /** Calls a function and returns a `Right` with the return value or an exception wrapped in a `Left` in case of failure */
   encase<L extends Error, R>(throwsF: () => R): Either<L, R>
+  /** Turns a list of `Either`s into an `Either` of list. */
+  sequence<L, R>(eithers: Either<L, R>[]): Either<L, R[]>
 
   'fantasy-land/of'<L, R>(value: R): Either<L, R>
 }
@@ -128,6 +130,13 @@ export const Either: EitherTypeRef = {
     } catch (e) {
       return left(e)
     }
+  },
+  sequence<L, R>(eithers: Either<L, R>[]): Either<L, R[]> {
+    return eithers.reduceRight(
+      (acc, either) =>
+        acc.chain((list: R[]) => either.map((value) => [value, ...list])),
+      right<R[], L>([])
+    )
   },
 
   'fantasy-land/of'<L, R>(value: R): Either<L, R> {
