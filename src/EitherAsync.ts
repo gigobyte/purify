@@ -1,7 +1,7 @@
 import { Either, Left, Right } from './Either'
 import { MaybeAsync } from './MaybeAsync'
 
-export interface EitherAsync<L, R> {
+export interface EitherAsync<L, R> extends Promise<Either<L, R>> {
   /**
    * It's important to remember how `run` will behave because in an
    * async context there are other ways for a function to fail other
@@ -130,6 +130,23 @@ class EitherAsyncImpl<L, R> implements EitherAsync<L, R> {
   ): EitherAsync<L, R2> {
     return this.chain(f)
   }
+
+  async then<TResult1 = Either<L, R>, TResult2 = never>(
+    onfulfilled?: ((value: Either<L, R>) => TResult1 | PromiseLike<TResult1>) | undefined | null,
+    onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null
+  ): Promise<TResult1 | TResult2> {
+    return this.run().then(onfulfilled, onrejected);
+  }
+
+  async catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): Promise<Either<L,R> | TResult> {
+    return this.run().catch(onrejected);
+  }
+
+  async finally(onfinally?: (() => void) | undefined | null): Promise<Either<L,R>> {
+    return this.run().finally(onfinally);
+  }
+
+  readonly [Symbol.toStringTag]: string;
 }
 
 /** Constructs an EitherAsync object from a function that takes an object full of helpers that let you lift things into the EitherAsync context and returns a Promise */
