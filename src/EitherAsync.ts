@@ -1,7 +1,7 @@
 import { Either, Left, Right } from './Either'
 import { MaybeAsync } from './MaybeAsync'
 
-export type EitherAsyncable<L, R> = Either<L, R> | EitherAsync<L, R> | Promise<Either<L, R>>;
+export type EitherAsyncable<L, R> = Either<L, R> | Promise<Either<L, R>>;
 
 export interface EitherAsync<L, R> extends Promise<Either<L, R>> {
   /**

@@ -42,6 +42,11 @@ describe('EitherAsync', () => {
     expect(await ea.run()).toEqual(Left('should show'))
   })
 
+  test('promise interface', async () => {
+    const newEitherAsync = EitherAsync(() => Promise.resolve(5));
+    expect(await newEitherAsync).toEqual(Right(5));
+  });
+
   test('map', async () => {
     const newEitherAsync = EitherAsync(() => Promise.resolve(5)).map(
       (_) => 'val'
@@ -53,6 +58,18 @@ describe('EitherAsync', () => {
     expect(await newEitherAsync.run()).toEqual(Right('val'))
     expect(await newEitherAsync2.run()).toEqual(Right('val'))
   })
+
+  test('map async', async () => {
+    const newEitherAsync = EitherAsync(() => Promise.resolve(5)).map(
+      async (_) => 'val'
+    )
+    const newEitherAsync2 = EitherAsync(() => Promise.resolve(5))[
+      'fantasy-land/map'
+    ](async (_) => 'val')
+
+    expect(await newEitherAsync.run()).toEqual(Right('val'))
+    expect(await newEitherAsync2.run()).toEqual(Right('val'))
+  });
 
   test('mapLeft', async () => {
     const newEitherAsync = EitherAsync<number, never>(() =>
@@ -77,6 +94,30 @@ describe('EitherAsync', () => {
 
     expect(await newEitherAsync.run()).toEqual(Right('val'))
     expect(await newEitherAsync2.run()).toEqual(Right('val'))
+  })
+
+  test('chain either', async () => {
+    const chainedEitherAsync = EitherAsync(() => Promise.resolve(5)).chain(
+      v => Right(v + 1)
+    );
+    expect(await chainedEitherAsync).toEqual(Right(6));
+
+    const failedEitherAsync = EitherAsync(() => Promise.resolve(5)).chain(
+      _ => Left('failed')
+    );
+    expect(await failedEitherAsync).toEqual(Left('failed'));
+  })
+
+  test('chain promise either', async () => {
+    const chainedEitherAsync = EitherAsync(() => Promise.resolve(5)).chain(
+      async (v) => Right(v + 1)
+    );
+    expect(await chainedEitherAsync).toEqual(Right(6));
+
+    const failedEitherAsync = EitherAsync(() => Promise.resolve(5)).chain(
+      async (_) => Left('failed')
+    );
+    expect(await failedEitherAsync).toEqual(Left('failed'));
   })
 
   test('chainLeft', async () => {
