@@ -84,6 +84,19 @@ describe('EitherAsync', () => {
     expect(await newEitherAsync2.run()).toEqual(Right(0))
   })
 
+  test('mapLeft async', async () => {
+    const newEitherAsync = EitherAsync<number, never>(() =>
+      Promise.reject(0)
+    ).mapLeft(async (x) => x + 1)
+
+    const newEitherAsync2 = EitherAsync<never, number>(() =>
+      Promise.resolve(0)
+    ).mapLeft(async (x) => x + 1)
+
+    expect(await newEitherAsync).toEqual(Left(1))
+    expect(await newEitherAsync2).toEqual(Right(0))
+  })
+
   test('chain', async () => {
     const newEitherAsync = EitherAsync(() => Promise.resolve(5)).chain((_) =>
       EitherAsync(() => Promise.resolve('val'))
@@ -96,7 +109,7 @@ describe('EitherAsync', () => {
     expect(await newEitherAsync2.run()).toEqual(Right('val'))
   })
 
-  test('chain either', async () => {
+  test('chain Either', async () => {
     const chainedEitherAsync = EitherAsync(() => Promise.resolve(5)).chain(
       v => Right(v + 1)
     );
@@ -108,7 +121,7 @@ describe('EitherAsync', () => {
     expect(await failedEitherAsync).toEqual(Left('failed'));
   })
 
-  test('chain promise either', async () => {
+  test('chain Promsie<Either>', async () => {
     const chainedEitherAsync = EitherAsync(() => Promise.resolve(5)).chain(
       async (v) => Right(v + 1)
     );
@@ -127,6 +140,30 @@ describe('EitherAsync', () => {
     const newEitherAsync2 = EitherAsync<number, number>(() =>
       Promise.reject(5)
     ).chainLeft((e) => EitherAsync(() => Promise.resolve(e + 1)))
+
+    expect(await newEitherAsync.run()).toEqual(Right(5))
+    expect(await newEitherAsync2.run()).toEqual(Right(6))
+  })
+
+  test('chainLeft Either', async () => {
+    const newEitherAsync = EitherAsync(() =>
+      Promise.resolve(5)
+    ).chainLeft(_ => Right(0));
+    const newEitherAsync2 = EitherAsync<number, number>(() =>
+      Promise.reject(5)
+    ).chainLeft(v => Right(v + 1));
+
+    expect(await newEitherAsync.run()).toEqual(Right(5))
+    expect(await newEitherAsync2.run()).toEqual(Right(6))
+  })
+
+  test('chainLeft Promise<Either>', async () => {
+    const newEitherAsync = EitherAsync(() =>
+      Promise.resolve(5)
+    ).chainLeft(async _ => Right(0));
+    const newEitherAsync2 = EitherAsync<number, number>(() =>
+      Promise.reject(5)
+    ).chainLeft(async v => Right(v + 1));
 
     expect(await newEitherAsync.run()).toEqual(Right(5))
     expect(await newEitherAsync2.run()).toEqual(Right(6))
