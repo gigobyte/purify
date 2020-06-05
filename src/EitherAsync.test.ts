@@ -45,7 +45,10 @@ describe('EitherAsync', () => {
   test('promise interface', async () => {
     const newEitherAsync = EitherAsync(() => Promise.resolve(5));
     expect(await newEitherAsync).toEqual(Right(5));
-  });
+
+    const newEitherAsync2 = EitherAsync(() => Promise.reject('nope'));
+    expect(await newEitherAsync2).toEqual(Left('nope'));
+});
 
   test('map', async () => {
     const newEitherAsync = EitherAsync(() => Promise.resolve(5)).map(
