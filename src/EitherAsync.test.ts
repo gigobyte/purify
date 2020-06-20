@@ -1,10 +1,5 @@
-import {
-  EitherAsync,
-  fromPromise,
-  liftPromise,
-  liftEither
-} from './EitherAsync'
-import { Left, Right, Either } from './Either'
+import { EitherAsync } from './EitherAsync'
+import { Left, Right } from './Either'
 import { Nothing, Just } from './Maybe'
 
 describe('EitherAsync', () => {
@@ -40,6 +35,19 @@ describe('EitherAsync', () => {
     })
 
     expect(await ea.run()).toEqual(Left('should show'))
+  })
+
+  test('Promise compatibility', async () => {
+    const result = await EitherAsync<string, never>(() => {
+      throw 'Err'
+    })
+
+    const result2 = await EitherAsync<never, string>(async () => {
+      return 'A'
+    })
+
+    expect(result).toEqual(Left('Err'))
+    expect(result2).toEqual(Right('A'))
   })
 
   test('map', async () => {
@@ -79,6 +87,18 @@ describe('EitherAsync', () => {
     expect(await newEitherAsync2.run()).toEqual(Right('val'))
   })
 
+  test('chain (with PromiseLike)', async () => {
+    const newEitherAsync = EitherAsync(() => Promise.resolve(5)).chain((_) =>
+      Promise.resolve(Right('val'))
+    )
+    const newEitherAsync2 = EitherAsync(() => Promise.resolve(5))[
+      'fantasy-land/chain'
+    ]((_) => Promise.resolve(Right('val')))
+
+    expect(await newEitherAsync.run()).toEqual(Right('val'))
+    expect(await newEitherAsync2.run()).toEqual(Right('val'))
+  })
+
   test('chainLeft', async () => {
     const newEitherAsync = EitherAsync(() =>
       Promise.resolve(5)
@@ -86,6 +106,18 @@ describe('EitherAsync', () => {
     const newEitherAsync2 = EitherAsync<number, number>(() =>
       Promise.reject(5)
     ).chainLeft((e) => EitherAsync(() => Promise.resolve(e + 1)))
+
+    expect(await newEitherAsync.run()).toEqual(Right(5))
+    expect(await newEitherAsync2.run()).toEqual(Right(6))
+  })
+
+  test('chainLeft (with PromiseLike)', async () => {
+    const newEitherAsync = EitherAsync(() =>
+      Promise.resolve(5)
+    ).chainLeft((_) => Promise.resolve(Right(7)))
+    const newEitherAsync2 = EitherAsync<number, number>(() =>
+      Promise.reject(5)
+    ).chainLeft((e) => Promise.resolve(Right(e + 1)))
 
     expect(await newEitherAsync.run()).toEqual(Right(5))
     expect(await newEitherAsync2.run()).toEqual(Right(6))
@@ -143,20 +175,26 @@ describe('EitherAsync', () => {
     })
   })
 
-  test('fromPromise export', async () => {
-    expect(await fromPromise(() => Promise.resolve(Right(5))).run()).toEqual(
-      Right(5)
-    )
-    expect(await fromPromise(() => Promise.reject(5)).run()).toEqual(Left(5))
+  test('fromPromise static', async () => {
+    expect(
+      await EitherAsync.fromPromise(() => Promise.resolve(Right(5))).run()
+    ).toEqual(Right(5))
+    expect(
+      await EitherAsync.fromPromise(() => Promise.reject(5)).run()
+    ).toEqual(Left(5))
   })
 
-  test('liftPromise export', async () => {
-    expect(await liftPromise(() => Promise.resolve(5)).run()).toEqual(Right(5))
-    expect(await liftPromise(() => Promise.reject(5)).run()).toEqual(Left(5))
+  test('liftPromise static', async () => {
+    expect(
+      await EitherAsync.liftPromise(() => Promise.resolve(5)).run()
+    ).toEqual(Right(5))
+    expect(
+      await EitherAsync.liftPromise(() => Promise.reject(5)).run()
+    ).toEqual(Left(5))
   })
 
-  test('liftEither export', async () => {
-    expect(await liftEither(Right(5)).run()).toEqual(Right(5))
-    expect(await liftEither(Left(5)).run()).toEqual(Left(5))
+  test('liftEither static', async () => {
+    expect(await EitherAsync.liftEither(Right(5)).run()).toEqual(Right(5))
+    expect(await EitherAsync.liftEither(Left(5)).run()).toEqual(Left(5))
   })
 })
