@@ -965,6 +965,23 @@ randomEither().map(x => x)
                 { input: 'Either.encase(() => 10)', output: 'Right(10)' },
               ],
             },
+            {
+              name: 'sequence',
+              description:
+                'Turns a list of `Either`s into an `Either` of list.',
+              signatureTS: '<L, R>(eithers: Either<L, R>[]): Either<L, R[]>',
+              signatureML: '[Either a b] -> Either a [b]',
+              examples: [
+                {
+                  input: 'Either.sequence([Right(1), Right(2)]))',
+                  output: 'Right([1, 2])',
+                },
+                {
+                  input: "Either.sequence([Right(1), Left('Error')]))",
+                  output: "Left('Error')",
+                },
+              ],
+            },
           ],
         },
         {

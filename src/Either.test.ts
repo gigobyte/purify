@@ -35,6 +35,7 @@ describe('Either', () => {
   })
 
   test('sequence', () => {
+    expect(Either.sequence([])).toEqual(Right([]))
     expect(Either.sequence([Right(1), Right(2)])).toEqual(Right([1, 2]))
     expect(Either.sequence([Right(1), Left('Nope')])).toEqual(Left('Nope'))
   })
