@@ -5,8 +5,6 @@ export type EitherPatterns<L, R, T> =
   | { _: () => T }
 
 export interface Either<L, R> {
-  /** Internal property and subject to breaking changes, please use some of the available methods on the object if you want to access it */
-  __value: L | R
   /** Returns true if `this` is `Left`, otherwise it returns false */
   isLeft(): this is Either<L, never>
   /** Returns true if `this` is `Right`, otherwise it returns false */
@@ -150,12 +148,9 @@ export const Either: EitherTypeRef = {
 }
 
 class Right<R, L = never> implements Either<L, R> {
-  __value: R
   private _ = 'R'
 
-  constructor(value: R) {
-    this.__value = value
-  }
+  constructor(private __value: R) {}
 
   isLeft(): false {
     return false
@@ -190,11 +185,11 @@ class Right<R, L = never> implements Either<L, R> {
   }
 
   ap<R2>(other: Either<L, (value: R) => R2>): Either<L, R2> {
-    return other.isLeft() ? other : this.map(other.__value as any)
+    return other.isRight() ? this.map(other.extract()) : (other as any)
   }
 
   equals(other: Either<L, R>): boolean {
-    return other.isRight() ? this.__value === other.__value : false
+    return other.isRight() ? this.__value === other.extract() : false
   }
 
   chain<R2>(f: (value: R) => Either<L, R2>): Either<L, R2> {
@@ -205,7 +200,7 @@ class Right<R, L = never> implements Either<L, R> {
     return this as any
   }
 
-  join<R2>(this: Either<L, Either<L, R2>>): Either<L, R2> {
+  join<R2>(this: Right<Either<L, R2>, L>): Either<L, R2> {
     return this.__value as any
   }
 
@@ -315,12 +310,9 @@ class Right<R, L = never> implements Either<L, R> {
 Right.prototype.constructor = Either as any
 
 class Left<L, R = never> implements Either<L, R> {
-  __value: L
   private _ = 'L'
 
-  constructor(value: L) {
-    this.__value = value
-  }
+  constructor(private __value: L) {}
 
   isLeft(): true {
     return true
@@ -359,7 +351,7 @@ class Left<L, R = never> implements Either<L, R> {
   }
 
   equals(other: Either<L, R>): boolean {
-    return other.isLeft() ? other.__value === this.__value : false
+    return other.isLeft() ? other.extract() === this.__value : false
   }
 
   chain<R2>(_: (value: R) => Either<L, R2>): Either<L, R2> {
