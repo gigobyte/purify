@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Note } from './pages/guides/maybe-api-guide'
-import { Highlight } from './components/HL'
+import { Highlight, HL } from './components/HL'
 
 export interface MethodExample {
   input: React.ReactNode
@@ -1395,8 +1395,19 @@ randomEither().map(x => x)
           link: '/guides/maybeasync-eitherasync-for-haskellers',
         },
       ],
-      description:
-        "It is recommended to have your promises resolve to Either wherever error handling is needed instead of rejecting them and handling errors in the catch method, because unfortunately errors in Promises are not typechecked. EitherAsync lets you do that seamlessly, it's a wrapper around Promise<Either<L, R>> that allows you to process asynchronous values while also having error handling via Either. That said, there are 2 ways of working with EitherAsync, just like there are two ways of working with Promises - async/await and chaining together transformations. The API of EitherAsync is heavily influenced by monad transformers, so you can read up on that if you are interested.",
+      description: (
+        <div>
+          {
+            "It is recommended to have your promises resolve to Either wherever error handling is needed instead of rejecting them and handling errors in the catch method, because unfortunately errors in Promises are not typechecked. EitherAsync lets you do that seamlessly, it's a wrapper (and hopefully a drop-in replacement) of"
+          }{' '}
+          <HL>{'Promise<Either<L, R>>'}</HL>{' '}
+          {
+            'that allows you to process asynchronous values while also having error handling via Either. That said, there are 2 ways of composing EitherAsync values, just like there are two ways of working with Promises - async/await and chaining together transformations. EitherAsync also implements'
+          }{' '}
+          <HL>PromiseLike</HL>
+          {', so you want await it just like a regular Promise.'}
+        </div>
+      ),
       examples: [
         {
           title: 'How to import',
@@ -1469,6 +1480,11 @@ randomEither().map(x => x)
               signatureML: '(EitherAsyncHelpers -> IO a) -> EitherAsync a b',
               signatureTS: `<L, R>(runPromise: (helpers: EitherAsyncHelpers<L>) => PromiseLike<R>): EitherAsync<L, R>`,
             },
+          ],
+        },
+        {
+          title: 'Static methods',
+          methods: [
             {
               name: 'fromPromise',
               description:
@@ -1599,10 +1615,8 @@ randomEither().map(x => x)
               name: 'chain',
               description:
                 'Transforms `this` with a function that returns a `EitherAsync`. Behaviour is the same as the regular Either#chain.',
-              signatureML:
-                'EitherAsync a b ~> (b -> EitherAsync a c) -> EitherAsync a c',
               signatureTS:
-                '<R2>(f: (value: R) => EitherAsync<L, R2>): EitherAsync<L, R2>',
+                '<R2>(f: (value: R) => PromiseLike<Either<L, R2>>): EitherAsync<L, R2>',
               examples: [
                 {
                   input: `EitherAsync(() => Promise.resolve(5))
@@ -1616,14 +1630,12 @@ randomEither().map(x => x)
               name: 'chainLeft',
               description:
                 'The same as EitherAsync#chain but executes the transformation function only if the value is Left. Useful for recovering from errors asynchronously.',
-              signatureML:
-                'EitherAsync a b ~> (a -> EitherAsync c b) -> EitherAsync c b',
               signatureTS:
-                '<L2>(f: (value: L) => EitherAsync<L2, R>): EitherAsync<L2, R>',
+                '<L2>(f: (value: L) => PromiseLike<Either<L2, R>>): EitherAsync<L2, R>',
               examples: [
                 {
                   input: `EitherAsync(({ throwE }) => throwE(500))
-  .chainLeft(x => EitherAsync(() => Promise.resolve(x + 1)))
+  .chainLeft(x => EitherAsync(() => Promise.resolve(6)))
   .run()`,
                   output: 'Promise {<resolved>: Right(6)}',
                 },
