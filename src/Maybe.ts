@@ -11,8 +11,6 @@ interface AlwaysJust {
 type ExtractMaybe<T, TDefault> = T extends never ? TDefault : T | TDefault
 
 export interface Maybe<T> {
-  /** Internal property and subject to breaking changes, please use some of the available methods on the object if you want to access it */
-  __value: T
   /** Returns true if `this` is `Just`, otherwise it returns false */
   isJust(): this is AlwaysJust
   /** Returns true if `this` is `Nothing`, otherwise it returns false */
@@ -137,7 +135,15 @@ export const Maybe: MaybeTypeRef = {
     }
   },
   catMaybes<T>(list: Maybe<T>[]): T[] {
-    return list.filter((x) => x.isJust()).map((x) => x.__value)
+    let res: T[] = []
+
+    for (const e of list) {
+      if (e.isJust()) {
+        res.push(e.extract())
+      }
+    }
+
+    return res
   },
   encase<T>(thunk: () => T): Maybe<T> {
     try {
@@ -159,11 +165,7 @@ export const Maybe: MaybeTypeRef = {
 }
 
 class Just<T> implements Maybe<T> {
-  __value: T
-
-  constructor(value: T) {
-    this.__value = value
-  }
+  constructor(private __value: T) {}
 
   isJust(): boolean {
     return true
@@ -186,7 +188,7 @@ class Just<T> implements Maybe<T> {
   }
 
   equals(other: Maybe<T>): boolean {
-    return this.__value === other.__value
+    return this.extract() === other.extract()
   }
 
   map<U>(f: (value: T) => U): Maybe<U> {
@@ -194,7 +196,7 @@ class Just<T> implements Maybe<T> {
   }
 
   ap<U>(maybeF: Maybe<(value: T) => U>): Maybe<U> {
-    return maybeF.isNothing() ? nothing : this.map(maybeF.__value)
+    return maybeF.isJust() ? this.map(maybeF.extract()) : nothing
   }
 
   alt(_: Maybe<T>): Maybe<T> {
@@ -208,7 +210,7 @@ class Just<T> implements Maybe<T> {
     return Maybe.fromNullable(f(this.__value))
   }
 
-  join<U>(this: Maybe<Maybe<U>>): Maybe<U> {
+  join<U>(this: Just<Maybe<U>>): Maybe<U> {
     return this.__value
   }
 
@@ -309,7 +311,7 @@ class Just<T> implements Maybe<T> {
 Just.prototype.constructor = Maybe as any
 
 class Nothing implements Maybe<never> {
-  __value!: never
+  private __value!: never
 
   isJust() {
     return false
@@ -332,7 +334,7 @@ class Nothing implements Maybe<never> {
   }
 
   equals<T>(other: Maybe<T>): boolean {
-    return this.__value === other.__value
+    return this.extract() === other.extract()
   }
 
   map<U>(_: (value: never) => U): Maybe<U> {
