@@ -38,11 +38,11 @@ export interface MaybeAsyncHelpers {
 
 const helpers: MaybeAsyncHelpers = {
   liftMaybe<T>(maybe: Maybe<T>): MaybeAsyncValue<T> {
-    if (maybe.isNothing()) {
-      throw Nothing
+    if (maybe.isJust()) {
+      return Promise.resolve(maybe.extract())
     }
 
-    return Promise.resolve(maybe.__value)
+    throw Nothing
   },
   fromPromise<T>(promise: PromiseLike<Maybe<T>>): MaybeAsyncValue<T> {
     return promise.then(helpers.liftMaybe) as any
