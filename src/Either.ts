@@ -91,10 +91,51 @@ interface EitherTypeRef {
   /** Calls a function and returns a `Right` with the return value or an exception wrapped in a `Left` in case of failure */
   encase<L extends Error, R>(throwsF: () => R): Either<L, R>
   /** Turns a list of `Either`s into an `Either` of list */
-  sequence<L, R>(eithers: Either<L, R>[]): Either<L, R[]>
+  sequence<L>(eithers: []): Either<L, []>
+  sequence<L, R1>(eithers: [Either<L, R1>]): Either<L, [R1]>
+  sequence<L, R1, R2>(eithers: [Either<L, R1>, Either<L, R2>]): Either<L, [R1, R2]>
+  sequence<L, R1, R2, R3>(eithers: [Either<L, R1>, Either<L, R2>, Either<L, R3>]): Either<L, [R1, R2, R3]>
+  sequence<L, R1, R2, R3, R4>(eithers: [Either<L, R1>, Either<L, R2>, Either<L, R3>, Either<L, R4>]): Either<L, [R1, R2, R3, R4]>
+  sequence<L, R1, R2, R3, R4, R5>(eithers: [Either<L, R1>, Either<L, R2>, Either<L, R3>, Either<L, R4>, Either<L, R5>]): Either<L, [R1, R2, R3, R4, R5]>
+  sequence<L, R1, R2, R3, R4, R5, R6>(eithers: [Either<L, R1>, Either<L, R2>, Either<L, R3>, Either<L, R4>, Either<L, R5>, Either<L, R6>]): Either<L, [R1, R2, R3, R4, R5, R6]>
+  sequence<L, R1, R2, R3, R4, R5, R6, R7>(eithers: [Either<L, R1>, Either<L, R2>, Either<L, R3>, Either<L, R4>, Either<L, R5>, Either<L, R6>, Either<L, R7>]): Either<L, [R1, R2, R3, R4, R5, R6, R7]>
+  sequence<L, R1, R2, R3, R4, R5, R6, R7, R8>(eithers: [Either<L, R1>, Either<L, R2>, Either<L, R3>, Either<L, R4>, Either<L, R5>, Either<L, R6>, Either<L, R7>, Either<L, R8>]): Either<L, [R1, R2, R3, R4, R5, R6, R7, R8]>
+  sequence<L, R1, R2, R3, R4, R5, R6, R7, R8, R9>(eithers: [Either<L, R1>, Either<L, R2>, Either<L, R3>, Either<L, R4>, Either<L, R5>, Either<L, R6>, Either<L, R7>, Either<L, R8>, Either<L, R9>]): Either<L, [R1, R2, R3, R4, R5, R6, R7, R8, R9]>
 
   'fantasy-land/of'<L, R>(value: R): Either<L, R>
 }
+
+function sequence<L>(eithers: []): Either<L, []>
+function sequence<L, R1>(eithers: [Either<L, R1>]): Either<L, [R1]>
+function sequence<L, R1, R2>(eithers: [Either<L, R1>, Either<L, R2>]): Either<L, [R1, R2]>
+function sequence<L, R1, R2, R3>(eithers: [Either<L, R1>, Either<L, R2>, Either<L, R3>]): Either<L, [R1, R2, R3]>
+function sequence<L, R1, R2, R3, R4>(eithers: [Either<L, R1>, Either<L, R2>, Either<L, R3>, Either<L, R4>]): Either<L, [R1, R2, R3, R4]>
+function sequence<L, R1, R2, R3, R4, R5>(eithers: [Either<L, R1>, Either<L, R2>, Either<L, R3>, Either<L, R4>, Either<L, R5>]): Either<L, [R1, R2, R3, R4, R5]>
+function sequence<L, R1, R2, R3, R4, R5, R6>(eithers: [Either<L, R1>, Either<L, R2>, Either<L, R3>, Either<L, R4>, Either<L, R5>, Either<L, R6>]): Either<L, [R1, R2, R3, R4, R5, R6]>
+function sequence<L, R1, R2, R3, R4, R5, R6, R7>(eithers: [Either<L, R1>, Either<L, R2>, Either<L, R3>, Either<L, R4>, Either<L, R5>, Either<L, R6>, Either<L, R7>]): Either<L, [R1, R2, R3, R4, R5, R6, R7]>
+function sequence<L, R1, R2, R3, R4, R5, R6, R7, R8>(eithers: [Either<L, R1>, Either<L, R2>, Either<L, R3>, Either<L, R4>, Either<L, R5>, Either<L, R6>, Either<L, R7>, Either<L, R8>]): Either<L, [R1, R2, R3, R4, R5, R6, R7, R8]>
+function sequence<L, R1, R2, R3, R4, R5, R6, R7, R8, R9>(eithers: [Either<L, R1>, Either<L, R2>, Either<L, R3>, Either<L, R4>, Either<L, R5>, Either<L, R6>, Either<L, R7>, Either<L, R8>, Either<L, R9>]): Either<L, [R1, R2, R3, R4, R5, R6, R7, R8, R9]>
+function sequence<L, R1, R2, R3, R4, R5, R6, R7, R8, R9>(eithers: Either<L, R1 | R2 | R3 | R4 | R5 | R6 | R7 | R8 | R9>[]):
+  | Either<L, []>
+  | Either<L, [R1]>
+  | Either<L, [R1, R2]>
+  | Either<L, [R1, R2, R3]>
+  | Either<L, [R1, R2, R3, R4]>
+  | Either<L, [R1, R2, R3, R4, R5]>
+  | Either<L, [R1, R2, R3, R4, R5, R6]>
+  | Either<L, [R1, R2, R3, R4, R5, R6, R7]>
+  | Either<L, [R1, R2, R3, R4, R5, R6, R7, R8]>
+  | Either<L, [R1, R2, R3, R4, R5, R6, R7, R8, R9]> {
+    const res = []
+    for (const e of eithers) {
+      if (e.isLeft()) {
+        return e;
+      } else {
+        res.push(e.unsafeCoerce());
+      }
+    }
+    return right(res) as any
+  }
 
 export const Either: EitherTypeRef = {
   of<L, R>(value: R): Either<L, R> {
@@ -129,18 +170,7 @@ export const Either: EitherTypeRef = {
       return left(e)
     }
   },
-  sequence<L, R>(eithers: Either<L, R>[]): Either<L, R[]> {
-    let res: R[] = []
-
-    for (const e of eithers) {
-      if (e.isLeft()) {
-        return e
-      }
-      res.push(e.extract() as R)
-    }
-
-    return right(res)
-  },
+  sequence,
 
   'fantasy-land/of'<L, R>(value: R): Either<L, R> {
     return Either.of(value)
