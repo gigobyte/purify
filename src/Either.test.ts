@@ -37,7 +37,13 @@ describe('Either', () => {
   test('sequence', () => {
     expect(Either.sequence([])).toEqual(Right([]))
     expect(Either.sequence([Right(1), Right(2)])).toEqual(Right([1, 2]))
-    expect(Either.sequence([Right(1), Left('Nope')])).toEqual(Left('Nope'))
+    expect(Either.sequence([Right(1), Right("a"), Left('Nope')])).toEqual(Left('Nope'))
+    expect(Either.sequence([
+      Right(1),
+      Right("a"),
+      Right(true),
+      Right({ type: "obj" })
+    ])).toEqual(Right([1, "a", true, { type: "obj" }]))
   })
 
   test('isLeft', () => {
