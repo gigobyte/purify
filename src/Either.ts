@@ -91,6 +91,7 @@ interface EitherTypeRef {
   /** Calls a function and returns a `Right` with the return value or an exception wrapped in a `Left` in case of failure */
   encase<L extends Error, R>(throwsF: () => R): Either<L, R>
   /** Turns a list of `Either`s into an `Either` of list */
+  sequence<L, R>(eithers: Either<L, R>[]): Either<L, R[]>
   sequence<L>(eithers: []): Either<L, []>
   sequence<L, R1>(eithers: [Either<L, R1>]): Either<L, [R1]>
   sequence<L, R1, R2>(eithers: [Either<L, R1>, Either<L, R2>]): Either<L, [R1, R2]>
@@ -105,6 +106,7 @@ interface EitherTypeRef {
   'fantasy-land/of'<L, R>(value: R): Either<L, R>
 }
 
+function sequence<L, R>(eithers: Either<L, R>[]): Either<L, R[]>;
 function sequence<L>(eithers: []): Either<L, []>
 function sequence<L, R1>(eithers: [Either<L, R1>]): Either<L, [R1]>
 function sequence<L, R1, R2>(eithers: [Either<L, R1>, Either<L, R2>]): Either<L, [R1, R2]>
@@ -115,7 +117,8 @@ function sequence<L, R1, R2, R3, R4, R5, R6>(eithers: [Either<L, R1>, Either<L, 
 function sequence<L, R1, R2, R3, R4, R5, R6, R7>(eithers: [Either<L, R1>, Either<L, R2>, Either<L, R3>, Either<L, R4>, Either<L, R5>, Either<L, R6>, Either<L, R7>]): Either<L, [R1, R2, R3, R4, R5, R6, R7]>
 function sequence<L, R1, R2, R3, R4, R5, R6, R7, R8>(eithers: [Either<L, R1>, Either<L, R2>, Either<L, R3>, Either<L, R4>, Either<L, R5>, Either<L, R6>, Either<L, R7>, Either<L, R8>]): Either<L, [R1, R2, R3, R4, R5, R6, R7, R8]>
 function sequence<L, R1, R2, R3, R4, R5, R6, R7, R8, R9>(eithers: [Either<L, R1>, Either<L, R2>, Either<L, R3>, Either<L, R4>, Either<L, R5>, Either<L, R6>, Either<L, R7>, Either<L, R8>, Either<L, R9>]): Either<L, [R1, R2, R3, R4, R5, R6, R7, R8, R9]>
-function sequence<L, R1, R2, R3, R4, R5, R6, R7, R8, R9>(eithers: Either<L, R1 | R2 | R3 | R4 | R5 | R6 | R7 | R8 | R9>[]):
+function sequence<L, R, R1, R2, R3, R4, R5, R6, R7, R8, R9>(eithers: Either<L, R | R1 | R2 | R3 | R4 | R5 | R6 | R7 | R8 | R9>[]):
+  | Either<L, R[]>
   | Either<L, []>
   | Either<L, [R1]>
   | Either<L, [R1, R2]>
