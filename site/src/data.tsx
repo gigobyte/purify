@@ -1411,9 +1411,7 @@ randomEither().map(x => x)
       examples: [
         {
           title: 'How to import',
-          content: [
-            `import { EitherAsync, liftEither, fromPromise } from 'purify-ts/EitherAsync'`,
-          ],
+          content: [`import { EitherAsync } from 'purify-ts/EitherAsync'`],
         },
         {
           title: 'Given the following functions, examples below',
@@ -1449,13 +1447,15 @@ randomEither().map(x => x)
           title: 'Example usage (chaining)',
           content: [
             'const deleteUser = (req): EitherAsync<Error, Id<User>> =>',
-            '    liftEither(validateRequest(req))',
-            '        // when you have Promise<Either<L, R>> and you want to chain it',
-            '        .chain(request => fromPromise(() => getUser(request.userId)))',
+            '    EitherAsync.liftEither(validateRequest(req))',
+            '        // when you have ',
+            '        // Promise<Either<L, R>> or EitherAsync<L, R> (both work)',
+            '        // and you want to chain it',
+            '        .chain(request => getUser(request.userId))',
             '        .mapLeft(_     => Error.UserDoesNotExist)',
             '',
             '        // when you have Promise<T> and you want to chain it',
-            '        .chain(user    => liftPromise(() => deleteUserDb(user)))',
+            '        .chain(user    => EitherAsync.liftPromise(() => deleteUserDb(user)))',
             '',
             'const promise: Promise<Either<Error, Id<User>>> =',
             '   deleteUser(req).run()',
@@ -1488,15 +1488,16 @@ randomEither().map(x => x)
             {
               name: 'fromPromise',
               description:
-                'Constructs an EitherAsync object from a function that returns an Either wrapped in a Promise. It is recommended to stick to one style of using EitherAsync only as you will run into nasty variable shadowing if you use the helpers for async/await while you have any of the constructors imported.',
+                'Constructs an EitherAsync object from a function that returns an Either wrapped in a Promise. You would rarely need to do that since most of the EitherAsync API works with both EitherAsync and Promise values',
               examples: [
                 {
-                  input: 'fromPromise(() => Promise.resolve(Right(5)))',
+                  input:
+                    'EitherAsync.fromPromise(() => Promise.resolve(Right(5)))',
                   output: 'EitherAsync<never, number>',
                 },
               ],
               signatureML: '(() -> IO (Either a b)) -> EitherAsync a b',
-              signatureTS: `<L, R>(f: () => Promise<Either<L, R>>): EitherAsync<L, R>`,
+              signatureTS: `<L, R>(f: () => PromiseLike<Either<L, R>>): EitherAsync<L, R>`,
             },
             {
               name: 'liftPromise',
@@ -1504,19 +1505,19 @@ randomEither().map(x => x)
                 'Constructs an EitherAsync object from a function that returns a Promise. The left type is defaulted to the built-in Error type.',
               examples: [
                 {
-                  input: 'liftPromise(() => Promise.resolve(5))',
+                  input: 'EitherAsync.liftPromise(() => Promise.resolve(5))',
                   output: 'EitherAsync<Error, number>',
                 },
               ],
               signatureML: '(() -> IO b) -> EitherAsync Error b',
-              signatureTS: `<R, L = Error>(f: () => Promise<R>): EitherAsync<L, R>`,
+              signatureTS: `<R, L = Error>(f: () => PromiseLike<R>): EitherAsync<L, R>`,
             },
             {
               name: 'liftEither',
               description: 'Constructs an EitherAsync object from an Either.',
               examples: [
                 {
-                  input: 'liftEither(Right(5))',
+                  input: 'EitherAsync.liftEither(Right(5))',
                   output: 'EitherAsync<never, number>',
                 },
               ],
