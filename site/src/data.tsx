@@ -2505,7 +2505,7 @@ type User = GetInterface<typeof User>`,
               signatureTS:
                 '<T extends Array<Codec<any>>>(codecs: T): Codec<GetInterface<T extends Array<infer U> ? U : never>>',
               description:
-                'A codec combinator that receives a list of codecs and runs them one after another during decode and resolves to whichever returns Right or to Left if all fail.',
+                "A codec combinator that receives a list of codecs and runs them one after another during decode and resolves to whichever returns Right or to Left if all fail. Keep in mind that encoding probably won't work correctly if you use a custom codec and it's not lawful (as in, decode(encode(X)) is not equal to X)",
               examples: [
                 {
                   input: `const nullable = <T>(codec: Codec<T>): Codec<T | null> =>
