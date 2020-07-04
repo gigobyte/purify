@@ -206,6 +206,7 @@ class Just<T> implements Maybe<T> {
   chain<U>(f: (value: T) => Maybe<U>): Maybe<U> {
     return f(this.__value)
   }
+
   chainNullable<U>(f: (value: T) => U | undefined | null | void): Maybe<U> {
     return Maybe.fromNullable(f(this.__value))
   }

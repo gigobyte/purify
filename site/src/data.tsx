@@ -1402,10 +1402,21 @@ randomEither().map(x => x)
           }{' '}
           <HL>{'Promise<Either<L, R>>'}</HL>{' '}
           {
-            'that allows you to process asynchronous values while also having error handling via Either. That said, there are 2 ways of composing EitherAsync values, just like there are two ways of working with Promises - async/await and chaining together transformations. EitherAsync also implements'
-          }{' '}
+            'that allows you to process asynchronous values while also having error handling via Either. EitherAsync even implements'
+          }
           <HL>PromiseLike</HL>
           {', so you want await it just like a regular Promise.'}
+          <br />
+          <br />
+          {
+            '\nThat said, there are 2 ways of composing EitherAsync values, just like there are two ways of working with Promises - async/await and chaining together transformations.  If you squint hard you can see that EitherAsync tries really hard to be a '
+          }{' '}
+          <a href="https://wiki.haskell.org/Monad_Transformers_Explained">
+            monad transformer
+          </a>
+          {
+            ', which is true, but constraining it to Promises brought a tremendous amount of value and the trade-off is worth it.'
+          }
         </div>
       ),
       examples: [
