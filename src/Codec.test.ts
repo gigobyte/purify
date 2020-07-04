@@ -303,25 +303,49 @@ describe('Codec', () => {
       expect(mockCodec.decode(false)).toEqual(Right(false))
     })
 
-    test('encode', () => {
-      expect(mockCodec.encode('')).toEqual('')
-      expect(mockCodec.encode(false)).toEqual(false)
-
-      const fancyStringCodec = Codec.custom<string>({
-        decode: string.decode,
-        encode: (_) => 'always!'
+    describe('encode', () => {
+      test('basic usage', () => {
+        expect(mockCodec.encode('')).toEqual('')
+        expect(mockCodec.encode(false)).toEqual(false)
       })
 
-      const fancyNumberCodec = Codec.custom<number>({
-        decode: number.decode,
-        encode: (input) => input + 1
+      test('with custom primitive', () => {
+        const fancyStringCodec = Codec.custom<string>({
+          decode: (x) => string.decode(x).map((x) => x + '!'),
+          encode: (x) => x.substring(0, x.length - 1)
+        })
+
+        const fancyNumberCodec = Codec.custom<number>({
+          decode: (x) => number.decode(x).map((x) => x - 1),
+          encode: (input) => input + 1
+        })
+
+        const fancyMockCodec = oneOf([fancyStringCodec, fancyNumberCodec])
+
+        expect(fancyMockCodec.encode('always!')).toEqual('always')
+        expect(fancyMockCodec.encode(1)).toEqual(2)
       })
 
-      const fancyMockCodec = oneOf([fancyStringCodec, fancyNumberCodec])
+      test('with ADTs', () => {
+        const Inc10 = Codec.custom<number>({
+          decode: (x) => number.decode(x).map((x) => x + 10),
+          encode: (x) => x - 10
+        })
 
-      expect(fancyMockCodec.encode('')).toEqual('always!')
-      expect(fancyMockCodec.encode(1)).toEqual(2)
-      expect(fancyMockCodec.encode(true as any)).toEqual(true)
+        const Calculator = oneOf([
+          Codec.interface({ tag: exactly('Increment'), value: Inc10 }),
+          Codec.interface({ tag: exactly('Show'), value: number })
+        ])
+
+        expect(Calculator.encode({ tag: 'Increment', value: 20 })).toEqual({
+          tag: 'Increment',
+          value: 10
+        })
+        expect(Calculator.encode({ tag: 'Show', value: 20 })).toEqual({
+          tag: 'Show',
+          value: 20
+        })
+      })
     })
   })
 

@@ -305,7 +305,10 @@ export const oneOf = <T extends Array<Codec<any>>>(
     },
     encode: (input) => {
       for (const codec of codecs) {
-        const res = codec.decode(input)
+        const res = Either.encase(() => codec.encode(input))
+          .mapLeft((_) => '')
+          .chain(codec.decode)
+
         if (res.isRight()) {
           return codec.encode(input)
         }
@@ -447,13 +450,13 @@ export const lazy = <T>(getCodec: () => Codec<T>): Codec<T> =>
 
 /** A codec for purify's Maybe type. Encode runs Maybe#toJSON, which effectively returns the value inside if it's a Just or undefined if it's Nothing */
 export const maybe = <T>(codec: Codec<T>): Codec<Maybe<T>> => {
-  const baseCodec = Codec.custom({
-    decode: (input: unknown) =>
+  const baseCodec = Codec.custom<Maybe<T>>({
+    decode: (input) =>
       Maybe.fromNullable(input).caseOf({
         Just: (x) => codec.decode(x).map(Just),
         Nothing: () => Right(Nothing)
       }),
-    encode: (input: Maybe<T>) => input.toJSON(),
+    encode: (input) => input.toJSON(),
     schema: () => ({
       oneOf: isEmptySchema(codec.schema())
         ? []
