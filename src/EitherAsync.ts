@@ -146,7 +146,7 @@ class EitherAsyncImpl<L, R> implements EitherAsync<L, R> {
   }
 
   'fantasy-land/chain'<R2>(
-    f: (value: R) => EitherAsync<L, R2>
+    f: (value: R) => PromiseLike<Either<L, R2>>
   ): EitherAsync<L, R2> {
     return this.chain(f)
   }

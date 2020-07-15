@@ -562,14 +562,32 @@ const data: Data = {
           link: '/guides/maybeasync-eitherasync-for-haskellers',
         },
       ],
-      description:
-        'MaybeAsync is a wrapper around Promise<Maybe<T>> that allows you to process asynchronous missing values or, on a more technical level, allows you to seamlessly chain Promises that resolve to Maybe. There are 2 ways of working with MaybeAsync, just like there are two ways of working with Promises - async/await and chaining together transformations. The API of MaybeAsync is heavily influenced by monad transformers, so you can read up on that if you are interested.',
+      description: (
+        <div>
+          {'MaybeAsync is a wrapper (and hopefully a drop-in replacement) of'}{' '}
+          <HL>{'Promise<Maybe<T>>'}</HL>
+          {
+            'that allows you to process asynchronous values while also having error handling via Maybe. MaybeAsync even implements'
+          }
+          <HL>PromiseLike</HL>
+          {', so you want await it just like a regular Promise.'}
+          <br />
+          <br />
+          {
+            '\nThat said, there are 2 ways of composing MaybeAsync values, just like there are two ways of working with Promises - async/await and chaining together transformations.  If you squint hard you can see that MaybeAsync tries really hard to be a '
+          }{' '}
+          <a href="https://wiki.haskell.org/Monad_Transformers_Explained">
+            monad transformer
+          </a>
+          {
+            ', which is true, but constraining it to Promises brought a tremendous amount of value and the trade-off is worth it.'
+          }
+        </div>
+      ),
       examples: [
         {
           title: 'How to import',
-          content: [
-            `import { MaybeAsync, liftMaybe, fromPromise } from 'purify-ts/MaybeAsync'`,
-          ],
+          content: [`import { MaybeAsync } from 'purify-ts/MaybeAsync'`],
         },
         {
           title: 'Given the following functions, examples below',
@@ -601,8 +619,9 @@ const data: Data = {
           content: [
             'const deleteUser = (req): MaybeAsync<Id<User>> =>',
             '    liftMaybe(validateRequest(req))',
-            '        // when you have Promise<Maybe<T>> and you want to chain it',
-            '        .chain(request => fromPromise(() => getUser(request.userId)))',
+            '        // Promise<Maybe<T>> or MaybeAsync<T> (both work)',
+            '        // and you want to chain it',
+            '        .chain(request => getUser(request.userId))',
             '',
             '        // when you have Promise<T> and you want to chain it',
             '        .chain(user    => liftPromise(() => deleteUserDb(user)))',
@@ -629,13 +648,19 @@ const data: Data = {
               signatureML: '(MaybeAsyncHelpers -> IO a) -> MaybeAsync a',
               signatureTS: `<T>(runPromise: (helpers: MaybeAsyncHelpers) => PromiseLike<T>): MaybeAsync<T>`,
             },
+          ],
+        },
+        {
+          title: 'Static methods',
+          methods: [
             {
               name: 'fromPromise',
               description:
                 'Constructs an MaybeAsync object from a function that returns a Maybe wrapped in a Promise. It is recommended to stick to one style of using MaybeAsync only as you will run into nasty variable shadowing if you use the helpers for async/await while you have any of the constructors imported.',
               examples: [
                 {
-                  input: 'fromPromise(() => Promise.resolve(Just(5)))',
+                  input:
+                    'MaybeAsync.fromPromise(() => Promise.resolve(Just(5)))',
                   output: 'MaybeAsync<number>',
                 },
               ],
@@ -648,7 +673,7 @@ const data: Data = {
                 'Constructs an MaybeAsync object from a function that returns a Promise.',
               examples: [
                 {
-                  input: 'liftPromise(() => Promise.resolve(5))',
+                  input: 'MaybeAsync.liftPromise(() => Promise.resolve(5))',
                   output: 'MaybeAsync<number>',
                 },
               ],
@@ -660,7 +685,7 @@ const data: Data = {
               description: 'Constructs an MaybeAsync object from a Maybe.',
               examples: [
                 {
-                  input: 'liftMaybe(Just(5))',
+                  input: 'MaybeAsync.liftMaybe(Just(5))',
                   output: 'MaybeAsync<number>',
                 },
               ],
@@ -704,7 +729,7 @@ const data: Data = {
               examples: [
                 {
                   input:
-                    'MaybeAsync(async ({ liftMaybe }) => { return await liftMaybe(Nothing) }).run()',
+                    'MaybeAsync(async ({ liftMaybe }) => liftMaybe(Nothing)).run()',
                   output: 'Promise {<resolved>: Nothing}',
                 },
                 {
@@ -739,9 +764,8 @@ const data: Data = {
               name: 'chain',
               description:
                 'Transforms `this` with a function that returns a `MaybeAsync`. Behaviour is the same as the regular Maybe#chain.',
-              signatureML:
-                'MaybeAsync a ~> (a -> MaybeAsync b) -> MaybeAsync b',
-              signatureTS: '<U>(f: (value: T) => MaybeAsync<U>): MaybeAsync<U>',
+              signatureTS:
+                '<U>(f: (value: T) => PromiseLike<Maybe<U>>): MaybeAsync<U>',
               examples: [
                 {
                   input: `MaybeAsync(() => Promise.resolve(5))
