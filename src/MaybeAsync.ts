@@ -38,7 +38,7 @@ export interface MaybeAsync<T> extends PromiseLike<Maybe<T>> {
   'fantasy-land/chain'<U>(f: (value: T) => PromiseLike<Maybe<U>>): MaybeAsync<U>
 
   /** WARNING: This is implemented only for Promise compatibility. Please use `chain` instead. */
-  then: any
+  then: PromiseLike<Maybe<T>>['then']
 }
 
 export interface MaybeAsyncValue<T> extends PromiseLike<T> {}
