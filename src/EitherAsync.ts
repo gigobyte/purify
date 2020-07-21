@@ -48,7 +48,7 @@ export interface EitherAsync<L, R> extends PromiseLike<Either<L, R>> {
   ): EitherAsync<L, R2>
 
   /** WARNING: This is implemented only for Promise compatibility. Please use `chain` instead. */
-  then: any
+  then: PromiseLike<Either<L, R>>['then']
 }
 
 export interface EitherAsyncValue<R> extends PromiseLike<R> {}
