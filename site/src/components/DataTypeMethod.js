@@ -29,10 +29,10 @@ const MethodName = styled.a`
 
 const MethodSignature = styled.span`
   display: inline-block;
-  font-family: Consolas;
+  font-family: Consolas, Menlo, monospace;
   background-color: #e7edf1;
   border-radius: 4px;
-  font-size: 14px;
+  font-size: 0.8rem;
   margin-right: 10px;
   margin-bottom: 10px;
 
@@ -42,7 +42,7 @@ const MethodSignature = styled.span`
     color: white;
     border-bottom-left-radius: 4px;
     border-top-left-radius: 4px;
-    padding: 0 5px;
+    padding: 3px 5px;
     display: inline-block;
     min-width: 13px;
     text-align: center;
