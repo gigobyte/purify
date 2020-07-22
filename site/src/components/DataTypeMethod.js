@@ -82,11 +82,13 @@ const MethodExample = styled.div`
   border-left: 4px solid #8acefb;
   padding: 5px;
   margin: 5px 0;
+  overflow-x: scroll;
+  max-width: calc(95vw - 200px);
 
   @media only screen and (max-width: 768px) {
     white-space: nowrap;
     text-overflow: ellipsis;
-    overflow-x: scroll;
+    max-width: 100vw;
   }
 `
 
