@@ -92,6 +92,7 @@ interface EitherTypeRef {
   encase<L extends Error, R>(throwsF: () => R): Either<L, R>
   /** Turns a list of `Either`s into an `Either` of list */
   sequence<L, R>(eithers: Either<L, R>[]): Either<L, R[]>
+  isEither<L, R>(x: unknown): x is Either<L, R>
 
   'fantasy-land/of'<L, R>(value: R): Either<L, R>
 }
@@ -140,6 +141,9 @@ export const Either: EitherTypeRef = {
     }
 
     return right(res)
+  },
+  isEither<L, R>(x: unknown): x is Either<L, R> {
+    return x instanceof Left || x instanceof Right
   },
 
   'fantasy-land/of'<L, R>(value: R): Either<L, R> {

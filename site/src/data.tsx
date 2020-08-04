@@ -242,6 +242,21 @@ const data: Data = {
                 { input: `Maybe.encase(() => 10)`, output: 'Just(10)' },
               ],
             },
+            {
+              name: 'isMaybe',
+              signatureTS: '<T>(x: unknown): x is Maybe<T>',
+              description: '',
+              examples: [
+                {
+                  input: 'Maybe.isMaybe(null)',
+                  output: 'false',
+                },
+                {
+                  input: 'Maybe.isMaybe(Just(10))',
+                  output: 'true',
+                },
+              ],
+            },
           ],
         },
         {
@@ -1003,6 +1018,21 @@ randomEither().map(x => x)
                 {
                   input: "Either.sequence([Right(1), Left('Error')]))",
                   output: "Left('Error')",
+                },
+              ],
+            },
+            {
+              name: 'isEither',
+              signatureTS: '<L, R>(x: unknown): x is Either<L, R>',
+              description: '',
+              examples: [
+                {
+                  input: "Either.isEither('Something')",
+                  output: 'false',
+                },
+                {
+                  input: 'Either.isEither(Right(10))',
+                  output: 'true',
                 },
               ],
             },

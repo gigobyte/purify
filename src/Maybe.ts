@@ -96,6 +96,7 @@ interface MaybeTypeRef {
   mapMaybe<T, U>(f: (value: T) => Maybe<U>, list: T[]): U[]
   /** Calls a function that may throw and wraps the result in a `Just` if successful or `Nothing` if an error is caught */
   encase<T>(thunk: () => T): Maybe<T>
+  isMaybe<T>(x: unknown): x is Maybe<T>
 
   'fantasy-land/of'<T>(value: T): Maybe<T>
   'fantasy-land/empty'(): Nothing
@@ -151,6 +152,9 @@ export const Maybe: MaybeTypeRef = {
     } catch {
       return nothing
     }
+  },
+  isMaybe<T>(x: unknown): x is Maybe<T> {
+    return x instanceof Just || x instanceof Nothing
   },
 
   'fantasy-land/of'<T>(value: T): Maybe<T> {
