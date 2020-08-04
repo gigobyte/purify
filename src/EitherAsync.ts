@@ -179,3 +179,5 @@ export const EitherAsync: EitherAsyncTypeRef = Object.assign(
       EitherAsync(({ liftEither }) => liftEither(either))
   }
 )
+
+EitherAsyncImpl.prototype.constructor = EitherAsync

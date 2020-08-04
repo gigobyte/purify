@@ -3,6 +3,10 @@ import { Just, Nothing, Maybe } from './Maybe'
 import { Left, Right } from './Either'
 
 describe('MaybeAsync', () => {
+  test('fantasy-land', () => {
+    expect(MaybeAsync(async () => {}).constructor).toEqual(MaybeAsync)
+  })
+
   test('liftMaybe', () => {
     MaybeAsync(async ({ liftMaybe }) => {
       const _: 5 = await liftMaybe(Just<5>(5))

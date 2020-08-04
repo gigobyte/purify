@@ -3,6 +3,10 @@ import { Left, Right } from './Either'
 import { Nothing, Just } from './Maybe'
 
 describe('EitherAsync', () => {
+  test('fantasy-land', () => {
+    expect(EitherAsync(async () => {}).constructor).toEqual(EitherAsync)
+  })
+
   test('liftEither', () => {
     EitherAsync(async ({ liftEither }) => {
       const value: 5 = await liftEither(Right<5>(5))

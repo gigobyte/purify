@@ -132,3 +132,5 @@ export const MaybeAsync: MaybeAsyncTypeRef = Object.assign(
       MaybeAsync(({ liftMaybe }) => liftMaybe(maybe))
   }
 )
+
+MaybeAsyncImpl.prototype.constructor = MaybeAsync
