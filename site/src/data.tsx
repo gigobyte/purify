@@ -1068,7 +1068,7 @@ randomEither().map(x => x)
               description:
                 'Structural pattern matching for `Either` in the form of a function.',
               signatureTS:
-                '<T>(patterns: { Left: (l: L) => T, Right: (r: R) => T }): T',
+                '<T>(patterns: { Left: (l: L) => T, Right: (r: R) => T } | { _: () => T }): T',
               examples: [
                 {
                   input: `Left('Error').caseOf({ Left: x => x, Right: () => 'No error' })`,
