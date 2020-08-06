@@ -41,6 +41,10 @@ export interface EitherAsync<L, R> extends PromiseLike<Either<L, R>> {
   toMaybeAsync(): MaybeAsync<R>
   /** Returns `Right` if `this` is `Left` and vice versa */
   swap(): EitherAsync<R, L>
+  /** Runs an effect if `this` is `Left`, returns `this` to make chaining other methods possible */
+  ifLeft(effect: (value: L) => any): EitherAsync<L, R>
+  /** Runs an effect if `this` is `Right`, returns `this` to make chaining other methods possible */
+  ifRight(effect: (value: R) => any): EitherAsync<L, R>
 
   'fantasy-land/map'<R2>(f: (value: R) => R2): EitherAsync<L, R2>
   'fantasy-land/chain'<R2>(
@@ -138,6 +142,22 @@ class EitherAsyncImpl<L, R> implements EitherAsync<L, R> {
       const either = await this.run()
       if (either.isRight()) helpers.throwE(either.extract() as R)
       return helpers.liftEither(Right(either.extract() as L))
+    })
+  }
+
+  ifLeft(effect: (value: L) => any): EitherAsync<L, R> {
+    return EitherAsync(async (helpers) => {
+      const either = await this.run()
+      if (either.isLeft()) effect(either.extract())
+      return helpers.liftEither(either)
+    })
+  }
+
+  ifRight(effect: (value: R) => any): EitherAsync<L, R> {
+    return EitherAsync(async (helpers) => {
+      const either = await this.run()
+      if (either.isRight()) effect(either.extract())
+      return helpers.liftEither(either)
     })
   }
 

@@ -1733,6 +1733,38 @@ randomEither().map(x => x)
                 },
               ],
             },
+            {
+              name: 'ifLeft',
+              description:
+                'Runs an effect if `this` is `Left`, returns `this` to make chaining other methods possible.',
+              signatureTS: '(effect: (value: L) => any): EitherAsync<L, R>',
+              examples: [
+                {
+                  input: `EitherAsync.liftEither(Left('Error')).ifLeft((err) => console.log(err))`,
+                  output: `// Error`,
+                },
+                {
+                  input: `EitherAsync.liftEither(Right(5)).ifLeft(() => console.log('Unexpected error'))`,
+                  output: '',
+                },
+              ],
+            },
+            {
+              name: 'ifRight',
+              description:
+                'Runs an effect if `this` is `Right`, returns `this` to make chaining other methods possible.',
+              signatureTS: '(effect: (value: R) => any): EitherAsync<L, R>',
+              examples: [
+                {
+                  input: `EitherAsync.liftEither(Left('Error')).ifRight((result) => console.log(result))`,
+                  output: ``,
+                },
+                {
+                  input: `EitherAsync.liftEither(Right(5)).ifRight((result) => console.log(result))`,
+                  output: '// 5',
+                },
+              ],
+            },
           ],
         },
         {

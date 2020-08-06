@@ -22,7 +22,7 @@ export type GetInterface<T extends Codec<any>> = T extends Codec<infer U>
 const isEmptySchema = (schema: JSONSchema6): boolean =>
   Object.keys(schema).length === 0
 
-const isObject = (obj: unknown): obj is object =>
+const isObject = (obj: unknown): obj is Record<string, unknown> =>
   typeof obj === 'object' && obj !== null && !Array.isArray(obj)
 
 const reportError = (type: string, input: unknown): string => {
@@ -120,7 +120,7 @@ export const Codec = {
           )
         }
 
-        const decodedProperty = properties[key].decode((input as any)[key])
+        const decodedProperty = properties[key].decode(input[key])
 
         if (decodedProperty.isLeft()) {
           return Left(

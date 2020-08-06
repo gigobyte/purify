@@ -145,6 +145,34 @@ describe('EitherAsync', () => {
     expect(await eitherAsyncLeft.swap().run()).toEqual(Right('fail'))
   })
 
+  test('ifLeft', async () => {
+    let a = 0
+    await EitherAsync.liftEither(Left('Error')).ifLeft(() => {
+      a = 5
+    })
+    expect(a).toEqual(5)
+
+    let b = 0
+    await EitherAsync.liftEither(Right(5)).ifLeft(() => {
+      b = 5
+    })
+    expect(b).toEqual(0)
+  })
+
+  test('ifRight', async () => {
+    let a = 0
+    await EitherAsync.liftEither(Left('Error')).ifRight(() => {
+      a = 5
+    })
+    expect(a).toEqual(0)
+
+    let b = 0
+    await EitherAsync.liftEither(Right(5)).ifRight(() => {
+      b = 5
+    })
+    expect(b).toEqual(5)
+  })
+
   describe('run', () => {
     it('resolves to Left if any of the async Eithers are Left', async () => {
       expect(
