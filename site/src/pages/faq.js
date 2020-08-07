@@ -14,15 +14,6 @@ const FAQ = props => (
         <h3>Q: What are the future goals of the library?</h3>
         The library's overall goals are to continue bringing popular patterns
         from FP languages into TypeScript.
-        <br />
-        Here's a preview on what's currently being worked on and when to
-        anticipate it:
-        <br />
-        <br />
-        0.16 - Data structures? Zipper is very likely to be included. RemoteData
-        is also a good candidate for this library.
-        <br />
-        Future / To research - Parser combinators?
       </li>
       <li>
         <h3>Q: How are new features decided and planned?</h3>
