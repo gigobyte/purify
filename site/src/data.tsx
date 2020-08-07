@@ -1259,7 +1259,7 @@ randomEither().map(x => x)
               description:
                 'Returns the first `Right` between `this` and another `Either` or the `Left` in the argument if both `this` and the argument are `Left`.',
               signatureML: 'Either a b ~> Either a b -> Either a b',
-              signatureTS: 'other: Either<L, R>): Either<L, R>',
+              signatureTS: '(other: Either<L, R>): Either<L, R>',
               examples: [
                 {
                   input: `Left('Error').alt(Left('Error!'))`,
@@ -1587,7 +1587,7 @@ randomEither().map(x => x)
             {
               name: 'fromPromise',
               description:
-                'Constructs an EitherAsync object from a function that returns an Either wrapped in a Promise. You would rarely need to do that since most of the EitherAsync API works with both EitherAsync and Promise values',
+                'Constructs an EitherAsync object from a function that returns an Either wrapped in a Promise. You would rarely need to do that since most of the EitherAsync API works with both EitherAsync and Promise values.',
               examples: [
                 {
                   input:
