@@ -260,7 +260,7 @@ describe('Codec', () => {
 
       expect(numberRecord.decode({ a: 0 })).toEqual(
         Left(
-          'Problem with key type of property "a": Expected a number key, but received a string with value "a"'
+          'Problem with key type of property "a": Expected a number, but received a string with value "a"'
         )
       )
       expect(numberRecord.decode({ 0: 0 })).toEqual(Right({ 0: 0 }))

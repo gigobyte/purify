@@ -355,7 +355,7 @@ const numberString = Codec.custom<any>({
     string
       .decode(input)
       .chain((x) =>
-        isFinite(+x) ? Right(x) : Left(reportError('a number key', input))
+        isFinite(+x) ? Right(x) : Left(reportError('a number', input))
       ),
   encode: identity,
   schema: number.schema
