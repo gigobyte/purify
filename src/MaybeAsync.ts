@@ -33,6 +33,10 @@ export interface MaybeAsync<T> extends PromiseLike<Maybe<T>> {
   chain<U>(f: (value: T) => PromiseLike<Maybe<U>>): MaybeAsync<U>
   /** Converts `this` to a EitherAsync with a default error value */
   toEitherAsync<L>(error: L): EitherAsync<L, T>
+  /** Runs an effect if `this` is `Just`, returns `this` to make chaining other methods possible */
+  ifJust(effect: (value: T) => any): MaybeAsync<T>
+  /** Runs an effect if `this` is `Nothing`, returns `this` to make chaining other methods possible */
+  ifNothing(effect: () => any): MaybeAsync<T>
 
   'fantasy-land/map'<U>(f: (value: T) => U): MaybeAsync<U>
   'fantasy-land/chain'<U>(f: (value: T) => PromiseLike<Maybe<U>>): MaybeAsync<U>
@@ -93,6 +97,22 @@ class MaybeAsyncImpl<T> implements MaybeAsync<T> {
     return EitherAsync(async ({ liftEither }) => {
       const maybe = await this.run()
       return liftEither(maybe.toEither(error))
+    })
+  }
+
+  ifJust(effect: (value: T) => any): MaybeAsync<T> {
+    return MaybeAsync(async (helpers) => {
+      const maybe = await this.run()
+      maybe.ifJust(effect)
+      return helpers.liftMaybe(maybe)
+    })
+  }
+
+  ifNothing(effect: () => any): MaybeAsync<T> {
+    return MaybeAsync(async (helpers) => {
+      const maybe = await this.run()
+      maybe.ifNothing(effect)
+      return helpers.liftMaybe(maybe)
     })
   }
 

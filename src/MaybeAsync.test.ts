@@ -88,6 +88,34 @@ describe('MaybeAsync', () => {
     expect(await ma2.toEitherAsync('Error').run()).toEqual(Right(5))
   })
 
+  test('ifJust', async () => {
+    let a = 0
+    await MaybeAsync.liftMaybe(Just(5)).ifJust(() => {
+      a = 5
+    })
+    expect(a).toEqual(5)
+
+    let b = 0
+    await MaybeAsync.liftMaybe(Nothing).ifJust(() => {
+      b = 5
+    })
+    expect(b).toEqual(0)
+  })
+
+  test('ifNothing', async () => {
+    let a = 0
+    await MaybeAsync.liftMaybe(Just(5)).ifNothing(() => {
+      a = 5
+    })
+    expect(a).toEqual(0)
+
+    let b = 0
+    await MaybeAsync.liftMaybe(Nothing).ifNothing(() => {
+      b = 5
+    })
+    expect(b).toEqual(5)
+  })
+
   describe('run', () => {
     it('resolves to Nothing if any of the async Maybes are Nothing', async () => {
       expect(

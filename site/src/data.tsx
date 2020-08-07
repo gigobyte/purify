@@ -798,6 +798,38 @@ const data: Data = {
               signatureTS: '<L>(error: L): EitherAsync<L, T>',
               examples: [],
             },
+            {
+              name: 'ifJust',
+              signatureTS: '(effect: (value: T) => any): MaybeAsync<T>',
+              description:
+                'Runs an effect if `this` is `Just`, returns `this` to make chaining other methods possible.',
+              examples: [
+                {
+                  input: `MaybeAsync.liftMaybe(Just(5)).ifJust(() => console.log('success'))`,
+                  output: `// success`,
+                },
+                {
+                  input: `MaybeAsync.liftMaybe(Nothing).ifJust(() => console.log('success'))`,
+                  output: '',
+                },
+              ],
+            },
+            {
+              name: 'ifNothing',
+              signatureTS: '(effect: (value: T) => any): MaybeAsync<T>',
+              description:
+                'Runs an effect if `this` is `Nothing`, returns `this` to make chaining other methods possible.',
+              examples: [
+                {
+                  input: `MaybeAsync.liftMaybe(Just(5)).ifNothing(() => console.log('failure'))`,
+                  output: '',
+                },
+                {
+                  input: `MaybeAsync.liftMaybe(Nothing).ifNothing(() => console.log('failure'))`,
+                  output: '// failure',
+                },
+              ],
+            },
           ],
         },
         {

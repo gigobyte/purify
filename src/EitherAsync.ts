@@ -148,7 +148,7 @@ class EitherAsyncImpl<L, R> implements EitherAsync<L, R> {
   ifLeft(effect: (value: L) => any): EitherAsync<L, R> {
     return EitherAsync(async (helpers) => {
       const either = await this.run()
-      if (either.isLeft()) effect(either.extract())
+      either.ifLeft(effect)
       return helpers.liftEither(either)
     })
   }
@@ -156,7 +156,7 @@ class EitherAsyncImpl<L, R> implements EitherAsync<L, R> {
   ifRight(effect: (value: R) => any): EitherAsync<L, R> {
     return EitherAsync(async (helpers) => {
       const either = await this.run()
-      if (either.isRight()) effect(either.extract())
+      either.ifRight(effect)
       return helpers.liftEither(either)
     })
   }
