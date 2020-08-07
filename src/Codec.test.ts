@@ -17,7 +17,8 @@ import {
   optional,
   nullable,
   enumeration,
-  intersect
+  intersect,
+  parseError
 } from './Codec'
 import { Left, Right } from './Either'
 import { Just, Nothing } from './Maybe'
@@ -219,12 +220,12 @@ describe('Codec', () => {
       )
       expect(numberArray.decode([''])).toEqual(
         Left(
-          'Problem with value at index 0: Expected a number, but received a string with value ""'
+          'Problem with the value at index 0: Expected a number, but received a string with value ""'
         )
       )
       expect(numberArray.decode([0, ''])).toEqual(
         Left(
-          'Problem with value at index 1: Expected a number, but received a string with value ""'
+          'Problem with the value at index 1: Expected a number, but received a string with value ""'
         )
       )
 
@@ -255,7 +256,7 @@ describe('Codec', () => {
       )
       expect(numberRecord.decode({ a: true })).toEqual(
         Left(
-          'Problem with value of property "a": Expected a number, but received a boolean'
+          'Problem with the value of property "a": Expected a number, but received a boolean'
         )
       )
 
@@ -456,7 +457,7 @@ describe('Codec', () => {
       )
       expect(numberNEL.decode([''])).toEqual(
         Left(
-          'Problem with value at index 0: Expected a number, but received a string with value ""'
+          'Problem with the value at index 0: Expected a number, but received a string with value ""'
         )
       )
       expect(numberNEL.decode(null)).toEqual(
@@ -492,7 +493,7 @@ describe('Codec', () => {
       )
       expect(tuple([number]).decode([''])).toEqual(
         Left(
-          'Problem with value at index 0: Expected a number, but received a string with value ""'
+          'Problem with the value at index 0: Expected a number, but received a string with value ""'
         )
       )
       expect(tuple([number]).decode([0, 1])).toEqual(
@@ -731,6 +732,307 @@ describe('Codec', () => {
           type: 'object'
         }
       ]
+    })
+  })
+})
+
+describe.only('parseError', () => {
+  describe('failure type', () => {
+    test('string + number', () => {
+      expect(
+        parseError('Expected a string, but received a number with value 0')
+      ).toEqual({
+        type: 'failure',
+        expectedType: 'string',
+        receivedType: 'number',
+        receivedValue: 0
+      })
+
+      expect(
+        parseError('Expected a number, but received a string with value ""')
+      ).toEqual({
+        type: 'failure',
+        expectedType: 'number',
+        receivedType: 'string',
+        receivedValue: ''
+      })
+    })
+
+    test('boolean + null', () => {
+      expect(parseError('Expected a boolean, but received null')).toEqual({
+        type: 'failure',
+        expectedType: 'boolean',
+        receivedType: 'null'
+      })
+
+      expect(parseError('Expected a null, but received a boolean')).toEqual({
+        type: 'failure',
+        expectedType: 'null',
+        receivedType: 'boolean'
+      })
+    })
+
+    test('array + object', () => {
+      expect(
+        parseError('Expected an object, but received an array with value []')
+      ).toEqual({
+        type: 'failure',
+        expectedType: 'object',
+        receivedType: 'array',
+        receivedValue: []
+      })
+
+      expect(
+        parseError(
+          'Expected an array, but received an object with value {"a": 5}'
+        )
+      ).toEqual({
+        type: 'failure',
+        expectedType: 'array',
+        receivedType: 'object',
+        receivedValue: { a: 5 }
+      })
+    })
+
+    test('undefined', () => {
+      expect(parseError('Expected an undefined, but received null')).toEqual({
+        type: 'failure',
+        expectedType: 'undefined',
+        receivedType: 'null'
+      })
+    })
+
+    test('enum', () => {
+      expect(
+        parseError(
+          'Expected an enum member, but received a number with value 0'
+        )
+      ).toEqual({
+        type: 'failure',
+        expectedType: 'enum',
+        receivedType: 'number',
+        receivedValue: 0
+      })
+    })
+
+    test('symbol', () => {
+      expect(parseError('Expected a string, but received a symbol')).toEqual({
+        type: 'failure',
+        expectedType: 'string',
+        receivedType: 'symbol'
+      })
+    })
+
+    test('function', () => {
+      expect(parseError('Expected a string, but received a function')).toEqual({
+        type: 'failure',
+        expectedType: 'string',
+        receivedType: 'function'
+      })
+    })
+
+    test('bigint', () => {
+      expect(
+        parseError('Expected a string, but received a bigint with value 10')
+      ).toEqual({
+        type: 'failure',
+        expectedType: 'string',
+        receivedType: 'bigint'
+      })
+    })
+
+    test('date', () => {
+      expect(
+        parseError(
+          'Problem with date string: Expected a string, but received null'
+        )
+      ).toEqual({
+        type: 'failure',
+        expectedType: 'string',
+        receivedType: 'null'
+      })
+    })
+  })
+
+  describe('oneOf type', () => {
+    it('should work', () => {
+      expect(
+        parseError(
+          'One of the following problems occured: (0) Expected a string, but received a number with value 0, (1) Expected a boolean, but received a number with value 0'
+        )
+      ).toEqual({
+        type: 'oneOf',
+        errors: [
+          {
+            type: 'failure',
+            expectedType: 'string',
+            receivedType: 'number',
+            receivedValue: 0
+          },
+          {
+            type: 'failure',
+            expectedType: 'boolean',
+            receivedType: 'number',
+            receivedValue: 0
+          }
+        ]
+      })
+    })
+  })
+
+  describe('property type', () => {
+    test('missing property', () => {
+      expect(
+        parseError(
+          'Problem with property "a": it does not exist in received object {"b": 5}'
+        )
+      ).toEqual({
+        type: 'property',
+        property: 'a',
+        error: {
+          type: 'failure',
+          receivedType: 'undefined'
+        }
+      })
+    })
+
+    test('bad property', () => {
+      expect(
+        parseError(
+          'Problem with the value of property "a": Expected a number, but received a string with value ""'
+        )
+      ).toEqual({
+        type: 'property',
+        property: 'a',
+        error: {
+          type: 'failure',
+          expectedType: 'number',
+          receivedType: 'string',
+          receivedValue: ''
+        }
+      })
+    })
+
+    test('bad key', () => {
+      expect(
+        parseError(
+          'Problem with key type of property "a": Expected a number, but received a string with value "a"'
+        )
+      ).toEqual({
+        type: 'property',
+        property: 'a',
+        error: {
+          type: 'failure',
+          expectedType: 'number',
+          receivedType: 'string',
+          receivedValue: 'a'
+        }
+      })
+    })
+  })
+
+  describe('index type', () => {
+    it('should work', () => {
+      expect(
+        parseError(
+          'Problem with the value at index 1: Expected a number, but received a string with value ""'
+        )
+      ).toEqual({
+        type: 'index',
+        index: 1,
+        error: {
+          type: 'failure',
+          expectedType: 'number',
+          receivedType: 'string',
+          receivedValue: ''
+        }
+      })
+    })
+  })
+
+  describe('custom', () => {
+    test('date', () => {
+      expect(
+        parseError(
+          'Expected a valid date string, but received a string that cannot be parsed'
+        )
+      ).toEqual({
+        type: 'custom',
+        message:
+          'Expected a valid date string, but received a string that cannot be parsed'
+      })
+    })
+
+    test('nonEmptyList', () => {
+      expect(
+        parseError(
+          'Expected an array with one or more elements, but received an empty array'
+        )
+      ).toEqual({
+        type: 'custom',
+        message:
+          'Expected an array with one or more elements, but received an empty array'
+      })
+    })
+  })
+
+  test.only('nested errors', () => {
+    expect(
+      parseError(
+        'Problem with the value of property "payload": Problem with the value of property "foo": Problem with the value of property "Foo": Problem with the value of property "reports": Problem with the value at index 1: Problem with the value of property "headers": Problem with the value at index 0: Problem with the value of property "style": One of the following problems occured: (0) Problem with property "hidden": it does not exist in received object {"visible":["bar"]}, (1) Expected an undefined, but received an object with value {"visible":["bar"]}'
+      )
+    ).toEqual({
+      error: {
+        error: {
+          error: {
+            error: {
+              error: {
+                error: {
+                  error: {
+                    error: {
+                      errors: [
+                        {
+                          error: {
+                            receivedType: 'undefined',
+                            type: 'failure'
+                          },
+                          property: 'hidden',
+                          type: 'property'
+                        },
+                        {
+                          expectedType: 'undefined',
+                          receivedType: 'object',
+                          receivedValue: {
+                            visible: ['bar']
+                          },
+                          type: 'failure'
+                        }
+                      ],
+                      type: 'oneOf'
+                    },
+                    property: 'style',
+                    type: 'property'
+                  },
+                  index: 0,
+                  type: 'index'
+                },
+                property: 'headers',
+                type: 'property'
+              },
+              index: 1,
+              type: 'index'
+            },
+            property: 'reports',
+            type: 'property'
+          },
+          property: 'Foo',
+          type: 'property'
+        },
+        property: 'foo',
+        type: 'property'
+      },
+      property: 'payload',
+      type: 'property'
     })
   })
 })
