@@ -45,6 +45,17 @@ const reportError = (type: string, input: unknown): string => {
     case 'boolean':
       receivedString = 'a boolean'
       break
+
+    case 'symbol':
+      receivedString = 'a symbol'
+      break
+
+    case 'function':
+      receivedString = 'a function'
+      break
+
+    case 'bigint':
+      receivedString = `a bigint with value ${input.toString()}`
   }
 
   receivedString =

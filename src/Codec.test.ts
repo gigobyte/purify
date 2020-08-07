@@ -100,6 +100,15 @@ describe('Codec', () => {
       expect(string.decode(false)).toEqual(
         Left('Expected a string, but received a boolean')
       )
+      expect(string.decode(Symbol())).toEqual(
+        Left('Expected a string, but received a symbol')
+      )
+      expect(string.decode(() => {})).toEqual(
+        Left('Expected a string, but received a function')
+      )
+      expect(string.decode(BigInt(10))).toEqual(
+        Left('Expected a string, but received a bigint with value 10')
+      )
 
       expect(string.decode('')).toEqual(Right(''))
     })
