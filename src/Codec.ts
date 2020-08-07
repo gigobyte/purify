@@ -591,7 +591,7 @@ export const intersect = <T, U>(t: Codec<T>, u: Codec<U>): Codec<T & U> =>
     schema: () => ({ allOf: [t, u].map((x) => x.schema()) })
   })
 
-type ExpectedType =
+export type ExpectedType =
   | 'string'
   | 'number'
   | 'boolean'
@@ -601,7 +601,7 @@ type ExpectedType =
   | 'undefined'
   | 'enum'
 
-type ReceivedType =
+export type ReceivedType =
   | 'string'
   | 'number'
   | 'boolean'
@@ -613,7 +613,7 @@ type ReceivedType =
   | 'symbol'
   | 'function'
 
-type DecodeError =
+export type DecodeError =
   | { type: 'property'; property: string; error: DecodeError }
   | { type: 'index'; index: number; error: DecodeError }
   | { type: 'oneOf'; errors: DecodeError[] }
