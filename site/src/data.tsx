@@ -778,14 +778,16 @@ const data: Data = {
             {
               name: 'chain',
               description:
-                'Transforms `this` with a function that returns a `MaybeAsync`. Behaviour is the same as the regular Maybe#chain.',
+                'Transforms `this` with a function that returns a `MaybeAsync` or another `PromiseLike`. Behaviour is the same as the regular Maybe#chain.',
               signatureTS:
                 '<U>(f: (value: T) => PromiseLike<Maybe<U>>): MaybeAsync<U>',
               examples: [
                 {
-                  input: `MaybeAsync(() => Promise.resolve(5))
-  .chain(x => MaybeAsync(() => Promise.resolve(x + 1)))
-  .run()`,
+                  input: `MaybeAsync(async () => 5).chain(x => MaybeAsync(async () => x + 1)).run()`,
+                  output: 'Promise {<resolved>: Just(6)}',
+                },
+                {
+                  input: `MaybeAsync(async () => 5).chain(async (x) => x + 1).run()`,
                   output: 'Promise {<resolved>: Just(6)}',
                 },
               ],
@@ -1712,14 +1714,16 @@ randomEither().map(x => x)
             {
               name: 'chain',
               description:
-                'Transforms `this` with a function that returns a `EitherAsync`. Behaviour is the same as the regular Either#chain.',
+                'Transforms `this` with a function that returns a `EitherAsync` or another `PromiseLike`. Behaviour is the same as the regular Either#chain.',
               signatureTS:
                 '<R2>(f: (value: R) => PromiseLike<Either<L, R2>>): EitherAsync<L, R2>',
               examples: [
                 {
-                  input: `EitherAsync(() => Promise.resolve(5))
-  .chain(x => EitherAsync(() => Promise.resolve(x + 1)))
-  .run()`,
+                  input: `EitherAsync(async () => 5).chain(x => EitherAsync(async () => x + 1)).run()`,
+                  output: 'Promise {<resolved>: Right(6)}',
+                },
+                {
+                  input: `EitherAsync(async () => 5).chain(async (x) => x + 1).run()`,
                   output: 'Promise {<resolved>: Right(6)}',
                 },
               ],
