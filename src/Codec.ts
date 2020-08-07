@@ -265,15 +265,15 @@ export const enumeration = <T extends Record<string, string | number>>(
 
   return Codec.custom({
     decode: (input) => {
-      if (typeof input !== 'string' && typeof input !== 'number') {
-        return Left(reportError('a string or number', input))
-      }
+      return oneOf([string, number])
+        .decode(input)
+        .chain((x) => {
+          const enumIndex = enumValues.indexOf(x)
 
-      const enumIndex = enumValues.indexOf(input)
-
-      return enumIndex !== -1
-        ? Right(enumValues[enumIndex] as T[keyof T])
-        : Left(reportError('an enum member', input))
+          return enumIndex !== -1
+            ? Right(enumValues[enumIndex] as T[keyof T])
+            : Left(reportError('an enum member', input))
+        })
     },
     encode: identity,
     schema: () => ({ enum: enumValues })

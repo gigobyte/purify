@@ -594,7 +594,9 @@ describe('Codec', () => {
         Left('Expected an enum member, but received a number with value 0')
       )
       expect(enumeration(Test).decode(null)).toEqual(
-        Left('Expected a string or number, but received null')
+        Left(
+          'One of the following problems occured: (0) Expected a string, but received null, (1) Expected a number, but received null'
+        )
       )
     })
 
@@ -604,7 +606,7 @@ describe('Codec', () => {
     })
   })
 
-  describe('interect', () => {
+  describe('intersect', () => {
     const a = Codec.interface({ a: number })
     const b = Codec.interface({ b: string })
 
