@@ -736,7 +736,7 @@ describe('Codec', () => {
   })
 })
 
-describe.only('parseError', () => {
+describe('parseError', () => {
   describe('failure type', () => {
     test('string + number', () => {
       expect(
@@ -976,7 +976,7 @@ describe.only('parseError', () => {
     })
   })
 
-  test.only('nested errors', () => {
+  test('nested errors', () => {
     expect(
       parseError(
         'Problem with the value of property "payload": Problem with the value of property "foo": Problem with the value of property "Foo": Problem with the value of property "reports": Problem with the value at index 1: Problem with the value of property "headers": Problem with the value at index 0: Problem with the value of property "style": One of the following problems occured: (0) Problem with property "hidden": it does not exist in received object {"visible":["bar"]}, (1) Expected an undefined, but received an object with value {"visible":["bar"]}'
