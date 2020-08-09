@@ -62,6 +62,13 @@ describe('Maybe', () => {
     expect(Maybe.encase(() => 10)).toEqual(Just(10))
   })
 
+  test('isMaybe', () => {
+    expect(Maybe.isMaybe(Just(5))).toEqual(true)
+    expect(Maybe.isMaybe(Nothing)).toEqual(true)
+    expect(Maybe.isMaybe(5)).toEqual(false)
+    expect(Maybe.isMaybe(undefined)).toEqual(false)
+  })
+
   test('isJust', () => {
     expect(Just(5).isJust()).toEqual(true)
     expect(Nothing.isJust()).toEqual(false)

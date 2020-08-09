@@ -41,6 +41,10 @@ export interface EitherAsync<L, R> extends PromiseLike<Either<L, R>> {
   toMaybeAsync(): MaybeAsync<R>
   /** Returns `Right` if `this` is `Left` and vice versa */
   swap(): EitherAsync<R, L>
+  /** Runs an effect if `this` is `Left`, returns `this` to make chaining other methods possible */
+  ifLeft(effect: (value: L) => any): EitherAsync<L, R>
+  /** Runs an effect if `this` is `Right`, returns `this` to make chaining other methods possible */
+  ifRight(effect: (value: R) => any): EitherAsync<L, R>
 
   'fantasy-land/map'<R2>(f: (value: R) => R2): EitherAsync<L, R2>
   'fantasy-land/chain'<R2>(
@@ -48,7 +52,7 @@ export interface EitherAsync<L, R> extends PromiseLike<Either<L, R>> {
   ): EitherAsync<L, R2>
 
   /** WARNING: This is implemented only for Promise compatibility. Please use `chain` instead. */
-  then: any
+  then: PromiseLike<Either<L, R>>['then']
 }
 
 export interface EitherAsyncValue<R> extends PromiseLike<R> {}
@@ -141,12 +145,28 @@ class EitherAsyncImpl<L, R> implements EitherAsync<L, R> {
     })
   }
 
+  ifLeft(effect: (value: L) => any): EitherAsync<L, R> {
+    return EitherAsync(async (helpers) => {
+      const either = await this.run()
+      either.ifLeft(effect)
+      return helpers.liftEither(either)
+    })
+  }
+
+  ifRight(effect: (value: R) => any): EitherAsync<L, R> {
+    return EitherAsync(async (helpers) => {
+      const either = await this.run()
+      either.ifRight(effect)
+      return helpers.liftEither(either)
+    })
+  }
+
   'fantasy-land/map'<R2>(f: (value: R) => R2): EitherAsync<L, R2> {
     return this.map(f)
   }
 
   'fantasy-land/chain'<R2>(
-    f: (value: R) => EitherAsync<L, R2>
+    f: (value: R) => PromiseLike<Either<L, R2>>
   ): EitherAsync<L, R2> {
     return this.chain(f)
   }
@@ -179,3 +199,5 @@ export const EitherAsync: EitherAsyncTypeRef = Object.assign(
       EitherAsync(({ liftEither }) => liftEither(either))
   }
 )
+
+EitherAsyncImpl.prototype.constructor = EitherAsync

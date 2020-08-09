@@ -46,6 +46,14 @@ describe('Either', () => {
     ])).toEqual(Right([1, "a", true, { type: "obj" }]))
   })
 
+  test('isEither', () => {
+    expect(Either.isEither(Left(''))).toEqual(true)
+    expect(Either.isEither(Right(''))).toEqual(true)
+    expect(Either.isEither(undefined)).toEqual(false)
+    expect(Either.isEither('')).toEqual(false)
+    expect(Either.isEither({})).toEqual(false)
+  })
+
   test('isLeft', () => {
     expect(Left(anything).isLeft()).toEqual(true)
     expect(Right(anything).isLeft()).toEqual(false)

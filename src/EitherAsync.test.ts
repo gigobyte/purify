@@ -3,6 +3,10 @@ import { Left, Right } from './Either'
 import { Nothing, Just } from './Maybe'
 
 describe('EitherAsync', () => {
+  test('fantasy-land', () => {
+    expect(EitherAsync(async () => {}).constructor).toEqual(EitherAsync)
+  })
+
   test('liftEither', () => {
     EitherAsync(async ({ liftEither }) => {
       const value: 5 = await liftEither(Right<5>(5))
@@ -139,6 +143,34 @@ describe('EitherAsync', () => {
 
     const eitherAsyncLeft = EitherAsync(async () => Promise.reject('fail'))
     expect(await eitherAsyncLeft.swap().run()).toEqual(Right('fail'))
+  })
+
+  test('ifLeft', async () => {
+    let a = 0
+    await EitherAsync.liftEither(Left('Error')).ifLeft(() => {
+      a = 5
+    })
+    expect(a).toEqual(5)
+
+    let b = 0
+    await EitherAsync.liftEither(Right(5)).ifLeft(() => {
+      b = 5
+    })
+    expect(b).toEqual(0)
+  })
+
+  test('ifRight', async () => {
+    let a = 0
+    await EitherAsync.liftEither(Left('Error')).ifRight(() => {
+      a = 5
+    })
+    expect(a).toEqual(0)
+
+    let b = 0
+    await EitherAsync.liftEither(Right(5)).ifRight(() => {
+      b = 5
+    })
+    expect(b).toEqual(5)
   })
 
   describe('run', () => {

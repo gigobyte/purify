@@ -102,6 +102,7 @@ interface EitherTypeRef {
   sequence<L, R1, R2, R3, R4, R5, R6, R7>(eithers: [Either<L, R1>, Either<L, R2>, Either<L, R3>, Either<L, R4>, Either<L, R5>, Either<L, R6>, Either<L, R7>]): Either<L, [R1, R2, R3, R4, R5, R6, R7]>
   sequence<L, R1, R2, R3, R4, R5, R6, R7, R8>(eithers: [Either<L, R1>, Either<L, R2>, Either<L, R3>, Either<L, R4>, Either<L, R5>, Either<L, R6>, Either<L, R7>, Either<L, R8>]): Either<L, [R1, R2, R3, R4, R5, R6, R7, R8]>
   sequence<L, R1, R2, R3, R4, R5, R6, R7, R8, R9>(eithers: [Either<L, R1>, Either<L, R2>, Either<L, R3>, Either<L, R4>, Either<L, R5>, Either<L, R6>, Either<L, R7>, Either<L, R8>, Either<L, R9>]): Either<L, [R1, R2, R3, R4, R5, R6, R7, R8, R9]>
+  isEither<L, R>(x: unknown): x is Either<L, R>
 
   'fantasy-land/of'<L, R>(value: R): Either<L, R>
 }
@@ -174,6 +175,9 @@ export const Either: EitherTypeRef = {
     }
   },
   sequence,
+  isEither<L, R>(x: unknown): x is Either<L, R> {
+    return x instanceof Left || x instanceof Right
+  },
 
   'fantasy-land/of'<L, R>(value: R): Either<L, R> {
     return Either.of(value)

@@ -22,7 +22,7 @@ export type GetInterface<T extends Codec<any>> = T extends Codec<infer U>
 const isEmptySchema = (schema: JSONSchema6): boolean =>
   Object.keys(schema).length === 0
 
-const isObject = (obj: unknown): obj is object =>
+const isObject = (obj: unknown): obj is Record<string, unknown> =>
   typeof obj === 'object' && obj !== null && !Array.isArray(obj)
 
 const reportError = (type: string, input: unknown): string => {
@@ -45,6 +45,17 @@ const reportError = (type: string, input: unknown): string => {
     case 'boolean':
       receivedString = 'a boolean'
       break
+
+    case 'symbol':
+      receivedString = 'a symbol'
+      break
+
+    case 'function':
+      receivedString = 'a function'
+      break
+
+    case 'bigint':
+      receivedString = `a bigint with value ${input.toString()}`
   }
 
   receivedString =
@@ -120,7 +131,7 @@ export const Codec = {
           )
         }
 
-        const decodedProperty = properties[key].decode((input as any)[key])
+        const decodedProperty = properties[key].decode(input[key])
 
         if (decodedProperty.isLeft()) {
           return Left(
@@ -265,15 +276,15 @@ export const enumeration = <T extends Record<string, string | number>>(
 
   return Codec.custom({
     decode: (input) => {
-      if (typeof input !== 'string' && typeof input !== 'number') {
-        return Left(reportError('a string or number', input))
-      }
+      return oneOf([string, number])
+        .decode(input)
+        .chain((x) => {
+          const enumIndex = enumValues.indexOf(x)
 
-      const enumIndex = enumValues.indexOf(input)
-
-      return enumIndex !== -1
-        ? Right(enumValues[enumIndex] as T[keyof T])
-        : Left(reportError('an enum member', input))
+          return enumIndex !== -1
+            ? Right(enumValues[enumIndex] as T[keyof T])
+            : Left(reportError('an enum member', input))
+        })
     },
     encode: identity,
     schema: () => ({ enum: enumValues })
@@ -281,7 +292,7 @@ export const enumeration = <T extends Record<string, string | number>>(
 }
 
 /** A codec combinator that receives a list of codecs and runs them one after another during decode and resolves to whichever returns Right or to Left if all fail */
-export const oneOf = <T extends Array<Codec<any>>>(
+export const oneOf = <T extends [Codec<any>, ...Codec<any>[]]>(
   codecs: T
 ): Codec<GetInterface<T extends Array<infer U> ? U : never>> =>
   Codec.custom({
@@ -305,7 +316,10 @@ export const oneOf = <T extends Array<Codec<any>>>(
     },
     encode: (input) => {
       for (const codec of codecs) {
-        const res = codec.decode(input)
+        const res = Either.encase(() => codec.encode(input))
+          .mapLeft((_) => '')
+          .chain(codec.decode)
+
         if (res.isRight()) {
           return codec.encode(input)
         }
@@ -332,7 +346,7 @@ export const array = <T>(codec: Codec<T>): Codec<Array<T>> =>
             result.push(decoded.extract())
           } else {
             return Left(
-              `Problem with value at index ${i}: ${decoded.extract()}`
+              `Problem with the value at index ${i}: ${decoded.extract()}`
             )
           }
         }
@@ -352,7 +366,7 @@ const numberString = Codec.custom<any>({
     string
       .decode(input)
       .chain((x) =>
-        isFinite(+x) ? Right(x) : Left(reportError('a number key', input))
+        isFinite(+x) ? Right(x) : Left(reportError('a number', input))
       ),
   encode: identity,
   schema: number.schema
@@ -386,7 +400,7 @@ export const record = <K extends keyof any, V>(
             )
           } else if (decodedValue.isLeft()) {
             return Left(
-              `Problem with value of property "${key}": ${decodedValue.extract()}`
+              `Problem with the value of property "${key}": ${decodedValue.extract()}`
             )
           }
         }
@@ -447,13 +461,13 @@ export const lazy = <T>(getCodec: () => Codec<T>): Codec<T> =>
 
 /** A codec for purify's Maybe type. Encode runs Maybe#toJSON, which effectively returns the value inside if it's a Just or undefined if it's Nothing */
 export const maybe = <T>(codec: Codec<T>): Codec<Maybe<T>> => {
-  const baseCodec = Codec.custom({
-    decode: (input: unknown) =>
+  const baseCodec = Codec.custom<Maybe<T>>({
+    decode: (input) =>
       Maybe.fromNullable(input).caseOf({
         Just: (x) => codec.decode(x).map(Just),
         Nothing: () => Right(Nothing)
       }),
-    encode: (input: Maybe<T>) => input.toJSON(),
+    encode: (input) => input.toJSON(),
     schema: () => ({
       oneOf: isEmptySchema(codec.schema())
         ? []
@@ -509,7 +523,7 @@ export const tuple = <TS extends [Codec<any>, ...Codec<any>[]]>(
             result.push(decoded.extract())
           } else {
             return Left(
-              `Problem with value at index ${i}: ${decoded.extract()}`
+              `Problem with the value at index ${i}: ${decoded.extract()}`
             )
           }
         }
@@ -576,3 +590,173 @@ export const intersect = <T, U>(t: Codec<T>, u: Codec<U>): Codec<T & U> =>
     },
     schema: () => ({ allOf: [t, u].map((x) => x.schema()) })
   })
+
+export type ExpectedType =
+  | 'string'
+  | 'number'
+  | 'boolean'
+  | 'object'
+  | 'array'
+  | 'null'
+  | 'undefined'
+  | 'enum'
+
+export type ReceivedType =
+  | 'string'
+  | 'number'
+  | 'boolean'
+  | 'object'
+  | 'array'
+  | 'null'
+  | 'undefined'
+  | 'bigint'
+  | 'symbol'
+  | 'function'
+
+export type DecodeError =
+  | { type: 'property'; property: string; error: DecodeError }
+  | { type: 'index'; index: number; error: DecodeError }
+  | { type: 'oneOf'; errors: DecodeError[] }
+  | {
+      type: 'failure'
+      expectedType?: ExpectedType
+      receivedType: ReceivedType
+      receivedValue?: unknown
+    }
+  | { type: 'custom'; message: string }
+
+const oneofRegex = /^(One of the following problems occured:)\s/
+const oneOfCounterRegex = /\(\d\)\s/
+const oneOfSeparatorRegex = /\, (?=\()/g
+const failureRegex = /^(Expected ).+(, but received )/
+const failureReceivedSeparator = ' with value'
+const missingPropertyMarker = 'Problem with property "'
+const badPropertyMarker = 'Problem with the value of property "'
+const badPropertyKeyMarker = 'Problem with key type of property "'
+const dateFailureMarket = 'Problem with date string: '
+const indexMarker = 'Problem with the value at index '
+
+const expectedTypesMap: Record<string, ExpectedType> = {
+  'an object': 'object',
+  'a number': 'number',
+  'a string': 'string',
+  'an undefined': 'undefined',
+  'a boolean': 'boolean',
+  'an array': 'array',
+  'a null': 'null',
+  'an enum member': 'enum'
+}
+
+const receivedTypesMap: Record<string, ReceivedType> = {
+  'a string': 'string',
+  'a number': 'number',
+  null: 'null',
+  undefined: 'undefined',
+  'a boolean': 'boolean',
+  'an array': 'array',
+  'an object': 'object',
+  'a symbol': 'symbol',
+  'a function': 'function',
+  'a bigint': 'bigint'
+}
+
+const receivedTypesWithoutValue: ReceivedType[] = [
+  'null',
+  'undefined',
+  'boolean',
+  'symbol',
+  'function',
+  'bigint'
+]
+
+export const parseError = (error: string): DecodeError => {
+  const oneOfCheck = error.match(oneofRegex)
+
+  // One of the following problems occured: (0) *, (1) *
+  if (oneOfCheck) {
+    const remainer = error.replace(oneOfCheck[0], '')
+
+    return {
+      type: 'oneOf',
+      errors: remainer
+        .split(oneOfSeparatorRegex)
+        .map((x) => parseError(x.replace(x.match(oneOfCounterRegex)![0], '')))
+    }
+  }
+
+  const failureCheck = error.match(failureRegex)
+
+  // Expected an object, but received an array with value []
+  if (failureCheck) {
+    const receivedTypeRaw = error.split(failureCheck[2]).pop()!
+    const receivedType =
+      receivedTypesMap[receivedTypeRaw.split(failureReceivedSeparator)[0]]
+
+    if (receivedType) {
+      const expectedTypeRaw = error
+        .replace(failureCheck[1], '')
+        .split(failureCheck[2])[0]
+
+      return {
+        type: 'failure',
+        expectedType: expectedTypesMap[expectedTypeRaw],
+        receivedType,
+        receivedValue: receivedTypesWithoutValue.includes(receivedType)
+          ? undefined
+          : JSON.parse(receivedTypeRaw.split(failureReceivedSeparator).pop()!)
+      }
+    }
+  }
+
+  // Problem with property "a": it does not exist in received object {}
+  if (error.startsWith(missingPropertyMarker)) {
+    const property = error.replace(missingPropertyMarker, '').split('": ')[0]
+
+    return {
+      type: 'property',
+      property,
+      error: {
+        type: 'failure',
+        receivedType: 'undefined'
+      }
+    }
+  }
+
+  // Problem with the value of property "a": *
+  // Problem with key type of property "a": *
+  if (
+    error.startsWith(badPropertyMarker) ||
+    error.startsWith(badPropertyKeyMarker)
+  ) {
+    const [property, ...restOfError] = error
+      .replace(badPropertyMarker, '')
+      .replace(badPropertyKeyMarker, '')
+      .split(/": (.+)/)
+
+    return {
+      type: 'property',
+      property,
+      error: parseError(restOfError.join(''))
+    }
+  }
+
+  // Problem with date string: *
+  if (error.startsWith(dateFailureMarket)) {
+    return parseError(error.replace(dateFailureMarket, ''))
+  }
+
+  //  Problem with the value at index 0: *
+  if (error.startsWith(indexMarker)) {
+    const [index, ...restOfError] = error
+      .replace(indexMarker, '')
+      .split(/: (.+)/)
+
+    return {
+      type: 'index',
+      index: Number(index),
+      error: parseError(restOfError.join(''))
+    }
+  }
+
+  return { type: 'custom', message: error }
+}

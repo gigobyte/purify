@@ -43,7 +43,8 @@ You can find the documentation on the [official site](https://gigobyte.github.io
 
 # Ecosystem
 
-- [purify-ts-extra-codec](https://github.com/airtoxin/purify-ts-extra-codec)
+- [purify-ts-extra-codec](https://github.com/airtoxin/purify-ts-extra-codec) - Extra utility codecs
+- [chai-purify](https://github.com/dave-inc/chai-purify) - Chai assert helpers
 
 # Inspired by
 

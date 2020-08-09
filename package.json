@@ -1,6 +1,6 @@
 {
   "name": "purify-ts",
-  "version": "0.16.0-beta.2",
+  "version": "0.16.0-beta.5",
   "description": "Functional programming standard library for TypeScript ",
   "main": "index.js",
   "types": "index.d.ts",
@@ -28,10 +28,10 @@
   },
   "devDependencies": {
     "@types/jest": "^26.0.0",
-    "jest": "26.0.1",
+    "jest": "26.2.2",
     "prettier": "^2.0.1",
-    "ts-jest": "26.1.0",
-    "typescript": "3.9.5"
+    "ts-jest": "26.1.4",
+    "typescript": "3.9.7"
   },
   "dependencies": {
     "@types/json-schema": "^7.0.4"
