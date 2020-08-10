@@ -122,7 +122,7 @@ export const Codec = {
       for (const key of keys) {
         if (
           !input.hasOwnProperty(key) &&
-          !(properties[key] as any)._isOptional?.()
+          !(properties[key] as any)._isOptional
         ) {
           return Left(
             `Problem with property "${key}": it does not exist in received object ${JSON.stringify(
@@ -166,7 +166,7 @@ export const Codec = {
       schema: () =>
         keys.reduce(
           (acc, key) => {
-            const isOptional = (properties[key] as any)._isOptional?.()
+            const isOptional = (properties[key] as any)._isOptional
 
             if (!isOptional) {
               acc.required.push(key)
@@ -244,7 +244,7 @@ export const optional = <T>(codec: Codec<T>): Codec<T | undefined> =>
   ({
     ...oneOf([codec, undefinedType]),
     schema: codec.schema,
-    _isOptional: () => true
+    _isOptional: true
   } as any)
 
 /** A codec for a value T or null. Keep in mind if you use `nullable` inside `Codec.interface` the property will still be required */
@@ -476,7 +476,7 @@ export const maybe = <T>(codec: Codec<T>): Codec<Maybe<T>> => {
   })
   return {
     ...baseCodec,
-    _isOptional: () => true
+    _isOptional: true
   } as any
 }
 
