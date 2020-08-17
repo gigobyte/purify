@@ -30,7 +30,7 @@
     "@types/jest": "^26.0.0",
     "jest": "26.2.2",
     "prettier": "^2.0.1",
-    "ts-jest": "26.1.4",
+    "ts-jest": "26.2.0",
     "typescript": "3.9.7"
   },
   "dependencies": {
