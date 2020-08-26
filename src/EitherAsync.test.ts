@@ -433,4 +433,20 @@ describe('EitherAsync', () => {
 
     expect(await ea).toEqual(Left('AAA'))
   })
+
+  test('all static', async () => {
+    expect(
+      await EitherAsync.all([
+        EitherAsync.liftEither(Right(1)),
+        EitherAsync.liftEither(Right(2))
+      ]).run()
+    ).toEqual(Right([1, 2]))
+
+    expect(
+      await EitherAsync.all2([
+        EitherAsync.liftEither(Right(1)),
+        EitherAsync.liftEither(Right('hello'))
+      ]).run()
+    ).toEqual(Right([1, 'hello']))
+  })
 })

@@ -16,6 +16,14 @@ export interface EitherAsyncTypeRef {
   rights<L, R>(list: EitherAsync<L, R>[]): Promise<R[]>
   /** Turns a list of `EitherAsync`s into an `EitherAsync` of list. The returned `Promise` will be rejected as soon as a single `EitherAsync` resolves to a `Left`, it will not wait for all Promises to resolve and since `EitherAsync` is lazy, unlike `Promise`, the remaining async operations will not be executed at all */
   sequence<L, R>(eas: EitherAsync<L, R>[]): EitherAsync<L, R[]>
+  /** Compose multiple EitherAsync's to run concurrently */
+  all<L, R>(eitherAsyncs: EitherAsync<L, R>[]): EitherAsync<L, R[]>
+  all2<L, R1, R2>(
+    eitherAsyncs: [EitherAsync<L, R1>, EitherAsync<L, R2>]
+  ): EitherAsync<L, [R1, R2]>
+  all3<L, R1, R2, R3>(
+    eitherAsyncs: [EitherAsync<L, R1>, EitherAsync<L, R2>, EitherAsync<L, R3>]
+  ): EitherAsync<L, [R1, R2, R3]>
 }
 
 export interface EitherAsync<L, R> extends PromiseLike<Either<L, R>> {
@@ -282,7 +290,32 @@ export const EitherAsync: EitherAsyncTypeRef = Object.assign(
         }
 
         return helpers.liftEither(Right(res))
-      })
+      }),
+    all: <L, R>(eitherAsyncs: EitherAsync<L, R>[]): EitherAsync<L, R[]> =>
+      EitherAsync.fromPromise(() =>
+        Promise.all(eitherAsyncs.map((eitherAsync) => eitherAsync.run())).then(
+          Either.sequence
+        )
+      ),
+    all2: <L, R1, R2>([ea1, ea2]: [
+      EitherAsync<L, R1>,
+      EitherAsync<L, R2>
+    ]): EitherAsync<L, [R1, R2]> =>
+      EitherAsync.fromPromise(() =>
+        Promise.all([ea1.run(), ea2.run()]).then(([e1, e2]) =>
+          e1.chain((r1) => e2.map((r2) => [r1, r2]))
+        )
+      ),
+    all3: <L, R1, R2, R3>([ea1, ea2, ea3]: [
+      EitherAsync<L, R1>,
+      EitherAsync<L, R2>,
+      EitherAsync<L, R3>
+    ]): EitherAsync<L, [R1, R2, R3]> =>
+      EitherAsync.fromPromise(() =>
+        Promise.all([ea1.run(), ea2.run(), ea3.run()]).then(([e1, e2, e3]) =>
+          e1.chain((r1) => e2.chain((r2) => e3.map((r3) => [r1, r2, r3])))
+        )
+      )
   }
 )
 
