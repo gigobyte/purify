@@ -430,6 +430,27 @@ export const record = <K extends keyof any, V>(
     })
   })
 
+/** A codec for ES6 Maps, which represents keys and values into tuples */
+export const map = <K, V>(
+  keyCodec: Codec<K>,
+  valueCodec: Codec<V>
+): Codec<Map<K, V>> =>
+  Codec.custom({
+    decode: (value) =>
+      array(tuple([keyCodec, valueCodec]))
+        .decode(value)
+        .map((pairs) => new Map(pairs)),
+    encode: (value) =>
+      Array.from(value.entries()).map(([k, v]) => [
+        keyCodec.encode(k),
+        valueCodec.encode(v)
+      ]),
+    schema: () => ({
+      type: 'object',
+      additionalProperties: valueCodec.schema()
+    })
+  })
+
 /** A codec that only succeeds decoding when the value is exactly what you've constructed the codec with */
 export const exactly = <T extends string | number | boolean>(
   expectedValue: T

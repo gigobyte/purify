@@ -9,6 +9,7 @@ import {
   array,
   record,
   exactly,
+  map,
   maybe,
   nonEmptyList,
   tuple,
@@ -291,6 +292,30 @@ describe('Codec', () => {
       expect(record(mockKeyCodec, mockValueCodec).encode({ a: 0 })).toEqual({
         haha: 1
       })
+    })
+  })
+
+  describe('map', () => {
+    const mockCodec = map(string, number)
+
+    const pairs = [
+      ['a', 1],
+      ['b', 2],
+      ['c', 3]
+    ] as const
+
+    test('decode', () => {
+      const decodedMap = mockCodec.decode(pairs)
+
+      expect(decodedMap.map((m) => m.get('a'))).toEqual(Right(1))
+      expect(decodedMap.map((m) => m.get('b'))).toEqual(Right(2))
+      expect(decodedMap.map((m) => m.get('c'))).toEqual(Right(3))
+    })
+
+    test('encode', () => {
+      const encodedMap = mockCodec.encode(new Map(pairs))
+
+      expect(encodedMap).toEqual(pairs)
     })
   })
 
