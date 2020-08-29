@@ -436,7 +436,8 @@ const data: Data = {
                 { input: 'Just(5).unsafeCoerce()', output: '5' },
                 {
                   input: 'Nothing.unsafeCoerce()',
-                  output: '// Error: Maybe got coerced to a null',
+                  output:
+                    '// Uncaught Error: Maybe#unsafeCoerce was ran on a Nothing',
                 },
               ],
             },
@@ -1309,13 +1310,18 @@ randomEither().map(x => x)
             {
               name: 'unsafeCoerce',
               description:
-                'Returns the value inside `this` or throws an error if `this` is a `Left`.',
+                "Returns the value inside `this` if it's a `Right` or either throws the value or a generic exception depending on whether the value is an Error.",
               signatureTS: '(): R',
               examples: [
                 { input: 'Right(5).unsafeCoerce()', output: '5' },
                 {
                   input: `Left('Error').unsafeCoerce()`,
-                  output: '// Error: Either got coerced to a Left',
+                  output:
+                    '// Uncaught Error: Either#unsafeCoerce was ran on a Left',
+                },
+                {
+                  input: `Left(Error('Something')).unsafeCoerce()`,
+                  output: '// Uncaught Error: Something',
                 },
               ],
             },
@@ -2133,7 +2139,7 @@ randomEither().map(x => x)
                 {
                   input: 'NonEmptyList.unsafeCoerce([])',
                   output:
-                    '// Error: NonEmptyList#unsafeCoerce passed an empty array',
+                    '// Uncaught Error: NonEmptyList#unsafeCoerce was ran on an empty array',
                 },
                 {
                   input: 'NonEmptyList.unsafeCoerce([1])',
@@ -2455,7 +2461,7 @@ Codec.custom<string>({
               signatureTS:
                 'GetInterface<T extends Codec<any>> = T extends Codec<infer U> ? U : never',
               description:
-                'You can use this to get a free type from an interface codec.',
+                'You can use this to get a free type from any codec.',
               examples: [
                 {
                   input: `const User = Codec.interface({

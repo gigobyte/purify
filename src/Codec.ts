@@ -14,7 +14,7 @@ export interface Codec<T> {
   schema: () => JSONSchema6
 }
 
-/** You can use this to get a free type from an interface codec */
+/** You can use this to get a free type from any codec */
 export type GetInterface<T extends Codec<any>> = T extends Codec<infer U>
   ? U
   : never

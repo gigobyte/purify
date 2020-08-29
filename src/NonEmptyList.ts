@@ -40,12 +40,13 @@ export const NonEmptyList: NonEmptyListTypeRef = Object.assign(
   {
     fromArray: <T>(source: T[]): Maybe<NonEmptyList<T>> =>
       NonEmptyList.isNonEmpty(source) ? Just(source) : Nothing,
-    unsafeCoerce: <T>(source: T[]): NonEmptyList<T> =>
-      NonEmptyList.isNonEmpty(source)
-        ? source
-        : (() => {
-            throw new Error('NonEmptyList#unsafeCoerce passed an empty array')
-          })(),
+    unsafeCoerce: <T>(source: T[]): NonEmptyList<T> => {
+      if (NonEmptyList.isNonEmpty(source)) {
+        return source
+      }
+
+      throw new Error('NonEmptyList#unsafeCoerce was ran on an empty array')
+    },
     fromTuple: <T, U>(source: Tuple<T, U>): NonEmptyList<T | U> =>
       NonEmptyList(source.toArray()),
     head: <T>(list: NonEmptyList<T>): T => list[0],

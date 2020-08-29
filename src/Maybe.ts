@@ -375,7 +375,7 @@ class Nothing implements Maybe<never> {
   }
 
   unsafeCoerce<T>(): T {
-    throw new Error('Maybe got coerced to a null')
+    throw new Error('Maybe#unsafeCoerce was ran on a Nothing')
   }
 
   caseOf<U>(patterns: MaybePatterns<never, U>): U {

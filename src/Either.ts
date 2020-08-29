@@ -36,7 +36,7 @@ export interface Either<L, R> {
   reduce<T>(reducer: (accumulator: T, value: R) => T, initialValue: T): T
   /** Returns `this` if it\'s a `Left`, otherwise it returns the result of applying the function argument to `this` and wrapping it in a `Right` */
   extend<R2>(f: (value: Either<L, R>) => R2): Either<L, R2>
-  /** Returns the value inside `this` or throws an error if `this` is a `Left` */
+  /** Returns the value inside `this` if it's a `Right` or either throws the value or a generic exception depending on whether the value is an Error */
   unsafeCoerce(): R
   /** Structural pattern matching for `Either` in the form of a function */
   caseOf<T>(patterns: EitherPatterns<L, R, T>): T
@@ -84,9 +84,9 @@ export interface Either<L, R> {
 interface EitherTypeRef {
   /** Takes a value and wraps it in a `Right` */
   of<L, R>(value: R): Either<L, R>
-  /** Takes a list of eithers and returns a list of all `Left` values */
+  /** Takes a list of `Either`s and returns a list of all `Left` values */
   lefts<L, R>(list: Either<L, R>[]): L[]
-  /** Takes a list of eithers and returns a list of all `Right` values */
+  /** Takes a list of `Either`s and returns a list of all `Right` values */
   rights<L, R>(list: Either<L, R>[]): R[]
   /** Calls a function and returns a `Right` with the return value or an exception wrapped in a `Left` in case of failure */
   encase<L extends Error, R>(throwsF: () => R): Either<L, R>
@@ -383,7 +383,11 @@ class Left<L, R = never> implements Either<L, R> {
   }
 
   unsafeCoerce(): never {
-    throw new Error('Either got coerced to a Left')
+    if (this.__value instanceof Error) {
+      throw this.__value
+    }
+
+    throw new Error('Either#unsafeCoerce was ran on a Left')
   }
 
   caseOf<T>(patterns: EitherPatterns<L, R, T>): T {
