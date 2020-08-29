@@ -156,6 +156,9 @@ describe('Either', () => {
   test('unsafeCoerce', () => {
     expect(Right(5).unsafeCoerce()).toEqual(5)
     expect(() => Left('Error').unsafeCoerce()).toThrow()
+    expect(() => Left(new Error('a')).unsafeCoerce()).toThrowError(
+      new Error('a')
+    )
   })
 
   test('caseOf', () => {

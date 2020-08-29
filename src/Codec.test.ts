@@ -65,7 +65,7 @@ describe('Codec', () => {
 
     test('unsafeDecode', () => {
       expect(() => mockCodec.unsafeDecode({})).toThrowError(
-        new Error('Either got coerced to a Left')
+        new Error('Either#unsafeCoerce was ran on a Left')
       )
       expect(() => mockCodec.unsafeDecode({ a: 0, b: '' })).not.toThrow()
     })
