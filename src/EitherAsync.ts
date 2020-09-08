@@ -55,6 +55,10 @@ export interface EitherAsync<L, R> extends PromiseLike<Either<L, R>> {
   ifRight(effect: (value: R) => any): EitherAsync<L, R>
 
   'fantasy-land/map'<R2>(f: (value: R) => R2): EitherAsync<L, R2>
+  'fantasy-land/bimap'<L2, R2>(
+    f: (value: L) => L2,
+    g: (value: R) => R2
+  ): EitherAsync<L2, R2>
   'fantasy-land/chain'<R2>(
     f: (value: R) => PromiseLike<Either<L, R2>>
   ): EitherAsync<L, R2>
