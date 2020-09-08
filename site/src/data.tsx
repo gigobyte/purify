@@ -1123,7 +1123,7 @@ randomEither().map(x => x)
               name: 'bimap',
               description:
                 'Given two functions, maps the value inside `this` using the first if `this` is `Left` or using the second one if `this` is `Right`. If both functions return the same type consider using `Either#either` instead.',
-              signatureML: 'Either a b ~> (a -> c, b -> d) -> Either c d',
+              signatureML: 'Either a b ~> (a -> c) -> (b -> d) -> Either c d',
               signatureTS:
                 '<L2, R2>(f: (value: L) => L2, g: (value: R) => R2): Either<L2, R2>',
               examples: [
@@ -1482,7 +1482,7 @@ randomEither().map(x => x)
     },
     {
       name: 'EitherAsync',
-      implements: ['Functor', 'Chain'],
+      implements: ['Functor', 'Bifunctor', 'Chain'],
       guides: [
         {
           title: 'MaybeAsync and EitherAsync for Haskellers',
@@ -1681,6 +1681,27 @@ randomEither().map(x => x)
                   input:
                     'EitherAsync<string, number>(() => Promise.resolve(5)).run()',
                   output: 'Promise {<resolved>: Right(5)}',
+                },
+              ],
+            },
+            {
+              name: 'bimap',
+              description:
+                ' Given two functions, maps the value that the Promise inside `this` resolves to using the first if it is `Left` or using the second one if it is `Right`.',
+              signatureML:
+                'EitherAsync a b ~> (a -> c) -> (b -> d) -> EitherAsync c d',
+              signatureTS:
+                '<L2, R2>(f: (value: L) => L2, g: (value: R) => R2): EitherAsync<L2, R2>',
+              examples: [
+                {
+                  input:
+                    'EitherAsync(() => Promise.resolve(5)).bimap(identity, x => x + 1).run()',
+                  output: 'Promise {<resolved>: Right(6)}',
+                },
+                {
+                  input:
+                    'EitherAsync(() => Promise.reject(5)).bimap(x => x + 1, identity).run()',
+                  output: 'Promise {<resolved>: Left(6)}',
                 },
               ],
             },
@@ -2843,6 +2864,52 @@ const Comment: Codec<Comment> = Codec.interface({
                   output: 'Right(NonEmptyList([0]))',
                 },
               ],
+            },
+          ],
+        },
+        {
+          title: 'Utils',
+          methods: [
+            {
+              name: 'parseError',
+              signatureTS: '(error: string): DecodeError',
+              description:
+                'Turns a string error message produced by a built-in purify codec into a meta object.',
+              examples: [
+                {
+                  input: `parseError(\`
+  Problem with key type of property "a":
+  Expected a number, but received a string with value "a"
+\`)`,
+                  output: `{
+  type: 'property',
+  property: 'a',
+  error: {
+    type: 'failure',
+    expectedType: 'number',
+    receivedType: 'string',
+    receivedValue: 'a'
+  }
+}`,
+                },
+              ],
+            },
+
+            {
+              name: 'DecodeError',
+              signatureTS: `DecodeError =
+               { type: 'property'; property: string; error: DecodeError }
+              | { type: 'index'; index: number; error: DecodeError }
+              | { type: 'oneOf'; errors: DecodeError[] }
+              | {
+                  type: 'failure'
+                  expectedType?: ExpectedType
+                  receivedType: ReceivedType
+                  receivedValue?: unknown
+                }
+              | { type: 'custom'; message: string }`,
+              description: 'An ADT representing all possible decode errors',
+              examples: [],
             },
           ],
         },

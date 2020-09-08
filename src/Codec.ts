@@ -669,6 +669,7 @@ const receivedTypesWithoutValue: ReceivedType[] = [
   'bigint'
 ]
 
+/** Turns a string error message produced by a built-in purify codec into a meta object */
 export const parseError = (error: string): DecodeError => {
   const oneOfCheck = error.match(oneofRegex)
 
