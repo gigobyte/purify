@@ -1,5 +1,5 @@
 import { EitherAsync } from './EitherAsync'
-import { Left, Right } from './Either'
+import { Left, Right, Either } from './Either'
 import { Nothing, Just } from './Maybe'
 
 describe('EitherAsync', () => {
@@ -52,6 +52,36 @@ describe('EitherAsync', () => {
 
     expect(result).toEqual(Left('Err'))
     expect(result2).toEqual(Right('A'))
+  })
+
+  test('bimap', async () => {
+    const newEitherAsync = EitherAsync(() => Promise.resolve(5)).bimap(
+      (_) => 'left',
+      (_) => 'right'
+    )
+    const newEitherAsync2 = EitherAsync(() => Promise.resolve(5))[
+      'fantasy-land/bimap'
+    ](
+      (_) => 'left',
+      (_) => 'right'
+    )
+    const newEitherAsync3 = EitherAsync(() => {
+      throw ''
+    }).bimap(
+      (_) => 'left',
+      (_) => 'right'
+    )
+    const newEitherAsync4 = EitherAsync(() => {
+      throw ''
+    })['fantasy-land/bimap'](
+      (_) => 'left',
+      (_) => 'right'
+    )
+
+    expect(await newEitherAsync.run()).toEqual(Right('right'))
+    expect(await newEitherAsync2.run()).toEqual(Right('right'))
+    expect(await newEitherAsync3.run()).toEqual(Left('left'))
+    expect(await newEitherAsync4.run()).toEqual(Left('left'))
   })
 
   test('map', async () => {
@@ -228,5 +258,61 @@ describe('EitherAsync', () => {
   test('liftEither static', async () => {
     expect(await EitherAsync.liftEither(Right(5)).run()).toEqual(Right(5))
     expect(await EitherAsync.liftEither(Left(5)).run()).toEqual(Left(5))
+  })
+
+  test('lefts', async () => {
+    expect(
+      await EitherAsync.lefts([
+        EitherAsync.liftEither(Left('Error')),
+        EitherAsync.liftEither(Left('Error2')),
+        EitherAsync.liftEither(Right(5))
+      ])
+    ).toEqual(['Error', 'Error2'])
+  })
+
+  test('rights', async () => {
+    expect(
+      await EitherAsync.rights([
+        EitherAsync.liftEither(Right(10)),
+        EitherAsync.liftEither(Left('Error')),
+        EitherAsync.liftEither(Right(5))
+      ])
+    ).toEqual([10, 5])
+  })
+
+  test('sequence', async () => {
+    expect(await EitherAsync.sequence([])).toEqual(Right([]))
+
+    const uncalledFn = jest.fn()
+
+    expect(
+      await EitherAsync.sequence([
+        EitherAsync(
+          () =>
+            new Promise((_, reject) => {
+              setTimeout(() => {
+                reject('A')
+              }, 200)
+            })
+        ),
+        EitherAsync(uncalledFn)
+      ])
+    ).toEqual(Left('A'))
+
+    expect(uncalledFn).toHaveBeenCalledTimes(0)
+
+    const calledFn = jest.fn()
+
+    expect(
+      await EitherAsync.sequence([
+        EitherAsync.liftEither(Right(1)),
+        EitherAsync(async () => {
+          calledFn()
+          return 2
+        })
+      ])
+    ).toEqual(Right([1, 2]))
+
+    expect(calledFn).toHaveBeenCalledTimes(1)
   })
 })
