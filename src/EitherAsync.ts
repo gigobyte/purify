@@ -12,11 +12,11 @@ export interface EitherAsyncTypeRef {
   liftPromise<R, L = Error>(f: () => PromiseLike<R>): EitherAsync<L, R>
   /** Constructs an `EitherAsync` object from an Either */
   liftEither<L, R>(either: Either<L, R>): EitherAsync<L, R>
-  /** Takes a list of `EitherAsync`s and returns a Promise that will resolve withh all `Left` values. Internally it uses `Promise.all` to wait for all results */
+  /** Takes a list of `EitherAsync`s and returns a Promise that will resolve with all `Left` values. Internally it uses `Promise.all` to wait for all results */
   lefts<L, R>(list: EitherAsync<L, R>[]): Promise<L[]>
-  /** Takes a list of `EitherAsync`s and returns a Promise that will resolve withh all `Right` values. Internally it uses `Promise.all` to wait for all results */
+  /** Takes a list of `EitherAsync`s and returns a Promise that will resolve with all `Right` values. Internally it uses `Promise.all` to wait for all results */
   rights<L, R>(list: EitherAsync<L, R>[]): Promise<R[]>
-  /** Turns a list of `EitherAsync`s into an `EitherAsync` of list. The returned `Promise` will be rejected as soon as a single `EitherAsync` resolves to a `Left`, it will not wait for all Promises to resolve and since `EitherAsync` is lazy, unlike `Promise`, the remaining async operations will not be executed at all. */
+  /** Turns a list of `EitherAsync`s into an `EitherAsync` of list. The returned `Promise` will be rejected as soon as a single `EitherAsync` resolves to a `Left`, it will not wait for all Promises to resolve and since `EitherAsync` is lazy, unlike `Promise`, the remaining async operations will not be executed at all */
   sequence<L, R>(eas: EitherAsync<L, R>[]): EitherAsync<L, R[]>
 }
 

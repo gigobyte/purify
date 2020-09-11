@@ -1002,7 +1002,7 @@ randomEither().map(x => x)
             {
               name: 'lefts',
               description:
-                'Takes a list of eithers and returns a list of all `Left` values.',
+                'Takes a list of `Either`s and returns a list of all `Left` values.',
               signatureML: '[Either a b] -> [a]',
               signatureTS: '<L, R>(list: Either<L,R>[]): L[]',
               examples: [
@@ -1015,7 +1015,7 @@ randomEither().map(x => x)
             {
               name: 'rights',
               description:
-                'Takes a list of eithers and returns a list of all `Right` values.',
+                'Takes a list of `Either`s and returns a list of all `Right` values.',
               signatureML: '[Either a b] -> [b]',
               signatureTS: '<L, R>(list: Either<L, R>[]): R[]',
               examples: [
@@ -1629,6 +1629,60 @@ randomEither().map(x => x)
               signatureML: 'Either a b -> EitherAsync a b',
               signatureTS: `<L, R>(either: Either<L, R>): EitherAsync<L, R>`,
             },
+            {
+              name: 'lefts',
+              description:
+                'Takes a list of `EitherAsync`s and returns a Promise that will resolve with all `Right` values. Internally it uses `Promise.all` to wait for all results.',
+              signatureML: '[EitherAsync a b] -> [IO a]',
+              signatureTS: '<L, R>(list: EitherAsync<L, R>[]): Promise<L[]>',
+              examples: [
+                {
+                  input: `EitherAsync.rights([
+  EitherAsync.liftEither(Left('Server error')),
+  EitherAsync.liftEither(Left('Wrong password')),
+  EitherAsync(async () => 'foo@bar.com')
+])`,
+                  output: `Promise {<resolved>: ['Server error', 'Wrong password']}`,
+                },
+              ],
+            },
+            {
+              name: 'rights',
+              description:
+                'Takes a list of `EitherAsync`s and returns a Promise that will resolve with all `Right` values. Internally it uses `Promise.all` to wait for all results.',
+              signatureML: '[EitherAsync a b] -> [IO b]',
+              signatureTS: '<L, R>(list: Either<L, R>[]): R[]',
+              examples: [
+                {
+                  input: `EitherAsync.rights([
+  EitherAsync(async () => 10),
+  EitherAsync.liftEither(Left('Invalid input')),
+  EitherAsync(async () => 5)
+])`,
+                  output: 'Promise {<resolved>: [10, 5]}',
+                },
+              ],
+            },
+            {
+              name: 'sequence',
+              description:
+                'Turns a list of `EitherAsync`s into an `EitherAsync` of list. The returned `Promise` will be rejected as soon as a single `EitherAsync` resolves to a `Left`, it will not wait for all Promises to resolve and since `EitherAsync` is lazy, unlike `Promise`, the remaining async operations will not be executed at all.',
+              signatureTS:
+                '<L, R>(eas: EitherAsync<L, R>[]): EitherAsync<L, R[]>',
+              signatureML: '[EitherAsync a b] -> EitherAsync a [b]',
+              examples: [
+                {
+                  input:
+                    'EitherAsync.sequence([EitherAsync(async () => 1), EitherAsync(async () => 2)).run()',
+                  output: 'Promise {<resolved>: Right([1, 2])}',
+                },
+                {
+                  input:
+                    "EitherAsync.sequence([EitherAsync(async () => 1), EitherAsync(() => { throw 'Error' })])).run()",
+                  output: "Promise {<resolved>: Left('Error')}",
+                },
+              ],
+            },
           ],
         },
         {
@@ -1687,7 +1741,7 @@ randomEither().map(x => x)
             {
               name: 'bimap',
               description:
-                ' Given two functions, maps the value that the Promise inside `this` resolves to using the first if it is `Left` or using the second one if it is `Right`.',
+                'Given two functions, maps the value that the Promise inside `this` resolves to using the first if it is `Left` or using the second one if it is `Right`.',
               signatureML:
                 'EitherAsync a b ~> (a -> c) -> (b -> d) -> EitherAsync c d',
               signatureTS:
