@@ -10,6 +10,8 @@ export interface MaybeAsyncTypeRef {
   liftPromise<T>(f: () => Promise<T>): MaybeAsync<T>
   /** Constructs an MaybeAsync object from a Maybe */
   liftMaybe<T>(maybe: Maybe<T>): MaybeAsync<T>
+  /** Returns only the `Just` values in a list */
+  catMaybes<T>(list: MaybeAsync<T>[]): Promise<T[]>
 }
 
 export interface MaybeAsync<T> extends PromiseLike<Maybe<T>> {
@@ -37,7 +39,8 @@ export interface MaybeAsync<T> extends PromiseLike<Maybe<T>> {
   ifJust(effect: (value: T) => any): MaybeAsync<T>
   /** Runs an effect if `this` is `Nothing`, returns `this` to make chaining other methods possible */
   ifNothing(effect: () => any): MaybeAsync<T>
-
+  /** Returns the default value if `this` is `Nothing`, otherwise it return the value inside `this` */
+  orDefault(defaultValue: T): Promise<T>
   /** Maps the future value of `this` with another future `Maybe` function */
   ap<U>(maybeF: MaybeAsync<(value: T) => U>): MaybeAsync<U>
   /** Returns the first `Just` between the future value of `this` and another future `Maybe` or future `Nothing` if both `this` and the argument are `Nothing` */
@@ -89,6 +92,10 @@ class MaybeAsyncImpl<T> implements MaybeAsync<T> {
   constructor(
     private runPromise: (helpers: MaybeAsyncHelpers) => PromiseLike<T>
   ) {}
+  async orDefault(defaultValue: T): Promise<T> {
+    const maybe = await this.run()
+    return maybe.orDefault(defaultValue)
+  }
   join<U>(this: MaybeAsync<MaybeAsync<U>>): MaybeAsync<U> {
     return MaybeAsync(async (helpers) => {
       const maybe = await this.run()
@@ -205,6 +212,10 @@ export const MaybeAsync: MaybeAsyncTypeRef = Object.assign(
     runPromise: (helpers: MaybeAsyncHelpers) => PromiseLike<T>
   ): MaybeAsync<T> => new MaybeAsyncImpl(runPromise),
   {
+    catMaybes: async <T>(list: MaybeAsync<T>[]): Promise<T[]> => {
+      const values = await Promise.all(list)
+      return Maybe.catMaybes(values)
+    },
     fromPromise: <T>(f: () => Promise<Maybe<T>>): MaybeAsync<T> =>
       MaybeAsync(({ fromPromise: fP }) => fP(f())),
     liftPromise: <T>(f: () => Promise<T>): MaybeAsync<T> => MaybeAsync(f),
