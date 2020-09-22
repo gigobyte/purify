@@ -53,6 +53,12 @@ export interface EitherAsync<L, R> extends PromiseLike<Either<L, R>> {
   ifLeft(effect: (value: L) => any): EitherAsync<L, R>
   /** Runs an effect if `this` is `Right`, returns `this` to make chaining other methods possible */
   ifRight(effect: (value: R) => any): EitherAsync<L, R>
+  /** Applies a `Right` function over a future `Right` value. Returns `Left` if either the future value of `this` or the function are `Left` */
+  ap<R2>(other: EitherAsync<L, (value: R) => R2>): EitherAsync<L, R2>
+  /** Returns the first `Right` between the future value of `this` and another future `Either` or the `Left` in the argument if both `this` and the argument are `Left` */
+  alt(other: EitherAsync<L, R>): EitherAsync<L, R>
+  /** Returns the future value of `this` if it's a `Left`, otherwise it returns a future of the result of applying the function argument to `this` and wrapping it in a `Right` */
+  extend<R2>(f: (value: EitherAsync<L, R>) => R2): EitherAsync<L, R2>
 
   'fantasy-land/map'<R2>(f: (value: R) => R2): EitherAsync<L, R2>
   'fantasy-land/bimap'<L2, R2>(
@@ -62,7 +68,13 @@ export interface EitherAsync<L, R> extends PromiseLike<Either<L, R>> {
   'fantasy-land/chain'<R2>(
     f: (value: R) => PromiseLike<Either<L, R2>>
   ): EitherAsync<L, R2>
-
+  'fantasy-land/ap'<R2>(
+    other: EitherAsync<L, (value: R) => R2>
+  ): EitherAsync<L, R2>
+  'fantasy-land/alt'(other: EitherAsync<L, R>): EitherAsync<L, R>
+  'fantasy-land/extend'<R2>(
+    f: (value: EitherAsync<L, R>) => R2
+  ): EitherAsync<L, R2>
   /** WARNING: This is implemented only for Promise compatibility. Please use `chain` instead. */
   then: PromiseLike<Either<L, R>>['then']
 }
@@ -100,6 +112,35 @@ class EitherAsyncImpl<L, R> implements EitherAsync<L, R> {
   constructor(
     private runPromise: (helpers: EitherAsyncHelpers<L>) => PromiseLike<R>
   ) {}
+
+  ap<R2>(other: EitherAsync<L, (value: R) => R2>): EitherAsync<L, R2> {
+    return EitherAsync(async (helpers) => {
+      const either = await this.run()
+      const o = await other
+      return helpers.liftEither(either.ap(o))
+    })
+  }
+  'fantasy-land/ap' = this.ap
+  alt(other: EitherAsync<L, R>): EitherAsync<L, R> {
+    return EitherAsync(async (helpers) => {
+      const either = await this.run()
+      const o = await other
+      return helpers.liftEither(either.alt(o))
+    })
+  }
+  'fantasy-land/alt' = this.alt
+
+  extend<R2>(f: (value: EitherAsync<L, R>) => R2): EitherAsync<L, R2> {
+    return EitherAsync(async (helpers) => {
+      const either = await this.run()
+      if (either.isRight()) {
+        const v = EitherAsync.liftEither(either)
+        return helpers.liftEither(Right(f(v)))
+      }
+      return helpers.liftEither(either as any)
+    })
+  }
+  'fantasy-land/extend' = this.extend
 
   async run(): Promise<Either<L, R>> {
     try {

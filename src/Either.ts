@@ -34,7 +34,7 @@ export interface Either<L, R> {
   alt(other: Either<L, R>): Either<L, R>
   /** Takes a reducer and an initial value and returns the initial value if `this` is `Left` or the result of applying the function to the initial value and the value inside `this` */
   reduce<T>(reducer: (accumulator: T, value: R) => T, initialValue: T): T
-  /** Returns `this` if it\'s a `Left`, otherwise it returns the result of applying the function argument to `this` and wrapping it in a `Right` */
+  /** Returns `this` if it's a `Left`, otherwise it returns the result of applying the function argument to `this` and wrapping it in a `Right` */
   extend<R2>(f: (value: Either<L, R>) => R2): Either<L, R2>
   /** Returns the value inside `this` if it's a `Right` or either throws the value or a generic exception depending on whether the value is an Error */
   unsafeCoerce(): R
