@@ -38,8 +38,22 @@ export interface MaybeAsync<T> extends PromiseLike<Maybe<T>> {
   /** Runs an effect if `this` is `Nothing`, returns `this` to make chaining other methods possible */
   ifNothing(effect: () => any): MaybeAsync<T>
 
+  /** Maps the future value of `this` with another future `Maybe` function */
+  ap<U>(maybeF: MaybeAsync<(value: T) => U>): MaybeAsync<U>
+  /** Returns the first `Just` between the future value of `this` and another future `Maybe` or future `Nothing` if both `this` and the argument are `Nothing` */
+  alt(other: MaybeAsync<T>): MaybeAsync<T>
+  /** Returns `this` if this resolves to `Nothing`, otherwise it returns the future result of applying the function argument to future value `this` and wrapping it in a `Just` */
+  extend<U>(f: (value: MaybeAsync<T>) => U): MaybeAsync<U>
+  /** Takes a predicate function and returns `this` if the predicate resolved to true or Nothing if it resolves to false */
+  filter(pred: (value: T) => boolean): MaybeAsync<T>
+
   'fantasy-land/map'<U>(f: (value: T) => U): MaybeAsync<U>
   'fantasy-land/chain'<U>(f: (value: T) => PromiseLike<Maybe<U>>): MaybeAsync<U>
+
+  'fantasy-land/ap'<U>(maybeF: MaybeAsync<(value: T) => U>): MaybeAsync<U>
+  'fantasy-land/alt'(other: MaybeAsync<T>): MaybeAsync<T>
+  'fantasy-land/extend'<U>(f: (value: MaybeAsync<T>) => U): MaybeAsync<U>
+  'fantasy-land/filter'(pred: (value: T) => boolean): MaybeAsync<T>
 
   /** WARNING: This is implemented only for Promise compatibility. Please use `chain` instead. */
   then: PromiseLike<Maybe<T>>['then']
@@ -73,6 +87,40 @@ class MaybeAsyncImpl<T> implements MaybeAsync<T> {
   constructor(
     private runPromise: (helpers: MaybeAsyncHelpers) => PromiseLike<T>
   ) {}
+  ap<U>(maybeF: MaybeAsync<(value: T) => U>): MaybeAsync<U> {
+    return MaybeAsync(async (helpers) => {
+      const value = await this.run()
+      const maybe = await maybeF
+      return helpers.liftMaybe(value.ap(maybe))
+    })
+  }
+  'fantasy-land/ap' = this.ap
+  alt(other: MaybeAsync<T>): MaybeAsync<T> {
+    return MaybeAsync(async (helpers) => {
+      const value = await this.run()
+      const maybe = await other
+      return helpers.liftMaybe(value.alt(maybe))
+    })
+  }
+  'fantasy-land/alt' = this.alt
+  extend<U>(f: (value: MaybeAsync<T>) => U): MaybeAsync<U> {
+    return MaybeAsync(async (helpers) => {
+      const maybe = await this.run()
+      if (maybe.isJust()) {
+        const v = MaybeAsync.liftMaybe((maybe as any) as Maybe<T>)
+        return helpers.liftMaybe(Just(f(v)))
+      }
+      return helpers.liftMaybe((Nothing as any) as Maybe<U>)
+    })
+  }
+  'fantasy-land/extend' = this.extend
+  filter(pred: (value: T) => boolean): MaybeAsync<T> {
+    return MaybeAsync(async (helpers) => {
+      const value = await this.run()
+      return helpers.liftMaybe(value.filter(pred))
+    })
+  }
+  'fantasy-land/filter' = this.filter
 
   async run(): Promise<Maybe<T>> {
     try {
