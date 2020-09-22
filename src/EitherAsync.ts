@@ -61,7 +61,10 @@ export interface EitherAsync<L, R> extends PromiseLike<Either<L, R>> {
   alt(other: EitherAsync<L, R>): EitherAsync<L, R>
   /** Returns the future value of `this` if it's a `Left`, otherwise it returns a future of the result of applying the function argument to `this` and wrapping it in a `Right` */
   extend<R2>(f: (value: EitherAsync<L, R>) => R2): EitherAsync<L, R2>
-
+  /** Returns the value inside `this` if it\'s `Left` or a default value if `this` is `Right` */
+  leftOrDefault(defaultValue: L): Promise<L>
+  /** Returns the value inside `this` if it\'s `Right` or a default value if `this` is `Left` */
+  orDefault(defaultValue: R): Promise<R>
   'fantasy-land/map'<R2>(f: (value: R) => R2): EitherAsync<L, R2>
   'fantasy-land/bimap'<L2, R2>(
     f: (value: L) => L2,
@@ -114,6 +117,16 @@ class EitherAsyncImpl<L, R> implements EitherAsync<L, R> {
   constructor(
     private runPromise: (helpers: EitherAsyncHelpers<L>) => PromiseLike<R>
   ) {}
+  
+  async leftOrDefault(defaultValue: L): Promise<L> {
+    const either = await this.run()
+    return either.leftOrDefault(defaultValue)
+  }
+
+  async orDefault(defaultValue: R): Promise<R> {
+    const either = await this.run()
+    return either.orDefault(defaultValue)
+  }
 
   join<R2>(this: EitherAsync<L, EitherAsync<L, R2>>): EitherAsync<L, R2> {
     return EitherAsync(async (helpers) => {
