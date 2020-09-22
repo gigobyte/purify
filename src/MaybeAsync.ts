@@ -46,6 +46,8 @@ export interface MaybeAsync<T> extends PromiseLike<Maybe<T>> {
   extend<U>(f: (value: MaybeAsync<T>) => U): MaybeAsync<U>
   /** Takes a predicate function and returns `this` if the predicate resolved to true or Nothing if it resolves to false */
   filter(pred: (value: T) => boolean): MaybeAsync<T>
+  /** Flattens nested Maybes. `m.join()` is equivalent to `m.chain(x => x)` */
+  join<U>(this: MaybeAsync<MaybeAsync<U>>): MaybeAsync<U>
 
   'fantasy-land/map'<U>(f: (value: T) => U): MaybeAsync<U>
   'fantasy-land/chain'<U>(f: (value: T) => PromiseLike<Maybe<U>>): MaybeAsync<U>
@@ -87,6 +89,16 @@ class MaybeAsyncImpl<T> implements MaybeAsync<T> {
   constructor(
     private runPromise: (helpers: MaybeAsyncHelpers) => PromiseLike<T>
   ) {}
+  join<U>(this: MaybeAsync<MaybeAsync<U>>): MaybeAsync<U> {
+    return MaybeAsync(async (helpers) => {
+      const maybe = await this.run()
+      if (maybe.isJust()) {
+        const nestedMaybe = await maybe.extract()
+        return helpers.liftMaybe(nestedMaybe)
+      }
+      return helpers.liftMaybe(Nothing as Maybe<U>)
+    })
+  }
   ap<U>(maybeF: MaybeAsync<(value: T) => U>): MaybeAsync<U> {
     return MaybeAsync(async (helpers) => {
       const value = await this.run()
