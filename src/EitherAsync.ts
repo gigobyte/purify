@@ -45,6 +45,8 @@ export interface EitherAsync<L, R> extends PromiseLike<Either<L, R>> {
   chain<R2>(f: (value: R) => PromiseLike<Either<L, R2>>): EitherAsync<L, R2>
   /** The same as EitherAsync#chain but executes the transformation function only if the value is Left. Useful for recovering from errors */
   chainLeft<L2>(f: (value: L) => PromiseLike<Either<L2, R>>): EitherAsync<L2, R>
+  /** Flattens nested Eithers. `e.join()` is equivalent to `e.chain(x => x)` */
+  join<R2>(this: EitherAsync<L, EitherAsync<L, R2>>): EitherAsync<L, R2>
   /** Converts `this` to a MaybeAsync, discarding any error values */
   toMaybeAsync(): MaybeAsync<R>
   /** Returns `Right` if `this` is `Left` and vice versa */
@@ -113,6 +115,17 @@ class EitherAsyncImpl<L, R> implements EitherAsync<L, R> {
     private runPromise: (helpers: EitherAsyncHelpers<L>) => PromiseLike<R>
   ) {}
 
+  join<R2>(this: EitherAsync<L, EitherAsync<L, R2>>): EitherAsync<L, R2> {
+    return EitherAsync(async (helpers) => {
+      const either = await this.run()
+      if (either.isRight()) {
+        const nestedEither = await either.extract()
+        return helpers.liftEither(nestedEither)
+      }
+      return helpers.liftEither((either as any) as Either<L, R2>)
+    })
+  }
+
   ap<R2>(other: EitherAsync<L, (value: R) => R2>): EitherAsync<L, R2> {
     return EitherAsync(async (helpers) => {
       const either = await this.run()
@@ -137,7 +150,7 @@ class EitherAsyncImpl<L, R> implements EitherAsync<L, R> {
         const v = EitherAsync.liftEither(either)
         return helpers.liftEither(Right(f(v)))
       }
-      return helpers.liftEither(either as any)
+      return helpers.liftEither((either as any) as Either<L, R2>)
     })
   }
   'fantasy-land/extend' = this.extend
