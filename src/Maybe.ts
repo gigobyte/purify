@@ -34,7 +34,7 @@ export interface Maybe<T> {
   join<U>(this: Maybe<Maybe<U>>): Maybe<U>
   /** Takes a reducer and an initial value and returns the initial value if `this` is `Nothing` or the result of applying the function to the initial value and the value inside `this` */
   reduce<U>(reducer: (accumulator: U, value: T) => U, initialValue: U): U
-  /** Returns `this` if it\'s `Nothing`, otherwise it returns the result of applying the function argument to `this` and wrapping it in a `Just` */
+  /** Returns `this` if it's `Nothing`, otherwise it returns the result of applying the function argument to `this` and wrapping it in a `Just` */
   extend<U>(f: (value: Maybe<T>) => U): Maybe<U>
   /** Returns the value inside `this` or throws an error if `this` is `Nothing` */
   unsafeCoerce(): T
