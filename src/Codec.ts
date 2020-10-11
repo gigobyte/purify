@@ -25,7 +25,7 @@ const isEmptySchema = (schema: JSONSchema6): boolean =>
 const isObject = (obj: unknown): obj is Record<string, unknown> =>
   typeof obj === 'object' && obj !== null && !Array.isArray(obj)
 
-const reportError = (type: string, input: unknown): string => {
+const reportError = (expectedType: string, input: unknown): string => {
   let receivedString: string = ''
 
   switch (typeof input) {
@@ -61,7 +61,7 @@ const reportError = (type: string, input: unknown): string => {
   receivedString =
     receivedString || `a ${typeof input} with value ${JSON.stringify(input)}`
 
-  return `Expected ${type}, but received ${receivedString}`
+  return `Expected ${expectedType}, but received ${receivedString}`
 }
 
 const removeOneOfWithSingleElement = (schema: JSONSchema6): JSONSchema6 => {
