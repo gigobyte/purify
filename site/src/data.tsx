@@ -1825,6 +1825,14 @@ randomEither().map(x => x)
               ],
             },
             {
+              name: 'join',
+              description:
+                'Flattens nested `EitherAsync`s. `e.join()` is equivalent to `e.chain(x => x)`.',
+              signatureTS:
+                '<R2>(this: EitherAsync<L, EitherAsync<L, R2>>): EitherAsync<L, R2>',
+              examples: [],
+            },
+            {
               name: 'toMaybeAsync',
               description:
                 'Converts `this` to a MaybeAsync, discarding any error values.',

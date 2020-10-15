@@ -10,7 +10,7 @@ export interface MaybeAsyncTypeRef {
   liftPromise<T>(f: () => Promise<T>): MaybeAsync<T>
   /** Constructs an MaybeAsync object from a Maybe */
   liftMaybe<T>(maybe: Maybe<T>): MaybeAsync<T>
-  /** Returns only the `Just` values in a list */
+  /** Takes a list of `MaybeAsync`s and returns a Promise that will resolve with all `Just` values. Internally it uses `Promise.all` to wait for all results */
   catMaybes<T>(list: MaybeAsync<T>[]): Promise<T[]>
 }
 
@@ -92,10 +92,11 @@ class MaybeAsyncImpl<T> implements MaybeAsync<T> {
   constructor(
     private runPromise: (helpers: MaybeAsyncHelpers) => PromiseLike<T>
   ) {}
-  async orDefault(defaultValue: T): Promise<T> {
-    const maybe = await this.run()
-    return maybe.orDefault(defaultValue)
+
+  orDefault(defaultValue: T): Promise<T> {
+    return this.run().then((x) => x.orDefault(defaultValue))
   }
+
   join<U>(this: MaybeAsync<MaybeAsync<U>>): MaybeAsync<U> {
     return MaybeAsync(async (helpers) => {
       const maybe = await this.run()
@@ -106,6 +107,7 @@ class MaybeAsyncImpl<T> implements MaybeAsync<T> {
       return helpers.liftMaybe(Nothing as Maybe<U>)
     })
   }
+
   ap<U>(maybeF: MaybeAsync<(value: T) => U>): MaybeAsync<U> {
     return MaybeAsync(async (helpers) => {
       const value = await this.run()
@@ -113,7 +115,7 @@ class MaybeAsyncImpl<T> implements MaybeAsync<T> {
       return helpers.liftMaybe(value.ap(maybe))
     })
   }
-  'fantasy-land/ap' = this.ap
+
   alt(other: MaybeAsync<T>): MaybeAsync<T> {
     return MaybeAsync(async (helpers) => {
       const value = await this.run()
@@ -121,7 +123,7 @@ class MaybeAsyncImpl<T> implements MaybeAsync<T> {
       return helpers.liftMaybe(value.alt(maybe))
     })
   }
-  'fantasy-land/alt' = this.alt
+
   extend<U>(f: (value: MaybeAsync<T>) => U): MaybeAsync<U> {
     return MaybeAsync(async (helpers) => {
       const maybe = await this.run()
@@ -132,14 +134,13 @@ class MaybeAsyncImpl<T> implements MaybeAsync<T> {
       return helpers.liftMaybe((Nothing as any) as Maybe<U>)
     })
   }
-  'fantasy-land/extend' = this.extend
+
   filter(pred: (value: T) => boolean): MaybeAsync<T> {
     return MaybeAsync(async (helpers) => {
       const value = await this.run()
       return helpers.liftMaybe(value.filter(pred))
     })
   }
-  'fantasy-land/filter' = this.filter
 
   async run(): Promise<Maybe<T>> {
     try {
@@ -193,6 +194,11 @@ class MaybeAsyncImpl<T> implements MaybeAsync<T> {
     return this.chain(f)
   }
 
+  'fantasy-land/ap' = this.ap
+  'fantasy-land/filter' = this.filter
+  'fantasy-land/extend' = this.extend
+  'fantasy-land/alt' = this.alt
+
   then<TResult1 = Maybe<T>, TResult2 = never>(
     onfulfilled?:
       | ((value: Maybe<T>) => TResult1 | PromiseLike<TResult1>)
@@ -212,10 +218,8 @@ export const MaybeAsync: MaybeAsyncTypeRef = Object.assign(
     runPromise: (helpers: MaybeAsyncHelpers) => PromiseLike<T>
   ): MaybeAsync<T> => new MaybeAsyncImpl(runPromise),
   {
-    catMaybes: async <T>(list: MaybeAsync<T>[]): Promise<T[]> => {
-      const values = await Promise.all(list)
-      return Maybe.catMaybes(values)
-    },
+    catMaybes: <T>(list: MaybeAsync<T>[]): Promise<T[]> =>
+      Promise.all(list).then(Maybe.catMaybes),
     fromPromise: <T>(f: () => Promise<Maybe<T>>): MaybeAsync<T> =>
       MaybeAsync(({ fromPromise: fP }) => fP(f())),
     liftPromise: <T>(f: () => Promise<T>): MaybeAsync<T> => MaybeAsync(f),
