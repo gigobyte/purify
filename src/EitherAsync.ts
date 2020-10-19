@@ -55,15 +55,15 @@ export interface EitherAsync<L, R> extends PromiseLike<Either<L, R>> {
   ifLeft(effect: (value: L) => any): EitherAsync<L, R>
   /** Runs an effect if `this` is `Right`, returns `this` to make chaining other methods possible */
   ifRight(effect: (value: R) => any): EitherAsync<L, R>
-  /** Applies a `Right` function over a future `Right` value. Returns `Left` if either the future value of `this` or the function are `Left` */
-  ap<R2>(other: EitherAsync<L, (value: R) => R2>): EitherAsync<L, R2>
-  /** Returns the first `Right` between the future value of `this` and another future `Either` or the `Left` in the argument if both `this` and the argument are `Left` */
+  /** Applies a `Right` function wrapped in `EitherAsync` over a future `Right` value. Returns `Left` if either the `this` resolves to a `Left` or the function is `Left` */
+  ap<R2>(other: PromiseLike<Either<L, (value: R) => R2>>): EitherAsync<L, R2>
+  /** Returns the first `Right` between the future value of `this` and another future `EitherAsync` or the `Left` in the argument if both `this` and the argument resolve to `Left` */
   alt(other: EitherAsync<L, R>): EitherAsync<L, R>
-  /** Returns the future value of `this` if it's a `Left`, otherwise it returns a future of the result of applying the function argument to `this` and wrapping it in a `Right` */
+  /** Returns `this` if it resolves to a `Left`, otherwise it returns the result of applying the function argument to `this` and wrapping it in a `Right` */
   extend<R2>(f: (value: EitherAsync<L, R>) => R2): EitherAsync<L, R2>
-  /** Returns the value inside `this` if it\'s `Left` or a default value if `this` is `Right` */
+  /** Returns a Promise that resolves to the value inside `this` if it\'s `Left` or a default value if `this` is `Right` */
   leftOrDefault(defaultValue: L): Promise<L>
-  /** Returns the value inside `this` if it\'s `Right` or a default value if `this` is `Left` */
+  /** Returns a Promise that resolves to the value inside `this` if it\'s `Right` or a default value if `this` is `Left` */
   orDefault(defaultValue: R): Promise<R>
   'fantasy-land/map'<R2>(f: (value: R) => R2): EitherAsync<L, R2>
   'fantasy-land/bimap'<L2, R2>(
@@ -137,7 +137,7 @@ class EitherAsyncImpl<L, R> implements EitherAsync<L, R> {
     })
   }
 
-  ap<R2>(other: EitherAsync<L, (value: R) => R2>): EitherAsync<L, R2> {
+  ap<R2>(other: PromiseLike<Either<L, (value: R) => R2>>): EitherAsync<L, R2> {
     return EitherAsync(async (helpers) => {
       const [either, o] = await Promise.all([this.run(), other])
       return helpers.liftEither(either.ap(o))
@@ -241,23 +241,9 @@ class EitherAsyncImpl<L, R> implements EitherAsync<L, R> {
     })
   }
 
-  'fantasy-land/map'<R2>(f: (value: R) => R2): EitherAsync<L, R2> {
-    return this.map(f)
-  }
-
-  'fantasy-land/bimap'<L2, R2>(
-    f: (value: L) => L2,
-    g: (value: R) => R2
-  ): EitherAsync<L2, R2> {
-    return this.bimap(f, g)
-  }
-
-  'fantasy-land/chain'<R2>(
-    f: (value: R) => PromiseLike<Either<L, R2>>
-  ): EitherAsync<L, R2> {
-    return this.chain(f)
-  }
-
+  'fantasy-land/map' = this.map
+  'fantasy-land/bimap' = this.bimap
+  'fantasy-land/chain' = this.chain
   'fantasy-land/ap' = this.ap
   'fantasy-land/extend' = this.extend
   'fantasy-land/alt' = this.alt

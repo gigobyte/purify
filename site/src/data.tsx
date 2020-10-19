@@ -1482,7 +1482,7 @@ randomEither().map(x => x)
     },
     {
       name: 'EitherAsync',
-      implements: ['Functor', 'Bifunctor', 'Chain'],
+      implements: ['Functor', 'Bifunctor', 'Chain', 'Apply', 'Extend'],
       guides: [
         {
           title: 'MaybeAsync and EitherAsync for Haskellers',
@@ -1793,6 +1793,14 @@ randomEither().map(x => x)
               ],
             },
             {
+              name: 'ap',
+              description:
+                'Applies a `Right` function wrapped in `EitherAsync` over a future `Right` value. Returns `Left` if either the `this` resolves to a `Left` or the function is `Left`.',
+              signatureTS:
+                '<R2>(other: PromiseLike<Either<L, (value: R) => R2>>): EitherAsync<L, R2>',
+              examples: [],
+            },
+            {
               name: 'chain',
               description:
                 'Transforms `this` with a function that returns a `EitherAsync` or another `PromiseLike`. Behaviour is the same as the regular Either#chain.',
@@ -1828,8 +1836,44 @@ randomEither().map(x => x)
               name: 'join',
               description:
                 'Flattens nested `EitherAsync`s. `e.join()` is equivalent to `e.chain(x => x)`.',
+              signatureML: 'EitherAsync a (EitherAsync a b) ~> EitherAsync a b',
               signatureTS:
                 '<R2>(this: EitherAsync<L, EitherAsync<L, R2>>): EitherAsync<L, R2>',
+              examples: [],
+            },
+            {
+              name: 'alt',
+              description:
+                'Returns the first `Right` between the future value of `this` and another future `EitherAsync` or the `Left` in the argument if both `this` and the argument resolve to `Left`.',
+              signatureML:
+                'EitherAsync a b ~> EitherAsync a b -> EitherAsync a b',
+              signatureTS: '(other: EitherAsync<L, R>): EitherAsync<L, R>',
+              examples: [],
+            },
+            {
+              name: 'extend',
+              description:
+                'Returns `this` if it resolves to a `Left`, otherwise it returns the result of applying the function argument to `this` and wrapping it in a `Right`.',
+              signatureML:
+                'EitherAsync a b ~> (EitherAsync a b -> c) -> EitherAsync a c',
+              signatureTS:
+                '<R2>(f: (value: EitherAsync<L, R>) => R2): EitherAsync<L, R2>',
+              examples: [],
+            },
+            {
+              name: 'orDefault',
+              description:
+                "Returns a Promise that resolves to the value inside `this` if it's `Right` or a default value if `this` is `Left`.",
+              signatureML: 'EitherAsync a b ~> b -> b',
+              signatureTS: '(defaultValue: R): Promise<R>',
+              examples: [],
+            },
+            {
+              name: 'leftOrDefault',
+              description:
+                "Returns a Promise that resolves to the value inside `this` if it's `Left` or a default value if `this` is `Right`.",
+              signatureML: 'EitherAsync a b ~> a -> IO a',
+              signatureTS: '(defaultValue: L): Promise<L>',
               examples: [],
             },
             {

@@ -137,27 +137,11 @@ class TupleImpl<F, S> implements Tuple<F, S> {
     return pred(this.first) || pred(this.second)
   }
 
-  'fantasy-land/equals'(other: Tuple<F, S>): boolean {
-    return this.equals(other)
-  }
-  'fantasy-land/bimap'<F2, S2>(
-    f: (fst: F) => F2,
-    g: (snd: S) => S2
-  ): Tuple<F2, S2> {
-    return this.bimap(f, g)
-  }
-  'fantasy-land/map'<S2>(f: (snd: S) => S2): Tuple<F, S2> {
-    return this.map(f)
-  }
-  'fantasy-land/reduce'<T>(
-    reducer: (accumulator: T, value: S) => T,
-    initialValue: T
-  ): T {
-    return this.reduce(reducer, initialValue)
-  }
-  'fantasy-land/ap'<T, S2>(f: Tuple<T, (value: S) => S2>): Tuple<F, S2> {
-    return this.ap(f)
-  }
+  'fantasy-land/equals' = this.equals
+  'fantasy-land/bimap' = this.bimap
+  'fantasy-land/map' = this.map
+  'fantasy-land/reduce' = this.reduce
+  'fantasy-land/ap' = this.ap
 }
 
 export const Tuple: TupleTypeRef = Object.assign(

@@ -184,16 +184,8 @@ class MaybeAsyncImpl<T> implements MaybeAsync<T> {
     })
   }
 
-  'fantasy-land/map'<U>(f: (value: T) => U): MaybeAsync<U> {
-    return this.map(f)
-  }
-
-  'fantasy-land/chain'<U>(
-    f: (value: T) => PromiseLike<Maybe<U>>
-  ): MaybeAsync<U> {
-    return this.chain(f)
-  }
-
+  'fantasy-land/map' = this.map
+  'fantasy-land/chain' = this.chain
   'fantasy-land/ap' = this.ap
   'fantasy-land/filter' = this.filter
   'fantasy-land/extend' = this.extend

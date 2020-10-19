@@ -426,40 +426,14 @@ class Nothing implements Maybe<never> {
     return nothing
   }
 
-  'fantasy-land/equals'(other: Maybe<never>): boolean {
-    return this.equals(other)
-  }
-
-  'fantasy-land/map'<U>(f: (value: never) => U): Maybe<U> {
-    return this.map(f)
-  }
-
-  'fantasy-land/ap'<U>(maybeF: Maybe<(value: never) => U>): Maybe<U> {
-    return this.ap(maybeF)
-  }
-
-  'fantasy-land/alt'(other: Maybe<never>): Maybe<never> {
-    return this.alt(other)
-  }
-
-  'fantasy-land/chain'<U>(f: (value: never) => Maybe<U>): Maybe<U> {
-    return this.chain(f)
-  }
-
-  'fantasy-land/reduce'<U>(
-    reducer: (accumulator: U, value: never) => U,
-    initialValue: U
-  ): U {
-    return this.reduce(reducer, initialValue)
-  }
-
-  'fantasy-land/extend'<U>(f: (value: Maybe<never>) => U): Maybe<U> {
-    return this.extend(f)
-  }
-
-  'fantasy-land/filter'(pred: (value: never) => boolean): Maybe<never> {
-    return this.filter(pred)
-  }
+  'fantasy-land/equals' = this.equals
+  'fantasy-land/map' = this.map
+  'fantasy-land/ap' = this.ap
+  'fantasy-land/alt' = this.alt
+  'fantasy-land/chain' = this.chain
+  'fantasy-land/reduce' = this.reduce
+  'fantasy-land/extend' = this.extend
+  'fantasy-land/filter' = this.filter
 }
 
 Nothing.prototype.constructor = Maybe as any
