@@ -248,16 +248,7 @@ class EitherAsyncImpl<L, R> implements EitherAsync<L, R> {
   'fantasy-land/extend' = this.extend
   'fantasy-land/alt' = this.alt
 
-  then<TResult1 = Either<L, R>, TResult2 = never>(
-    onfulfilled?:
-      | ((value: Either<L, R>) => TResult1 | PromiseLike<TResult1>)
-      | undefined
-      | null,
-    onrejected?:
-      | ((reason: any) => TResult2 | PromiseLike<TResult2>)
-      | undefined
-      | null
-  ): PromiseLike<TResult1 | TResult2> {
+  then: PromiseLike<Either<L, R>>['then'] = (onfulfilled, onrejected) => {
     return this.run().then(onfulfilled, onrejected)
   }
 }
