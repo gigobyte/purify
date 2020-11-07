@@ -1262,7 +1262,7 @@ randomEither().map(x => x)
                 'Transforms `this` with a function that returns an `Either`. Useful for chaining many computations that may fail.',
               signatureML: 'Either a b ~> (b -> Either a c) -> Either a c',
               signatureTS:
-                '<R2>(f: (value: R) => Either<L, R2>): Either<L, R2>',
+                '<L2, R2>(f: (value: R) => Either<L2, R2>): Either<L | L2, R2>',
               examples: [
                 {
                   input: `Left('Error').chain(x => Right(x + 1))`,
@@ -1844,7 +1844,7 @@ randomEither().map(x => x)
               description:
                 'Transforms `this` with a function that returns a `EitherAsync` or another `PromiseLike`. Behaviour is the same as the regular Either#chain.',
               signatureTS:
-                '<R2>(f: (value: R) => PromiseLike<Either<L, R2>>): EitherAsync<L, R2>',
+                '<L2, R2>(f: (value: R) => PromiseLike<Either<L2, R2>>): EitherAsync<L | L2, R2>',
               examples: [
                 {
                   input: `EitherAsync(async () => 5).chain(x => EitherAsync(async () => x + 1)).run()`,

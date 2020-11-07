@@ -40,7 +40,9 @@ export interface EitherAsync<L, R> extends PromiseLike<Either<L, R>> {
   /** Maps the `Left` value of `this`, acts like an identity if `this` is `Right` */
   mapLeft<L2>(f: (value: L) => L2): EitherAsync<L2, R>
   /** Transforms `this` with a function that returns a `EitherAsync`. Behaviour is the same as the regular Either#chain */
-  chain<R2>(f: (value: R) => PromiseLike<Either<L, R2>>): EitherAsync<L, R2>
+  chain<L2, R2>(
+    f: (value: R) => PromiseLike<Either<L2, R2>>
+  ): EitherAsync<L | L2, R2>
   /** The same as EitherAsync#chain but executes the transformation function only if the value is Left. Useful for recovering from errors */
   chainLeft<L2>(f: (value: L) => PromiseLike<Either<L2, R>>): EitherAsync<L2, R>
   /** Flattens nested `EitherAsync`s. `e.join()` is equivalent to `e.chain(x => x)` */
@@ -189,7 +191,9 @@ class EitherAsyncImpl<L, R> implements EitherAsync<L, R> {
     })
   }
 
-  chain<R2>(f: (value: R) => PromiseLike<Either<L, R2>>): EitherAsync<L, R2> {
+  chain<L2, R2>(
+    f: (value: R) => PromiseLike<Either<L2, R2>>
+  ): EitherAsync<L | L2, R2> {
     return EitherAsync(async (helpers) => {
       const value = await this.runPromise(helpers)
       return helpers.fromPromise(f(value))

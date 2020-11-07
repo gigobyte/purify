@@ -25,7 +25,7 @@ export interface Either<L, R> {
   /** Compares `this` to another `Either`, returns false if the constructors or the values inside are different, e.g. `Right(5).equals(Left(5))` is false */
   equals(other: Either<L, R>): boolean
   /** Transforms `this` with a function that returns an `Either`. Useful for chaining many computations that may fail */
-  chain<R2>(f: (value: R) => Either<L, R2>): Either<L, R2>
+  chain<L2, R2>(f: (value: R) => Either<L2, R2>): Either<L | L2, R2>
   /** The same as Either#chain but executes the transformation function only if the value is Left. Useful for recovering from errors */
   chainLeft<L2>(f: (value: L) => Either<L2, R>): Either<L2, R>
   /** Flattens nested Eithers. `e.join()` is equivalent to `e.chain(x => x)` */
@@ -72,7 +72,9 @@ export interface Either<L, R> {
   'fantasy-land/map'<R2>(f: (value: R) => R2): Either<L, R2>
   'fantasy-land/ap'<R2>(other: Either<L, (value: R) => R2>): Either<L, R2>
   'fantasy-land/equals'(other: Either<L, R>): boolean
-  'fantasy-land/chain'<R2>(f: (value: R) => Either<L, R2>): Either<L, R2>
+  'fantasy-land/chain'<L2, R2>(
+    f: (value: R) => Either<L2, R2>
+  ): Either<L | L2, R2>
   'fantasy-land/alt'(other: Either<L, R>): Either<L, R>
   'fantasy-land/reduce'<T>(
     reducer: (accumulator: T, value: R) => T,
@@ -196,7 +198,7 @@ class Right<R, L = never> implements Either<L, R> {
     return other.isRight() ? this.__value === other.extract() : false
   }
 
-  chain<R2>(f: (value: R) => Either<L, R2>): Either<L, R2> {
+  chain<L2, R2>(f: (value: R) => Either<L2, R2>): Either<L | L2, R2> {
     return f(this.__value)
   }
 
@@ -329,7 +331,7 @@ class Left<L, R = never> implements Either<L, R> {
     return other.isLeft() ? other.extract() === this.__value : false
   }
 
-  chain<R2>(_: (value: R) => Either<L, R2>): Either<L, R2> {
+  chain<L2, R2>(_: (value: R) => Either<L2, R2>): Either<L | L2, R2> {
     return this as any
   }
 
