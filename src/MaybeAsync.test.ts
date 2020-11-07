@@ -153,15 +153,6 @@ describe('MaybeAsync', () => {
     )
   })
 
-  test('liftPromise static', async () => {
-    expect(
-      await MaybeAsync.liftPromise(() => Promise.resolve(5)).run()
-    ).toEqual(Just(5))
-    expect(await MaybeAsync.liftPromise(() => Promise.reject()).run()).toEqual(
-      Nothing
-    )
-  })
-
   test('liftEither static', async () => {
     expect(await MaybeAsync.liftMaybe(Just(5)).run()).toEqual(Just(5))
     expect(await MaybeAsync.liftMaybe(Nothing).run()).toEqual(Nothing)

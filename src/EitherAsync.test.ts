@@ -246,15 +246,6 @@ describe('EitherAsync', () => {
     ).toEqual(Left(5))
   })
 
-  test('liftPromise static', async () => {
-    expect(
-      await EitherAsync.liftPromise(() => Promise.resolve(5)).run()
-    ).toEqual(Right(5))
-    expect(
-      await EitherAsync.liftPromise(() => Promise.reject(5)).run()
-    ).toEqual(Left(5))
-  })
-
   test('liftEither static', async () => {
     expect(await EitherAsync.liftEither(Right(5)).run()).toEqual(Right(5))
     expect(await EitherAsync.liftEither(Left(5)).run()).toEqual(Left(5))

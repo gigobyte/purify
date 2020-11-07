@@ -62,7 +62,6 @@ const data: Data = {
       name: 'Maybe',
       implements: [
         'Setoid',
-        'Monoid',
         'Functor',
         'Apply',
         'Applicative',
@@ -571,7 +570,7 @@ const data: Data = {
     },
     {
       name: 'MaybeAsync',
-      implements: ['Functor', 'Chain'],
+      implements: ['Functor', 'Chain', 'Apply', 'Alt', 'Extend', 'Filterable'],
       guides: [
         {
           title: 'MaybeAsync and EitherAsync for Haskellers',
@@ -684,19 +683,6 @@ const data: Data = {
               signatureTS: `<T>(f: () => Promise<Maybe<T>>): MaybeAsync<T>`,
             },
             {
-              name: 'liftPromise',
-              description:
-                'Constructs an MaybeAsync object from a function that returns a Promise.',
-              examples: [
-                {
-                  input: 'MaybeAsync.liftPromise(() => Promise.resolve(5))',
-                  output: 'MaybeAsync<number>',
-                },
-              ],
-              signatureML: '(() -> IO b) -> MaybeAsync a',
-              signatureTS: `<T>(f: () => Promise<T>): MaybeAsync<T>`,
-            },
-            {
               name: 'liftMaybe',
               description: 'Constructs an MaybeAsync object from a Maybe.',
               examples: [
@@ -707,6 +693,23 @@ const data: Data = {
               ],
               signatureML: 'Maybe a -> MaybeAsync a',
               signatureTS: `<T>(maybe: Maybe<T>): MaybeAsync<T>`,
+            },
+            {
+              name: 'catMaybes',
+              description:
+                'Takes a list of `MaybeAsync`s and returns a Promise that will resolve with all `Just` values. Internally it uses `Promise.all` to wait for all results.',
+              examples: [
+                {
+                  input: `MaybeAsync.catMaybes([
+  MaybeAsync(async () => 'value1'),
+  MaybeAsync.liftMaybe(Nothing),
+  MaybeAsync(async () => 'value2')
+])`,
+                  output: `Promise {<resolved>: ['value1', 'value2']}`,
+                },
+              ],
+              signatureML: '[MaybeAsync a] -> IO [a]',
+              signatureTS: `<T>(list: MaybeAsync<T>[]): Promise<T[]>`,
             },
           ],
         },
@@ -788,10 +791,59 @@ const data: Data = {
                   output: 'Promise {<resolved>: Just(6)}',
                 },
                 {
-                  input: `MaybeAsync(async () => 5).chain(async (x) => x + 1).run()`,
+                  input: `MaybeAsync(async () => 5).chain(async (x) => Just(x + 1)).run()`,
                   output: 'Promise {<resolved>: Just(6)}',
                 },
               ],
+            },
+            {
+              name: 'orDefault',
+              signatureTS: '(defaultValue: T): Promise<T>',
+              signatureML: 'MaybeAsync a ~> a -> IO a',
+              description:
+                'Returns the default value if `this` is `Nothing`, otherwise it returns a Promise that will resolve to the value inside `this`.',
+              examples: [],
+            },
+            {
+              name: 'ap',
+              signatureTS:
+                '<U>(maybeF: PromiseLike<Maybe<(value: T) => U>>): MaybeAsync<U>',
+              description:
+                'Runs an effect if `this` is `Nothing`, returns `this` to make chaining other methods possible.',
+              examples: [],
+            },
+            {
+              name: 'alt',
+              signatureTS: '(other: MaybeAsync<T>): MaybeAsync<T>',
+              signatureML: 'MaybeAsync a ~> MaybeAsync a -> MaybeAsync a',
+              description:
+                'Returns the first `Just` between the future value of `this` and another future `Maybe` or future `Nothing` if both `this` and the argument are `Nothing`.',
+              examples: [],
+            },
+            {
+              name: 'extend',
+              signatureTS: '<U>(f: (value: MaybeAsync<T>) => U): MaybeAsync<U>',
+              signatureML:
+                'MaybeAsync a ~> (MaybeAsync a -> b) -> MaybeAsync b',
+              description:
+                'Returns `this` if it resolves to `Nothing`, otherwise it returns the result of applying the function argument to the value of `this` and wrapping it in a `Just`.',
+              examples: [],
+            },
+            {
+              name: 'filter',
+              signatureTS: '(pred: (value: T) => boolean): MaybeAsync<T>',
+              signatureML: 'MaybeAsync a ~> (a -> Bool) -> MaybeAsync a',
+              description: `Takes a predicate function and returns \`this\` if the predicate, applied to the resolved value, is true or Nothing if it's false.`,
+              examples: [],
+            },
+            {
+              name: 'join',
+              signatureTS:
+                '<U>(this: MaybeAsync<MaybeAsync<U>>): MaybeAsync<U>',
+              signatureML: 'MaybeAsync (MaybeAsync a) ~> MaybeAsync a',
+              description:
+                'Flattens nested `MaybeAsync`s. `m.join()` is equivalent to `m.chain(x => x).',
+              examples: [],
             },
             {
               name: 'toEitherAsync',
@@ -1482,7 +1534,7 @@ randomEither().map(x => x)
     },
     {
       name: 'EitherAsync',
-      implements: ['Functor', 'Bifunctor', 'Chain', 'Apply', 'Extend'],
+      implements: ['Functor', 'Bifunctor', 'Chain', 'Apply', 'Alt', 'Extend'],
       guides: [
         {
           title: 'MaybeAsync and EitherAsync for Haskellers',
@@ -1560,7 +1612,7 @@ randomEither().map(x => x)
             '        .mapLeft(_     => Error.UserDoesNotExist)',
             '',
             '        // when you have Promise<T> and you want to chain it',
-            '        .chain(user    => EitherAsync.liftPromise(() => deleteUserDb(user)))',
+            '        .chain(user    => EitherAsync(() => deleteUserDb(user)))',
             '',
             'const promise: Promise<Either<Error, Id<User>>> =',
             '   deleteUser(req).run()',
@@ -1603,19 +1655,6 @@ randomEither().map(x => x)
               ],
               signatureML: '(() -> IO (Either a b)) -> EitherAsync a b',
               signatureTS: `<L, R>(f: () => PromiseLike<Either<L, R>>): EitherAsync<L, R>`,
-            },
-            {
-              name: 'liftPromise',
-              description:
-                'Constructs an EitherAsync object from a function that returns a Promise. The left type is defaulted to the built-in Error type.',
-              examples: [
-                {
-                  input: 'EitherAsync.liftPromise(() => Promise.resolve(5))',
-                  output: 'EitherAsync<Error, number>',
-                },
-              ],
-              signatureML: '(() -> IO b) -> EitherAsync Error b',
-              signatureTS: `<R, L = Error>(f: () => PromiseLike<R>): EitherAsync<L, R>`,
             },
             {
               name: 'liftEither',
@@ -1844,7 +1883,7 @@ randomEither().map(x => x)
             {
               name: 'alt',
               description:
-                'Returns the first `Right` between the future value of `this` and another future `EitherAsync` or the `Left` in the argument if both `this` and the argument resolve to `Left`.',
+                'Returns the first `Right` between the future value of `this` and another `EitherAsync` or the `Left` in the argument if both `this` and the argument resolve to `Left`.',
               signatureML:
                 'EitherAsync a b ~> EitherAsync a b -> EitherAsync a b',
               signatureTS: '(other: EitherAsync<L, R>): EitherAsync<L, R>',

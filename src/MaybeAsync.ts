@@ -6,8 +6,6 @@ export interface MaybeAsyncTypeRef {
   <T>(runPromise: (helpers: MaybeAsyncHelpers) => PromiseLike<T>): MaybeAsync<T>
   /** Constructs an MaybeAsync object from a function that returns a Maybe wrapped in a Promise */
   fromPromise<T>(f: () => Promise<Maybe<T>>): MaybeAsync<T>
-  /** Constructs an MaybeAsync object from a function that returns a Promise */
-  liftPromise<T>(f: () => Promise<T>): MaybeAsync<T>
   /** Constructs an MaybeAsync object from a Maybe */
   liftMaybe<T>(maybe: Maybe<T>): MaybeAsync<T>
   /** Takes a list of `MaybeAsync`s and returns a Promise that will resolve with all `Just` values. Internally it uses `Promise.all` to wait for all results */
@@ -39,17 +37,17 @@ export interface MaybeAsync<T> extends PromiseLike<Maybe<T>> {
   ifJust(effect: (value: T) => any): MaybeAsync<T>
   /** Runs an effect if `this` is `Nothing`, returns `this` to make chaining other methods possible */
   ifNothing(effect: () => any): MaybeAsync<T>
-  /** Returns the default value if `this` is `Nothing`, otherwise it return the value inside `this` */
+  /** Returns the default value if `this` is `Nothing`, otherwise it returns a Promise that will resolve to the value inside `this` */
   orDefault(defaultValue: T): Promise<T>
   /** Maps the future value of `this` with another future `Maybe` function */
-  ap<U>(maybeF: MaybeAsync<(value: T) => U>): MaybeAsync<U>
+  ap<U>(maybeF: PromiseLike<Maybe<(value: T) => U>>): MaybeAsync<U>
   /** Returns the first `Just` between the future value of `this` and another future `Maybe` or future `Nothing` if both `this` and the argument are `Nothing` */
   alt(other: MaybeAsync<T>): MaybeAsync<T>
-  /** Returns `this` if this resolves to `Nothing`, otherwise it returns the future result of applying the function argument to future value `this` and wrapping it in a `Just` */
+  /** Returns `this` if it resolves to `Nothing`, otherwise it returns the result of applying the function argument to the value of `this` and wrapping it in a `Just` */
   extend<U>(f: (value: MaybeAsync<T>) => U): MaybeAsync<U>
-  /** Takes a predicate function and returns `this` if the predicate resolved to true or Nothing if it resolves to false */
+  /** Takes a predicate function and returns `this` if the predicate, applied to the resolved value, is true or Nothing if it's false */
   filter(pred: (value: T) => boolean): MaybeAsync<T>
-  /** Flattens nested Maybes. `m.join()` is equivalent to `m.chain(x => x)` */
+  /** Flattens nested `MaybeAsync`s. `m.join()` is equivalent to `m.chain(x => x)` */
   join<U>(this: MaybeAsync<MaybeAsync<U>>): MaybeAsync<U>
 
   'fantasy-land/map'<U>(f: (value: T) => U): MaybeAsync<U>
@@ -118,9 +116,8 @@ class MaybeAsyncImpl<T> implements MaybeAsync<T> {
 
   alt(other: MaybeAsync<T>): MaybeAsync<T> {
     return MaybeAsync(async (helpers) => {
-      const value = await this.run()
-      const maybe = await other
-      return helpers.liftMaybe(value.alt(maybe))
+      const [maybe, o] = await Promise.all([this.run(), other])
+      return helpers.liftMaybe(maybe.alt(o))
     })
   }
 
@@ -214,7 +211,6 @@ export const MaybeAsync: MaybeAsyncTypeRef = Object.assign(
       Promise.all(list).then(Maybe.catMaybes),
     fromPromise: <T>(f: () => Promise<Maybe<T>>): MaybeAsync<T> =>
       MaybeAsync(({ fromPromise: fP }) => fP(f())),
-    liftPromise: <T>(f: () => Promise<T>): MaybeAsync<T> => MaybeAsync(f),
     liftMaybe: <T>(maybe: Maybe<T>): MaybeAsync<T> =>
       MaybeAsync(({ liftMaybe }) => liftMaybe(maybe))
   }

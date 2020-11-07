@@ -8,8 +8,6 @@ export interface EitherAsyncTypeRef {
   ): EitherAsync<L, R>
   /** Constructs an `EitherAsync` object from a function that returns an Either wrapped in a Promise */
   fromPromise<L, R>(f: () => PromiseLike<Either<L, R>>): EitherAsync<L, R>
-  /** Constructs an `EitherAsync` object from a function that returns a Promise. The left type is defaulted to the built-in Error type */
-  liftPromise<R, L = Error>(f: () => PromiseLike<R>): EitherAsync<L, R>
   /** Constructs an `EitherAsync` object from an Either */
   liftEither<L, R>(either: Either<L, R>): EitherAsync<L, R>
   /** Takes a list of `EitherAsync`s and returns a Promise that will resolve with all `Left` values. Internally it uses `Promise.all` to wait for all results */
@@ -57,7 +55,7 @@ export interface EitherAsync<L, R> extends PromiseLike<Either<L, R>> {
   ifRight(effect: (value: R) => any): EitherAsync<L, R>
   /** Applies a `Right` function wrapped in `EitherAsync` over a future `Right` value. Returns `Left` if either the `this` resolves to a `Left` or the function is `Left` */
   ap<R2>(other: PromiseLike<Either<L, (value: R) => R2>>): EitherAsync<L, R2>
-  /** Returns the first `Right` between the future value of `this` and another future `EitherAsync` or the `Left` in the argument if both `this` and the argument resolve to `Left` */
+  /** Returns the first `Right` between the future value of `this` and another `EitherAsync` or the `Left` in the argument if both `this` and the argument resolve to `Left` */
   alt(other: EitherAsync<L, R>): EitherAsync<L, R>
   /** Returns `this` if it resolves to a `Left`, otherwise it returns the result of applying the function argument to `this` and wrapping it in a `Right` */
   extend<R2>(f: (value: EitherAsync<L, R>) => R2): EitherAsync<L, R2>
@@ -261,8 +259,6 @@ export const EitherAsync: EitherAsyncTypeRef = Object.assign(
     fromPromise: <L, R>(
       f: () => PromiseLike<Either<L, R>>
     ): EitherAsync<L, R> => EitherAsync(({ fromPromise: fP }) => fP(f())),
-    liftPromise: <R, L = Error>(f: () => PromiseLike<R>): EitherAsync<L, R> =>
-      EitherAsync(f),
     liftEither: <L, R>(either: Either<L, R>): EitherAsync<L, R> =>
       EitherAsync(({ liftEither }) => liftEither(either)),
     lefts: <L, R>(list: EitherAsync<L, R>[]): Promise<L[]> =>
