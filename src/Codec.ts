@@ -22,9 +22,7 @@ export type FromType<T> = {
 }
 
 /** You can use this to get a free type from any codec */
-export type GetInterface<T extends Codec<any>> = T extends Codec<infer U>
-  ? U
-  : never
+export type GetType<T extends Codec<any>> = T extends Codec<infer U> ? U : never
 
 const isEmptySchema = (schema: JSONSchema6): boolean =>
   Object.keys(schema).length === 0
@@ -114,7 +112,7 @@ export const Codec = {
     properties: T
   ): Codec<
     {
-      [k in keyof T]: GetInterface<T[k]>
+      [k in keyof T]: GetType<T[k]>
     }
   > {
     const keys = Object.keys(properties)
@@ -124,7 +122,7 @@ export const Codec = {
         return Left(reportError('an object', input))
       }
 
-      const result = {} as { [k in keyof T]: GetInterface<T[k]> }
+      const result = {} as { [k in keyof T]: GetType<T[k]> }
 
       for (const key of keys) {
         if (
@@ -157,7 +155,7 @@ export const Codec = {
     }
 
     const encode = (input: any) => {
-      const result = {} as { [k in keyof T]: GetInterface<T[k]> }
+      const result = {} as { [k in keyof T]: GetType<T[k]> }
 
       for (const key of keys) {
         result[key as keyof T] = properties[key].encode(input[key]) as any
@@ -301,7 +299,7 @@ export const enumeration = <T extends Record<string, string | number>>(
 /** A codec combinator that receives a list of codecs and runs them one after another during decode and resolves to whichever returns Right or to Left if all fail */
 export const oneOf = <T extends [Codec<any>, ...Codec<any>[]]>(
   codecs: T
-): Codec<GetInterface<T extends Array<infer U> ? U : never>> =>
+): Codec<GetType<T extends Array<infer U> ? U : never>> =>
   Codec.custom({
     decode: (input) => {
       let errors: string[] = []

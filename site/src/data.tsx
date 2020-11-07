@@ -2623,9 +2623,9 @@ Codec.custom<string>({
           title: 'Type helpers',
           methods: [
             {
-              name: 'GetInterface',
+              name: 'GetType',
               signatureTS:
-                'GetInterface<T extends Codec<any>> = T extends Codec<infer U> ? U : never',
+                'GetType<T extends Codec<any>> = T extends Codec<infer U> ? U : never',
               description:
                 'You can use this to get a free type from any codec.',
               examples: [
@@ -2635,7 +2635,7 @@ Codec.custom<string>({
   age: number
 })
 
-type User = GetInterface<typeof User>`,
+type User = GetType<typeof User>`,
                   output:
                     '// type User will equal {username: string; age: number}',
                 },
