@@ -107,7 +107,7 @@ const data: Data = {
           content: [
             'const port = getConfig()',
             '    .chain(x => x.port)',
-            '    .map(parseInt)',
+            '    .map(elem => parseInt(elem, 10))',
             '    .orDefault(8080)',
           ],
         },
