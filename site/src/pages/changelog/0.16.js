@@ -53,8 +53,8 @@ const v016 = props => (
         <li>
           Running <HL>Either#unsafeDecode</HL> used to throw a generic error if
           the value inside was Left. That error is still there, but if the value
-          is an instance of <HL>Error</HL>, it will throw it instead. This makes
-          debugging and logging easier.
+          is an instance of <HL>Error</HL>, it will throw the value instead.
+          This makes debugging and logging easier.
         </li>
       </ul>
       <Topic>
@@ -64,15 +64,15 @@ const v016 = props => (
       <ul>
         <li>
           Removed <HL>liftPromise</HL> from both EitherAsync and MaybeAsync.
-          With the addition of <HL>PromiseLike</HL> support this utility was
-          just an alias for the normal constructors, making it redundant.
+          With the addition of <HL>PromiseLike</HL> support this utility is just
+          an alias for the normal constructors, making it redundant.
         </li>
         <li>
           Since <HL>PromiseLike</HL> is now supported in both modules you should
           be using the special constructors <HL>liftEither</HL>,{' '}
           <HL>liftMaybe</HL> and <HL>fromPromise</HL> way less now.
           <br />
-          Because of that they are now static methods now (e.g. to use run{' '}
+          Because of that they are now static methods (e.g. to use run{' '}
           <HL>EitherAsync.liftEither</HL> or <HL>MaybeAsync.fromPromise</HL>)
         </li>
       </ul>
