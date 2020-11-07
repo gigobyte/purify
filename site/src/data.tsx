@@ -2641,6 +2641,25 @@ type User = GetInterface<typeof User>`,
                 },
               ],
             },
+            {
+              name: 'FromType',
+              signatureTS: `FromType<T> = {[P in keyof Required<T>]: Pick<T, P> extends Required<Pick<T, P>> ? T[P] : T[P] | undefined}`,
+              description:
+                'Special type used when you want to do the opposite of `GetInterface` - define a Codec for an existing type. The problem is that due to technical limitations optional properties are hard to generate in TypeScript so Codec generates properties of type "T | undefined" instead, which is not compatible.',
+              examples: [
+                {
+                  input: `type A = { a?: number }
+const A: Codec<A> = Codec.inteface({ a: optional(number) })`,
+                  output:
+                    "// Type 'Codec<{ a: number | undefined; }>' is not assignable to type 'Codec<A>'",
+                },
+                {
+                  input: `type A = { a?: number }
+const A: Codec<FromType<A>> = Codec.inteface({ a: optional(number) })`,
+                  output: 'Success!',
+                },
+              ],
+            },
           ],
         },
         {

@@ -14,6 +14,13 @@ export interface Codec<T> {
   schema: () => JSONSchema6
 }
 
+/** Special type used when you want to do the opposite of `GetInterface` - define a Codec for an existing type. The problem is that due to technical limitations optional properties are hard to generate in TypeScript so Codec generates properties of type "T | undefined" instead, which is not compatible */
+export type FromType<T> = {
+  [P in keyof Required<T>]: Pick<T, P> extends Required<Pick<T, P>>
+    ? T[P]
+    : T[P] | undefined
+}
+
 /** You can use this to get a free type from any codec */
 export type GetInterface<T extends Codec<any>> = T extends Codec<infer U>
   ? U
