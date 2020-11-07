@@ -52,6 +52,11 @@ const Changelog = props => (
     <div>
       <h1>Choose version:</h1>
       <VersionContainer>
+        <Version to="/changelog/0.16">0.16</Version>
+        <Description>Version 1.0.0 preparation</Description>
+        <Date>November 2020</Date>
+      </VersionContainer>
+      <VersionContainer>
         <Version to="/changelog/0.15">0.15</Version>
         <Description>Polished Maybe/EitherAsync API</Description>
         <Date>April 2020</Date>
