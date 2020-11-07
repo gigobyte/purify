@@ -277,40 +277,14 @@ class Just<T> implements Maybe<T> {
     return pred(this.__value) ? just(this.__value) : nothing
   }
 
-  'fantasy-land/equals'(other: Maybe<T>): boolean {
-    return this.equals(other)
-  }
-
-  'fantasy-land/map'<U>(f: (value: T) => U): Maybe<U> {
-    return this.map(f)
-  }
-
-  'fantasy-land/ap'<U>(maybeF: Maybe<(value: T) => U>): Maybe<U> {
-    return this.ap(maybeF)
-  }
-
-  'fantasy-land/alt'(other: Maybe<T>): Maybe<T> {
-    return this.alt(other)
-  }
-
-  'fantasy-land/chain'<U>(f: (value: T) => Maybe<U>): Maybe<U> {
-    return this.chain(f)
-  }
-
-  'fantasy-land/reduce'<U>(
-    reducer: (accumulator: U, value: T) => U,
-    initialValue: U
-  ): U {
-    return this.reduce(reducer, initialValue)
-  }
-
-  'fantasy-land/extend'<U>(f: (value: Maybe<T>) => U): Maybe<U> {
-    return this.extend(f)
-  }
-
-  'fantasy-land/filter'(pred: (value: T) => boolean): Maybe<T> {
-    return this.filter(pred)
-  }
+  'fantasy-land/equals' = this.equals
+  'fantasy-land/map' = this.map
+  'fantasy-land/ap' = this.ap
+  'fantasy-land/alt' = this.alt
+  'fantasy-land/chain' = this.chain
+  'fantasy-land/reduce' = this.reduce
+  'fantasy-land/extend' = this.extend
+  'fantasy-land/filter' = this.filter
 }
 
 Just.prototype.constructor = Maybe as any

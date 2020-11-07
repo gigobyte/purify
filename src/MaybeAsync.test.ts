@@ -78,6 +78,103 @@ describe('MaybeAsync', () => {
     expect(await newMaybeAsync2.run()).toEqual(Just('val'))
   })
 
+  test('ap', async () => {
+    expect(
+      await MaybeAsync.liftMaybe(Just(5)).ap(
+        MaybeAsync(async () => (x) => x + 1)
+      )
+    ).toEqual(Just(6))
+    expect(
+      await MaybeAsync.liftMaybe(Just(5)).ap(
+        MaybeAsync.liftMaybe(Nothing as any)
+      )
+    ).toEqual(Nothing)
+    expect(
+      await MaybeAsync.liftMaybe(Nothing).ap(
+        MaybeAsync(async () => (x: any) => x + 1)
+      )
+    ).toEqual(Nothing)
+    expect(
+      await MaybeAsync.liftMaybe(Nothing).ap(
+        MaybeAsync.liftMaybe(Nothing as any)
+      )
+    ).toEqual(Nothing)
+
+    expect(
+      await MaybeAsync.liftMaybe(Just(5))['fantasy-land/ap'](
+        MaybeAsync.liftMaybe(Nothing as any)
+      )
+    ).toEqual(Nothing)
+  })
+
+  test('alt', async () => {
+    expect(
+      await MaybeAsync.liftMaybe(Just(5)).alt(MaybeAsync.liftMaybe(Just(6)))
+    ).toEqual(Just(5))
+    expect(
+      await MaybeAsync.liftMaybe(Just(5)).alt(
+        MaybeAsync.liftMaybe(Nothing as any)
+      )
+    ).toEqual(Just(5))
+    expect(
+      await MaybeAsync.liftMaybe(Nothing).alt(MaybeAsync.liftMaybe(Just(5)))
+    ).toEqual(Just(5))
+    expect(
+      await MaybeAsync.liftMaybe(Nothing).alt(MaybeAsync.liftMaybe(Nothing))
+    ).toEqual(Nothing)
+
+    expect(
+      await MaybeAsync.liftMaybe(Just(5))['fantasy-land/alt'](
+        MaybeAsync.liftMaybe(Nothing as any)
+      )
+    ).toEqual(Just(5))
+  })
+
+  test('join', async () => {
+    const ma = MaybeAsync(async () => 1).map((x) =>
+      MaybeAsync(async () => x + 1)
+    )
+
+    expect(await ma.join()).toEqual(Just(2))
+
+    const ma2 = MaybeAsync(async () => 1).map(() =>
+      MaybeAsync(() => Promise.reject())
+    )
+
+    expect(await ma2.join()).toEqual(Nothing)
+
+    const ma3 = MaybeAsync(() => Promise.reject())
+
+    expect(await ma3.join()).toEqual(Nothing)
+  })
+
+  test('extend', async () => {
+    expect(
+      await MaybeAsync.liftMaybe(Just(5)).extend((x) => x.orDefault(10))
+    ).toEqual(Just(5))
+    expect(
+      await MaybeAsync.liftMaybe(Nothing).extend((x) => x.orDefault(5))
+    ).toEqual(Nothing)
+
+    expect(
+      await MaybeAsync.liftMaybe(Just(5))['fantasy-land/extend']((x) =>
+        x.orDefault(10)
+      )
+    ).toEqual(Just(5))
+  })
+
+  test('filter', async () => {
+    expect(await MaybeAsync.liftMaybe(Just(5)).filter((x) => x > 10)).toEqual(
+      Nothing
+    )
+    expect(await MaybeAsync.liftMaybe(Just(5)).filter((x) => x > 0)).toEqual(
+      Just(5)
+    )
+    expect(
+      await MaybeAsync.liftMaybe<number>(Nothing).filter((x) => x > 0)
+    ).toEqual(Nothing)
+  })
+
   test('toEitherAsync', async () => {
     const ma = MaybeAsync(({ liftMaybe }) => liftMaybe(Nothing))
 
@@ -156,5 +253,18 @@ describe('MaybeAsync', () => {
   test('liftEither static', async () => {
     expect(await MaybeAsync.liftMaybe(Just(5)).run()).toEqual(Just(5))
     expect(await MaybeAsync.liftMaybe(Nothing).run()).toEqual(Nothing)
+  })
+
+  test('catMaybes', async () => {
+    expect(
+      await MaybeAsync.catMaybes([
+        MaybeAsync.liftMaybe(Just(5)),
+        MaybeAsync.liftMaybe(Nothing),
+        MaybeAsync.liftMaybe(Just(10))
+      ])
+    ).toEqual([5, 10])
+    expect(await MaybeAsync.catMaybes([MaybeAsync.liftMaybe(Nothing)])).toEqual(
+      []
+    )
   })
 })

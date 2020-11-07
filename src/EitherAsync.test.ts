@@ -237,6 +237,125 @@ describe('EitherAsync', () => {
     })
   })
 
+  test('leftOrDefault', async () => {
+    const eitherAsyncRight = EitherAsync(() => Promise.resolve(5))
+    expect(await eitherAsyncRight.leftOrDefault(5)).toEqual(5)
+
+    const eitherAsyncLeft = EitherAsync(async () => Promise.reject('fail'))
+    expect(await eitherAsyncLeft.leftOrDefault(5)).toEqual('fail')
+  })
+
+  test('orDefault', async () => {
+    const eitherAsyncRight = EitherAsync(() => Promise.resolve(5))
+    expect(await eitherAsyncRight.orDefault(10)).toEqual(5)
+
+    const eitherAsyncLeft = EitherAsync<string, number>(async () =>
+      Promise.reject('fail')
+    )
+    expect(await eitherAsyncLeft.orDefault(5)).toEqual(5)
+  })
+
+  test('join', async () => {
+    const ea = EitherAsync(async () => 1).map((x) =>
+      EitherAsync(async () => x + 1)
+    )
+
+    expect(await ea.join()).toEqual(Right(2))
+
+    const ea2 = EitherAsync(async () => 1).map(() =>
+      EitherAsync(async () => {
+        throw 'Err'
+      })
+    )
+
+    expect(await ea2.join()).toEqual(Left('Err'))
+
+    const ea3 = EitherAsync(async () => {
+      throw 'Err'
+    })
+
+    expect(await ea3.join()).toEqual(Left('Err'))
+  })
+
+  test('ap', async () => {
+    expect(
+      await EitherAsync.liftEither(Right(5)).ap(
+        EitherAsync(async () => (x: number) => x + 1)
+      )
+    ).toEqual(Right(6))
+    expect(
+      await EitherAsync.liftEither(Right(5)).ap(
+        EitherAsync(() => {
+          throw 'Error'
+        })
+      )
+    ).toEqual(Left('Error'))
+    expect(
+      await EitherAsync.liftEither(Left('Error')).ap(
+        EitherAsync(async () => (x: number) => x + 1)
+      )
+    ).toEqual(Left('Error'))
+    expect(
+      await EitherAsync.liftEither(Left('Error')).ap(
+        EitherAsync(() => {
+          throw 'Function Error'
+        })
+      )
+    ).toEqual(Left('Function Error'))
+
+    expect(
+      await EitherAsync.liftEither(Right(5))['fantasy-land/ap'](
+        EitherAsync(async () => (x: number) => x + 1)
+      )
+    ).toEqual(Right(6))
+  })
+
+  test('alt', async () => {
+    expect(
+      await EitherAsync.liftEither(Left('Error')).alt(
+        EitherAsync.liftEither(Left('Error!'))
+      )
+    ).toEqual(Left('Error!'))
+    expect(
+      await EitherAsync.liftEither(Left('Error')).alt(
+        EitherAsync.liftEither(Right(5) as any)
+      )
+    ).toEqual(Right(5))
+    expect(
+      await EitherAsync.liftEither(Right(5)).alt(
+        EitherAsync.liftEither(Left('Error') as any)
+      )
+    ).toEqual(Right(5))
+    expect(
+      await EitherAsync.liftEither(Right(5)).alt(
+        EitherAsync.liftEither(Right(6))
+      )
+    ).toEqual(Right(5))
+
+    expect(
+      await EitherAsync.liftEither(Right(5))['fantasy-land/alt'](
+        EitherAsync.liftEither(Right(6))
+      )
+    ).toEqual(Right(5))
+  })
+
+  test('extend', async () => {
+    expect(
+      await EitherAsync.liftEither<string, number>(Left('Error')).extend((x) =>
+        x.orDefault(6)
+      )
+    ).toEqual(Left('Error'))
+    expect(
+      await EitherAsync.liftEither(Right(5)).extend((x) => x.orDefault(6))
+    ).toEqual(Right(5))
+
+    expect(
+      await EitherAsync.liftEither(Right(5))['fantasy-land/extend']((x) =>
+        x.orDefault(6)
+      )
+    ).toEqual(Right(5))
+  })
+
   test('fromPromise static', async () => {
     expect(
       await EitherAsync.fromPromise(() => Promise.resolve(Right(5))).run()

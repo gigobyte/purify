@@ -409,43 +409,14 @@ class Left<L, R = never> implements Either<L, R> {
     return right(this.__value)
   }
 
-  'fantasy-land/bimap'<L2, R2>(
-    f: (value: L) => L2,
-    g: (value: R) => R2
-  ): Either<L2, R2> {
-    return this.bimap(f, g)
-  }
-
-  'fantasy-land/map'<R2>(f: (value: R) => R2): Either<L, R2> {
-    return this.map(f)
-  }
-
-  'fantasy-land/ap'<R2>(other: Either<L, (value: R) => R2>): Either<L, R2> {
-    return this.ap(other)
-  }
-
-  'fantasy-land/equals'(other: Either<L, R>): boolean {
-    return this.equals(other)
-  }
-
-  'fantasy-land/chain'<R2>(f: (value: R) => Either<L, R2>): Either<L, R2> {
-    return this.chain(f)
-  }
-
-  'fantasy-land/alt'(other: Either<L, R>): Either<L, R> {
-    return this.alt(other)
-  }
-
-  'fantasy-land/reduce'<T>(
-    reducer: (accumulator: T, value: R) => T,
-    initialValue: T
-  ): T {
-    return this.reduce(reducer, initialValue)
-  }
-
-  'fantasy-land/extend'<R2>(f: (value: Either<L, R>) => R2): Either<L, R2> {
-    return this.extend(f)
-  }
+  'fantasy-land/bimap' = this.bimap
+  'fantasy-land/map' = this.map
+  'fantasy-land/ap' = this.ap
+  'fantasy-land/equals' = this.equals
+  'fantasy-land/chain' = this.chain
+  'fantasy-land/alt' = this.alt
+  'fantasy-land/reduce' = this.reduce
+  'fantasy-land/extend' = this.extend
 }
 
 Left.prototype.constructor = Either as any

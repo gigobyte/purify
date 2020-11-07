@@ -9,6 +9,21 @@ describe('Either', () => {
     expect(Right(5).constructor).toEqual(Either)
   })
 
+  test('inspect', () => {
+    expect(Left('Err').inspect()).toEqual('Left("Err")')
+    expect(Right(1).inspect()).toEqual('Right(1)')
+  })
+
+  test('toString', () => {
+    expect(Left('Err').toString()).toEqual('Left("Err")')
+    expect(Right(1).toString()).toEqual('Right(1)')
+  })
+
+  test('toJSON', () => {
+    expect(JSON.stringify(Left('Err'))).toEqual('"Err"')
+    expect(JSON.stringify(Right(1)).toString()).toEqual('1')
+  })
+
   test('of', () => {
     expect(Either.of(5)).toEqual(Right(5))
     expect(Either['fantasy-land/of'](5)).toEqual(Right(5))
@@ -73,6 +88,12 @@ describe('Either', () => {
     ).toEqual(Right(6))
 
     expect(
+      Left('Error')['fantasy-land/bimap'](
+        (x) => x + '!',
+        (x) => x + 1
+      )
+    ).toEqual(Left('Error!'))
+    expect(
       Right(5)['fantasy-land/bimap'](
         (x) => x + '!',
         (x) => x + 1
@@ -121,6 +142,13 @@ describe('Either', () => {
     expect(Right(5)['fantasy-land/chain']((x) => Right(x + 1))).toEqual(
       Right(6)
     )
+  })
+
+  test('chainLeft', () => {
+    expect(Left('Error').chainLeft((x) => Left(x + '!'))).toEqual(
+      Left('Error!')
+    )
+    expect(Right(5).chainLeft((x) => Right(x + 1))).toEqual(Right(5))
   })
 
   test('join', () => {

@@ -126,7 +126,7 @@ class EitherAsyncImpl<L, R> implements EitherAsync<L, R> {
 
   join<R2>(this: EitherAsync<L, EitherAsync<L, R2>>): EitherAsync<L, R2> {
     return EitherAsync(async (helpers) => {
-      const either = await this.run()
+      const either = await this
       if (either.isRight()) {
         const nestedEither = await either.extract()
         return helpers.liftEither(nestedEither)

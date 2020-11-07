@@ -7,6 +7,18 @@ describe('Tuple', () => {
     expect(snd).toEqual('test')
   })
 
+  test('inspect', () => {
+    expect(Tuple(1, 'a').inspect()).toEqual('Tuple(1, "a")')
+  })
+
+  test('toString', () => {
+    expect(Tuple(1, 'a').toString()).toEqual('Tuple(1, "a")')
+  })
+
+  test('toJSON', () => {
+    expect(JSON.stringify(Tuple(1, 'a'))).toEqual('[1,"a"]')
+  })
+
   test('fanout', () => {
     expect(
       Tuple.fanout(

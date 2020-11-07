@@ -7,6 +7,21 @@ describe('Maybe', () => {
     expect(Nothing.constructor).toEqual(Maybe)
   })
 
+  test('inspect', () => {
+    expect(Nothing.inspect()).toEqual('Nothing')
+    expect(Just(1).inspect()).toEqual('Just(1)')
+  })
+
+  test('toString', () => {
+    expect(Nothing.toString()).toEqual('Nothing')
+    expect(Just(1).toString()).toEqual('Just(1)')
+  })
+
+  test('toJSON', () => {
+    expect(JSON.stringify({ a: Nothing })).toEqual('{}')
+    expect(JSON.stringify(Just(1)).toString()).toEqual('1')
+  })
+
   test('of', () => {
     expect(Maybe.of(5)).toEqual(Just(5))
     expect(Maybe['fantasy-land/of'](5)).toEqual(Just(5))
