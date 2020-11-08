@@ -425,4 +425,12 @@ describe('EitherAsync', () => {
 
     expect(calledFn).toHaveBeenCalledTimes(1)
   })
+
+  test('throwing in some method', async () => {
+    const ea = EitherAsync(async () => 5).map(() => {
+      throw 'AAA'
+    })
+
+    expect(await ea).toEqual(Left('AAA'))
+  })
 })
