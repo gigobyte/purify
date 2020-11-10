@@ -2931,7 +2931,7 @@ const A: Codec<FromType<A>> = Codec.inteface({ a: optional(number) })`,
                   output: `Left('Expected a string with a value of exactly "", but received a string with value "non-empty string"')`,
                 },
                 {
-                  input: `oneof(['None', 'Read', 'Write'].map(exactly))`,
+                  input: `oneOf([exactly('None'), exactly('Read'), exactly('Write')])`,
                   output: `Codec<"None" | "Read" | "Write">`,
                 },
               ],
