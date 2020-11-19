@@ -2572,7 +2572,7 @@ randomEither().map(x => x)
       description:
         "This module allows you to create a boundary on the outermost layer of your application, usually where you process back-end data or communicate with a third-party API. A codec consists of two parts - an encoder and a decoder, hence the name. Using a decoder you can validate your expectations regarding the structure and type of data you're receiving. An encoder, on the other hand, lets you make sure you're sending your application data in the correct format and can also act as a mapper from your custom domain objects to plain JSON values. In case your infrastructure supports JSON schema you can also generate one from your codecs so that you don't have to deal with the error handling.",
       example: {
-        import: `import { Codec, GetInterface, string, number ... } from 'purify-ts/Codec'`,
+        import: `import { Codec, GetType, string, number ... } from 'purify-ts/Codec'`,
       },
       content: [
         {
@@ -2581,7 +2581,7 @@ randomEither().map(x => x)
             {
               name: 'interface',
               signatureTS:
-                '<T extends Record<string, Codec<any>>>(properties: T): Codec<{[k in keyof T]: GetInterface<T[k]>}>',
+                '<T extends Record<string, Codec<any>>>(properties: T): Codec<{[k in keyof T]: GetType<T[k]>}>',
               description: 'Creates a codec for any JSON object.',
               examples: [
                 {
@@ -2645,7 +2645,7 @@ type User = GetType<typeof User>`,
               name: 'FromType',
               signatureTS: `FromType<T> = {[P in keyof Required<T>]: Pick<T, P> extends Required<Pick<T, P>> ? T[P] : T[P] | undefined}`,
               description:
-                'Special type used when you want to do the opposite of `GetInterface` - define a Codec for an existing type. The problem is that due to technical limitations optional properties are hard to generate in TypeScript so Codec generates properties of type "T | undefined" instead, which is not compatible.',
+                'Special type used when you want to do the opposite of `GetType` - define a Codec for an existing type. The problem is that due to technical limitations optional properties are hard to generate in TypeScript so Codec generates properties of type "T | undefined" instead, which is not compatible.',
               examples: [
                 {
                   input: `type A = { a?: number }
@@ -2816,7 +2816,7 @@ const A: Codec<FromType<A>> = Codec.inteface({ a: optional(number) })`,
             {
               name: 'oneOf',
               signatureTS:
-                '<T extends Array<Codec<any>>>(codecs: T): Codec<GetInterface<T extends Array<infer U> ? U : never>>',
+                '<T extends Array<Codec<any>>>(codecs: T): Codec<GetType<T extends Array<infer U> ? U : never>>',
               description:
                 "A codec combinator that receives a list of codecs and runs them one after another during decode and resolves to whichever returns Right or to Left if all fail. Keep in mind that encoding probably won't work correctly if you use a custom codec and it's not lawful (as in, decode(encode(X)) is not equal to X)",
               examples: [

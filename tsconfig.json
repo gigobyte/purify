@@ -19,5 +19,5 @@
     "strict": true,
     "isolatedModules": true
   },
-  "exclude": ["site", "**/*.test.ts", "lib"]
+  "exclude": ["site", "lib"]
 }
