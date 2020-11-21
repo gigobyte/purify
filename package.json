@@ -6,7 +6,7 @@
   "types": "index.d.ts",
   "repository": "https://github.com/gigobyte/purify.git",
   "author": "gigobyte <gigobest2@gmail.com>",
-  "license": "MIT",
+  "license": "ISC",
   "sideEffects": false,
   "scripts": {
     "build": "tsc && tsc -p tsconfig.es.json",
