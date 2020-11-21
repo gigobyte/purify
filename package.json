@@ -1,6 +1,6 @@
 {
   "name": "purify-ts",
-  "version": "0.16.0",
+  "version": "0.16.1",
   "description": "Functional programming standard library for TypeScript ",
   "main": "index.js",
   "types": "index.d.ts",
