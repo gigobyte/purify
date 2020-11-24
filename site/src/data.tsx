@@ -2898,7 +2898,7 @@ const A: Codec<FromType<A>> = Codec.inteface({ a: optional(number) })`,
                 {
                   input: "record(number, string).decode({valid: 'no'})",
                   output:
-                    'Left(\'Problem with key type of property "a": Expected a number key, but received a string with value "valid"\')',
+                    'Left(\'Problem with key type of property "valid": Expected a number, but received a string with value "valid"\')',
                 },
               ],
             },
@@ -2928,7 +2928,7 @@ const A: Codec<FromType<A>> = Codec.inteface({ a: optional(number) })`,
               examples: [
                 {
                   input: `exactly('').decode('non-empty string')`,
-                  output: `Left('Expected a string with a value of exactly "", but received a string with value "non-empty string"')`,
+                  output: `Left('Expected a string with a value of exactly "", the types match, but the received value is "non-empty string"')`,
                 },
                 {
                   input: `oneOf([exactly('None'), exactly('Read'), exactly('Write')])`,
