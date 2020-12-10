@@ -120,6 +120,14 @@ const Footer = styled.div`
     line-height: initial;
     padding-bottom: 10px;
   }
+
+  a {
+    margin-right: 15px;
+  }
+
+  img {
+    height: 35px;
+  }
 `
 
 const FeatureTitle = styled.h3``
@@ -178,6 +186,12 @@ const IndexPage = props => (
         <WhoIsUsing>Who's using purify?</WhoIsUsing>
         <a href="https://www.scaleleap.com/">
           <ScaleLeap />
+        </a>
+        <a href="https://www.askmarty.io/">
+          <img
+            alt="Ask Marty"
+            src="https://user-images.githubusercontent.com/145502/101811283-cfb28c80-3b11-11eb-8996-0277f9066c3a.png"
+          />
         </a>
       </Footer>
     </Container>
