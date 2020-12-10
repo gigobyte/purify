@@ -50,7 +50,7 @@ export const NonEmptyList: NonEmptyListTypeRef = Object.assign(
     fromTuple: <T, U>(source: Tuple<T, U>): NonEmptyList<T | U> =>
       NonEmptyList(source.toArray()),
     head: <T>(list: NonEmptyList<T>): T => list[0],
-    last: <T>(list: NonEmptyList<T>): T => list[list.length - 1],
+    last: <T>(list: NonEmptyList<T>): T => list[list.length - 1]!,
     isNonEmpty: <T>(list: T[]): list is NonEmptyList<T> => list.length > 0,
     tail: <T>(list: NonEmptyList<T>): T[] => list.slice(1)
   }

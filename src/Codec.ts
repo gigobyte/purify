@@ -136,7 +136,7 @@ export const Codec = {
           )
         }
 
-        const decodedProperty = properties[key].decode(input[key])
+        const decodedProperty = properties[key]!.decode(input[key])
 
         if (decodedProperty.isLeft()) {
           return Left(
@@ -158,7 +158,7 @@ export const Codec = {
       const result = {} as { [k in keyof T]: GetType<T[k]> }
 
       for (const key of keys) {
-        result[key as keyof T] = properties[key].encode(input[key]) as any
+        result[key as keyof T] = properties[key]!.encode(input[key]) as any
       }
 
       return result
@@ -177,7 +177,7 @@ export const Codec = {
               acc.required.push(key)
             }
 
-            acc.properties[key] = optimizeSchema(properties[key].schema())
+            acc.properties[key] = optimizeSchema(properties[key]!.schema())
 
             return acc
           },
@@ -522,7 +522,7 @@ export const tuple = <TS extends [Codec<any>, ...Codec<any>[]]>(
         const result: any = []
 
         for (let i = 0; i < codecs.length; i++) {
-          const decoded = codecs[i].decode(input[i])
+          const decoded = codecs[i]!.decode(input[i])
 
           if (decoded.isRight()) {
             result.push(decoded.extract())
@@ -536,7 +536,7 @@ export const tuple = <TS extends [Codec<any>, ...Codec<any>[]]>(
         return Right(result)
       }
     },
-    encode: (input) => input.map((x, i) => codecs[i].encode(x)),
+    encode: (input) => input.map((x, i) => codecs[i]!.encode(x)),
     schema: () => ({
       type: 'array',
       items: codecs.map((x) => x.schema()),
@@ -680,13 +680,13 @@ export const parseError = (error: string): DecodeError => {
 
   // One of the following problems occured: (0) *, (1) *
   if (oneOfCheck) {
-    const remainer = error.replace(oneOfCheck[0], '')
+    const remainer = error.replace(oneOfCheck[0]!, '')
 
     return {
       type: 'oneOf',
       errors: remainer
         .split(oneOfSeparatorRegex)
-        .map((x) => parseError(x.replace(x.match(oneOfCounterRegex)![0], '')))
+        .map((x) => parseError(x.replace(x.match(oneOfCounterRegex)![0]!, '')))
     }
   }
 
@@ -694,14 +694,14 @@ export const parseError = (error: string): DecodeError => {
 
   // Expected an object, but received an array with value []
   if (failureCheck) {
-    const receivedTypeRaw = error.split(failureCheck[2]).pop()!
+    const receivedTypeRaw = error.split(failureCheck[2]!).pop()!
     const receivedType =
-      receivedTypesMap[receivedTypeRaw.split(failureReceivedSeparator)[0]]
+      receivedTypesMap[receivedTypeRaw.split(failureReceivedSeparator)[0]!]
 
     if (receivedType) {
       const expectedTypeRaw = error
-        .replace(failureCheck[1], '')
-        .split(failureCheck[2])[0]
+        .replace(failureCheck[1]!, '')
+        .split(failureCheck[2]!)[0]!
 
       return {
         type: 'failure',
@@ -716,7 +716,7 @@ export const parseError = (error: string): DecodeError => {
 
   // Problem with property "a": it does not exist in received object {}
   if (error.startsWith(missingPropertyMarker)) {
-    const property = error.replace(missingPropertyMarker, '').split('": ')[0]
+    const property = error.replace(missingPropertyMarker, '').split('": ')[0]!
 
     return {
       type: 'property',
@@ -741,7 +741,7 @@ export const parseError = (error: string): DecodeError => {
 
     return {
       type: 'property',
-      property,
+      property: property!,
       error: parseError(restOfError.join(''))
     }
   }

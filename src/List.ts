@@ -4,11 +4,11 @@ import { Order, orderToNumber } from './Function'
 
 /** Returns Just the first element of an array or Nothing if there is none. If you don't want to work with a Maybe but still keep type safety, check out `NonEmptyList` */
 const head = <T>(list: T[]): Maybe<T> =>
-  list.length > 0 ? Just(list[0]) : Nothing
+  list.length > 0 ? Just(list[0]!) : Nothing
 
 /** Returns Just the last element of an array or Nothing if there is none */
 const last = <T>(list: T[]): Maybe<T> =>
-  list.length > 0 ? Just(list[list.length - 1]) : Nothing
+  list.length > 0 ? Just(list[list.length - 1]!) : Nothing
 
 /** Returns all elements of an array except the first */
 const tail = <T>(list: T[]): Maybe<T[]> =>
@@ -20,7 +20,7 @@ const init = <T>(list: T[]): Maybe<T[]> =>
 
 /** Returns a tuple of an array's head and tail */
 const uncons = <T>(list: T[]): Maybe<Tuple<T, T[]>> =>
-  list.length > 0 ? Just(Tuple(list[0], list.slice(1))) : Nothing
+  list.length > 0 ? Just(Tuple(list[0]!, list.slice(1))) : Nothing
 
 /* Returns the sum of all numbers inside an array */
 const sum = (list: number[]): number => list.reduce((acc, x) => acc + x, 0)

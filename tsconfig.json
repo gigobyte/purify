@@ -17,7 +17,8 @@
     "emitDecoratorMetadata": true,
     "downlevelIteration": true,
     "strict": true,
-    "isolatedModules": true
+    "isolatedModules": true,
+    "noUncheckedIndexedAccess": true
   },
   "exclude": ["site", "lib"]
 }
