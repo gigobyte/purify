@@ -84,6 +84,13 @@ describe('Maybe', () => {
     expect(Maybe.isMaybe(undefined)).toEqual(false)
   })
 
+  test('sequence', () => {
+    expect(Maybe.sequence([Just(1), Just(5), Just(10)])).toEqual(
+      Just([1, 5, 10])
+    )
+    expect(Maybe.sequence([Just(1), Nothing, Just(10)])).toEqual(Nothing)
+  })
+
   test('isJust', () => {
     expect(Just(5).isJust()).toEqual(true)
     expect(Nothing.isJust()).toEqual(false)

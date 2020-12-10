@@ -229,6 +229,23 @@ const data: Data = {
               ],
             },
             {
+              name: 'sequence',
+              signatureML: '[Maybe a] -> Maybe [a]',
+              signatureTS: '<T>(maybes: Maybe<T>[]): Maybe<T[]>',
+              description:
+                'Turns a list of `Maybe`s into an `Maybe` of list if all items are `Just`.',
+              examples: [
+                {
+                  input: `Maybe.sequence([Just(1), Just(5), Just(10)])`,
+                  output: 'Just([1, 5, 10])',
+                },
+                {
+                  input: `Maybe.sequence([Just(1), Nothing, Just(10)])`,
+                  output: 'Nothing',
+                },
+              ],
+            },
+            {
               name: 'encase',
               signatureTS: '<T>(throwsF: () => T): Maybe<T>',
               description:
