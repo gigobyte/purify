@@ -32,3 +32,25 @@ export const orderToNumber = (order: Order): number => {
       return 1
   }
 }
+
+type TupleOfLength<T extends any[]> = Extract<{ [K in keyof T]: any }, any[]>
+
+type CurriedFn<TAllArgs extends any[], TReturn> = <
+  TProvidedArgs extends Partial<TAllArgs>
+>(
+  ...args: TProvidedArgs
+) => TProvidedArgs extends TAllArgs
+  ? TReturn
+  : TAllArgs extends [...TupleOfLength<TProvidedArgs>, ...infer TRestOfArgs]
+  ? CurriedFn<TRestOfArgs, TReturn>
+  : never
+
+/** Takes a function that receives multiple arguments and returns a "curried" version of that function that can take any number of those arguments and if they are less than needed a new function that takes the rest of them will be returned */
+export const curry = <TArgs extends any[], TReturn>(
+  fn: (...args: TArgs) => TReturn
+): CurriedFn<TArgs, TReturn> =>
+  function currify(...args: any[]): any {
+    return args.length >= fn.length
+      ? fn.apply(undefined, args as TArgs)
+      : currify.bind(undefined, ...args)
+  }

@@ -2540,6 +2540,34 @@ randomEither().map(x => x)
               ],
             },
             {
+              name: 'curry',
+              description:
+                'Takes a function that receives multiple arguments and returns a "curried" version of that function that can take any number of those arguments and if they are less than needed a new function that takes the rest of them will be returned.',
+              signatureTS:
+                '<TArgs extends any[], TReturn>(fn: (...args: TArgs) => TReturn): CurriedFn<TArgs, TReturn>',
+              examples: [
+                {
+                  input: `const sum3 = (
+  x: number, y: number, z: number
+) => x + y + z
+
+const curriedSum3 = curry(sum3)`,
+                  output: `curriedSum3(1)       // (y: number, z: number) => number
+curriedSum3(1, 2)    // (z: number) => number
+curriedSum3(1, 2, 3) // number
+curriedSum3(1)(2)(3) // number
+curriedSum3(1, 2)(3) // number
+`,
+                },
+              ],
+            },
+            {
+              name: 'compose/flow/pipe',
+              description:
+                "There is no such function in purify! Unfortunately it's not possible to provide a type-safe version of compose and friends, so until TypeScript allows us to do that purify will not have them.",
+              examples: [],
+            },
+            {
               name: 'compare',
               description:
                 'Compares two values using the default "<" and ">" operators.',
