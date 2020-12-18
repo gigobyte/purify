@@ -292,11 +292,7 @@ export const EitherAsync: EitherAsyncTypeRef = Object.assign(
         return helpers.liftEither(Right(res))
       }),
     all: <L, R>(eitherAsyncs: EitherAsync<L, R>[]): EitherAsync<L, R[]> =>
-      EitherAsync.fromPromise(() =>
-        Promise.all(eitherAsyncs.map((eitherAsync) => eitherAsync.run())).then(
-          Either.sequence
-        )
-      ),
+      EitherAsync.sequence(eitherAsyncs),
     all2: <L, R1, R2>([ea1, ea2]: [
       EitherAsync<L, R1>,
       EitherAsync<L, R2>
