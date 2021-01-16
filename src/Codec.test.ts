@@ -362,49 +362,47 @@ describe('Codec', () => {
   describe('exactly', () => {
     test('decode', () => {
       expect(exactly(0).decode(10)).toEqual(
-        Left(
-          'Expected a number with a value of exactly 0, the types match, but the received value is 10'
-        )
+        Left('Expected 0, but received a number with value 10')
       )
       expect(exactly(0).decode('')).toEqual(
-        Left(
-          'Expected a number with a value of exactly 0, but received a string with value ""'
-        )
+        Left('Expected 0, but received a string with value ""')
       )
 
       expect(exactly(0).decode(0)).toEqual(Right(0))
 
       expect(exactly('a').decode('b')).toEqual(
-        Left(
-          'Expected a string with a value of exactly "a", the types match, but the received value is "b"'
-        )
+        Left('Expected "a", but received a string with value "b"')
       )
       expect(exactly('a').decode('')).toEqual(
-        Left(
-          'Expected a string with a value of exactly "a", the types match, but the received value is ""'
-        )
+        Left('Expected "a", but received a string with value ""')
       )
 
       expect(exactly('a').decode('a')).toEqual(Right('a'))
 
       expect(exactly(true).decode(false)).toEqual(
-        Left(
-          'Expected a boolean with a value of exactly true, the types match, but the received value is false'
-        )
+        Left('Expected true, but received a boolean')
       )
       expect(exactly(true).decode('')).toEqual(
-        Left(
-          'Expected a boolean with a value of exactly true, but received a string with value ""'
-        )
+        Left('Expected true, but received a string with value ""')
       )
 
       expect(exactly(true).decode(true)).toEqual(Right(true))
+    })
+
+    test('decode multiple', () => {
+      expect(exactly(0, 'a').decode(0)).toEqual(Right(0))
+      expect(exactly(0, 'a').decode('a')).toEqual(Right('a'))
+
+      expect(exactly(0, false).decode(true)).toEqual(
+        Left('Expected 0, false, but received a boolean')
+      )
     })
 
     test('encode', () => {
       expect(exactly(0).encode(0)).toEqual(0)
       expect(exactly('a').encode('a')).toEqual('a')
       expect(exactly(true).encode(true)).toEqual(true)
+      expect(exactly(0, 'a').encode(0)).toEqual(0)
     })
   })
 
@@ -669,6 +667,7 @@ describe('Codec', () => {
         on: oneOf([array(string), record(string, string)]),
         optimal: oneOf([oneOf([oneOf([optional(optional(string))])])]),
         e: exactly('SSS'),
+        ee: exactly('SSS', 'DDD'),
         m: maybe(tuple([number, number])),
         n: nonEmptyList(date)
       }),
@@ -701,6 +700,12 @@ describe('Codec', () => {
             },
             optimal: { type: 'string' },
             e: { type: 'string', enum: ['SSS'] },
+            ee: {
+              oneOf: [
+                { type: 'string', enum: ['SSS'] },
+                { type: 'string', enum: ['DDD'] }
+              ]
+            },
             m: {
               oneOf: [
                 {
@@ -719,7 +724,7 @@ describe('Codec', () => {
               minItems: 1
             }
           },
-          required: ['a', 'b', 'u', 'en', 'on', 'optimal', 'e', 'n']
+          required: ['a', 'b', 'u', 'en', 'on', 'optimal', 'e', 'ee', 'n']
         },
         {
           properties: {

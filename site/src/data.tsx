@@ -2967,16 +2967,16 @@ const A: Codec<FromType<A>> = Codec.inteface({ a: optional(number) })`,
             {
               name: 'exactly',
               signatureTS:
-                '<T extends string | number | boolean>(expectedValue: T): Codec<T>',
+                '<T extends (string | number | boolean)[]>(...expectedValues: T): Codec<T[number]>',
               description:
                 "A codec that only succeeds decoding when the value is exactly what you've constructed the codec with.",
               examples: [
                 {
                   input: `exactly('').decode('non-empty string')`,
-                  output: `Left('Expected a string with a value of exactly "", the types match, but the received value is "non-empty string"')`,
+                  output: `Left('Expected "", but received a string with value "non-empty string"')`,
                 },
                 {
-                  input: `oneOf([exactly('None'), exactly('Read'), exactly('Write')])`,
+                  input: `exactly('None', 'Read', 'Write')`,
                   output: `Codec<"None" | "Read" | "Write">`,
                 },
               ],

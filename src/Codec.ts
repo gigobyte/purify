@@ -431,27 +431,26 @@ export const record = <K extends keyof any, V>(
   })
 
 /** A codec that only succeeds decoding when the value is exactly what you've constructed the codec with */
-export const exactly = <T extends string | number | boolean>(
-  expectedValue: T
-): Codec<T> =>
+export const exactly = <T extends (string | number | boolean)[]>(
+  ...expectedValues: T
+): Codec<T[number]> =>
   Codec.custom({
-    decode: (input) =>
-      input === expectedValue
-        ? Right(expectedValue)
+    decode: (input: any) =>
+      expectedValues.includes(input)
+        ? Right(input)
         : Left(
-            typeof input === typeof expectedValue
-              ? `Expected a ${typeof input} with a value of exactly ${JSON.stringify(
-                  expectedValue
-                )}, the types match, but the received value is ${JSON.stringify(
-                  input
-                )}`
-              : reportError(
-                  `a ${typeof expectedValue} with a value of exactly ${expectedValue}`,
-                  input
-                )
+            reportError(
+              expectedValues.map((x) => JSON.stringify(x)).join(', '),
+              input
+            )
           ),
     encode: identity,
-    schema: () => ({ type: typeof expectedValue, enum: [expectedValue] })
+    schema: () => ({
+      oneOf: expectedValues.map((value) => ({
+        type: typeof value,
+        enum: [value]
+      }))
+    })
   })
 
 /** A special codec used when dealing with recursive data structures, it allows a codec to be recursively defined by itself */
