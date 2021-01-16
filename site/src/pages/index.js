@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import Meta from '../components/Meta'
 import Layout from '../components/Layout'
 import ScaleLeap from '../assets/scaleleap'
+import Dill from '../assets/dill'
 
 const Container = styled.div`
   display: flex;
@@ -191,6 +192,23 @@ const IndexPage = props => (
           <img
             alt="Ask Marty"
             src="https://user-images.githubusercontent.com/145502/101811283-cfb28c80-3b11-11eb-8996-0277f9066c3a.png"
+          />
+        </a>
+        <a
+          href="https://dill.network/"
+          style={{
+            background: '#10b981',
+            paddingTop: 16,
+            paddingLeft: 5,
+            paddingRight: 3,
+          }}
+        >
+          <Dill />
+        </a>
+        <a href="https://www.cargosnap.com/">
+          <img
+            alt="CargoSnap"
+            src="https://user-images.githubusercontent.com/5529244/104025717-52883f00-51c5-11eb-9029-1a220abe9d26.png"
           />
         </a>
       </Footer>
