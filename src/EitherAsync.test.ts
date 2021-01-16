@@ -426,6 +426,45 @@ describe('EitherAsync', () => {
     expect(calledFn).toHaveBeenCalledTimes(1)
   })
 
+  test('all', async () => {
+    expect(await EitherAsync.all([])).toEqual(Right([]))
+
+    const fn1 = jest.fn()
+
+    expect(
+      await EitherAsync.all([
+        EitherAsync(
+          () =>
+            new Promise((_, reject) => {
+              setTimeout(() => {
+                reject('A')
+              }, 200)
+            })
+        ),
+        EitherAsync(async () => {
+          fn1()
+          return 2
+        })
+      ])
+    ).toEqual(Left('A'))
+
+    expect(fn1).toHaveBeenCalledTimes(1)
+
+    const fn2 = jest.fn()
+
+    expect(
+      await EitherAsync.all([
+        EitherAsync.liftEither(Right(1)),
+        EitherAsync(async () => {
+          fn2()
+          return 2
+        })
+      ])
+    ).toEqual(Right([1, 2]))
+
+    expect(fn2).toHaveBeenCalledTimes(1)
+  })
+
   test('throwing in some method', async () => {
     const ea = EitherAsync(async () => 5).map(() => {
       throw 'AAA'

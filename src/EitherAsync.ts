@@ -16,6 +16,8 @@ export interface EitherAsyncTypeRef {
   rights<L, R>(list: EitherAsync<L, R>[]): Promise<R[]>
   /** Turns a list of `EitherAsync`s into an `EitherAsync` of list. The returned `Promise` will be rejected as soon as a single `EitherAsync` resolves to a `Left`, it will not wait for all Promises to resolve and since `EitherAsync` is lazy, unlike `Promise`, the remaining async operations will not be executed at all */
   sequence<L, R>(eas: EitherAsync<L, R>[]): EitherAsync<L, R[]>
+  /** The same as `EitherAsync.sequence`, but it will run all async operations at the same time rather than sequentially */
+  all<L, R>(eas: EitherAsync<L, R>[]): EitherAsync<L, R[]>
 }
 
 export interface EitherAsync<L, R> extends PromiseLike<Either<L, R>> {
@@ -282,7 +284,11 @@ export const EitherAsync: EitherAsyncTypeRef = Object.assign(
         }
 
         return helpers.liftEither(Right(res))
-      })
+      }),
+    all: <L, R>(eas: EitherAsync<L, R>[]): EitherAsync<L, R[]> =>
+      EitherAsync.fromPromise(async () =>
+        Promise.all(eas).then(Either.sequence)
+      )
   }
 )
 

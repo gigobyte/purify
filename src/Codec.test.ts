@@ -857,6 +857,16 @@ describe('parseError', () => {
         receivedType: 'null'
       })
     })
+
+    test('exactly', () => {
+      expect(
+        parseError('Expected "a", but received a string with value "b"')
+      ).toEqual({
+        type: 'failure',
+        receivedType: 'string',
+        receivedValue: 'b'
+      })
+    })
   })
 
   describe('oneOf type', () => {

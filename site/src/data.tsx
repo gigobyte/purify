@@ -1739,6 +1739,15 @@ randomEither().map(x => x)
                 },
               ],
             },
+            {
+              name: 'all',
+              description:
+                'The same as `EitherAsync.sequence`, but it will run all async operations at the same time rather than sequentially.',
+              signatureTS:
+                '<L, R>(eas: EitherAsync<L, R>[]): EitherAsync<L, R[]>',
+              signatureML: '[EitherAsync a b] -> EitherAsync a [b]',
+              examples: [],
+            },
           ],
         },
         {
