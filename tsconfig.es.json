@@ -3,8 +3,6 @@
   "compilerOptions": {
     "target": "es2018",
     "lib": ["es2018", "dom"],
-    "module": "ESNext",
-    "moduleResolution": "node",
     "outDir": "lib/es",
     "downlevelIteration": false
   }

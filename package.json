@@ -4,7 +4,6 @@
   "description": "Functional programming standard library for TypeScript ",
   "main": "index.js",
   "types": "index.d.ts",
-  "module": "es/index.js",
   "repository": "https://github.com/gigobyte/purify.git",
   "author": "gigobyte <gigobest2@gmail.com>",
   "license": "ISC",
