@@ -442,6 +442,19 @@ describe('Codec', () => {
       expect(maybeNumber.encode(Nothing)).toEqual(undefined)
       expect(maybeNumber.encode(Just(0))).toEqual(0)
     })
+
+    test('encode should call inner codec', () => {
+      const mockCodec = Codec.custom<number>({
+        decode: number.decode,
+        encode: (input: number) => input + 1
+      })
+      const codec = Codec.interface({
+        a: maybe(mockCodec)
+      })
+
+      expect(codec.encode({ a: Just(1) })).toEqual({ a: 2 })
+      expect(codec.encode({ a: Nothing })).toEqual({ a: undefined })
+    })
   })
 
   describe('nonEmptyList', () => {
