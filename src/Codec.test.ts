@@ -65,7 +65,9 @@ describe('Codec', () => {
 
     test('unsafeDecode', () => {
       expect(() => mockCodec.unsafeDecode({})).toThrowError(
-        new Error('Either#unsafeCoerce was ran on a Left')
+        new Error(
+          'Problem with property "a": it does not exist in received object {}'
+        )
       )
       expect(() => mockCodec.unsafeDecode({ a: 0, b: '' })).not.toThrow()
     })
