@@ -117,7 +117,7 @@ export const Codec = {
   > {
     const keys = Object.keys(properties)
 
-    const decode = (input: any) => {
+    const decode: Codec<any>['decode'] = (input: unknown) => {
       if (!isObject(input)) {
         return Left(reportError('an object', input))
       }
@@ -167,7 +167,7 @@ export const Codec = {
     return {
       decode,
       encode,
-      unsafeDecode: (input) => decode(input).unsafeCoerce(),
+      unsafeDecode: (input) => decode(input).mapLeft(Error).unsafeCoerce(),
       schema: () =>
         keys.reduce(
           (acc, key) => {
@@ -203,7 +203,7 @@ export const Codec = {
     return {
       decode,
       encode,
-      unsafeDecode: (input) => decode(input).unsafeCoerce(),
+      unsafeDecode: (input) => decode(input).mapLeft(Error).unsafeCoerce(),
       schema: schema ?? (() => ({}))
     }
   }
@@ -585,15 +585,41 @@ export const intersect = <T, U>(t: Codec<T>, u: Codec<U>): Codec<T & U> =>
         ? Right(Object.assign(valuet, valueu))
         : Right(valueu as T & U)
     },
-    encode: (x) => {
-      const valuet = t.encode(x)
-      const valueu = u.encode(x)
+    encode: (input) => {
+      const valuet = t.encode(input)
+      const valueu = u.encode(input)
 
       return isObject(valuet) && isObject(valueu)
         ? Object.assign(valuet, valueu)
         : valueu
     },
     schema: () => ({ allOf: [t, u].map((x) => x.schema()) })
+  })
+
+export const map = <K, V>(
+  keyCodec: Codec<K>,
+  valueCodec: Codec<V>
+): Codec<Map<K, V>> =>
+  Codec.custom({
+    decode: (input) =>
+      array(tuple([keyCodec, valueCodec]))
+        .decode(input)
+        .map((pairs) => new Map(pairs)),
+    encode: (input) =>
+      Array.from(input.entries()).map(([k, v]) => [
+        keyCodec.encode(k),
+        valueCodec.encode(v)
+      ]),
+    schema: () => ({
+      type: 'array',
+      items: {
+        type: 'array',
+        items: [keyCodec.schema(), valueCodec.schema()],
+        additionalItems: false,
+        minItems: 2,
+        maxItems: 2
+      }
+    })
   })
 
 export type ExpectedType =
