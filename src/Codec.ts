@@ -112,8 +112,21 @@ export const Codec = {
     properties: T
   ): Codec<
     {
-      [k in keyof T]: GetType<T[k]>
-    }
+      [K in keyof Pick<
+        T,
+        {
+          [Key in keyof T]-?: undefined extends GetType<T[Key]> ? never : Key
+        }[keyof T]
+      >]: GetType<T[K]>
+    } &
+      {
+        [K in keyof Pick<
+          T,
+          {
+            [Key in keyof T]-?: undefined extends GetType<T[Key]> ? Key : never
+          }[keyof T]
+        >]?: Exclude<GetType<T[K]>, undefined>
+      }
   > {
     const keys = Object.keys(properties)
 
