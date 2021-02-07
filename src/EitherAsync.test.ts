@@ -472,4 +472,12 @@ describe('EitherAsync', () => {
 
     expect(await ea).toEqual(Left('AAA'))
   })
+
+  test('void', async () => {
+    const ea: EitherAsync<string, void> = EitherAsync<string, number>(
+      async () => 5
+    ).void()
+
+    expect(await ea).toEqual(Right(undefined))
+  })
 })

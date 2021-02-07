@@ -267,4 +267,10 @@ describe('MaybeAsync', () => {
       []
     )
   })
+
+  test('void', async () => {
+    const ea: MaybeAsync<void> = MaybeAsync<number>(async () => 5).void()
+
+    expect(await ea).toEqual(Just(undefined))
+  })
 })

@@ -907,6 +907,13 @@ const data: Data = {
                 },
               ],
             },
+            {
+              name: 'void',
+              signatureTS: '(): MaybeAsync<void>',
+              description:
+                'Useful if you are not interested in the result of an operation.',
+              examples: [],
+            },
           ],
         },
         {
@@ -2008,6 +2015,13 @@ randomEither().map(x => x)
                   output: '// 5',
                 },
               ],
+            },
+            {
+              name: 'void',
+              signatureTS: '(): EitherAsync<L, void>',
+              description:
+                'Useful if you are not interested in the result of an operation.',
+              examples: [],
             },
           ],
         },

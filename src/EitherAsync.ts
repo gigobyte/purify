@@ -67,6 +67,8 @@ export interface EitherAsync<L, R> extends PromiseLike<Either<L, R>> {
   leftOrDefault(defaultValue: L): Promise<L>
   /** Returns a Promise that resolves to the value inside `this` if it\'s `Right` or a default value if `this` is `Left` */
   orDefault(defaultValue: R): Promise<R>
+  /** Useful if you are not interested in the result of an operation */
+  void(): EitherAsync<L, void>
   'fantasy-land/map'<R2>(f: (value: R) => R2): EitherAsync<L, R2>
   'fantasy-land/bimap'<L2, R2>(
     f: (value: L) => L2,
@@ -262,6 +264,10 @@ class EitherAsyncImpl<L, R> implements EitherAsync<L, R> {
       either.ifRight(effect)
       return helpers.liftEither(either)
     })
+  }
+
+  void(): EitherAsync<L, void> {
+    return this.map((_) => {})
   }
 
   'fantasy-land/map' = this.map

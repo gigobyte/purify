@@ -49,10 +49,10 @@ export interface MaybeAsync<T> extends PromiseLike<Maybe<T>> {
   filter(pred: (value: T) => boolean): MaybeAsync<T>
   /** Flattens nested `MaybeAsync`s. `m.join()` is equivalent to `m.chain(x => x)` */
   join<U>(this: MaybeAsync<MaybeAsync<U>>): MaybeAsync<U>
-
+  /** Useful if you are not interested in the result of an operation */
+  void(): MaybeAsync<void>
   'fantasy-land/map'<U>(f: (value: T) => U): MaybeAsync<U>
   'fantasy-land/chain'<U>(f: (value: T) => PromiseLike<Maybe<U>>): MaybeAsync<U>
-
   'fantasy-land/ap'<U>(maybeF: MaybeAsync<(value: T) => U>): MaybeAsync<U>
   'fantasy-land/alt'(other: MaybeAsync<T>): MaybeAsync<T>
   'fantasy-land/extend'<U>(f: (value: MaybeAsync<T>) => U): MaybeAsync<U>
@@ -195,6 +195,10 @@ class MaybeAsyncImpl<T> implements MaybeAsync<T> {
       maybe.ifNothing(effect)
       return helpers.liftMaybe(maybe)
     })
+  }
+
+  void(): MaybeAsync<void> {
+    return this.map((_) => {})
   }
 
   'fantasy-land/map' = this.map

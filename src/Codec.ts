@@ -595,6 +595,7 @@ export const intersect = <T, U>(t: Codec<T>, u: Codec<U>): Codec<T & U> =>
     schema: () => ({ allOf: [t, u].map((x) => x.schema()) })
   })
 
+/** A codec for the built-in Map type */
 export const map = <K, V>(
   keyCodec: Codec<K>,
   valueCodec: Codec<V>
