@@ -108,16 +108,32 @@ class MaybeAsyncImpl<T> implements MaybeAsync<T> {
 
   ap<U>(maybeF: MaybeAsync<(value: T) => U>): MaybeAsync<U> {
     return MaybeAsync(async (helpers) => {
-      const value = await this.run()
-      const maybe = await maybeF
-      return helpers.liftMaybe(value.ap(maybe))
+      const otherValue = await maybeF
+
+      if (otherValue.isJust()) {
+        const thisValue = await this
+
+        if (thisValue.isJust()) {
+          return otherValue.extract()(thisValue.extract())
+        } else {
+          return helpers.liftMaybe(Nothing as Maybe<U>)
+        }
+      }
+
+      return helpers.liftMaybe(Nothing as Maybe<U>)
     })
   }
 
   alt(other: MaybeAsync<T>): MaybeAsync<T> {
     return MaybeAsync(async (helpers) => {
-      const [maybe, o] = await Promise.all([this.run(), other])
-      return helpers.liftMaybe(maybe.alt(o))
+      const thisValue = await this
+
+      if (thisValue.isJust()) {
+        return thisValue.extract()
+      } else {
+        const otherValue = await other
+        return helpers.liftMaybe(otherValue)
+      }
     })
   }
 

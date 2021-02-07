@@ -139,17 +139,36 @@ class EitherAsyncImpl<L, R> implements EitherAsync<L, R> {
     })
   }
 
-  ap<R2>(other: PromiseLike<Either<L, (value: R) => R2>>): EitherAsync<L, R2> {
+  ap<R2>(
+    eitherF: PromiseLike<Either<L, (value: R) => R2>>
+  ): EitherAsync<L, R2> {
     return EitherAsync(async (helpers) => {
-      const [either, o] = await Promise.all([this.run(), other])
-      return helpers.liftEither(either.ap(o))
+      const otherValue = await eitherF
+
+      if (otherValue.isRight()) {
+        const thisValue = await this
+
+        if (thisValue.isRight()) {
+          return otherValue.extract()(thisValue.extract())
+        } else {
+          return helpers.liftEither((thisValue as any) as Either<L, R2>)
+        }
+      }
+
+      return helpers.liftEither((otherValue as any) as Either<L, R2>)
     })
   }
 
   alt(other: EitherAsync<L, R>): EitherAsync<L, R> {
     return EitherAsync(async (helpers) => {
-      const [either, o] = await Promise.all([this.run(), other])
-      return helpers.liftEither(either.alt(o))
+      const thisValue = await this
+
+      if (thisValue.isRight()) {
+        return thisValue.extract()
+      } else {
+        const otherValue = await other
+        return helpers.liftEither(otherValue)
+      }
     })
   }
 
