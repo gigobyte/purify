@@ -593,6 +593,11 @@ const data: Data = {
           title: 'MaybeAsync and EitherAsync for Haskellers',
           link: '/guides/maybeasync-eitherasync-for-haskellers',
         },
+        {
+          title: 'MaybeAsync used in an example repo',
+          link:
+            'https://github.com/gigobyte/ts-react-express-starter/tree/main/server/src',
+        },
       ],
       description: (
         <div>
@@ -1556,6 +1561,11 @@ randomEither().map(x => x)
         {
           title: 'MaybeAsync and EitherAsync for Haskellers',
           link: '/guides/maybeasync-eitherasync-for-haskellers',
+        },
+        {
+          title: 'EitherAsync used in an example repo',
+          link:
+            'https://github.com/gigobyte/ts-react-express-starter/tree/main/server/src',
         },
       ],
       description: (

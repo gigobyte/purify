@@ -103,6 +103,10 @@ const Guide = styled(Link)`
   text-align: center;
   text-decoration: none;
   width: 100%;
+
+  &:not(:last-of-type) {
+    border-bottom: 1px solid #f3eeee;
+  }
 `
 
 const DataTypeContent = adt => props => (
