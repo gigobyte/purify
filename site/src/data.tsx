@@ -2974,6 +2974,23 @@ const A: Codec<FromType<A>> = Codec.inteface({ a: optional(number) })`,
               ],
             },
             {
+              name: 'map',
+              description: 'A codec for the built-in Map type.',
+              signatureTS:
+                '<K, V>(keyCodec: Codec<K>, valueCodec: Codec<V>): Codec<Map<K, V>>',
+              examples: [
+                {
+                  input: `map(string, number).decode([['a', 0], ['b', 1]])`,
+                  output: 'Right(Map(2) {"a" => 0, "b" => 1})',
+                },
+                {
+                  input:
+                    'map(string, number).encode(new Map(Object.entries({a: 0, b: 1}))',
+                  output: `[['a', 0], ['b', 1]]`,
+                },
+              ],
+            },
+            {
               name: 'exactly',
               signatureTS:
                 '<T extends (string | number | boolean)[]>(...expectedValues: T): Codec<T[number]>',

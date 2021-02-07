@@ -471,8 +471,7 @@ export const maybe = <T>(codec: Codec<T>): Codec<Maybe<T>> => {
         Just: (x) => codec.decode(x).map(Just),
         Nothing: () => Right(Nothing)
       }),
-    encode: (input) =>
-      input.map((value) => codec.encode(value)).orDefault(undefined),
+    encode: (input) => input.map(codec.encode).orDefault(undefined),
     schema: () => ({
       oneOf: isEmptySchema(codec.schema())
         ? []

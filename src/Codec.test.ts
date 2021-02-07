@@ -18,7 +18,8 @@ import {
   nullable,
   enumeration,
   intersect,
-  parseError
+  parseError,
+  map
 } from './Codec'
 import { Left, Right } from './Either'
 import { Just, Nothing } from './Maybe'
@@ -651,6 +652,48 @@ describe('Codec', () => {
 
     test('encode', () => {
       expect(intersect(a, b).encode({ a: 5, b: '' })).toEqual({ a: 5, b: '' })
+    })
+  })
+
+  describe('map', () => {
+    test('decode', () => {
+      expect(
+        map(string, boolean).decode([
+          ['a', true],
+          ['b', false]
+        ])
+      ).toEqual(
+        Right(
+          new Map([
+            ['a', true],
+            ['b', false]
+          ])
+        )
+      )
+
+      expect(
+        map(string, boolean).decode([
+          ['a', true, 'junk'],
+          ['b', false]
+        ])
+      ).toEqual(
+        Left(
+          'Problem with the value at index 0: Expected an array of length 2, but received an array with length of 3'
+        )
+      )
+    })
+
+    test('encode', () => {
+      const codec = map(string, number)
+
+      const testMap = new Map()
+      testMap.set('a', 5)
+      testMap.set('b', 10)
+
+      expect(codec.encode(testMap)).toEqual([
+        ['a', 5],
+        ['b', 10]
+      ])
     })
   })
 
