@@ -2727,13 +2727,13 @@ type User = GetType<typeof User>`,
               examples: [
                 {
                   input: `type A = { a?: number }
-const A: Codec<A> = Codec.inteface({ a: optional(number) })`,
+const A: Codec<A> = Codec.interface({ a: optional(number) })`,
                   output:
                     "// Type 'Codec<{ a: number | undefined; }>' is not assignable to type 'Codec<A>'",
                 },
                 {
                   input: `type A = { a?: number }
-const A: Codec<FromType<A>> = Codec.inteface({ a: optional(number) })`,
+const A: Codec<FromType<A>> = Codec.interface({ a: optional(number) })`,
                   output: 'Success!',
                 },
               ],
