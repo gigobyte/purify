@@ -4,21 +4,21 @@
   "version": "1.0.0",
   "author": "Stanislav Iliev <s.iliev3@gmail.com>",
   "dependencies": {
-    "@types/react-syntax-highlighter": "^11.0.1",
-    "babel-plugin-styled-components": "^1.0.0",
-    "gatsby": "^2.17.10",
-    "gatsby-link": "^2.2.22",
-    "gatsby-plugin-favicon": "^3.1.6",
-    "gatsby-plugin-google-fonts": "^0.0.4",
-    "gatsby-plugin-react-helmet": "^3.1.13",
-    "gatsby-plugin-styled-components": "^3.0.0",
-    "gatsby-plugin-typescript": "^2.0.0",
-    "gh-pages": "^1.1.0",
-    "react": "^16.11.0",
-    "react-dom": "^16.11.0",
-    "react-helmet": "^5.2.1",
-    "react-syntax-highlighter": "^7.0.2",
-    "styled-components": "^3.2.5"
+    "@types/react-syntax-highlighter": "11.0.1",
+    "babel-plugin-styled-components": "1.8.0",
+    "gatsby": "2.17.10",
+    "gatsby-link": "2.2.22",
+    "gatsby-plugin-favicon": "3.1.6",
+    "gatsby-plugin-google-fonts": "0.0.4",
+    "gatsby-plugin-react-helmet": "3.1.13",
+    "gatsby-plugin-styled-components": "3.0.0",
+    "gatsby-plugin-typescript": "2.0.0",
+    "gh-pages": "1.1.0",
+    "react": "16.11.0",
+    "react-dom": "16.11.0",
+    "react-helmet": "5.2.1",
+    "react-syntax-highlighter": "7.0.4",
+    "styled-components": "3.2.6"
   },
   "license": "MIT",
   "scripts": {
@@ -29,6 +29,6 @@
     "deploy": "gatsby build --prefix-paths && gh-pages -d public"
   },
   "devDependencies": {
-    "prettier": "^1.19.1"
+    "prettier": "1.19.1"
   }
 }
