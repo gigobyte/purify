@@ -9,7 +9,7 @@
     "gatsby": "2.32.11",
     "gatsby-link": "2.11.0",
     "gatsby-plugin-favicon": "3.1.6",
-    "gatsby-plugin-google-fonts": "0.0.4",
+    "gatsby-plugin-google-fonts": "1.0.1",
     "gatsby-plugin-react-helmet": "3.10.0",
     "gatsby-plugin-styled-components": "3.10.0",
     "gatsby-plugin-typescript": "2.12.1",
