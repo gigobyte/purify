@@ -59,6 +59,8 @@ export interface Maybe<T> {
   /** Runs an effect if `this` is `Nothing`, returns `this` to make chaining other methods possible */
   ifNothing(effect: () => any): this
   /** Takes a predicate function and returns `this` if the predicate returns true or Nothing if it returns false */
+  filter<U extends T>(pred: (value: T) => value is U): Maybe<U>
+  /** Takes a predicate function and returns `this` if the predicate returns true or Nothing if it returns false */
   filter(pred: (value: T) => boolean): Maybe<T>
 
   'fantasy-land/equals'(other: Maybe<T>): boolean
@@ -71,6 +73,7 @@ export interface Maybe<T> {
     initialValue: U
   ): U
   'fantasy-land/extend'<U>(f: (value: Maybe<T>) => U): Maybe<U>
+  'fantasy-land/filter'<U extends T>(pred: (value: T) => boolean): Maybe<U>
   'fantasy-land/filter'(pred: (value: T) => boolean): Maybe<T>
 }
 
@@ -288,7 +291,9 @@ class Just<T> implements Maybe<T> {
     return this
   }
 
-  filter(pred: (value: T) => boolean): Maybe<T> {
+  filter<U extends T>(pred: (value: T) => value is U): Maybe<U>;
+  filter(pred: (value: T) => boolean): Maybe<T>;
+  filter(pred: (value: T) => boolean) {
     return pred(this.__value) ? just(this.__value) : nothing
   }
 
