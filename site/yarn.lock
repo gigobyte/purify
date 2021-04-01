@@ -5813,10 +5813,10 @@ gatsby-telemetry@^2.2.0:
     node-fetch "^2.6.1"
     uuid "3.4.0"
 
-gatsby@3.2.0:
-  version "3.2.0"
-  resolved "https://registry.yarnpkg.com/gatsby/-/gatsby-3.2.0.tgz#4b92b3063761572eb8116b9fd4efce3c916bb045"
-  integrity sha512-eVaAR6LQA4D7bPeN1/2Hzk5kt7QJzb0DoPUuBy9daxZy3oPR1Zf6wfdV6RQcW6+ABLpG073h5uOTMxANAlm66A==
+gatsby@3.2.1:
+  version "3.2.1"
+  resolved "https://registry.yarnpkg.com/gatsby/-/gatsby-3.2.1.tgz#c1130764077e4fc7360cb6892b25e810ae53cbbf"
+  integrity sha512-nakOINSniWsBPfbZE5HJOoEwC2/bBoJAYxGYNG/P7M8mM9JVbsIsnAylTe205/MsO0qpcTpqRm0usxzyvF3yYw==
   dependencies:
     "@babel/code-frame" "^7.10.4"
     "@babel/core" "^7.12.3"
