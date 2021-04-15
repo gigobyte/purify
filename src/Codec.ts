@@ -8,7 +8,7 @@ export interface Codec<T> {
   /** Takes a JSON value and runs the decode function the codec was constructed with. All of purify's built-in codecs return a descriptive error message in case the decode fails */
   decode: (input: unknown) => Either<string, T>
   /** Takes a runtime value and turns it into a JSON value using the encode function the codec was constructed with. Most of purify's built-in codecs have no custom encode method and they just return the same value, but you could add custom serialization logic for your custom codecs. */
-  encode: (input: T) => unknown
+  encode: <U = unknown>(input: T) => U
   /** The same as the decode method, but throws an exception on failure. Please only use as an escape hatch */
   unsafeDecode: (input: unknown) => T
   schema: () => JSONSchema6
@@ -155,7 +155,7 @@ export const Codec = {
     }
 
     const encode = (input: any) => {
-      const result = {} as { [k in keyof T]: GetType<T[k]> }
+      const result = {} as any
 
       for (const key of keys) {
         result[key as keyof T] = properties[key]!.encode(input[key]) as any
