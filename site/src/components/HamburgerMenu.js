@@ -19,24 +19,24 @@ const Bar = styled.div`
   transition: 0.4s;
 `
 
-const Bar1 = Bar.extend`
-  ${props =>
+const Bar1 = styled(Bar)`
+  ${(props) =>
     props.changed &&
     `
         transform: rotate(-45deg) translate(-9px, 6px);
     `};
 `
 
-const Bar2 = Bar.extend`
-  ${props =>
+const Bar2 = styled(Bar)`
+  ${(props) =>
     props.changed &&
     `
         opacity: 0;
     `};
 `
 
-const Bar3 = Bar.extend`
-  ${props =>
+const Bar3 = styled(Bar)`
+  ${(props) =>
     props.changed &&
     `
     transform: rotate(45deg) translate(-8px, -8px);

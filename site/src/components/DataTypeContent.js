@@ -3,7 +3,7 @@ import Link from 'gatsby-link'
 import styled from 'styled-components'
 import DataTypeMethod from './DataTypeMethod'
 import SyntaxHighlighter from 'react-syntax-highlighter'
-import highlightStyle from 'react-syntax-highlighter/styles/hljs/googlecode'
+import highlightStyle from 'react-syntax-highlighter/dist/esm/styles/hljs/googlecode'
 import Layout from './Layout'
 
 const Container = styled.div``
@@ -109,12 +109,12 @@ const Guide = styled(Link)`
   }
 `
 
-const DataTypeContent = adt => props => (
+const DataTypeContent = (adt) => (props) => (
   <Layout location={props.location}>
     <Container>
       <Title>{adt.name}</Title>
       <TypeclassBadges>
-        {adt.implements.map(typeclass => (
+        {adt.implements.map((typeclass) => (
           <TypeclassBadge key={typeclass}>{typeclass}</TypeclassBadge>
         ))}
         {adt.implements.length > 0 && (
@@ -123,7 +123,7 @@ const DataTypeContent = adt => props => (
       </TypeclassBadges>
       <Description>{adt.description}</Description>
       <ExamplesContainer>
-        {adt.examples.map(example => (
+        {adt.examples.map((example) => (
           <Example>
             <ExampleHeader>{example.title}</ExampleHeader>
             <SyntaxHighlighter language="javascript" style={highlightStyle}>
@@ -134,16 +134,16 @@ const DataTypeContent = adt => props => (
         {adt.guides.length > 0 && (
           <Example>
             <ExampleHeader>Official Guides</ExampleHeader>
-            {adt.guides.map(guide => (
+            {adt.guides.map((guide) => (
               <Guide to={guide.link}>{guide.title}</Guide>
             ))}
           </Example>
         )}
       </ExamplesContainer>
-      {adt.content.map(x => (
+      {adt.content.map((x) => (
         <>
           <TopicHeader>{x.title}</TopicHeader>
-          {x.methods.map(DataTypeMethod)}
+          {x.methods.map((method) => DataTypeMethod(x.id, method))}
         </>
       ))}
     </Container>

@@ -37,8 +37,8 @@ const MethodSignature = styled.span`
   margin-bottom: 10px;
 
   &:before {
-    content: ${props => (props.ml ? "'λ'" : "'TS'")};
-    background-color: ${props => (props.ml ? '#9756f3' : '#3b74d7')};
+    content: ${(props) => (props.ml ? "'λ'" : "'TS'")};
+    background-color: ${(props) => (props.ml ? '#9756f3' : '#3b74d7')};
     color: white;
     border-bottom-left-radius: 4px;
     border-top-left-radius: 4px;
@@ -46,7 +46,7 @@ const MethodSignature = styled.span`
     display: inline-block;
     min-width: 13px;
     text-align: center;
-    letter-spacing: ${props => (props.ts ? '-1px' : '0')};
+    letter-spacing: ${(props) => (props.ts ? '-1px' : '0')};
   }
 
   @media only screen and (max-width: 768px) {
@@ -125,9 +125,12 @@ const MethodDescription = styled.div`
   }
 `
 
-const DataTypeMethod = method => (
+const DataTypeMethod = (categoryId, method) => (
   <Container key={method.name}>
-    <MethodName id={method.name} href={'#' + method.name}>
+    <MethodName
+      id={`${categoryId}-${method.name}`}
+      href={`#${categoryId}-${method.name}`}
+    >
       {method.name}
     </MethodName>
     <div>
@@ -145,19 +148,19 @@ const DataTypeMethod = method => (
       {method.examples.length > 0 && (
         <MethodExample>
           <MethodExampleColumn>
-            {method.examples.map(example => (
+            {method.examples.map((example) => (
               <Highlight key={example.input}>{example.input}</Highlight>
             ))}
           </MethodExampleColumn>
 
           <MethodExampleColumn>
-            {method.examples.map(example => (
+            {method.examples.map((example) => (
               <Highlight key={example.input}>➔</Highlight>
             ))}
           </MethodExampleColumn>
 
           <MethodExampleColumn>
-            {method.examples.map(example => (
+            {method.examples.map((example) => (
               <Highlight key={example.input}>{example.output}</Highlight>
             ))}
           </MethodExampleColumn>

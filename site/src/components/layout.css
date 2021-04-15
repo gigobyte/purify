@@ -6,8 +6,3 @@ body {
   margin: 0;
   padding: 0;
 }
-
-body > div,
-body > div > div {
-  height: 100%;
-}

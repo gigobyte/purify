@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import DataTypeMethod from './DataTypeMethod'
 import SyntaxHighlighter from 'react-syntax-highlighter'
-import highlightStyle from 'react-syntax-highlighter/styles/hljs/googlecode'
+import highlightStyle from 'react-syntax-highlighter/dist/esm/styles/hljs/googlecode'
 import Layout from './Layout'
 
 const Container = styled.div``
@@ -53,7 +53,7 @@ const Example = styled.div`
   border: 1px solid #f3eeee;
 `
 
-const UtilContent = util => props => (
+const UtilContent = (util) => (props) => (
   <Layout location={props.location}>
     <Container>
       <Title>{util.name}</Title>
@@ -82,7 +82,7 @@ const UtilContent = util => props => (
           </Example>
         )}
       </ExamplesContainer>
-      {util.content.map(x => (
+      {util.content.map((x) => (
         <>
           <TopicHeader>{x.title}</TopicHeader>
           {x.methods.map(DataTypeMethod)}

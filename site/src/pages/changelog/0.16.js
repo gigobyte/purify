@@ -16,7 +16,7 @@ const Topic = styled.h2`
   font-weight: normal;
 `
 
-const v016 = props => (
+const v016 = (props) => (
   <Layout location={props.location}>
     <Title>Purify v0.16</Title>
     <Subtitle>November 7, 2020</Subtitle>

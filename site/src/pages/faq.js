@@ -1,7 +1,7 @@
 import React from 'react'
 import Layout from '../components/Layout'
 
-const FAQ = props => (
+const FAQ = (props) => (
   <Layout location={props.location}>
     <h1>FAQ</h1>
     <ul>

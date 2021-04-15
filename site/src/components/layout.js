@@ -28,7 +28,7 @@ const ContentContainer = styled.div`
   padding: 20px;
 `
 
-const LayoutWithSidebar = children => (
+const LayoutWithSidebar = (children) => (
   <Container>
     <Meta />
     <SidebarContainer>

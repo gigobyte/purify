@@ -17,6 +17,12 @@ const Meta = () => (
       name="apple-mobile-web-app-status-bar-style"
       content="black-translucent"
     />
+    <link
+      rel="icon"
+      type="image/png"
+      href="./images/favicon.png"
+      sizes="16x16"
+    />
   </Helmet>
 )
 

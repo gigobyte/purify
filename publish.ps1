@@ -1,4 +1,4 @@
-$files = @("package.json", "LICENSE", "README.md", "yarn.lock")
+$files = @("package.json", "LICENSE", "README.md", "package-lock.json")
 
 Invoke-Expression "npm run build"
 

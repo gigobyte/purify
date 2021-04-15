@@ -47,7 +47,7 @@ const VersionContainer = styled.div`
   }
 `
 
-const Changelog = props => (
+const Changelog = (props) => (
   <Layout location={props.location}>
     <div>
       <h1>Choose version:</h1>

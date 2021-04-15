@@ -4,7 +4,7 @@ import Layout from '../../components/Layout'
 import { HL } from '../../components/HL'
 import Link from 'gatsby-link'
 import SyntaxHighlighter from 'react-syntax-highlighter'
-import highlightStyle from 'react-syntax-highlighter/styles/hljs/googlecode'
+import highlightStyle from 'react-syntax-highlighter/dist/esm/styles/hljs/googlecode'
 
 export const Note = styled.div`
   display: inline-block;
@@ -39,7 +39,7 @@ const SmallMethodName = styled(MethodName)`
   margin-top: 0;
 `
 
-const MaybeApiGuide = props => (
+const MaybeApiGuide = (props) => (
   <Layout location={props.location}>
     <h1>Which Maybe method am I supposed to use now? (API guide)</h1>
     We've all been in that research phase where we're still learning the API of
@@ -120,42 +120,53 @@ myMaybe.chainNullable(transform)`}
     </Note>
     <h3>Scenario #2 - I'm not sure how to check if a value exists or not</h3>
     There are numerous ways to check if a value exists with purify, but I want
-    to focus on the fact that you rarely need to do so explicitly.<br />
+    to focus on the fact that you rarely need to do so explicitly.
+    <br />
     Try to split up your code into functions and then find ways to combine them
-    using many of the available transformation methods like<br />
+    using many of the available transformation methods like
+    <br />
     <SmallMethodName to="/adts/Maybe/#map">Maybe#map</SmallMethodName> or{' '}
     <SmallMethodName to="/adts/Maybe/#chain">Maybe#chain</SmallMethodName> or{' '}
     <SmallMethodName to="/adts/Maybe/#extend">Maybe#extend</SmallMethodName> or{' '}
     <SmallMethodName to="/adts/Maybe/#filter">Maybe#filter</SmallMethodName>...
-    you get the point.<br />
+    you get the point.
+    <br />
     There are so many methods you can chain so that your code is nice and
     declarative that you'll almost never have to unpack a Maybe and check
-    manually.<br />
+    manually.
+    <br />
     There are some cases where that is needed though, let's go through them:{' '}
     <br /> <br />
     <MethodName to="/adts/Maybe/#isJust">Maybe#isJust</MethodName> /{' '}
     <MethodName to="/adts/Maybe/#isNothing">Maybe#isNothing</MethodName>
     <br />
     The most primitive of the bunch, these methods enable us to do JS-style
-    checking if a value is missing or not.<br />
+    checking if a value is missing or not.
+    <br />
     The method names are pretty self-explanatory so we won't go into much
-    details, but it's generally not recommend to use those methods.<br />
-    Better choices are almost always available.<br />
+    details, but it's generally not recommend to use those methods.
+    <br />
+    Better choices are almost always available.
+    <br />
     <br />
     <MethodName to="/adts/Maybe/#caseOf">Maybe#caseOf</MethodName> /{' '}
     <MethodName to="/adts/Maybe/#reduce">Maybe#reduce</MethodName>
     <br />
     <SmallMethodName to="/adts/Maybe/#caseOf">caseOf</SmallMethodName> is the
-    go-to choice when none of the other methods seem good enough.<br />
+    go-to choice when none of the other methods seem good enough.
+    <br />
     Since pattern matching is still not available (yet) in JavaScript, caseOf
     tries to mimic this behaviour, allowing you to branch your logic by asking
-    you for two functions that will handle each case.<br />
+    you for two functions that will handle each case.
+    <br />
     <SmallMethodName to="/adts/Maybe/#reduce">reduce</SmallMethodName> is very,
     very similar, in fact it's so similar that it looks almost useless. The goal
-    of reduce is to provide an instance for the Foldable typeclass for Maybe.<br />
+    of reduce is to provide an instance for the Foldable typeclass for Maybe.
+    <br />
     If you like the minimalism of reduce and you don't care about Foldable or
     you haven't heard of it - no problem, you can use it instead of caseOf just
-    fine!<br />
+    fine!
+    <br />
   </Layout>
 )
 

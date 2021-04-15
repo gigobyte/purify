@@ -2,10 +2,10 @@ import React from 'react'
 import Layout from '../../components/Layout'
 import { HL } from '../../components/HL'
 import SyntaxHighlighter from 'react-syntax-highlighter'
-import highlightStyle from 'react-syntax-highlighter/styles/hljs/googlecode'
+import highlightStyle from 'react-syntax-highlighter/dist/esm/styles/hljs/googlecode'
 import { Note } from './maybe-api-guide'
 
-const MaybeApiGuide = props => (
+const MaybeApiGuide = (props) => (
   <Layout location={props.location}>
     <h1>MaybeAsync and EitherAsync for Haskellers</h1>
     <Note>

@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import Link from 'gatsby-link'
 import Layout from '../../components/Layout'
 import SyntaxHighlighter from 'react-syntax-highlighter'
-import highlightStyle from 'react-syntax-highlighter/styles/hljs/googlecode'
+import highlightStyle from 'react-syntax-highlighter/dist/esm/styles/hljs/googlecode'
 
 const Title = styled.h1`
   margin-bottom: 0;
@@ -25,7 +25,7 @@ const TopicDescription = styled.div`
   }
 `
 
-const v014 = props => (
+const v014 = (props) => (
   <Layout location={props.location}>
     <Title>Purify v0.14</Title>
     <Subtitle>December 16, 2019</Subtitle>

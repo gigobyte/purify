@@ -36,9 +36,9 @@ const Nav = styled.div`
   transition: 0.2s;
 
   @media only screen and (max-width: 768px) {
-    opacity: ${props => (props.shown ? '1' : '0')};
-    height: ${props => (props.shown ? '100%' : '0')};
-    visibility: ${props => (props.shown ? 'visible' : 'hidden')};
+    opacity: ${(props) => (props.shown ? '1' : '0')};
+    height: ${(props) => (props.shown ? '100%' : '0')};
+    visibility: ${(props) => (props.shown ? 'visible' : 'hidden')};
   }
 `
 
@@ -65,7 +65,7 @@ class Sidebar extends React.Component {
           <SidebarLink name="Getting started" link="/getting-started" />
           <SidebarLink name="FAQ" link="/faq" />
           <SidebarLink name="Changelog" link="/changelog" />
-          {data.datatypes.map(datatype => (
+          {data.datatypes.map((datatype) => (
             <div key={datatype.name} onClick={this.toggleMenu}>
               <SidebarLink
                 name={datatype.name}
@@ -74,7 +74,7 @@ class Sidebar extends React.Component {
               />
             </div>
           ))}
-          {data.utils.map(util => (
+          {data.utils.map((util) => (
             <div key={util.name} onClick={this.toggleMenu}>
               <SidebarLink
                 name={util.name}

@@ -19,7 +19,7 @@ const Console = styled.div`
   border-radius: 4px;
 `
 
-const GettingStarted = props => (
+const GettingStarted = (props) => (
   <Layout location={props.location}>
     <Container>
       <h1>What is purify?</h1>

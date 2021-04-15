@@ -20,9 +20,9 @@ const Container = styled(Link)`
 `
 
 const Tag = styled.div`
-  background-color: ${props => props.palette.bgColor};
+  background-color: ${(props) => props.palette.bgColor};
   border-radius: 5px;
-  color: ${props => props.palette.color};
+  color: ${(props) => props.palette.color};
   height: 16px;
   line-height: 18px;
   margin-right: 20px;
@@ -36,7 +36,7 @@ const Tag = styled.div`
 const colorMap = {
   ADT: { color: '#2877ad', bgColor: '#d6eeff' },
   Util: { color: '#0a9e1b', bgColor: '#d3f9d8' },
-  Typeclass: { color: 'white', bgColor: '#af87e6' },
+  Typeclass: { color: 'white', bgColor: '#af87e6' }
 }
 
 const SidebarLink = ({ name, tag, link }) => (

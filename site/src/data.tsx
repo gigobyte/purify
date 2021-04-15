@@ -33,6 +33,7 @@ export interface DataType {
   examples: DataTypeExample[]
   content: {
     title: React.ReactNode
+    id: string
     methods: Method[]
   }[]
 }
@@ -72,13 +73,13 @@ const data: Data = {
         'Monad',
         'Foldable',
         'Extend',
-        'Filterable',
+        'Filterable'
       ],
       description: `The Maybe type is one of the most popular data types available. It is fundamental to learning about functional error handling and representing missing values. A Maybe value can be either Just a value or Nothing. The Just data constructor is used for wrapping present values while the Nothing constructor is used when a value is absent. Both constructors produce objects that share the same API which makes it easy to manipulate optional values without null checking or exception handling.`,
       examples: [
         {
           title: 'How to import',
-          content: [`import { Maybe, Just, Nothing } from 'purify-ts/Maybe'`],
+          content: [`import { Maybe, Just, Nothing } from 'purify-ts/Maybe'`]
         },
         {
           title: 'Without Maybe',
@@ -90,8 +91,8 @@ const data: Data = {
             '',
             'const port = config && config.port',
             '    ? parseInt(config.port)',
-            '    : 8080',
-          ],
+            '    : 8080'
+          ]
         },
         {
           title: 'Without Maybe (since TS 3.7 / ES2020)',
@@ -99,8 +100,8 @@ const data: Data = {
             `// Still hard to chain additional transformations`,
             "// This is a valid alternative if you don't mind the syntax",
             '',
-            "const port = parseInt(getConfig()?.port ?? '8080')",
-          ],
+            "const port = parseInt(getConfig()?.port ?? '8080')"
+          ]
         },
         {
           title: 'With Maybe',
@@ -108,19 +109,20 @@ const data: Data = {
             'const port = getConfig()',
             '    .chain(x => x.port)',
             '    .map(parseInt)',
-            '    .orDefault(8080)',
-          ],
-        },
+            '    .orDefault(8080)'
+          ]
+        }
       ],
       guides: [
         {
           title: 'Which method am I supposed to use now? (API guide)',
-          link: '/guides/maybe-api-guide',
-        },
+          link: '/guides/maybe-api-guide'
+        }
       ],
       content: [
         {
           title: 'Constructors',
+          id: 'constructor',
           methods: [
             {
               name: 'Just',
@@ -129,41 +131,42 @@ const data: Data = {
               signatureML: 'a -> Maybe a',
               signatureTS: '<T>(value: T): Maybe<T>',
               examples: [
-                { input: 'Just(10)', output: 'Just(10) // Maybe<number>' },
-              ],
+                { input: 'Just(10)', output: 'Just(10) // Maybe<number>' }
+              ]
             },
             {
               name: 'Nothing',
               description: `Nothing doesn't have a constructor, instead you can use it directly as a value. Represents a missing value, you can think of it as a smart 'null'.`,
               examples: [
-                { input: 'Nothing', output: 'Nothing // Maybe<never>' },
-              ],
-            },
-          ],
+                { input: 'Nothing', output: 'Nothing // Maybe<never>' }
+              ]
+            }
+          ]
         },
         {
           title: 'Static methods',
+          id: 'static',
           methods: [
             {
               name: 'of',
               signatureML: 'a -> Maybe a',
               signatureTS: '<T>(value: T): Maybe<T>',
               description: 'Takes a value and wraps it in a `Just`.',
-              examples: [{ input: 'Maybe.of(10)', output: 'Just(10)' }],
+              examples: [{ input: 'Maybe.of(10)', output: 'Just(10)' }]
             },
             {
               name: 'empty',
               signatureML: '() -> Maybe a',
               signatureTS: '(): Maybe<never>',
               description: 'Returns `Nothing`.',
-              examples: [{ input: 'Maybe.empty()', output: 'Nothing' }],
+              examples: [{ input: 'Maybe.empty()', output: 'Nothing' }]
             },
             {
               name: 'zero',
               signatureML: '() -> Maybe a',
               signatureTS: '(): Maybe<never>',
               description: 'Returns `Nothing`.',
-              examples: [{ input: 'Maybe.zero()', output: 'Nothing' }],
+              examples: [{ input: 'Maybe.zero()', output: 'Nothing' }]
             },
             {
               name: 'fromNullable',
@@ -172,8 +175,8 @@ const data: Data = {
                 'Takes a value and returns `Nothing` if the value is null or undefined, otherwise a `Just` is returned.',
               examples: [
                 { input: 'Maybe.fromNullable(null)', output: 'Nothing' },
-                { input: 'Maybe.fromNullable(10)', output: 'Just(10)' },
-              ],
+                { input: 'Maybe.fromNullable(10)', output: 'Just(10)' }
+              ]
             },
             {
               name: 'fromFalsy',
@@ -182,8 +185,8 @@ const data: Data = {
                 'Takes a value and returns Nothing if the value is falsy, otherwise a Just is returned.',
               examples: [
                 { input: `Maybe.fromFalsy('')`, output: 'Nothing' },
-                { input: 'Maybe.fromFalsy(0)', output: 'Nothing' },
-              ],
+                { input: 'Maybe.fromFalsy(0)', output: 'Nothing' }
+              ]
             },
             {
               name: 'fromPredicate',
@@ -195,13 +198,13 @@ const data: Data = {
               examples: [
                 {
                   input: 'Maybe.fromPredicate(x => x > 0, 5)',
-                  output: 'Just(5)',
+                  output: 'Just(5)'
                 },
                 {
                   input: 'Maybe.fromPredicate(x => x > 0, -1)',
-                  output: 'Nothing',
-                },
-              ],
+                  output: 'Nothing'
+                }
+              ]
             },
             {
               name: 'catMaybes',
@@ -211,9 +214,9 @@ const data: Data = {
               examples: [
                 {
                   input: 'Maybe.catMaybes([Just(5), Nothing, Just(10)])',
-                  output: '[5, 10]',
-                },
-              ],
+                  output: '[5, 10]'
+                }
+              ]
             },
             {
               name: 'mapMaybe',
@@ -224,9 +227,9 @@ const data: Data = {
               examples: [
                 {
                   input: `Maybe.mapMaybe(x => isNaN(x) ? Nothing : Just(parseInt(x)), ['1', 'Apple', '3'])`,
-                  output: '[1, 3]',
-                },
-              ],
+                  output: '[1, 3]'
+                }
+              ]
             },
             {
               name: 'sequence',
@@ -237,13 +240,13 @@ const data: Data = {
               examples: [
                 {
                   input: `Maybe.sequence([Just(1), Just(5), Just(10)])`,
-                  output: 'Just([1, 5, 10])',
+                  output: 'Just([1, 5, 10])'
                 },
                 {
                   input: `Maybe.sequence([Just(1), Nothing, Just(10)])`,
-                  output: 'Nothing',
-                },
-              ],
+                  output: 'Nothing'
+                }
+              ]
             },
             {
               name: 'encase',
@@ -253,10 +256,10 @@ const data: Data = {
               examples: [
                 {
                   input: `Maybe.encase(() => { throw Error('Always fails') })`,
-                  output: 'Nothing',
+                  output: 'Nothing'
                 },
-                { input: `Maybe.encase(() => 10)`, output: 'Just(10)' },
-              ],
+                { input: `Maybe.encase(() => 10)`, output: 'Just(10)' }
+              ]
             },
             {
               name: 'isMaybe',
@@ -265,18 +268,19 @@ const data: Data = {
               examples: [
                 {
                   input: 'Maybe.isMaybe(null)',
-                  output: 'false',
+                  output: 'false'
                 },
                 {
                   input: 'Maybe.isMaybe(Just(10))',
-                  output: 'true',
-                },
-              ],
-            },
-          ],
+                  output: 'true'
+                }
+              ]
+            }
+          ]
         },
         {
           title: 'Instance methods',
+          id: 'instance',
           methods: [
             {
               name: 'isJust',
@@ -286,8 +290,8 @@ const data: Data = {
                 'Returns true if `this` is `Just`, otherwise it returns false.',
               examples: [
                 { input: 'Just(5).isJust()', output: 'true' },
-                { input: 'Nothing.isJust()', output: 'false' },
-              ],
+                { input: 'Nothing.isJust()', output: 'false' }
+              ]
             },
             {
               name: 'isNothing',
@@ -297,8 +301,8 @@ const data: Data = {
                 'Returns true if `this` is `Nothing`, otherwise it returns false.',
               examples: [
                 { input: 'Just(5).isNothing()', output: 'false' },
-                { input: 'Nothing.isNothing()', output: 'true' },
-              ],
+                { input: 'Nothing.isNothing()', output: 'true' }
+              ]
             },
             {
               name: 'caseOf',
@@ -310,18 +314,18 @@ const data: Data = {
                 {
                   input:
                     'Just(5).caseOf({ Just: x => x + 1, Nothing: () => 0 })',
-                  output: '6',
+                  output: '6'
                 },
                 {
                   input:
                     'Nothing.caseOf({ Just: x => x + 1, Nothing: () => 0 })',
-                  output: '0',
+                  output: '0'
                 },
                 {
                   input: `Nothing.caseOf({ _: () => 'anything'}) // wildcard`,
-                  output: `'anything'`,
-                },
-              ],
+                  output: `'anything'`
+                }
+              ]
             },
             {
               name: 'equals',
@@ -332,8 +336,8 @@ const data: Data = {
               examples: [
                 { input: 'Just(5).equals(Just(5))', output: 'true' },
                 { input: 'Just(5).equals(Just(10))', output: 'false' },
-                { input: 'Just(5).equals(Nothing)', output: 'false' },
-              ],
+                { input: 'Just(5).equals(Nothing)', output: 'false' }
+              ]
             },
             {
               name: 'map',
@@ -343,8 +347,8 @@ const data: Data = {
                 'Transforms the value inside `this` with a given function. Returns `Nothing` if `this` is `Nothing`.',
               examples: [
                 { input: 'Just(5).map(x => x + 1)', output: 'Just(6)' },
-                { input: 'Nothing.map(x => x + 1)', output: 'Nothing' },
-              ],
+                { input: 'Nothing.map(x => x + 1)', output: 'Nothing' }
+              ]
             },
             {
               name: 'ap',
@@ -355,8 +359,8 @@ const data: Data = {
                 { input: 'Just(5).ap(Just(x => x + 1))', output: 'Just(6)' },
                 { input: 'Just(5).ap(Nothing)', output: 'Nothing' },
                 { input: 'Nothing.ap(Just(x => x + 1))', output: 'Nothing' },
-                { input: 'Nothing.ap(Nothing)', output: 'Nothing' },
-              ],
+                { input: 'Nothing.ap(Nothing)', output: 'Nothing' }
+              ]
             },
             {
               name: 'alt',
@@ -368,8 +372,8 @@ const data: Data = {
                 { input: 'Just(5).alt(Just(6))', output: 'Just(5)' },
                 { input: 'Just(5).alt(Nothing)', output: 'Just(5)' },
                 { input: 'Nothing.alt(Just(5))', output: 'Just(5)' },
-                { input: 'Nothing.alt(Nothing)', output: 'Nothing' },
-              ],
+                { input: 'Nothing.alt(Nothing)', output: 'Nothing' }
+              ]
             },
             {
               name: 'chain',
@@ -379,8 +383,8 @@ const data: Data = {
                 'Transforms `this` with a function that returns a `Maybe`. Useful for chaining many computations that may result in a missing value.',
               examples: [
                 { input: 'Just(5).chain(x => Just(x + 1))', output: 'Just(6)' },
-                { input: 'Nothing.chain(x => Just(x + 1))', output: 'Nothing' },
-              ],
+                { input: 'Nothing.chain(x => Just(x + 1))', output: 'Nothing' }
+              ]
             },
             {
               name: 'chainNullable',
@@ -391,13 +395,13 @@ const data: Data = {
               examples: [
                 {
                   input: 'Just({prop: null}).chainNullable(x => x.prop)',
-                  output: 'Nothing',
+                  output: 'Nothing'
                 },
                 {
                   input: 'Just(5).chainNullable(x => x + 1)',
-                  output: 'Just(6)',
-                },
-              ],
+                  output: 'Just(6)'
+                }
+              ]
             },
             {
               name: 'join',
@@ -407,8 +411,8 @@ const data: Data = {
                 'Flattens nested Maybes. `m.join()` is equivalent to `m.chain(x => x)`.',
               examples: [
                 { input: 'Just(Just(5)).join()', output: 'Just(5)' },
-                { input: 'Nothing.join()', output: 'Nothing' },
-              ],
+                { input: 'Nothing.join()', output: 'Nothing' }
+              ]
             },
             {
               name: 'reduce',
@@ -420,13 +424,13 @@ const data: Data = {
               examples: [
                 {
                   input: 'Just(5).reduce((acc, x) => x * acc, 2)',
-                  output: '10',
+                  output: '10'
                 },
                 {
                   input: 'Nothing.reduce((acc, x) => x * acc, 0)',
-                  output: '0',
-                },
-              ],
+                  output: '0'
+                }
+              ]
             },
             {
               name: 'extend',
@@ -437,10 +441,10 @@ const data: Data = {
               examples: [
                 {
                   input: 'Just(5).extend(x => x.isJust())',
-                  output: 'Just(true)',
+                  output: 'Just(true)'
                 },
-                { input: 'Nothing.extend(x => x.isJust())', output: 'Nothing' },
-              ],
+                { input: 'Nothing.extend(x => x.isJust())', output: 'Nothing' }
+              ]
             },
             {
               name: 'unsafeCoerce',
@@ -453,9 +457,9 @@ const data: Data = {
                 {
                   input: 'Nothing.unsafeCoerce()',
                   output:
-                    '// Uncaught Error: Maybe#unsafeCoerce was ran on a Nothing',
-                },
-              ],
+                    '// Uncaught Error: Maybe#unsafeCoerce was ran on a Nothing'
+                }
+              ]
             },
             {
               name: 'orDefault',
@@ -465,8 +469,8 @@ const data: Data = {
                 'Returns the default value if `this` is `Nothing`, otherwise it returns the value inside `this`.',
               examples: [
                 { input: 'Just(5).orDefault(0)', output: '5' },
-                { input: 'Nothing.orDefault(0)', output: '0' },
-              ],
+                { input: 'Nothing.orDefault(0)', output: '0' }
+              ]
             },
             {
               name: 'orDefaultLazy',
@@ -477,10 +481,10 @@ const data: Data = {
               examples: [
                 {
                   input: 'Just(5).orDefaultLazy(() => expensiveComputation())',
-                  output: '5 // expensiveComputation is never called',
+                  output: '5 // expensiveComputation is never called'
                 },
-                { input: 'Nothing.orDefaultLazy(() => 0)', output: '0' },
-              ],
+                { input: 'Nothing.orDefaultLazy(() => 0)', output: '0' }
+              ]
             },
             {
               name: 'mapOrDefault',
@@ -490,8 +494,8 @@ const data: Data = {
                 'Maps over `this` and returns the resulting value or returns the default value if `this` is `Nothing`.',
               examples: [
                 { input: 'Just(5).mapOrDefault(x => x + 1, 0)', output: '6' },
-                { input: 'Nothing.mapOrDefault(x => x + 1, 0)', output: '0' },
-              ],
+                { input: 'Nothing.mapOrDefault(x => x + 1, 0)', output: '0' }
+              ]
             },
             {
               name: 'filter',
@@ -503,9 +507,9 @@ const data: Data = {
                 { input: `Just(5).filter(x => x > 1)`, output: 'Just(5)' },
                 {
                   input: `Just('apple').filter(x => x === 'banana')`,
-                  output: 'Nothing',
-                },
-              ],
+                  output: 'Nothing'
+                }
+              ]
             },
             {
               name: 'extract',
@@ -514,8 +518,8 @@ const data: Data = {
                 'Returns the value inside `this` or undefined if `this` is `Nothing`. Use `extractNullable` if you need a null returned instead.',
               examples: [
                 { input: 'Just(5).extract()', output: '5' },
-                { input: 'Nothing.extract()', output: 'undefined' },
-              ],
+                { input: 'Nothing.extract()', output: 'undefined' }
+              ]
             },
             {
               name: 'extractNullable',
@@ -524,8 +528,8 @@ const data: Data = {
                 'Returns the value inside `this` or null if `this` is `Nothing`. Use `extract` if you need an undefined returned instead.',
               examples: [
                 { input: 'Just(5).extractNullable()', output: '5' },
-                { input: 'Nothing.extractNullable()', output: 'null' },
-              ],
+                { input: 'Nothing.extractNullable()', output: 'null' }
+              ]
             },
             {
               name: 'toList',
@@ -535,8 +539,8 @@ const data: Data = {
                 'Returns empty list if the `Maybe` is `Nothing` or a list where the only element is the value of `Just`.',
               examples: [
                 { input: 'Just(5).toList()', output: '[5]' },
-                { input: 'Nothing.toList()', output: '[]' },
-              ],
+                { input: 'Nothing.toList()', output: '[]' }
+              ]
             },
             {
               name: 'toEither',
@@ -546,8 +550,8 @@ const data: Data = {
                 'Constructs a `Right` from a `Just` or a `Left` with a provided left value if `this` is `Nothing`.',
               examples: [
                 { input: `Just(5).toEither('Error')`, output: 'Right(5)' },
-                { input: `Nothing.toEither('Error')`, output: `Left('Error')` },
-              ],
+                { input: `Nothing.toEither('Error')`, output: `Left('Error')` }
+              ]
             },
             {
               name: 'ifJust',
@@ -557,13 +561,13 @@ const data: Data = {
               examples: [
                 {
                   input: `Just(5).ifJust(() => console.log('success'))`,
-                  output: `// success`,
+                  output: `// success`
                 },
                 {
                   input: `Nothing.ifJust(() => console.log('success'))`,
-                  output: '',
-                },
-              ],
+                  output: ''
+                }
+              ]
             },
             {
               name: 'ifNothing',
@@ -573,17 +577,17 @@ const data: Data = {
               examples: [
                 {
                   input: `Just(5).ifNothing(() => console.log('failure'))`,
-                  output: '',
+                  output: ''
                 },
                 {
                   input: `Nothing.ifNothing(() => console.log('failure'))`,
-                  output: '// failure',
-                },
-              ],
-            },
-          ],
-        },
-      ],
+                  output: '// failure'
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       name: 'MaybeAsync',
@@ -591,13 +595,13 @@ const data: Data = {
       guides: [
         {
           title: 'MaybeAsync and EitherAsync for Haskellers',
-          link: '/guides/maybeasync-eitherasync-for-haskellers',
+          link: '/guides/maybeasync-eitherasync-for-haskellers'
         },
         {
           title: 'MaybeAsync used in an example repo',
           link:
-            'https://github.com/gigobyte/ts-react-express-starter/tree/main/server/src',
-        },
+            'https://github.com/gigobyte/ts-react-express-starter/tree/main/server/src'
+        }
       ],
       description: (
         <div>
@@ -624,15 +628,15 @@ const data: Data = {
       examples: [
         {
           title: 'How to import',
-          content: [`import { MaybeAsync } from 'purify-ts/MaybeAsync'`],
+          content: [`import { MaybeAsync } from 'purify-ts/MaybeAsync'`]
         },
         {
           title: 'Given the following functions, examples below',
           content: [
             `function validateRequest(req: Request): Maybe<DeleteUserRequest>`,
             `function getUser(userId: number):       Promise<Maybe<User>>`,
-            `function deleteUserDb(user: User):      Promise<Id<User>>`,
-          ],
+            `function deleteUserDb(user: User):      Promise<Id<User>>`
+          ]
         },
         {
           title: 'Example usage (async/await)',
@@ -648,8 +652,8 @@ const data: Data = {
             '        return deleteUserDb(user)',
             '    })',
             '',
-            'const promise: Promise<Maybe<Id<User>>> = deleteUser(req).run()',
-          ],
+            'const promise: Promise<Maybe<Id<User>>> = deleteUser(req).run()'
+          ]
         },
         {
           title: 'Example usage (chaining)',
@@ -663,13 +667,14 @@ const data: Data = {
             '        // when you have Promise<T> and you want to chain it',
             '        .chain(user    => MaybeAsync(() => deleteUserDb(user)))',
             '',
-            'const promise: Promise<Maybe<Id<User>>> = deleteUser(req).run()',
-          ],
-        },
+            'const promise: Promise<Maybe<Id<User>>> = deleteUser(req).run()'
+          ]
+        }
       ],
       content: [
         {
           title: 'Constructors',
+          id: 'constructor',
           methods: [
             {
               name: 'MaybeAsync',
@@ -679,16 +684,17 @@ const data: Data = {
                 {
                   input:
                     'MaybeAsync(({ liftMaybe, fromPromise }) => Promise.resolve(5))',
-                  output: 'MaybeAsync<number>',
-                },
+                  output: 'MaybeAsync<number>'
+                }
               ],
               signatureML: '(MaybeAsyncHelpers -> IO a) -> MaybeAsync a',
-              signatureTS: `<T>(runPromise: (helpers: MaybeAsyncHelpers) => PromiseLike<T>): MaybeAsync<T>`,
-            },
-          ],
+              signatureTS: `<T>(runPromise: (helpers: MaybeAsyncHelpers) => PromiseLike<T>): MaybeAsync<T>`
+            }
+          ]
         },
         {
           title: 'Static methods',
+          id: 'static',
           methods: [
             {
               name: 'fromPromise',
@@ -698,11 +704,11 @@ const data: Data = {
                 {
                   input:
                     'MaybeAsync.fromPromise(() => Promise.resolve(Just(5)))',
-                  output: 'MaybeAsync<number>',
-                },
+                  output: 'MaybeAsync<number>'
+                }
               ],
               signatureML: '(() -> IO (Maybe a)) -> MaybeAsync a',
-              signatureTS: `<T>(f: () => Promise<Maybe<T>>): MaybeAsync<T>`,
+              signatureTS: `<T>(f: () => Promise<Maybe<T>>): MaybeAsync<T>`
             },
             {
               name: 'liftMaybe',
@@ -710,11 +716,11 @@ const data: Data = {
               examples: [
                 {
                   input: 'MaybeAsync.liftMaybe(Just(5))',
-                  output: 'MaybeAsync<number>',
-                },
+                  output: 'MaybeAsync<number>'
+                }
               ],
               signatureML: 'Maybe a -> MaybeAsync a',
-              signatureTS: `<T>(maybe: Maybe<T>): MaybeAsync<T>`,
+              signatureTS: `<T>(maybe: Maybe<T>): MaybeAsync<T>`
             },
             {
               name: 'catMaybes',
@@ -727,16 +733,17 @@ const data: Data = {
   MaybeAsync.liftMaybe(Nothing),
   MaybeAsync(async () => 'value2')
 ])`,
-                  output: `Promise {<resolved>: ['value1', 'value2']}`,
-                },
+                  output: `Promise {<resolved>: ['value1', 'value2']}`
+                }
               ],
               signatureML: '[MaybeAsync a] -> IO [a]',
-              signatureTS: `<T>(list: MaybeAsync<T>[]): Promise<T[]>`,
-            },
-          ],
+              signatureTS: `<T>(list: MaybeAsync<T>[]): Promise<T[]>`
+            }
+          ]
         },
         {
           title: 'Instance methods',
+          id: 'instance',
           methods: [
             {
               name: 'run',
@@ -771,21 +778,21 @@ const data: Data = {
                 {
                   input:
                     'MaybeAsync(async ({ liftMaybe }) => liftMaybe(Nothing)).run()',
-                  output: 'Promise {<resolved>: Nothing}',
+                  output: 'Promise {<resolved>: Nothing}'
                 },
                 {
                   input: 'MaybeAsync(() => Promise.reject()).run()',
-                  output: 'Promise {<resolved>: Nothing}',
+                  output: 'Promise {<resolved>: Nothing}'
                 },
                 {
                   input: `MaybeAsync(() => { throw Error('Something happened') }).run()`,
-                  output: 'Promise {<resolved>: Nothing}',
+                  output: 'Promise {<resolved>: Nothing}'
                 },
                 {
                   input: 'MaybeAsync(() => Promise.resolve(5)).run()',
-                  output: 'Promise {<resolved>: Just(5)}',
-                },
-              ],
+                  output: 'Promise {<resolved>: Just(5)}'
+                }
+              ]
             },
             {
               name: 'map',
@@ -797,9 +804,9 @@ const data: Data = {
                 {
                   input:
                     'MaybeAsync(() => Promise.resolve(5)).map(x => x + 1).run()',
-                  output: 'Promise {<resolved>: Just(6)}',
-                },
-              ],
+                  output: 'Promise {<resolved>: Just(6)}'
+                }
+              ]
             },
             {
               name: 'chain',
@@ -810,13 +817,13 @@ const data: Data = {
               examples: [
                 {
                   input: `MaybeAsync(async () => 5).chain(x => MaybeAsync(async () => x + 1)).run()`,
-                  output: 'Promise {<resolved>: Just(6)}',
+                  output: 'Promise {<resolved>: Just(6)}'
                 },
                 {
                   input: `MaybeAsync(async () => 5).chain(async (x) => Just(x + 1)).run()`,
-                  output: 'Promise {<resolved>: Just(6)}',
-                },
-              ],
+                  output: 'Promise {<resolved>: Just(6)}'
+                }
+              ]
             },
             {
               name: 'orDefault',
@@ -824,7 +831,7 @@ const data: Data = {
               signatureML: 'MaybeAsync a ~> a -> IO a',
               description:
                 'Returns the default value if `this` is `Nothing`, otherwise it returns a Promise that will resolve to the value inside `this`.',
-              examples: [],
+              examples: []
             },
             {
               name: 'ap',
@@ -832,7 +839,7 @@ const data: Data = {
                 '<U>(maybeF: PromiseLike<Maybe<(value: T) => U>>): MaybeAsync<U>',
               description:
                 'Runs an effect if `this` is `Nothing`, returns `this` to make chaining other methods possible.',
-              examples: [],
+              examples: []
             },
             {
               name: 'alt',
@@ -840,7 +847,7 @@ const data: Data = {
               signatureML: 'MaybeAsync a ~> MaybeAsync a -> MaybeAsync a',
               description:
                 'Returns the first `Just` between the future value of `this` and another future `Maybe` or future `Nothing` if both `this` and the argument are `Nothing`.',
-              examples: [],
+              examples: []
             },
             {
               name: 'extend',
@@ -849,14 +856,14 @@ const data: Data = {
                 'MaybeAsync a ~> (MaybeAsync a -> b) -> MaybeAsync b',
               description:
                 'Returns `this` if it resolves to `Nothing`, otherwise it returns the result of applying the function argument to the value of `this` and wrapping it in a `Just`.',
-              examples: [],
+              examples: []
             },
             {
               name: 'filter',
               signatureTS: '(pred: (value: T) => boolean): MaybeAsync<T>',
               signatureML: 'MaybeAsync a ~> (a -> Bool) -> MaybeAsync a',
               description: `Takes a predicate function and returns \`this\` if the predicate, applied to the resolved value, is true or Nothing if it's false.`,
-              examples: [],
+              examples: []
             },
             {
               name: 'join',
@@ -865,7 +872,7 @@ const data: Data = {
               signatureML: 'MaybeAsync (MaybeAsync a) ~> MaybeAsync a',
               description:
                 'Flattens nested `MaybeAsync`s. `m.join()` is equivalent to `m.chain(x => x).',
-              examples: [],
+              examples: []
             },
             {
               name: 'toEitherAsync',
@@ -873,7 +880,7 @@ const data: Data = {
                 'Converts `this` to a EitherAsync with a default error value',
               signatureML: 'MaybeAsync b ~> a -> EitherAsync a b',
               signatureTS: '<L>(error: L): EitherAsync<L, T>',
-              examples: [],
+              examples: []
             },
             {
               name: 'ifJust',
@@ -883,13 +890,13 @@ const data: Data = {
               examples: [
                 {
                   input: `MaybeAsync.liftMaybe(Just(5)).ifJust(() => console.log('success'))`,
-                  output: `// success`,
+                  output: `// success`
                 },
                 {
                   input: `MaybeAsync.liftMaybe(Nothing).ifJust(() => console.log('success'))`,
-                  output: '',
-                },
-              ],
+                  output: ''
+                }
+              ]
             },
             {
               name: 'ifNothing',
@@ -899,25 +906,26 @@ const data: Data = {
               examples: [
                 {
                   input: `MaybeAsync.liftMaybe(Just(5)).ifNothing(() => console.log('failure'))`,
-                  output: '',
+                  output: ''
                 },
                 {
                   input: `MaybeAsync.liftMaybe(Nothing).ifNothing(() => console.log('failure'))`,
-                  output: '// failure',
-                },
-              ],
+                  output: '// failure'
+                }
+              ]
             },
             {
               name: 'void',
               signatureTS: '(): MaybeAsync<void>',
               description:
                 'Useful if you are not interested in the result of an operation.',
-              examples: [],
-            },
-          ],
+              examples: []
+            }
+          ]
         },
         {
           title: 'Methods passed to the MaybeAsync async/await callback',
+          id: 'callback',
           methods: [
             {
               name: 'liftMaybe',
@@ -930,9 +938,9 @@ const data: Data = {
                   input: `MaybeAsync(async ({ liftMaybe }) => {
   const value: number = await liftMaybe(Just(5))
 }).run()`,
-                  output: 'Promise {<resolved>: Just(5)}',
-                },
-              ],
+                  output: 'Promise {<resolved>: Just(5)}'
+                }
+              ]
             },
             {
               name: 'fromPromise',
@@ -946,13 +954,13 @@ const data: Data = {
                   input: `MaybeAsync(async ({ fromPromise }) => {
   const value: number = await fromPromise(Promise.resolve(Just(5)))
 }).run()`,
-                  output: 'Promise {<resolved>: Just(5)}',
-                },
-              ],
-            },
-          ],
-        },
-      ],
+                  output: 'Promise {<resolved>: Just(5)}'
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       name: 'Either',
@@ -966,13 +974,13 @@ const data: Data = {
         'Monad',
         'Foldable',
         'Extend',
-        'Bifunctor',
+        'Bifunctor'
       ],
       description: `Either is a data type with two sides (constructors) - Left and Right. It is most commonly used for error handling as it is very similar to the Maybe type with the only difference being that you can store information about the missing value (an error message for example). By convention, "Right is right", meaning that success is stored on the Right and failure is stored on the Left. It is also important to note that Either is right-biased which means that \`map\`, \`chain\` and other similar methods will operate on the right side.`,
       examples: [
         {
           title: 'How to import',
-          content: [`import { Either, Left, Right } from 'purify-ts/Either'`],
+          content: [`import { Either, Left, Right } from 'purify-ts/Either'`]
         },
         {
           title: 'Without Either',
@@ -994,8 +1002,8 @@ const data: Data = {
             '} catch (e) {',
             '    loggingService.log(e.message)',
             '    port = 8080',
-            '}',
-          ],
+            '}'
+          ]
         },
         {
           title: 'With Either',
@@ -1007,14 +1015,15 @@ const data: Data = {
             'const port: number = getPort() // Either<Error, number>',
             '    .ifLeft((e) => loggingService.log(e.message))',
             '    .map(parseInt)',
-            '    .orDefault(8080)',
-          ],
-        },
+            '    .orDefault(8080)'
+          ]
+        }
       ],
       guides: [],
       content: [
         {
           title: 'Constructors',
+          id: 'constructor',
           methods: [
             {
               name: 'Left',
@@ -1051,9 +1060,9 @@ randomEither().map(x => x)
               examples: [
                 {
                   input: `Left('Error')`,
-                  output: `Left('Error') // Either<string, never>`,
-                },
-              ],
+                  output: `Left('Error') // Either<string, never>`
+                }
+              ]
             },
             {
               name: 'Right',
@@ -1064,21 +1073,22 @@ randomEither().map(x => x)
               examples: [
                 {
                   input: 'Right(10)',
-                  output: 'Right(10) // Either<never, number>',
-                },
-              ],
-            },
-          ],
+                  output: 'Right(10) // Either<never, number>'
+                }
+              ]
+            }
+          ]
         },
         {
           title: 'Static methods',
+          id: 'static',
           methods: [
             {
               name: 'of',
               description: 'Takes a value and wraps it in a `Right`.',
               signatureML: 'b -> Either a b',
               signatureTS: '<R>(value: R): Either<never, R>',
-              examples: [{ input: 'Either.of(5)', output: 'Right(5)' }],
+              examples: [{ input: 'Either.of(5)', output: 'Right(5)' }]
             },
             {
               name: 'lefts',
@@ -1089,9 +1099,9 @@ randomEither().map(x => x)
               examples: [
                 {
                   input: `Either.lefts([Left('Server error'), Left('Wrong password'), Right('foo@bar.com')])`,
-                  output: `['Server error', 'Wrong password']`,
-                },
-              ],
+                  output: `['Server error', 'Wrong password']`
+                }
+              ]
             },
             {
               name: 'rights',
@@ -1102,9 +1112,9 @@ randomEither().map(x => x)
               examples: [
                 {
                   input: `Either.rights([Right(10), Left('Invalid input'), Right(5)])`,
-                  output: '[10, 5]',
-                },
-              ],
+                  output: '[10, 5]'
+                }
+              ]
             },
             {
               name: 'encase',
@@ -1115,10 +1125,10 @@ randomEither().map(x => x)
               examples: [
                 {
                   input: `Either.encase(() => { throw Error('Always fails') })`,
-                  output: `Left(new Error('Always fails'))`,
+                  output: `Left(new Error('Always fails'))`
                 },
-                { input: 'Either.encase(() => 10)', output: 'Right(10)' },
-              ],
+                { input: 'Either.encase(() => 10)', output: 'Right(10)' }
+              ]
             },
             {
               name: 'sequence',
@@ -1129,13 +1139,13 @@ randomEither().map(x => x)
               examples: [
                 {
                   input: 'Either.sequence([Right(1), Right(2)]))',
-                  output: 'Right([1, 2])',
+                  output: 'Right([1, 2])'
                 },
                 {
                   input: "Either.sequence([Right(1), Left('Error')]))",
-                  output: "Left('Error')",
-                },
-              ],
+                  output: "Left('Error')"
+                }
+              ]
             },
             {
               name: 'isEither',
@@ -1144,18 +1154,19 @@ randomEither().map(x => x)
               examples: [
                 {
                   input: "Either.isEither('Something')",
-                  output: 'false',
+                  output: 'false'
                 },
                 {
                   input: 'Either.isEither(Right(10))',
-                  output: 'true',
-                },
-              ],
-            },
-          ],
+                  output: 'true'
+                }
+              ]
+            }
+          ]
         },
         {
           title: 'Instance methods',
+          id: 'instance',
           methods: [
             {
               name: 'isLeft',
@@ -1165,8 +1176,8 @@ randomEither().map(x => x)
               signatureTS: '(): boolean',
               examples: [
                 { input: `Left('Error').isLeft()`, output: 'true' },
-                { input: `Right(10).isLeft()`, output: 'false' },
-              ],
+                { input: `Right(10).isLeft()`, output: 'false' }
+              ]
             },
             {
               name: 'isRight',
@@ -1176,8 +1187,8 @@ randomEither().map(x => x)
               signatureTS: '(): boolean',
               examples: [
                 { input: `Left('Error').isRight()`, output: 'false' },
-                { input: `Right(10).isRight()`, output: 'true' },
-              ],
+                { input: `Right(10).isRight()`, output: 'true' }
+              ]
             },
             {
               name: 'caseOf',
@@ -1188,17 +1199,17 @@ randomEither().map(x => x)
               examples: [
                 {
                   input: `Left('Error').caseOf({ Left: x => x, Right: () => 'No error' })`,
-                  output: `'Error'`,
+                  output: `'Error'`
                 },
                 {
                   input: `Right(6).caseOf({ Left: _ => 0, Right: x => x + 1 })`,
-                  output: '7',
+                  output: '7'
                 },
                 {
                   input: `Left('Error').caseOf({ _: () => 0 }) // wildcard`,
-                  output: '0',
-                },
-              ],
+                  output: '0'
+                }
+              ]
             },
             {
               name: 'bimap',
@@ -1210,13 +1221,13 @@ randomEither().map(x => x)
               examples: [
                 {
                   input: `Left('Error').bimap(x => x + '!', x => x + 1)`,
-                  output: `Left('Error!')`,
+                  output: `Left('Error!')`
                 },
                 {
                   input: `Right(5).bimap(x => x + '!', x => x + 1)`,
-                  output: `Right(6)`,
-                },
-              ],
+                  output: `Right(6)`
+                }
+              ]
             },
             {
               name: 'map',
@@ -1227,10 +1238,10 @@ randomEither().map(x => x)
               examples: [
                 {
                   input: `Left('Error').map(x => x + 1)`,
-                  output: `Left('Error')`,
+                  output: `Left('Error')`
                 },
-                { input: `Right(5).map(x => x + 1)`, output: `Right(6)` },
-              ],
+                { input: `Right(5).map(x => x + 1)`, output: `Right(6)` }
+              ]
             },
             {
               name: 'mapLeft',
@@ -1241,10 +1252,10 @@ randomEither().map(x => x)
               examples: [
                 {
                   input: `Left('Error').mapLeft(x => x + '!')`,
-                  output: `Left('Error!')`,
+                  output: `Left('Error!')`
                 },
-                { input: `Right(5).mapLeft(x => x + '!')`, output: `Right(5)` },
-              ],
+                { input: `Right(5).mapLeft(x => x + '!')`, output: `Right(5)` }
+              ]
             },
             {
               name: 'ap',
@@ -1257,17 +1268,17 @@ randomEither().map(x => x)
                 { input: 'Right(5).ap(Right(x => x + 1))', output: 'Right(6)' },
                 {
                   input: `Right(5).ap(Left('Error'))`,
-                  output: `Left('Error')`,
+                  output: `Left('Error')`
                 },
                 {
                   input: `Left('Error').ap(Right(x => x + 1))`,
-                  output: `Left('Error')`,
+                  output: `Left('Error')`
                 },
                 {
                   input: `Left('Error').ap(Left('Function Error'))`,
-                  output: `Left('Function Error')`,
-                },
-              ],
+                  output: `Left('Function Error')`
+                }
+              ]
             },
             {
               name: 'equals',
@@ -1278,12 +1289,12 @@ randomEither().map(x => x)
               examples: [
                 {
                   input: `Left('Error').equals(Left('Error'))`,
-                  output: 'true',
+                  output: 'true'
                 },
                 { input: `Right(5).equals(Right(5))`, output: 'true' },
                 { input: `Left(10).equals(Right(10))`, output: 'false' },
-                { input: `Right(5).equals(Left('Error'))`, output: 'false' },
-              ],
+                { input: `Right(5).equals(Left('Error'))`, output: 'false' }
+              ]
             },
             {
               name: 'chain',
@@ -1295,13 +1306,13 @@ randomEither().map(x => x)
               examples: [
                 {
                   input: `Left('Error').chain(x => Right(x + 1))`,
-                  output: `Left('Error')`,
+                  output: `Left('Error')`
                 },
                 {
                   input: `Right(5).chain(x => Right(x + 1))`,
-                  output: `Right(6)`,
-                },
-              ],
+                  output: `Right(6)`
+                }
+              ]
             },
             {
               name: 'chainLeft',
@@ -1313,13 +1324,13 @@ randomEither().map(x => x)
               examples: [
                 {
                   input: `Left('Error').chainLeft(x => Right(''))`,
-                  output: `Right('')`,
+                  output: `Right('')`
                 },
                 {
                   input: `Right(5).chainLeft(x => Right(999))`,
-                  output: `Right(5)`,
-                },
-              ],
+                  output: `Right(5)`
+                }
+              ]
             },
             {
               name: 'join',
@@ -1332,9 +1343,9 @@ randomEither().map(x => x)
                 { input: 'Right(Right(5)).join()', output: 'Right(5)' },
                 {
                   input: `Left(Left('Error')).join()`,
-                  output: `Left(Left('Error'))`,
-                },
-              ],
+                  output: `Left(Left('Error'))`
+                }
+              ]
             },
             {
               name: 'alt',
@@ -1345,12 +1356,12 @@ randomEither().map(x => x)
               examples: [
                 {
                   input: `Left('Error').alt(Left('Error!'))`,
-                  output: `Left('Error!')`,
+                  output: `Left('Error!')`
                 },
                 { input: `Left('Error').alt(Right(5))`, output: `Right(5)` },
                 { input: `Right(5).alt(Left('Error'))`, output: `Right(5)` },
-                { input: `Right(5).alt(Right(6))`, output: `Right(5)` },
-              ],
+                { input: `Right(5).alt(Right(6))`, output: `Right(5)` }
+              ]
             },
             {
               name: 'reduce',
@@ -1362,13 +1373,13 @@ randomEither().map(x => x)
               examples: [
                 {
                   input: 'Right(5).reduce((acc, x) => x * acc, 2)',
-                  output: '10',
+                  output: '10'
                 },
                 {
                   input: `Left('Error').reduce((acc, x) => x * acc, 0)`,
-                  output: '0',
-                },
-              ],
+                  output: '0'
+                }
+              ]
             },
             {
               name: 'extend',
@@ -1380,13 +1391,13 @@ randomEither().map(x => x)
               examples: [
                 {
                   input: `Left('Error').extend(x => x.isRight())`,
-                  output: `Left('Error')`,
+                  output: `Left('Error')`
                 },
                 {
                   input: `Right(5).extend(x => x.isRight())`,
-                  output: `Right(true)`,
-                },
-              ],
+                  output: `Right(true)`
+                }
+              ]
             },
             {
               name: 'unsafeCoerce',
@@ -1398,13 +1409,13 @@ randomEither().map(x => x)
                 {
                   input: `Left('Error').unsafeCoerce()`,
                   output:
-                    '// Uncaught Error: Either#unsafeCoerce was ran on a Left',
+                    '// Uncaught Error: Either#unsafeCoerce was ran on a Left'
                 },
                 {
                   input: `Left(Error('Something')).unsafeCoerce()`,
-                  output: '// Uncaught Error: Something',
-                },
-              ],
+                  output: '// Uncaught Error: Something'
+                }
+              ]
             },
             {
               name: 'orDefault',
@@ -1414,8 +1425,8 @@ randomEither().map(x => x)
               signatureTS: '(defaultValue: R): R',
               examples: [
                 { input: `Left('Error').orDefault(0)`, output: '0' },
-                { input: `Right(5).orDefault(0)`, output: '5' },
-              ],
+                { input: `Right(5).orDefault(0)`, output: '5' }
+              ]
             },
             {
               name: 'leftOrDefault',
@@ -1426,13 +1437,13 @@ randomEither().map(x => x)
               examples: [
                 {
                   input: `Left('Error').leftOrDefault('No error')`,
-                  output: `'Error'`,
+                  output: `'Error'`
                 },
                 {
                   input: `Right(5).leftOrDefault('No error')`,
-                  output: `'No error'`,
-                },
-              ],
+                  output: `'No error'`
+                }
+              ]
             },
             {
               name: 'orDefaultLazy',
@@ -1444,9 +1455,9 @@ randomEither().map(x => x)
                 { input: `Left('Error').orDefault(() => 0)`, output: '0' },
                 {
                   input: `Right(5).orDefault(() => expensiveComputation())`,
-                  output: '5 // expensiveComputation is never called',
-                },
-              ],
+                  output: '5 // expensiveComputation is never called'
+                }
+              ]
             },
             {
               name: 'leftOrDefaultLazy',
@@ -1457,13 +1468,13 @@ randomEither().map(x => x)
               examples: [
                 {
                   input: `Left('Error').leftOrDefault(() => 'No error')`,
-                  output: `'Error'`,
+                  output: `'Error'`
                 },
                 {
                   input: `Right(5).leftOrDefault(() => 'No error')`,
-                  output: `'No error'`,
-                },
-              ],
+                  output: `'No error'`
+                }
+              ]
             },
             {
               name: 'toMaybe',
@@ -1473,8 +1484,8 @@ randomEither().map(x => x)
               signatureTS: '(): Maybe<R>',
               examples: [
                 { input: `Left('Error').toMaybe()`, output: 'Nothing' },
-                { input: `Right(5).toMaybe()`, output: 'Just(5)' },
-              ],
+                { input: `Right(5).toMaybe()`, output: 'Just(5)' }
+              ]
             },
             {
               name: 'leftToMaybe',
@@ -1485,10 +1496,10 @@ randomEither().map(x => x)
               examples: [
                 {
                   input: `Left('Error').leftToMaybe()`,
-                  output: `Just('Error')`,
+                  output: `Just('Error')`
                 },
-                { input: `Right(5).leftToMaybe()`, output: 'Nothing' },
-              ],
+                { input: `Right(5).leftToMaybe()`, output: 'Nothing' }
+              ]
             },
             {
               name: 'ifLeft',
@@ -1498,13 +1509,13 @@ randomEither().map(x => x)
               examples: [
                 {
                   input: `Left('Error').ifLeft((err) => console.log(err))`,
-                  output: `// Error`,
+                  output: `// Error`
                 },
                 {
                   input: `Right(5).ifLeft(() => console.log('Unexpected error'))`,
-                  output: '',
-                },
-              ],
+                  output: ''
+                }
+              ]
             },
             {
               name: 'ifRight',
@@ -1514,13 +1525,13 @@ randomEither().map(x => x)
               examples: [
                 {
                   input: `Left('Error').ifRight((result) => console.log(result))`,
-                  output: ``,
+                  output: ``
                 },
                 {
                   input: `Right(5).ifRight((result) => console.log(result))`,
-                  output: '// 5',
-                },
-              ],
+                  output: '// 5'
+                }
+              ]
             },
             {
               name: 'either',
@@ -1533,9 +1544,9 @@ randomEither().map(x => x)
                 { input: 'Right(5).either(_ => 0, x => x + 1)', output: '6' },
                 {
                   input: `Left('Error').either(x => x + '!', _ => '')`,
-                  output: `'Error!'`,
-                },
-              ],
+                  output: `'Error!'`
+                }
+              ]
             },
             {
               name: 'extract',
@@ -1543,8 +1554,8 @@ randomEither().map(x => x)
               signatureTS: '(): L | R',
               examples: [
                 { input: 'Right(5).extract()', output: '5' },
-                { input: `Left('Error').extract()`, output: `'Error'` },
-              ],
+                { input: `Left('Error').extract()`, output: `'Error'` }
+              ]
             },
             {
               name: 'swap',
@@ -1554,12 +1565,12 @@ randomEither().map(x => x)
               signatureML: 'Either a b ~> Either b a',
               examples: [
                 { input: 'Right(5).swap()', output: 'Left(5)' },
-                { input: 'Left(5).swap()', output: 'Right(5)' },
-              ],
-            },
-          ],
-        },
-      ],
+                { input: 'Left(5).swap()', output: 'Right(5)' }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       name: 'EitherAsync',
@@ -1567,13 +1578,13 @@ randomEither().map(x => x)
       guides: [
         {
           title: 'MaybeAsync and EitherAsync for Haskellers',
-          link: '/guides/maybeasync-eitherasync-for-haskellers',
+          link: '/guides/maybeasync-eitherasync-for-haskellers'
         },
         {
           title: 'EitherAsync used in an example repo',
           link:
-            'https://github.com/gigobyte/ts-react-express-starter/tree/main/server/src',
-        },
+            'https://github.com/gigobyte/ts-react-express-starter/tree/main/server/src'
+        }
       ],
       description: (
         <div>
@@ -1602,15 +1613,15 @@ randomEither().map(x => x)
       examples: [
         {
           title: 'How to import',
-          content: [`import { EitherAsync } from 'purify-ts/EitherAsync'`],
+          content: [`import { EitherAsync } from 'purify-ts/EitherAsync'`]
         },
         {
           title: 'Given the following functions, examples below',
           content: [
             `function validateRequest(req: Request): Either<Error, DeleteUserRequest>`,
             `function getUser(userId: number):       Promise<Either<Error, User>>`,
-            `function deleteUserDb(user: User):      Promise<Id<User>>`,
-          ],
+            `function deleteUserDb(user: User):      Promise<Id<User>>`
+          ]
         },
         {
           title: 'Example usage (async/await)',
@@ -1631,8 +1642,8 @@ randomEither().map(x => x)
             '    })',
             '',
             'const promise: Promise<Either<Error, Id<User>>> =',
-            '   deleteUser(req).run()',
-          ],
+            '   deleteUser(req).run()'
+          ]
         },
         {
           title: 'Example usage (chaining)',
@@ -1649,13 +1660,14 @@ randomEither().map(x => x)
             '        .chain(user    => EitherAsync(() => deleteUserDb(user)))',
             '',
             'const promise: Promise<Either<Error, Id<User>>> =',
-            '   deleteUser(req).run()',
-          ],
-        },
+            '   deleteUser(req).run()'
+          ]
+        }
       ],
       content: [
         {
           title: 'Constructors',
+          id: 'constructor',
           methods: [
             {
               name: 'EitherAsync',
@@ -1665,16 +1677,17 @@ randomEither().map(x => x)
                 {
                   input:
                     'EitherAsync<Error, number>(({ liftEither, fromPromise }) => Promise.resolve(5))',
-                  output: 'EitherAsync<Error, number>',
-                },
+                  output: 'EitherAsync<Error, number>'
+                }
               ],
               signatureML: '(EitherAsyncHelpers -> IO a) -> EitherAsync a b',
-              signatureTS: `<L, R>(runPromise: (helpers: EitherAsyncHelpers<L>) => PromiseLike<R>): EitherAsync<L, R>`,
-            },
-          ],
+              signatureTS: `<L, R>(runPromise: (helpers: EitherAsyncHelpers<L>) => PromiseLike<R>): EitherAsync<L, R>`
+            }
+          ]
         },
         {
           title: 'Static methods',
+          id: 'static',
           methods: [
             {
               name: 'fromPromise',
@@ -1684,11 +1697,11 @@ randomEither().map(x => x)
                 {
                   input:
                     'EitherAsync.fromPromise(() => Promise.resolve(Right(5)))',
-                  output: 'EitherAsync<never, number>',
-                },
+                  output: 'EitherAsync<never, number>'
+                }
               ],
               signatureML: '(() -> IO (Either a b)) -> EitherAsync a b',
-              signatureTS: `<L, R>(f: () => PromiseLike<Either<L, R>>): EitherAsync<L, R>`,
+              signatureTS: `<L, R>(f: () => PromiseLike<Either<L, R>>): EitherAsync<L, R>`
             },
             {
               name: 'liftEither',
@@ -1696,11 +1709,11 @@ randomEither().map(x => x)
               examples: [
                 {
                   input: 'EitherAsync.liftEither(Right(5))',
-                  output: 'EitherAsync<never, number>',
-                },
+                  output: 'EitherAsync<never, number>'
+                }
               ],
               signatureML: 'Either a b -> EitherAsync a b',
-              signatureTS: `<L, R>(either: Either<L, R>): EitherAsync<L, R>`,
+              signatureTS: `<L, R>(either: Either<L, R>): EitherAsync<L, R>`
             },
             {
               name: 'lefts',
@@ -1715,9 +1728,9 @@ randomEither().map(x => x)
   EitherAsync.liftEither(Left('Wrong password')),
   EitherAsync(async () => 'foo@bar.com')
 ])`,
-                  output: `Promise {<resolved>: ['Server error', 'Wrong password']}`,
-                },
-              ],
+                  output: `Promise {<resolved>: ['Server error', 'Wrong password']}`
+                }
+              ]
             },
             {
               name: 'rights',
@@ -1732,9 +1745,9 @@ randomEither().map(x => x)
   EitherAsync.liftEither(Left('Invalid input')),
   EitherAsync(async () => 5)
 ])`,
-                  output: 'Promise {<resolved>: [10, 5]}',
-                },
-              ],
+                  output: 'Promise {<resolved>: [10, 5]}'
+                }
+              ]
             },
             {
               name: 'sequence',
@@ -1747,14 +1760,14 @@ randomEither().map(x => x)
                 {
                   input:
                     'EitherAsync.sequence([EitherAsync(async () => 1), EitherAsync(async () => 2)).run()',
-                  output: 'Promise {<resolved>: Right([1, 2])}',
+                  output: 'Promise {<resolved>: Right([1, 2])}'
                 },
                 {
                   input:
                     "EitherAsync.sequence([EitherAsync(async () => 1), EitherAsync(() => { throw 'Error' })])).run()",
-                  output: "Promise {<resolved>: Left('Error')}",
-                },
-              ],
+                  output: "Promise {<resolved>: Left('Error')}"
+                }
+              ]
             },
             {
               name: 'all',
@@ -1763,12 +1776,13 @@ randomEither().map(x => x)
               signatureTS:
                 '<L, R>(eas: EitherAsync<L, R>[]): EitherAsync<L, R[]>',
               signatureML: '[EitherAsync a b] -> EitherAsync a [b]',
-              examples: [],
-            },
-          ],
+              examples: []
+            }
+          ]
         },
         {
           title: 'Instance methods',
+          id: 'instance',
           methods: [
             {
               name: 'run',
@@ -1803,22 +1817,22 @@ randomEither().map(x => x)
               examples: [
                 {
                   input: `EitherAsync<string, never>(({ liftEither }) => liftEither(Left('Error'))).run()`,
-                  output: `Promise {<resolved>: Left('Error')}`,
+                  output: `Promise {<resolved>: Left('Error')}`
                 },
                 {
                   input: `EitherAsync<string, never>(() => Promise.reject('Something happened')).run()`,
-                  output: `Promise {<resolved>: Left('Something happened')}`,
+                  output: `Promise {<resolved>: Left('Something happened')}`
                 },
                 {
                   input: `EitherAsync<Error, never>(() => { throw Error('Something happened') }).run()`,
-                  output: `Promise {<resolved>: Left(Error('Something happened'))}`,
+                  output: `Promise {<resolved>: Left(Error('Something happened'))}`
                 },
                 {
                   input:
                     'EitherAsync<string, number>(() => Promise.resolve(5)).run()',
-                  output: 'Promise {<resolved>: Right(5)}',
-                },
-              ],
+                  output: 'Promise {<resolved>: Right(5)}'
+                }
+              ]
             },
             {
               name: 'bimap',
@@ -1832,14 +1846,14 @@ randomEither().map(x => x)
                 {
                   input:
                     'EitherAsync(() => Promise.resolve(5)).bimap(identity, x => x + 1).run()',
-                  output: 'Promise {<resolved>: Right(6)}',
+                  output: 'Promise {<resolved>: Right(6)}'
                 },
                 {
                   input:
                     'EitherAsync(() => Promise.reject(5)).bimap(x => x + 1, identity).run()',
-                  output: 'Promise {<resolved>: Left(6)}',
-                },
-              ],
+                  output: 'Promise {<resolved>: Left(6)}'
+                }
+              ]
             },
             {
               name: 'map',
@@ -1851,9 +1865,9 @@ randomEither().map(x => x)
                 {
                   input:
                     'EitherAsync(() => Promise.resolve(5)).map(x => x + 1).run()',
-                  output: 'Promise {<resolved>: Right(6)}',
-                },
-              ],
+                  output: 'Promise {<resolved>: Right(6)}'
+                }
+              ]
             },
             {
               name: 'mapLeft',
@@ -1865,14 +1879,14 @@ randomEither().map(x => x)
                 {
                   input:
                     'EitherAsync(() => throw new Error()).mapLeft(_ => ({ status: 500 })).run()',
-                  output: 'Promise {<resolved>: Left({ status: 500 })}',
+                  output: 'Promise {<resolved>: Left({ status: 500 })}'
                 },
                 {
                   input:
                     'EitherAsync(() => Promise.resolve(5)).mapLeft(x => x + 1).run()',
-                  output: 'Promise {<resolved>: Right(5)}',
-                },
-              ],
+                  output: 'Promise {<resolved>: Right(5)}'
+                }
+              ]
             },
             {
               name: 'ap',
@@ -1880,7 +1894,7 @@ randomEither().map(x => x)
                 'Applies a `Right` function wrapped in `EitherAsync` over a future `Right` value. Returns `Left` if either the `this` resolves to a `Left` or the function is `Left`.',
               signatureTS:
                 '<R2>(other: PromiseLike<Either<L, (value: R) => R2>>): EitherAsync<L, R2>',
-              examples: [],
+              examples: []
             },
             {
               name: 'chain',
@@ -1891,13 +1905,13 @@ randomEither().map(x => x)
               examples: [
                 {
                   input: `EitherAsync(async () => 5).chain(x => EitherAsync(async () => x + 1)).run()`,
-                  output: 'Promise {<resolved>: Right(6)}',
+                  output: 'Promise {<resolved>: Right(6)}'
                 },
                 {
                   input: `EitherAsync(async () => 5).chain(async (x) => x + 1).run()`,
-                  output: 'Promise {<resolved>: Right(6)}',
-                },
-              ],
+                  output: 'Promise {<resolved>: Right(6)}'
+                }
+              ]
             },
             {
               name: 'chainLeft',
@@ -1910,9 +1924,9 @@ randomEither().map(x => x)
                   input: `EitherAsync(({ throwE }) => throwE(500))
   .chainLeft(x => EitherAsync(() => Promise.resolve(6)))
   .run()`,
-                  output: 'Promise {<resolved>: Right(6)}',
-                },
-              ],
+                  output: 'Promise {<resolved>: Right(6)}'
+                }
+              ]
             },
             {
               name: 'join',
@@ -1921,7 +1935,7 @@ randomEither().map(x => x)
               signatureML: 'EitherAsync a (EitherAsync a b) ~> EitherAsync a b',
               signatureTS:
                 '<R2>(this: EitherAsync<L, EitherAsync<L, R2>>): EitherAsync<L, R2>',
-              examples: [],
+              examples: []
             },
             {
               name: 'alt',
@@ -1930,7 +1944,7 @@ randomEither().map(x => x)
               signatureML:
                 'EitherAsync a b ~> EitherAsync a b -> EitherAsync a b',
               signatureTS: '(other: EitherAsync<L, R>): EitherAsync<L, R>',
-              examples: [],
+              examples: []
             },
             {
               name: 'extend',
@@ -1940,7 +1954,7 @@ randomEither().map(x => x)
                 'EitherAsync a b ~> (EitherAsync a b -> c) -> EitherAsync a c',
               signatureTS:
                 '<R2>(f: (value: EitherAsync<L, R>) => R2): EitherAsync<L, R2>',
-              examples: [],
+              examples: []
             },
             {
               name: 'orDefault',
@@ -1948,7 +1962,7 @@ randomEither().map(x => x)
                 "Returns a Promise that resolves to the value inside `this` if it's `Right` or a default value if `this` is `Left`.",
               signatureML: 'EitherAsync a b ~> b -> b',
               signatureTS: '(defaultValue: R): Promise<R>',
-              examples: [],
+              examples: []
             },
             {
               name: 'leftOrDefault',
@@ -1956,7 +1970,7 @@ randomEither().map(x => x)
                 "Returns a Promise that resolves to the value inside `this` if it's `Left` or a default value if `this` is `Right`.",
               signatureML: 'EitherAsync a b ~> a -> IO a',
               signatureTS: '(defaultValue: L): Promise<L>',
-              examples: [],
+              examples: []
             },
             {
               name: 'toMaybeAsync',
@@ -1964,7 +1978,7 @@ randomEither().map(x => x)
                 'Converts `this` to a MaybeAsync, discarding any error values.',
               signatureML: 'EitherAsync a b ~> MaybeAsync b',
               signatureTS: '(): MaybeAsync<R>',
-              examples: [],
+              examples: []
             },
             {
               name: 'swap',
@@ -1976,13 +1990,13 @@ randomEither().map(x => x)
                 {
                   input:
                     'EitherAsync<string, number>(() => Promise.resolve(5)).swap().run()',
-                  output: 'Promise {<resolved>: Left(5)}',
+                  output: 'Promise {<resolved>: Left(5)}'
                 },
                 {
                   input: `EitherAsync(() => Promise.reject('Something happened')).swap().run()`,
-                  output: `Promise {<resolved>: Right('Something happened')}`,
-                },
-              ],
+                  output: `Promise {<resolved>: Right('Something happened')}`
+                }
+              ]
             },
             {
               name: 'ifLeft',
@@ -1992,13 +2006,13 @@ randomEither().map(x => x)
               examples: [
                 {
                   input: `EitherAsync.liftEither(Left('Error')).ifLeft((err) => console.log(err))`,
-                  output: `// Error`,
+                  output: `// Error`
                 },
                 {
                   input: `EitherAsync.liftEither(Right(5)).ifLeft(() => console.log('Unexpected error'))`,
-                  output: '',
-                },
-              ],
+                  output: ''
+                }
+              ]
             },
             {
               name: 'ifRight',
@@ -2008,25 +2022,26 @@ randomEither().map(x => x)
               examples: [
                 {
                   input: `EitherAsync.liftEither(Left('Error')).ifRight((result) => console.log(result))`,
-                  output: ``,
+                  output: ``
                 },
                 {
                   input: `EitherAsync.liftEither(Right(5)).ifRight((result) => console.log(result))`,
-                  output: '// 5',
-                },
-              ],
+                  output: '// 5'
+                }
+              ]
             },
             {
               name: 'void',
               signatureTS: '(): EitherAsync<L, void>',
               description:
                 'Useful if you are not interested in the result of an operation.',
-              examples: [],
-            },
-          ],
+              examples: []
+            }
+          ]
         },
         {
           title: 'Methods passed to the EitherAsync async/await callback',
+          id: 'callback',
           methods: [
             {
               name: 'liftEither',
@@ -2039,9 +2054,9 @@ randomEither().map(x => x)
                   input: `EitherAsync(async ({ liftEither }) => {
   const value: number = await liftEither(Right(5))
 }).run()`,
-                  output: 'Promise {<resolved>: Right(5)}',
-                },
-              ],
+                  output: 'Promise {<resolved>: Right(5)}'
+                }
+              ]
             },
             {
               name: 'fromPromise',
@@ -2055,9 +2070,9 @@ randomEither().map(x => x)
                   input: `EitherAsync(async ({ fromPromise }) => {
   const value: number = await fromPromise(Promise.resolve(Right(5)))
 }).run()`,
-                  output: 'Promise {<resolved>: Right(5)}',
-                },
-              ],
+                  output: 'Promise {<resolved>: Right(5)}'
+                }
+              ]
             },
             {
               name: 'throwE',
@@ -2071,13 +2086,13 @@ randomEither().map(x => x)
   throwE('Test')
   return value
 }).run()`,
-                  output: `Promise {<resolved>: Left('Test')}`,
-                },
-              ],
-            },
-          ],
-        },
-      ],
+                  output: `Promise {<resolved>: Left('Test')}`
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       name: 'Tuple',
@@ -2086,13 +2101,14 @@ randomEither().map(x => x)
       examples: [
         {
           title: 'How to import',
-          content: [`import { Tuple } from 'purify-ts/Tuple'`],
-        },
+          content: [`import { Tuple } from 'purify-ts/Tuple'`]
+        }
       ],
       guides: [],
       content: [
         {
           title: 'Constructors',
+          id: 'constructor',
           methods: [
             {
               name: 'Tuple',
@@ -2102,14 +2118,15 @@ randomEither().map(x => x)
               examples: [
                 {
                   input: 'Tuple(1, true)',
-                  output: 'Tuple(1, true) // Tuple<number, boolean>',
-                },
-              ],
-            },
-          ],
+                  output: 'Tuple(1, true) // Tuple<number, boolean>'
+                }
+              ]
+            }
+          ]
         },
         {
           title: 'Static methods',
+          id: 'static',
           methods: [
             {
               name: 'fromArray',
@@ -2117,8 +2134,8 @@ randomEither().map(x => x)
                 'Constructs a tuple from an array with two elements.',
               signatureTS: '<F, S>([fst, snd]: [F, S]): Tuple<F, S>',
               examples: [
-                { input: 'Tuple.fromArray([5, 10])', output: 'Tuple(5, 10)' },
-              ],
+                { input: 'Tuple.fromArray([5, 10])', output: 'Tuple(5, 10)' }
+              ]
             },
             {
               name: 'fanout',
@@ -2130,18 +2147,19 @@ randomEither().map(x => x)
               examples: [
                 {
                   input: `Tuple.fanout(x => x[0], x => x.length, 'sss')`,
-                  output: `Tuple('s', 3)`,
+                  output: `Tuple('s', 3)`
                 },
                 {
                   input: `Tuple.fanout(x => x[0], x => x.length)('sss')`,
-                  output: `Tuple('s', 3)`,
-                },
-              ],
-            },
-          ],
+                  output: `Tuple('s', 3)`
+                }
+              ]
+            }
+          ]
         },
         {
           title: 'Instance methods',
+          id: 'instance',
           methods: [
             {
               name: '[Symbol.iterator]',
@@ -2151,23 +2169,23 @@ randomEither().map(x => x)
                 {
                   input: `const [ fst, snd ] = Tuple(1, 'str')`,
                   output:
-                    '// Types are preserved - fst has type of number, snd has type of string',
-                },
-              ],
+                    '// Types are preserved - fst has type of number, snd has type of string'
+                }
+              ]
             },
             {
               name: 'fst',
               description: 'Returns the first value of `this`.',
               signatureML: '(a, b) ~> a',
               signatureTS: '(): F',
-              examples: [{ input: 'Tuple(5, 10).fst()', output: '5' }],
+              examples: [{ input: 'Tuple(5, 10).fst()', output: '5' }]
             },
             {
               name: 'snd',
               description: 'Returns the second value of `this`.',
               signatureML: '(a, b) ~> b',
               signatureTS: '(): S',
-              examples: [{ input: 'Tuple(5, 10).snd()', output: '10' }],
+              examples: [{ input: 'Tuple(5, 10).snd()', output: '10' }]
             },
             {
               name: 'equals',
@@ -2177,8 +2195,8 @@ randomEither().map(x => x)
               signatureTS: 'other: Tuple<F, S>): boolean',
               examples: [
                 { input: 'Tuple(5, 10).equals(Tuple(5, 10))', output: 'true' },
-                { input: `Tuple(5, 'foo').equals(5, 'bar')`, output: 'false' },
-              ],
+                { input: `Tuple(5, 'foo').equals(5, 'bar')`, output: 'false' }
+              ]
             },
             {
               name: 'bimap',
@@ -2190,9 +2208,9 @@ randomEither().map(x => x)
               examples: [
                 {
                   input: `Tuple(1, 'apple').bimap(x => x + 1, x => x + 's')`,
-                  output: `Tuple(2, 'apples')`,
-                },
-              ],
+                  output: `Tuple(2, 'apples')`
+                }
+              ]
             },
             {
               name: 'map',
@@ -2202,9 +2220,9 @@ randomEither().map(x => x)
               examples: [
                 {
                   input: `Tuple('configured', false).map(x => !x)`,
-                  output: `Tuple('configured', true)`,
-                },
-              ],
+                  output: `Tuple('configured', true)`
+                }
+              ]
             },
             {
               name: 'mapFirst',
@@ -2214,9 +2232,9 @@ randomEither().map(x => x)
               examples: [
                 {
                   input: `Tuple(2, 'items').mapFirst(x => x + 1)`,
-                  output: `Tuple(3, 'items')`,
-                },
-              ],
+                  output: `Tuple(3, 'items')`
+                }
+              ]
             },
             {
               name: 'ap',
@@ -2228,9 +2246,9 @@ randomEither().map(x => x)
               examples: [
                 {
                   input: `Tuple(5, 10).ap(Tuple('increment', x => x + 1))`,
-                  output: `Tuple(5, 11)`,
-                },
-              ],
+                  output: `Tuple(5, 11)`
+                }
+              ]
             },
             {
               name: 'reduce',
@@ -2242,18 +2260,16 @@ randomEither().map(x => x)
               examples: [
                 {
                   input: `Tuple(5, 10).reduce((acc, x) => acc + x, 10)`,
-                  output: '20',
-                },
-              ],
+                  output: '20'
+                }
+              ]
             },
             {
               name: 'swap',
               description: 'Swaps the values inside `this`.',
               signatureML: '(a, b) ~> (b, a)',
               signatureTS: '(): Tuple<S, F>',
-              examples: [
-                { input: 'Tuple(0, 1).swap()', output: 'Tuple(1, 0)' },
-              ],
+              examples: [{ input: 'Tuple(0, 1).swap()', output: 'Tuple(1, 0)' }]
             },
             {
               name: 'toArray',
@@ -2263,9 +2279,9 @@ randomEither().map(x => x)
               examples: [
                 {
                   input: `Tuple('username', true).toArray()`,
-                  output: `['username', true]`,
-                },
-              ],
+                  output: `['username', true]`
+                }
+              ]
             },
             {
               name: 'some',
@@ -2273,7 +2289,7 @@ randomEither().map(x => x)
                 'Tests whether at least one element in the tuple passes the test implemented by the provided function.',
               signatureTS: '(pred: (value: F | S) => boolean): boolean',
               signatureML: '(a, a) ~> (a -> Bool) -> Bool',
-              examples: [],
+              examples: []
             },
             {
               name: 'every',
@@ -2281,11 +2297,11 @@ randomEither().map(x => x)
                 'Tests whether both elements in the tuple pass the test implemented by the provided function.',
               signatureTS: '(pred: (value: F | S) => boolean): boolean',
               signatureML: '(a, a) ~> (a -> Bool) -> Bool',
-              examples: [],
-            },
-          ],
-        },
-      ],
+              examples: []
+            }
+          ]
+        }
+      ]
     },
     {
       name: 'NonEmptyList',
@@ -2294,13 +2310,14 @@ randomEither().map(x => x)
       examples: [
         {
           title: 'How to import',
-          content: [`import { NonEmptyList } from 'purify-ts/NonEmptyList'`],
-        },
+          content: [`import { NonEmptyList } from 'purify-ts/NonEmptyList'`]
+        }
       ],
       guides: [],
       content: [
         {
           title: 'Constructors',
+          id: 'constructor',
           methods: [
             {
               name: 'NonEmptyList',
@@ -2311,15 +2328,16 @@ randomEither().map(x => x)
               examples: [
                 {
                   input: 'NonEmptyList([1])',
-                  output: '// NonEmptyList<number>',
+                  output: '// NonEmptyList<number>'
                 },
-                { input: 'NonEmptyList([])', output: '// Compiler error' },
-              ],
-            },
-          ],
+                { input: 'NonEmptyList([])', output: '// Compiler error' }
+              ]
+            }
+          ]
         },
         {
           title: 'Static methods',
+          id: 'static',
           methods: [
             {
               name: 'fromArray',
@@ -2330,10 +2348,10 @@ randomEither().map(x => x)
               examples: [
                 {
                   input: 'NonEmptyList.fromArray([1])',
-                  output: 'Just(NonEmptyList([1]))',
+                  output: 'Just(NonEmptyList([1]))'
                 },
-                { input: 'NonEmptyList.fromArray([])', output: 'Nothing' },
-              ],
+                { input: 'NonEmptyList.fromArray([])', output: 'Nothing' }
+              ]
             },
             {
               name: 'fromTuple',
@@ -2342,9 +2360,9 @@ randomEither().map(x => x)
               examples: [
                 {
                   input: 'NonEmptyList.fromTuple(Tuple(1, 2))',
-                  output: 'NonEmptyList([1, 2])',
-                },
-              ],
+                  output: 'NonEmptyList([1, 2])'
+                }
+              ]
             },
             {
               name: 'unsafeCoerce',
@@ -2355,13 +2373,13 @@ randomEither().map(x => x)
                 {
                   input: 'NonEmptyList.unsafeCoerce([])',
                   output:
-                    '// Uncaught Error: NonEmptyList#unsafeCoerce was ran on an empty array',
+                    '// Uncaught Error: NonEmptyList#unsafeCoerce was ran on an empty array'
                 },
                 {
                   input: 'NonEmptyList.unsafeCoerce([1])',
-                  output: '// NonEmptyList<number>',
-                },
-              ],
+                  output: '// NonEmptyList<number>'
+                }
+              ]
             },
             {
               name: 'isNonEmpty',
@@ -2370,34 +2388,34 @@ randomEither().map(x => x)
               description:
                 'Returns true and narrows the type if the passed array has one or more elements.',
               examples: [
-                { input: 'NonEmptyList.isNonEmpty([1])', output: 'true' },
-              ],
+                { input: 'NonEmptyList.isNonEmpty([1])', output: 'true' }
+              ]
             },
             {
               name: 'head',
               signatureML: 'NonEmptyList a -> a',
               signatureTS: '<T>(list: NonEmptyList<T>): T',
               description: `The same function as \`List#head\`, but it doesn't return a Maybe as a NonEmptyList will always have a head.`,
-              examples: [],
+              examples: []
             },
             {
               name: 'last',
               signatureML: 'NonEmptyList a -> a',
               signatureTS: '<T>(list: NonEmptyList<T>): T',
               description: `The same function as \`List#last\`, but it doesn't return a Maybe as a NonEmptyList will always have a last element.`,
-              examples: [],
+              examples: []
             },
             {
               name: 'tail',
               signatureML: 'NonEmptyList a -> [a]',
               signatureTS: '<T>(list: NonEmptyList<T>): T[]',
               description: `The same function as \`List#tail\`, but it doesn't return a Maybe as a NonEmptyList will always have a tail (although it may be of length 0).`,
-              examples: [],
-            },
-          ],
-        },
-      ],
-    },
+              examples: []
+            }
+          ]
+        }
+      ]
+    }
   ],
   utils: [
     {
@@ -2405,7 +2423,7 @@ randomEither().map(x => x)
       description:
         'This module contains type-safe functions for working with arrays.',
       example: {
-        import: `import { List } from 'purify-ts/List'`,
+        import: `import { List } from 'purify-ts/List'`
       },
       content: [
         {
@@ -2418,8 +2436,8 @@ randomEither().map(x => x)
               signatureTS: '<T>(index: number, list: T[]): Maybe<T>',
               examples: [
                 { input: 'List.at(0, [1, 2])', output: 'Just(1)' },
-                { input: 'List.at(2, [1, 2])', output: 'Nothing' },
-              ],
+                { input: 'List.at(2, [1, 2])', output: 'Nothing' }
+              ]
             },
             {
               name: 'head',
@@ -2428,8 +2446,8 @@ randomEither().map(x => x)
               signatureTS: '<T>(list: T[]): Maybe<T>',
               examples: [
                 { input: 'List.head([1])', output: 'Just(1)' },
-                { input: 'List.head([])', output: 'Nothing' },
-              ],
+                { input: 'List.head([])', output: 'Nothing' }
+              ]
             },
             {
               name: 'last',
@@ -2439,8 +2457,8 @@ randomEither().map(x => x)
               signatureTS: '<T>(list: T[]): Maybe<T>',
               examples: [
                 { input: 'List.last([1, 2, 3])', output: 'Just(3)' },
-                { input: 'List.last([])', output: 'Nothing' },
-              ],
+                { input: 'List.last([])', output: 'Nothing' }
+              ]
             },
             {
               name: 'tail',
@@ -2450,8 +2468,8 @@ randomEither().map(x => x)
               examples: [
                 { input: 'List.tail([1, 2, 3])', output: 'Just([2, 3])' },
                 { input: 'List.tail([1])', output: 'Just([])' },
-                { input: 'List.tail([])', output: 'Nothing' },
-              ],
+                { input: 'List.tail([])', output: 'Nothing' }
+              ]
             },
             {
               name: 'init',
@@ -2461,8 +2479,8 @@ randomEither().map(x => x)
               examples: [
                 { input: 'List.init([1, 2, 3])', output: 'Just([1, 2])' },
                 { input: 'List.init([1])', output: 'Just([])' },
-                { input: 'List.init([])', output: 'Nothing' },
-              ],
+                { input: 'List.init([])', output: 'Nothing' }
+              ]
             },
             {
               name: 'find',
@@ -2474,17 +2492,17 @@ randomEither().map(x => x)
               examples: [
                 {
                   input: 'List.find(x => x > 5, [1,3,7,9])',
-                  output: 'Just(7)',
+                  output: 'Just(7)'
                 },
                 {
                   input: 'List.find(x => x > 5)([1,3,7,9])',
-                  output: 'Just(7)',
+                  output: 'Just(7)'
                 },
                 {
                   input: 'List.find(x => x > 10, [1,3,7,9])',
-                  output: 'Nothing',
-                },
-              ],
+                  output: 'Nothing'
+                }
+              ]
             },
             {
               name: 'findIndex',
@@ -2496,17 +2514,17 @@ randomEither().map(x => x)
               examples: [
                 {
                   input: 'List.findIndex(x => x > 5, [1,3,7,9])',
-                  output: 'Just(2)',
+                  output: 'Just(2)'
                 },
                 {
                   input: 'List.findIndex(x => x > 5)([1,3,7,9])',
-                  output: 'Just(2)',
+                  output: 'Just(2)'
                 },
                 {
                   input: 'List.findIndex(x => x > 10, [1,3,7,9])',
-                  output: 'Nothing',
-                },
-              ],
+                  output: 'Nothing'
+                }
+              ]
             },
             {
               name: 'uncons',
@@ -2516,11 +2534,11 @@ randomEither().map(x => x)
               examples: [
                 {
                   input: 'List.uncons([1, 2, 3])',
-                  output: 'Just(Tuple(1, [2, 3]))',
+                  output: 'Just(Tuple(1, [2, 3]))'
                 },
                 { input: 'List.uncons([1])', output: 'Just(Tuple(1, []))' },
-                { input: 'List.uncons([])', output: 'Nothing' },
-              ],
+                { input: 'List.uncons([])', output: 'Nothing' }
+              ]
             },
             {
               name: 'sum',
@@ -2529,8 +2547,8 @@ randomEither().map(x => x)
               signatureTS: '(list: number[]): number',
               examples: [
                 { input: 'List.sum([])', output: '0' },
-                { input: 'List.sum([1, 2, 3])', output: '6' },
-              ],
+                { input: 'List.sum([1, 2, 3])', output: '6' }
+              ]
             },
             {
               name: 'sort',
@@ -2542,19 +2560,19 @@ randomEither().map(x => x)
                 {
                   input:
                     "import { compare } from 'purify-ts/Function'\nList.sort(compare, [1,100,-1])",
-                  output: '[-1, 1, 100]',
+                  output: '[-1, 1, 100]'
                 },
                 {
                   input:
                     "import { Order } from 'purify-ts/Function'\nList.sort((x, y) => /* your own fn */, [0,102,-223])",
                   output:
-                    '// Result depends on the returned Order enum value (Order.LT, Order.EQ or Order.GT)',
-                },
-              ],
-            },
-          ],
-        },
-      ],
+                    '// Result depends on the returned Order enum value (Order.LT, Order.EQ or Order.GT)'
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       name: 'Function',
@@ -2562,7 +2580,7 @@ randomEither().map(x => x)
         "This module contains some basic function utilities. Something to note is that purify doesn't expose a compose or pipe function - that is because in JavaScript/TypeScript using those functions is not ergonomic and is prone to type errors related to generics.",
       example: {
         import:
-          "import { Order, identity, always, ... } from 'purify-ts/Function'",
+          "import { Order, identity, always, ... } from 'purify-ts/Function'"
       },
       content: [
         {
@@ -2574,7 +2592,7 @@ randomEither().map(x => x)
                 'The identity function, returns the value it was given.',
               examples: [],
               signatureML: 'a -> a',
-              signatureTS: '<T>(x: T): T',
+              signatureTS: '<T>(x: T): T'
             },
             {
               name: 'always',
@@ -2585,9 +2603,9 @@ randomEither().map(x => x)
               examples: [
                 {
                   input: '[1, 2, 3, 4].map(always(0))',
-                  output: '[0, 0, 0, 0]',
-                },
-              ],
+                  output: '[0, 0, 0, 0]'
+                }
+              ]
             },
             {
               name: 'curry',
@@ -2607,15 +2625,15 @@ curriedSum3(1, 2)    // (z: number) => number
 curriedSum3(1, 2, 3) // number
 curriedSum3(1)(2)(3) // number
 curriedSum3(1, 2)(3) // number
-`,
-                },
-              ],
+`
+                }
+              ]
             },
             {
               name: 'compose/flow/pipe',
               description:
                 "There is no such function in purify! Unfortunately it's not possible to provide a type-safe version of compose and friends, so until TypeScript allows us to do that purify will not have them.",
-              examples: [],
+              examples: []
             },
             {
               name: 'compare',
@@ -2626,8 +2644,8 @@ curriedSum3(1, 2)(3) // number
               examples: [
                 { input: 'compare(1, 10)', output: 'Order.LT' },
                 { input: "compare('a', 'a')", output: 'Order.EQ' },
-                { input: 'compare(10, 1)', output: 'Order.GT' },
-              ],
+                { input: 'compare(10, 1)', output: 'Order.GT' }
+              ]
             },
             {
               name: 'orderToNumber',
@@ -2638,19 +2656,19 @@ curriedSum3(1, 2)(3) // number
               examples: [
                 { input: 'orderToNumber(Order.LT)', output: '-1' },
                 { input: 'orderToNumber(Order.EQ)', output: '0' },
-                { input: 'orderToNumber(Order.GT)', output: '1' },
-              ],
-            },
-          ],
-        },
-      ],
+                { input: 'orderToNumber(Order.GT)', output: '1' }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       name: 'Codec',
       description:
         "This module allows you to create a boundary on the outermost layer of your application, usually where you process back-end data or communicate with a third-party API. A codec consists of two parts - an encoder and a decoder, hence the name. Using a decoder you can validate your expectations regarding the structure and type of data you're receiving. An encoder, on the other hand, lets you make sure you're sending your application data in the correct format and can also act as a mapper from your custom domain objects to plain JSON values. In case your infrastructure supports JSON schema you can also generate one from your codecs so that you don't have to deal with the error handling.",
       example: {
-        import: `import { Codec, GetType, string, number ... } from 'purify-ts/Codec'`,
+        import: `import { Codec, GetType, string, number ... } from 'purify-ts/Codec'`
       },
       content: [
         {
@@ -2674,9 +2692,9 @@ curriedSum3(1, 2)(3) // number
   age: number
   email?: string
   followers: Array<number>
-}>`,
-                },
-              ],
+}>`
+                }
+              ]
             },
             {
               name: 'custom',
@@ -2691,11 +2709,11 @@ Codec.custom<string>({
     decode: input => (typeof input === 'string' ? Right(input) : Left('fail')),
     encode: input => input // strings have no serialization logic
 })`,
-                  output: 'Codec<string>',
-                },
-              ],
-            },
-          ],
+                  output: 'Codec<string>'
+                }
+              ]
+            }
+          ]
         },
         {
           title: 'Type helpers',
@@ -2715,9 +2733,9 @@ Codec.custom<string>({
 
 type User = GetType<typeof User>`,
                   output:
-                    '// type User will equal {username: string; age: number}',
-                },
-              ],
+                    '// type User will equal {username: string; age: number}'
+                }
+              ]
             },
             {
               name: 'FromType',
@@ -2729,16 +2747,16 @@ type User = GetType<typeof User>`,
                   input: `type A = { a?: number }
 const A: Codec<A> = Codec.interface({ a: optional(number) })`,
                   output:
-                    "// Type 'Codec<{ a: number | undefined; }>' is not assignable to type 'Codec<A>'",
+                    "// Type 'Codec<{ a: number | undefined; }>' is not assignable to type 'Codec<A>'"
                 },
                 {
                   input: `type A = { a?: number }
 const A: Codec<FromType<A>> = Codec.interface({ a: optional(number) })`,
-                  output: 'Success!',
-                },
-              ],
-            },
-          ],
+                  output: 'Success!'
+                }
+              ]
+            }
+          ]
         },
         {
           title: 'Instance methods',
@@ -2748,21 +2766,21 @@ const A: Codec<FromType<A>> = Codec.interface({ a: optional(number) })`,
               signatureTS: '(input: unknown) => Either<string, T>',
               description:
                 "Takes a JSON value (i.e. a plain JS object) and runs the decode function the codec was constructed with. All of purify's built-in codecs return a descriptive error message in case the decode fails.",
-              examples: [],
+              examples: []
             },
             {
               name: 'encode',
               signatureTS: '(input: T) => unknown',
               description:
                 "Takes a runtime value and turns it into a JSON value using the encode function the codec was constructed with. Most of purify's built-in codecs have no custom encode method and they just return the same value, but you could add custom serialization logic for your custom codecs.",
-              examples: [],
+              examples: []
             },
             {
               name: 'unsafeDecode',
               signatureTS: '(input: unknown) => T',
               description:
                 'The same as the decode method, but throws an exception on failure. Please only use as an escape hatch.',
-              examples: [],
+              examples: []
             },
             {
               name: 'schema',
@@ -2785,11 +2803,11 @@ const A: Codec<FromType<A>> = Codec.interface({ a: optional(number) })`,
     followers: { type: 'array', items: [ { type: 'number' } ] }
   },
   required: [ 'username', 'age', 'followers' ]
-}`,
-                },
-              ],
-            },
-          ],
+}`
+                }
+              ]
+            }
+          ]
         },
         {
           title: 'Primitive codecs',
@@ -2801,13 +2819,13 @@ const A: Codec<FromType<A>> = Codec.interface({ a: optional(number) })`,
               examples: [
                 {
                   input: `string.decode('purify-ts')`,
-                  output: `Right('purify-ts')`,
+                  output: `Right('purify-ts')`
                 },
                 {
                   input: 'string.decode(3.14)',
-                  output: `Left('Expected a string, but received a number with value 3.14')`,
-                },
-              ],
+                  output: `Left('Expected a string, but received a number with value 3.14')`
+                }
+              ]
             },
             {
               name: 'number',
@@ -2816,13 +2834,13 @@ const A: Codec<FromType<A>> = Codec.interface({ a: optional(number) })`,
               examples: [
                 {
                   input: `number.decode(4.20)`,
-                  output: `Right(4.20)`,
+                  output: `Right(4.20)`
                 },
                 {
                   input: `number.decode(null)`,
-                  output: `Left('Expected a number, but received null')`,
-                },
-              ],
+                  output: `Left('Expected a number, but received null')`
+                }
+              ]
             },
             {
               name: 'boolean',
@@ -2831,13 +2849,13 @@ const A: Codec<FromType<A>> = Codec.interface({ a: optional(number) })`,
               examples: [
                 {
                   input: `boolean.decode(true)`,
-                  output: `Right(true)`,
+                  output: `Right(true)`
                 },
                 {
                   input: `boolean.decode(0)`,
-                  output: `Left('Expected a boolean, but received a number with value 0')`,
-                },
-              ],
+                  output: `Left('Expected a boolean, but received a number with value 0')`
+                }
+              ]
             },
             {
               name: 'nullType',
@@ -2846,9 +2864,9 @@ const A: Codec<FromType<A>> = Codec.interface({ a: optional(number) })`,
               examples: [
                 {
                   input: 'nullType.decode(null)',
-                  output: 'Right(null)',
-                },
-              ],
+                  output: 'Right(null)'
+                }
+              ]
             },
             {
               name: 'unknown',
@@ -2858,17 +2876,17 @@ const A: Codec<FromType<A>> = Codec.interface({ a: optional(number) })`,
               examples: [
                 {
                   input: 'unknown.decode(0)',
-                  output: 'Right(0)',
+                  output: 'Right(0)'
                 },
                 {
                   input: 'unknown.decode({someObject: true})',
-                  output: 'Right({someObject: true})',
+                  output: 'Right({someObject: true})'
                 },
                 {
                   input: 'unknown.decode(false)',
-                  output: 'Right(false)',
-                },
-              ],
+                  output: 'Right(false)'
+                }
+              ]
             },
             {
               name: 'date',
@@ -2878,15 +2896,15 @@ const A: Codec<FromType<A>> = Codec.interface({ a: optional(number) })`,
               examples: [
                 {
                   input: "date.decode('2019-12-15T20:34:25.052Z')",
-                  output: "Right(new Date('2019-12-15T20:34:25.052Z'))",
+                  output: "Right(new Date('2019-12-15T20:34:25.052Z'))"
                 },
                 {
                   input: `date.encode(new Date(2019, 2, 13))`,
-                  output: `'2019-03-12T22:00:00.000Z'`,
-                },
-              ],
-            },
-          ],
+                  output: `'2019-03-12T22:00:00.000Z'`
+                }
+              ]
+            }
+          ]
         },
         {
           title: 'Complex codecs',
@@ -2901,17 +2919,17 @@ const A: Codec<FromType<A>> = Codec.interface({ a: optional(number) })`,
                 {
                   input: `const nullable = <T>(codec: Codec<T>): Codec<T | null> =>
   oneOf([codec, nullType])`,
-                  output: 'Codec<T | null>',
+                  output: 'Codec<T | null>'
                 },
                 {
                   input: `oneOf([string, nullType]).decode('Well, hi!')`,
-                  output: `Right('Well, hi!')`,
+                  output: `Right('Well, hi!')`
                 },
                 {
                   input: 'oneOf([string, nullType]).decode(null)',
-                  output: 'Right(null)',
-                },
-              ],
+                  output: 'Right(null)'
+                }
+              ]
             },
             {
               name: 'optional',
@@ -2921,13 +2939,13 @@ const A: Codec<FromType<A>> = Codec.interface({ a: optional(number) })`,
               examples: [
                 {
                   input: 'optional(number).decode(undefined)',
-                  output: 'Right(undefined)',
+                  output: 'Right(undefined)'
                 },
                 {
                   input: 'Codec.interface({ a: optional(number) }).decode({})',
-                  output: 'Right({})',
-                },
-              ],
+                  output: 'Right({})'
+                }
+              ]
             },
             {
               name: 'nullable',
@@ -2937,9 +2955,9 @@ const A: Codec<FromType<A>> = Codec.interface({ a: optional(number) })`,
               examples: [
                 {
                   input: 'nullable(number).decode(null)',
-                  output: 'Right(null)',
-                },
-              ],
+                  output: 'Right(null)'
+                }
+              ]
             },
             {
               name: 'array',
@@ -2948,13 +2966,13 @@ const A: Codec<FromType<A>> = Codec.interface({ a: optional(number) })`,
               examples: [
                 {
                   input: 'array(number).decode([3.14, 2, 3])',
-                  output: 'Right([3.14, 2, 3])',
+                  output: 'Right([3.14, 2, 3])'
                 },
                 {
                   input: `array(oneOf([string, number])).decode(['x', 0, 'y', 1])`,
-                  output: `Right(['x', 0, 'y', 1])`,
-                },
-              ],
+                  output: `Right(['x', 0, 'y', 1])`
+                }
+              ]
             },
             {
               name: 'record',
@@ -2966,19 +2984,19 @@ const A: Codec<FromType<A>> = Codec.interface({ a: optional(number) })`,
                 {
                   input: 'record(string, boolean).decode({valid: true})',
                   output:
-                    'Right({valid: true}) // but the type is Either<string, Record<string, boolean>>',
+                    'Right({valid: true}) // but the type is Either<string, Record<string, boolean>>'
                 },
                 {
                   input:
                     "record(number, string).decode({0: 'user1', 1: 'user2'})",
-                  output: `Right({0: \'user1\', 1: \'user2\'})`,
+                  output: `Right({0: \'user1\', 1: \'user2\'})`
                 },
                 {
                   input: "record(number, string).decode({valid: 'no'})",
                   output:
-                    'Left(\'Problem with key type of property "valid": Expected a number, but received a string with value "valid"\')',
-                },
-              ],
+                    'Left(\'Problem with key type of property "valid": Expected a number, but received a string with value "valid"\')'
+                }
+              ]
             },
             {
               name: 'tuple',
@@ -2989,13 +3007,13 @@ const A: Codec<FromType<A>> = Codec.interface({ a: optional(number) })`,
               examples: [
                 {
                   input: 'tuple([number]).decode([0, 1])',
-                  output: `Left('Expected an array of length 1, but received an array with length of 2')`,
+                  output: `Left('Expected an array of length 1, but received an array with length of 2')`
                 },
                 {
                   input: "tuple([number]).decode([''])",
-                  output: `Left('Problem with value at index 0: Expected a number, but received a string with value ""')`,
-                },
-              ],
+                  output: `Left('Problem with value at index 0: Expected a number, but received a string with value ""')`
+                }
+              ]
             },
             {
               name: 'map',
@@ -3005,14 +3023,14 @@ const A: Codec<FromType<A>> = Codec.interface({ a: optional(number) })`,
               examples: [
                 {
                   input: `map(string, number).decode([['a', 0], ['b', 1]])`,
-                  output: 'Right(Map(2) {"a" => 0, "b" => 1})',
+                  output: 'Right(Map(2) {"a" => 0, "b" => 1})'
                 },
                 {
                   input:
                     'map(string, number).encode(new Map(Object.entries({a: 0, b: 1}))',
-                  output: `[['a', 0], ['b', 1]]`,
-                },
-              ],
+                  output: `[['a', 0], ['b', 1]]`
+                }
+              ]
             },
             {
               name: 'exactly',
@@ -3023,13 +3041,13 @@ const A: Codec<FromType<A>> = Codec.interface({ a: optional(number) })`,
               examples: [
                 {
                   input: `exactly('').decode('non-empty string')`,
-                  output: `Left('Expected "", but received a string with value "non-empty string"')`,
+                  output: `Left('Expected "", but received a string with value "non-empty string"')`
                 },
                 {
                   input: `exactly('None', 'Read', 'Write')`,
-                  output: `Codec<"None" | "Read" | "Write">`,
-                },
-              ],
+                  output: `Codec<"None" | "Read" | "Write">`
+                }
+              ]
             },
             {
               name: 'enumeration',
@@ -3041,9 +3059,9 @@ const A: Codec<FromType<A>> = Codec.interface({ a: optional(number) })`,
                   input: `enum Mode { Read, Write, ReadWrite }
                   
 enumeration(Mode).decode(0)`,
-                  output: `Right(Mode.Read)`,
-                },
-              ],
+                  output: `Right(Mode.Read)`
+                }
+              ]
             },
             {
               name: 'lazy',
@@ -3061,9 +3079,9 @@ const Comment: Codec<Comment> = Codec.interface({
   content: string,
   responses: lazy(() => array(Comment))
 })`,
-                  output: 'Codec<Comment>',
-                },
-              ],
+                  output: 'Codec<Comment>'
+                }
+              ]
             },
             {
               name: 'intersect',
@@ -3076,11 +3094,11 @@ const Comment: Codec<Comment> = Codec.interface({
   Codec.interface({a: number}),
   Codec.interface({b: string})
 ).decode({a: 5, b: ''})`,
-                  output: `Right({a: 5, b: ''})`,
-                },
-              ],
-            },
-          ],
+                  output: `Right({a: 5, b: ''})`
+                }
+              ]
+            }
+          ]
         },
         {
           title: 'Purify-specific codecs',
@@ -3093,21 +3111,21 @@ const Comment: Codec<Comment> = Codec.interface({
                 {
                   input: 'maybe(number).decode(undefined)',
                   output:
-                    'Right(Nothing) // Also works with missing properties inside an object',
+                    'Right(Nothing) // Also works with missing properties inside an object'
                 },
                 {
                   input: 'maybe(number).decode(null)',
-                  output: 'Right(Nothing)',
+                  output: 'Right(Nothing)'
                 },
                 {
                   input: 'maybe(number).decode(123)',
-                  output: 'Right(Just(123))',
+                  output: 'Right(Just(123))'
                 },
                 {
                   input: 'maybe(number).encode(Just(0))',
-                  output: '0',
-                },
-              ],
+                  output: '0'
+                }
+              ]
             },
             {
               name: 'nonEmptyList',
@@ -3116,15 +3134,15 @@ const Comment: Codec<Comment> = Codec.interface({
               examples: [
                 {
                   input: 'nonEmptyList(number).decode([])',
-                  output: `Left('Expected an array with one or more elements, but received an empty array')`,
+                  output: `Left('Expected an array with one or more elements, but received an empty array')`
                 },
                 {
                   input: 'nonEmptyList(number).decode([0])',
-                  output: 'Right(NonEmptyList([0]))',
-                },
-              ],
-            },
-          ],
+                  output: 'Right(NonEmptyList([0]))'
+                }
+              ]
+            }
+          ]
         },
         {
           title: 'Utils',
@@ -3149,9 +3167,9 @@ const Comment: Codec<Comment> = Codec.interface({
     receivedType: 'string',
     receivedValue: 'a'
   }
-}`,
-                },
-              ],
+}`
+                }
+              ]
             },
 
             {
@@ -3168,13 +3186,13 @@ const Comment: Codec<Comment> = Codec.interface({
                 }
               | { type: 'custom'; message: string }`,
               description: 'An ADT representing all possible decode errors',
-              examples: [],
-            },
-          ],
-        },
-      ],
-    },
-  ],
+              examples: []
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }
 
 export default data

@@ -138,7 +138,7 @@ const WhoIsUsing = styled.h4`
   padding: 12px 0;
 `
 
-const IndexPage = props => (
+const IndexPage = (props) => (
   <Layout location={props.location}>
     <Container>
       <Meta />
@@ -200,7 +200,7 @@ const IndexPage = props => (
             background: '#10b981',
             paddingTop: 16,
             paddingLeft: 5,
-            paddingRight: 3,
+            paddingRight: 3
           }}
         >
           <Dill />

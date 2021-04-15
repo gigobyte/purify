@@ -24,7 +24,7 @@ const TopicDescription = styled.div`
   }
 `
 
-const v013 = props => (
+const v013 = (props) => (
   <Layout location={props.location}>
     <Title>Purify v0.13</Title>
     <Subtitle>August 15, 2019</Subtitle>
