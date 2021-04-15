@@ -127,7 +127,7 @@ const Footer = styled.div`
   }
 
   img {
-    height: 35px;
+    height: 33px;
   }
 `
 
@@ -209,6 +209,12 @@ const IndexPage = (props) => (
           <img
             alt="CargoSnap"
             src="https://user-images.githubusercontent.com/5529244/104025717-52883f00-51c5-11eb-9029-1a220abe9d26.png"
+          />
+        </a>
+        <a href="https://codegrade.com/">
+          <img
+            alt="CodeGrade"
+            src="https://user-images.githubusercontent.com/12597247/114862749-32cd6c00-9def-11eb-9af2-25424905557e.png"
           />
         </a>
       </Footer>
