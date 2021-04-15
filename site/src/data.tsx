@@ -48,6 +48,7 @@ export interface Util {
   }
   content: {
     title: React.ReactNode
+    id: string
     methods: Method[]
   }[]
 }
@@ -2428,6 +2429,7 @@ randomEither().map(x => x)
       content: [
         {
           title: 'Exports',
+          id: 'export',
           methods: [
             {
               name: 'at',
@@ -2585,6 +2587,7 @@ randomEither().map(x => x)
       content: [
         {
           title: 'Exports',
+          id: 'export',
           methods: [
             {
               name: 'identity',
@@ -2673,6 +2676,7 @@ curriedSum3(1, 2)(3) // number
       content: [
         {
           title: 'Constructors',
+          id: 'constructor',
           methods: [
             {
               name: 'interface',
@@ -2717,6 +2721,7 @@ Codec.custom<string>({
         },
         {
           title: 'Type helpers',
+          id: 'helper',
           methods: [
             {
               name: 'GetType',
@@ -2760,6 +2765,7 @@ const A: Codec<FromType<A>> = Codec.interface({ a: optional(number) })`,
         },
         {
           title: 'Instance methods',
+          id: 'instance',
           methods: [
             {
               name: 'decode',
@@ -2811,6 +2817,7 @@ const A: Codec<FromType<A>> = Codec.interface({ a: optional(number) })`,
         },
         {
           title: 'Primitive codecs',
+          id: 'primitive',
           methods: [
             {
               name: 'string',
@@ -2908,6 +2915,7 @@ const A: Codec<FromType<A>> = Codec.interface({ a: optional(number) })`,
         },
         {
           title: 'Complex codecs',
+          id: 'complex',
           methods: [
             {
               name: 'oneOf',
@@ -3102,6 +3110,7 @@ const Comment: Codec<Comment> = Codec.interface({
         },
         {
           title: 'Purify-specific codecs',
+          id: 'purify',
           methods: [
             {
               name: 'maybe',
@@ -3146,6 +3155,7 @@ const Comment: Codec<Comment> = Codec.interface({
         },
         {
           title: 'Utils',
+          id: 'util',
           methods: [
             {
               name: 'parseError',

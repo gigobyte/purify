@@ -52,6 +52,16 @@ const Changelog = (props) => (
     <div>
       <h1>Choose version:</h1>
       <VersionContainer>
+        <VersionStatic>0.16.2</VersionStatic>
+        <Description>
+          Check out the release on{' '}
+          <a href="https://github.com/gigobyte/purify/releases/tag/v0.16.2">
+            GitHub
+          </a>
+        </Description>
+        <Date>April 2021</Date>
+      </VersionContainer>
+      <VersionContainer>
         <Version to="/changelog/0.16">0.16</Version>
         <Description>Version 1.0.0 preparation</Description>
         <Date>November 2020</Date>
