@@ -85,7 +85,7 @@ const UtilContent = (util) => (props) => (
       {util.content.map((x) => (
         <>
           <TopicHeader>{x.title}</TopicHeader>
-          {x.methods.map(DataTypeMethod)}
+          {x.methods.map((method) => DataTypeMethod(x.id, method))}
         </>
       ))}
     </Container>
