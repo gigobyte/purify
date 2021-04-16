@@ -1321,7 +1321,7 @@ randomEither().map(x => x)
                 'The same as Either#chain but executes the transformation function only if the value is Left. Useful for recovering from errors.',
               signatureML: 'Either a b ~> (a -> Either c b) -> Either c b',
               signatureTS:
-                '<L2>(f: (value: L) => Either<L2, R>): Either<L2, R>',
+                '<L2, R2>(f: (value: L) => Either<L2, R2>): Either<L2, R | R2>',
               examples: [
                 {
                   input: `Left('Error').chainLeft(x => Right(''))`,
@@ -1919,7 +1919,7 @@ randomEither().map(x => x)
               description:
                 'The same as EitherAsync#chain but executes the transformation function only if the value is Left. Useful for recovering from errors asynchronously.',
               signatureTS:
-                '<L2>(f: (value: L) => PromiseLike<Either<L2, R>>): EitherAsync<L2, R>',
+                '<L2, R2>(f: (value: L) => PromiseLike<Either<L2, R2>>): EitherAsync<L2, R | R2>',
               examples: [
                 {
                   input: `EitherAsync(({ throwE }) => throwE(500))
