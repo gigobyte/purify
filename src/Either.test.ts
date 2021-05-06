@@ -165,6 +165,16 @@ describe('Either', () => {
     expect(Right(5)['fantasy-land/alt'](Right(6))).toEqual(Right(5))
   })
 
+  test('altLazy', () => {
+    const fn = jest.fn(() => Left('Error!'))
+    const fn2 = jest.fn(() => Right(5))
+    expect(Left('Error').altLazy(fn)).toEqual(Left('Error!'))
+    expect(Right(5).altLazy(fn2)).toEqual(Right(5))
+
+    expect(fn).toBeCalledTimes(1)
+    expect(fn2).not.toHaveBeenCalled()
+  })
+
   test('reduce', () => {
     expect(Right(5).reduce((acc, x) => x * acc, 2)).toEqual(10)
     expect(Left('Error').reduce((acc, x) => x * acc, 0)).toEqual(0)

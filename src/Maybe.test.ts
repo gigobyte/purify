@@ -137,6 +137,16 @@ describe('Maybe', () => {
     expect(Just(5)['fantasy-land/alt'](Nothing)).toEqual(Just(5))
   })
 
+  test('altLazy', () => {
+    const fn = jest.fn(() => Just(5))
+    const fn2 = jest.fn(() => Just(6))
+    expect(Nothing.altLazy(fn)).toEqual(Just(5))
+    expect(Just(5).altLazy(fn2)).toEqual(Just(5))
+
+    expect(fn).toBeCalledTimes(1)
+    expect(fn2).not.toHaveBeenCalled()
+  })
+
   test('chain', () => {
     expect(Just(5).chain((x) => Just(x + 1))).toEqual(Just(6))
     expect(Nothing.chain((x) => Just(x + 1))).toEqual(Nothing)

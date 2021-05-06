@@ -32,6 +32,8 @@ export interface Either<L, R> {
   join<R2>(this: Either<L, Either<L, R2>>): Either<L, R2>
   /** Returns the first `Right` between `this` and another `Either` or the `Left` in the argument if both `this` and the argument are `Left` */
   alt(other: Either<L, R>): Either<L, R>
+  /** Lazy version of `alt` */
+  altLazy(other: () => Either<L, R>): Either<L, R>
   /** Takes a reducer and an initial value and returns the initial value if `this` is `Left` or the result of applying the function to the initial value and the value inside `this` */
   reduce<T>(reducer: (accumulator: T, value: R) => T, initialValue: T): T
   /** Returns `this` if it's a `Left`, otherwise it returns the result of applying the function argument to `this` and wrapping it in a `Right` */
@@ -214,6 +216,10 @@ class Right<R, L = never> implements Either<L, R> {
     return this
   }
 
+  altLazy(_: () => Either<L, R>): Either<L, R> {
+    return this
+  }
+
   reduce<T>(reducer: (accumulator: T, value: R) => T, initialValue: T): T {
     return reducer(initialValue, this.__value)
   }
@@ -345,6 +351,10 @@ class Left<L, R = never> implements Either<L, R> {
 
   alt(other: Either<L, R>): Either<L, R> {
     return other
+  }
+
+  altLazy(other: () => Either<L, R>): Either<L, R> {
+    return other()
   }
 
   reduce<T>(_: (accumulator: T, value: R) => T, initialValue: T): T {

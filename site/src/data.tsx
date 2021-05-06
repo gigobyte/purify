@@ -377,6 +377,13 @@ const data: Data = {
               ]
             },
             {
+              name: 'altLazy',
+              signatureML: 'Maybe a ~> (() -> Maybe a) -> Maybe a',
+              signatureTS: '(other: () => Maybe<T>): Maybe<T>',
+              description: 'Lazy version of `alt`.',
+              examples: []
+            },
+            {
               name: 'chain',
               signatureML: 'Maybe a ~> (a -> Maybe b) -> Maybe b',
               signatureTS: '<U>(f: (value: T) => Maybe<U>): Maybe<U>',
@@ -1363,6 +1370,13 @@ randomEither().map(x => x)
                 { input: `Right(5).alt(Left('Error'))`, output: `Right(5)` },
                 { input: `Right(5).alt(Right(6))`, output: `Right(5)` }
               ]
+            },
+            {
+              name: 'altLazy',
+              description: 'Lazy version of `alt`.',
+              signatureML: 'Either a b ~> (() -> Either a b) -> Either a b',
+              signatureTS: '(other: () => Either<L, R>): Either<L, R>',
+              examples: []
             },
             {
               name: 'reduce',

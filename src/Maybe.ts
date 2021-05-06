@@ -26,6 +26,8 @@ export interface Maybe<T> {
   ap<U>(maybeF: Maybe<(value: T) => U>): Maybe<U>
   /** Returns the first `Just` between `this` and another `Maybe` or `Nothing` if both `this` and the argument are `Nothing` */
   alt(other: Maybe<T>): Maybe<T>
+  /** Lazy version of `alt` */
+  altLazy(other: () => Maybe<T>): Maybe<T>
   /** Transforms `this` with a function that returns a `Maybe`. Useful for chaining many computations that may result in a missing value */
   chain<U>(f: (value: T) => Maybe<U>): Maybe<U>
   /** Transforms `this` with a function that returns a nullable value. Equivalent to `m.chain(x => Maybe.fromNullable(f(x)))` */
@@ -225,6 +227,10 @@ class Just<T> implements Maybe<T> {
     return this
   }
 
+  altLazy(_: () => Maybe<T>): Maybe<T> {
+    return this
+  }
+
   chain<U>(f: (value: T) => Maybe<U>): Maybe<U> {
     return f(this.__value)
   }
@@ -291,8 +297,8 @@ class Just<T> implements Maybe<T> {
     return this
   }
 
-  filter<U extends T>(pred: (value: T) => value is U): Maybe<U>;
-  filter(pred: (value: T) => boolean): Maybe<T>;
+  filter<U extends T>(pred: (value: T) => value is U): Maybe<U>
+  filter(pred: (value: T) => boolean): Maybe<T>
   filter(pred: (value: T) => boolean) {
     return pred(this.__value) ? just(this.__value) : nothing
   }
@@ -346,6 +352,10 @@ class Nothing implements Maybe<never> {
 
   alt<T>(other: Maybe<T>): Maybe<T> {
     return other
+  }
+
+  altLazy<T>(other: () => Maybe<T>): Maybe<T> {
+    return other()
   }
 
   chain<U>(_: (value: never) => Maybe<U>): Maybe<U> {
