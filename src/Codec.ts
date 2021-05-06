@@ -362,7 +362,7 @@ export const array = <T>(codec: Codec<T>): Codec<Array<T>> =>
     encode: (input) => input.map(codec.encode),
     schema: () => ({
       type: 'array',
-      items: [codec.schema()]
+      items: codec.schema()
     })
   })
 
@@ -472,11 +472,10 @@ export const maybe = <T>(codec: Codec<T>): Codec<Maybe<T>> => {
         Nothing: () => Right(Nothing)
       }),
     encode: (input) => input.map(codec.encode).orDefault(undefined),
-    schema: () => ({
-      oneOf: isEmptySchema(codec.schema())
-        ? []
-        : [codec.schema(), { type: 'null' }]
-    })
+    schema: () =>
+      isEmptySchema(codec.schema())
+        ? {}
+        : { oneOf: [codec.schema(), { type: 'null' }] }
   })
   return {
     ...baseCodec,

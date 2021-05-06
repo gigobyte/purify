@@ -18,7 +18,8 @@
     "downlevelIteration": true,
     "strict": true,
     "isolatedModules": true,
-    "noUncheckedIndexedAccess": true
+    "noUncheckedIndexedAccess": true,
+    "esModuleInterop": true
   },
   "exclude": ["site", "lib"]
 }

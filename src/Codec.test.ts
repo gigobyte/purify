@@ -24,6 +24,8 @@ import {
 import { Left, Right } from './Either'
 import { Just, Nothing } from './Maybe'
 import { NonEmptyList } from './NonEmptyList'
+import Ajv from 'ajv'
+import addFormats from 'ajv-formats'
 
 describe('Codec', () => {
   describe('interface', () => {
@@ -698,103 +700,155 @@ describe('Codec', () => {
   })
 
   describe('JSON schema', () => {
-    enum E {
-      E1 = 'E1',
-      E2 = 'E2'
-    }
+    describe('expectations', () => {
+      enum E {
+        E1 = 'E1',
+        E2 = 'E2'
+      }
 
-    interface Dog {
-      dog: Dog
-    }
+      interface Dog {
+        dog: Dog
+      }
 
-    const Dog: Codec<Dog> = Codec.interface({
-      dog: lazy(() => Dog)
+      const Dog: Codec<Dog> = Codec.interface({
+        dog: lazy(() => Dog)
+      })
+
+      const God = intersect(
+        Codec.interface({
+          a: string,
+          b: Codec.interface({
+            c: number,
+            d: nullType,
+            e: nullable(string),
+            f: optional(boolean)
+          }),
+          u: unknown,
+          en: enumeration(E),
+          on: oneOf([array(string), record(string, string)]),
+          optimal: oneOf([oneOf([oneOf([optional(optional(string))])])]),
+          e: exactly('SSS'),
+          ee: exactly('SSS', 'DDD'),
+          m: maybe(tuple([number, number])),
+          n: nonEmptyList(date)
+        }),
+        Dog
+      )
+
+      expect(God.schema()).toEqual({
+        allOf: [
+          {
+            type: 'object',
+            properties: {
+              a: { type: 'string' },
+              b: {
+                type: 'object',
+                properties: {
+                  c: { type: 'number' },
+                  d: { type: 'null' },
+                  e: { oneOf: [{ type: 'string' }, { type: 'null' }] },
+                  f: { type: 'boolean' }
+                },
+                required: ['c', 'd', 'e']
+              },
+              u: {},
+              en: { enum: ['E1', 'E2'] },
+              on: {
+                oneOf: [
+                  { type: 'array', items: { type: 'string' } },
+                  { type: 'object', additionalProperties: { type: 'string' } }
+                ]
+              },
+              optimal: { type: 'string' },
+              e: { type: 'string', enum: ['SSS'] },
+              ee: {
+                oneOf: [
+                  { type: 'string', enum: ['SSS'] },
+                  { type: 'string', enum: ['DDD'] }
+                ]
+              },
+              m: {
+                oneOf: [
+                  {
+                    type: 'array',
+                    items: [{ type: 'number' }, { type: 'number' }],
+                    additionalItems: false,
+                    minItems: 2,
+                    maxItems: 2
+                  },
+                  { type: 'null' }
+                ]
+              },
+              n: {
+                type: 'array',
+                items: { type: 'string', format: 'date-time' },
+                minItems: 1
+              }
+            },
+            required: ['a', 'b', 'u', 'en', 'on', 'optimal', 'e', 'ee', 'n']
+          },
+          {
+            properties: {
+              dog: {
+                $comment:
+                  'Lazy codecs are not supported when generating a JSON schema'
+              }
+            },
+            required: ['dog'],
+            type: 'object'
+          }
+        ]
+      })
     })
 
-    const God = intersect(
-      Codec.interface({
-        a: string,
-        b: Codec.interface({
-          c: number,
-          d: nullType,
-          e: nullable(string),
-          f: optional(boolean)
-        }),
-        u: unknown,
-        en: enumeration(E),
-        on: oneOf([array(string), record(string, string)]),
-        optimal: oneOf([oneOf([oneOf([optional(optional(string))])])]),
-        e: exactly('SSS'),
-        ee: exactly('SSS', 'DDD'),
-        m: maybe(tuple([number, number])),
-        n: nonEmptyList(date)
-      }),
-      Dog
-    )
+    describe.only('ajv compatibility', () => {
+      const ajv = new Ajv({ strict: true, validateSchema: true })
+      addFormats(ajv)
 
-    expect(God.schema()).toEqual({
-      allOf: [
-        {
-          type: 'object',
-          properties: {
-            a: { type: 'string' },
-            b: {
-              type: 'object',
-              properties: {
-                c: { type: 'number' },
-                d: { type: 'null' },
-                e: { oneOf: [{ type: 'string' }, { type: 'null' }] },
-                f: { type: 'boolean' }
-              },
-              required: ['c', 'd', 'e']
-            },
-            u: {},
-            en: { enum: ['E1', 'E2'] },
-            on: {
-              oneOf: [
-                { type: 'array', items: [{ type: 'string' }] },
-                { type: 'object', additionalProperties: { type: 'string' } }
-              ]
-            },
-            optimal: { type: 'string' },
-            e: { type: 'string', enum: ['SSS'] },
-            ee: {
-              oneOf: [
-                { type: 'string', enum: ['SSS'] },
-                { type: 'string', enum: ['DDD'] }
-              ]
-            },
-            m: {
-              oneOf: [
-                {
-                  type: 'array',
-                  items: [{ type: 'number' }, { type: 'number' }],
-                  additionalItems: false,
-                  minItems: 2,
-                  maxItems: 2
-                },
-                { type: 'null' }
-              ]
-            },
-            n: {
-              type: 'array',
-              items: [{ type: 'string', format: 'date-time' }],
-              minItems: 1
-            }
-          },
-          required: ['a', 'b', 'u', 'en', 'on', 'optimal', 'e', 'ee', 'n']
-        },
-        {
-          properties: {
-            dog: {
-              $comment:
-                'Lazy codecs are not supported when generating a JSON schema'
-            }
-          },
-          required: ['dog'],
-          type: 'object'
-        }
-      ]
+      enum TestEnum {
+        A,
+        B
+      }
+
+      expect(ajv.validate(unknown.schema(), 'anything')).toBe(true)
+      expect(ajv.validate(enumeration(TestEnum).schema(), TestEnum.A)).toBe(
+        true
+      )
+      expect(ajv.validate(oneOf([number, string]).schema(), 4)).toBe(true)
+      expect(ajv.validate(array(number).schema(), [1, 2, 3])).toBe(true)
+      expect(ajv.validate(record(string, string).schema(), { a: 'test' })).toBe(
+        true
+      )
+      expect(ajv.validate(exactly(true).schema(), true)).toBe(true)
+      expect(ajv.validate(maybe(number).schema(), 42)).toBe(true)
+      expect(ajv.validate(maybe(number).schema(), null)).toBe(true)
+      expect(ajv.validate(maybe(unknown).schema(), { hehe: true })).toBe(true)
+      expect(ajv.validate(nullable(unknown).schema(), { hehe: true })).toBe(
+        true
+      )
+      expect(ajv.validate(nullable(number).schema(), null)).toBe(true)
+      expect(ajv.validate(nonEmptyList(string).schema(), ['a'])).toBe(true)
+      expect(ajv.validate(nonEmptyList(string).schema(), [])).toBe(false)
+      expect(
+        ajv.validate(tuple([number, string, boolean]).schema(), [5, 'b', false])
+      ).toBe(true)
+      expect(ajv.validate(tuple([number]).schema(), [5, 'b'])).toBe(false)
+      expect(ajv.validate(date.schema(), new Date().toISOString())).toBe(true)
+      expect(
+        ajv.validate(
+          intersect(
+            Codec.interface({ a: number }),
+            Codec.interface({ b: number })
+          ).schema(),
+          { a: 0, b: 1 }
+        )
+      ).toBe(true)
+      expect(
+        ajv.validate(map(number, boolean).schema(), [
+          [5, true],
+          [0, false]
+        ])
+      ).toBe(true)
     })
   })
 })
