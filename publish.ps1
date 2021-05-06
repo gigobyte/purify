@@ -1,5 +1,12 @@
 $files = @("package.json", "LICENSE", "README.md", "package-lock.json")
 
+Remove-Item -Recurse node_modules
+Invoke-Expression "npm install"
+
+if (Test-Path -Path lib) {
+    Remove-Item -Recurse lib
+}
+
 Invoke-Expression "npm run build"
 
 foreach ($file in $files) {
@@ -7,4 +14,3 @@ foreach ($file in $files) {
 }
 
 Invoke-Expression "cd lib"
-Invoke-Expression "npm publish"
