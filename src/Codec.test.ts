@@ -801,7 +801,7 @@ describe('Codec', () => {
       })
     })
 
-    describe.only('ajv compatibility', () => {
+    describe('ajv compatibility', () => {
       const ajv = new Ajv({ strict: true, validateSchema: true })
       addFormats(ajv)
 
