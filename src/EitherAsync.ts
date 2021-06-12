@@ -1,4 +1,4 @@
-import { Either, Left, Right } from './Either'
+import { Either, EitherPatterns, Left, Right } from './Either'
 import { MaybeAsync } from './MaybeAsync'
 
 export interface EitherAsyncTypeRef {
@@ -71,6 +71,9 @@ export interface EitherAsync<L, R> extends PromiseLike<Either<L, R>> {
   orDefault(defaultValue: R): Promise<R>
   /** Useful if you are not interested in the result of an operation */
   void(): EitherAsync<L, void>
+  /** Structural pattern matching for `EitherAsync` in the form of a function */
+  caseOf<T>(patterns: EitherPatterns<L, R, T>): Promise<T>
+
   'fantasy-land/map'<R2>(f: (value: R) => R2): EitherAsync<L, R2>
   'fantasy-land/bimap'<L2, R2>(
     f: (value: L) => L2,
@@ -270,6 +273,10 @@ class EitherAsyncImpl<L, R> implements EitherAsync<L, R> {
 
   void(): EitherAsync<L, void> {
     return this.map((_) => {})
+  }
+
+  caseOf<T>(patterns: EitherPatterns<L, R, T>): Promise<T> {
+    return this.run().then((x) => x.caseOf(patterns))
   }
 
   'fantasy-land/map' = this.map

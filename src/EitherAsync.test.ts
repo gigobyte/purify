@@ -480,4 +480,25 @@ describe('EitherAsync', () => {
 
     expect(await ea).toEqual(Right(undefined))
   })
+
+  test('caseOf', async () => {
+    expect(
+      await EitherAsync.liftEither(Left('Error')).caseOf({
+        Left: (x) => x,
+        Right: () => 'No error'
+      })
+    ).toEqual('Error')
+    expect(
+      await EitherAsync.liftEither(Right(6)).caseOf({
+        Left: (_) => 0,
+        Right: (x) => x + 1
+      })
+    ).toEqual(7)
+    expect(
+      await EitherAsync.liftEither(Right(6)).caseOf({ _: () => 0 })
+    ).toEqual(0)
+    expect(
+      await EitherAsync.liftEither(Left('Error')).caseOf({ _: () => 0 })
+    ).toEqual(0)
+  })
 })
