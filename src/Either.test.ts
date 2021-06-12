@@ -268,21 +268,6 @@ describe('Either', () => {
     expect(Right(5).leftToMaybe()).toEqual(Nothing)
   })
 
-  test('either', () => {
-    expect(
-      Right(5).either(
-        (_) => 0,
-        (x) => x + 1
-      )
-    ).toEqual(6)
-    expect(
-      Left('Error').either(
-        (x) => x + '!',
-        (_) => ''
-      )
-    ).toEqual('Error!')
-  })
-
   test('extract', () => {
     expect(Right(5).extract()).toEqual(5)
     expect(Left('Error').extract()).toEqual('Error')

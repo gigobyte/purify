@@ -58,10 +58,6 @@ export interface Either<L, R> {
   toMaybe(): Maybe<R>
   /** Constructs a `Just` with the value of `this` if it\'s `Left` or a `Nothing` if `this` is `Right` */
   leftToMaybe(): Maybe<L>
-  /** Given two map functions, maps using the first if `this` is `Left` or using the second one if `this` is `Right`.
-   * If you want the functions to return different types depending on the either you may want to use `Either#bimap` instead
-   * */
-  either<T>(ifLeft: (value: L) => T, ifRight: (value: R) => T): T
   /** Extracts the value out of `this` */
   extract(): L | R
   /** Returns `Right` if `this` is `Left` and vice versa */
@@ -268,10 +264,6 @@ class Right<R, L = never> implements Either<L, R> {
     return Nothing
   }
 
-  either<T>(_: (value: L) => T, ifRight: (value: R) => T): T {
-    return ifRight(this.__value)
-  }
-
   extract(): L | R {
     return this.__value
   }
@@ -407,10 +399,6 @@ class Left<L, R = never> implements Either<L, R> {
 
   leftToMaybe(): Maybe<L> {
     return Just(this.__value)
-  }
-
-  either<T>(ifLeft: (value: L) => T, _: (value: R) => T): T {
-    return ifLeft(this.__value)
   }
 
   extract(): L | R {

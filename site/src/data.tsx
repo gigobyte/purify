@@ -1549,21 +1549,6 @@ randomEither().map(x => x)
               ]
             },
             {
-              name: 'either',
-              description:
-                'Given two map functions, maps using the first if `this` is `Left` or using the second one if `this` is `Right`. If you want the functions to return different types depending on the either you may want to use `Either#bimap` instead.',
-              signatureML: '(a -> c) -> (b -> c) -> Either a b -> c',
-              signatureTS:
-                '<T>(ifLeft: (value: L) => T, ifRight: (value: R) => T): T',
-              examples: [
-                { input: 'Right(5).either(_ => 0, x => x + 1)', output: '6' },
-                {
-                  input: `Left('Error').either(x => x + '!', _ => '')`,
-                  output: `'Error!'`
-                }
-              ]
-            },
-            {
               name: 'extract',
               description: 'Extracts the value out of `this`.',
               signatureTS: '(): L | R',
