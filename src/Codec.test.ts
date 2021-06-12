@@ -26,6 +26,7 @@ import { Just, Nothing } from './Maybe'
 import { NonEmptyList } from './NonEmptyList'
 import Ajv from 'ajv'
 import addFormats from 'ajv-formats'
+import { always, identity } from './Function'
 
 describe('Codec', () => {
   describe('interface', () => {
@@ -86,6 +87,23 @@ describe('Codec', () => {
         b: ''
       })
       expect(mockCodec.encode({} as any)).toEqual({})
+    })
+  })
+
+  describe('custom', () => {
+    it('provides a default schema', () => {
+      expect(
+        Codec.custom({ decode: always(Right(null)), encode: identity }).schema()
+      ).toEqual({})
+    })
+
+    it('provides a free unsafeDecode method', () => {
+      expect(() =>
+        Codec.custom({
+          decode: always(Left('Error')),
+          encode: identity
+        }).unsafeDecode(0)
+      ).toThrowError(Error('Error'))
     })
   })
 
