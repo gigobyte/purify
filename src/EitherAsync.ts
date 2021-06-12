@@ -139,7 +139,7 @@ class EitherAsyncImpl<L, R> implements EitherAsync<L, R> {
         const nestedEither = await either.extract()
         return helpers.liftEither(nestedEither)
       }
-      return helpers.liftEither((either as any) as Either<L, R2>)
+      return helpers.liftEither(either as any as Either<L, R2>)
     })
   }
 
@@ -155,11 +155,11 @@ class EitherAsyncImpl<L, R> implements EitherAsync<L, R> {
         if (thisValue.isRight()) {
           return otherValue.extract()(thisValue.extract())
         } else {
-          return helpers.liftEither((thisValue as any) as Either<L, R2>)
+          return helpers.liftEither(thisValue as any as Either<L, R2>)
         }
       }
 
-      return helpers.liftEither((otherValue as any) as Either<L, R2>)
+      return helpers.liftEither(otherValue as any as Either<L, R2>)
     })
   }
 
@@ -183,7 +183,7 @@ class EitherAsyncImpl<L, R> implements EitherAsync<L, R> {
         const v = EitherAsync.liftEither(either)
         return helpers.liftEither(Right(f(v)))
       }
-      return helpers.liftEither((either as any) as Either<L, R2>)
+      return helpers.liftEither(either as any as Either<L, R2>)
     })
   }
 
@@ -209,7 +209,7 @@ class EitherAsyncImpl<L, R> implements EitherAsync<L, R> {
   mapLeft<L2>(f: (value: L) => L2): EitherAsync<L2, R> {
     return EitherAsync(async (helpers) => {
       try {
-        return await this.runPromise((helpers as any) as EitherAsyncHelpers<L>)
+        return await this.runPromise(helpers as any as EitherAsyncHelpers<L>)
       } catch (e) {
         throw f(e)
       }
@@ -230,7 +230,7 @@ class EitherAsyncImpl<L, R> implements EitherAsync<L, R> {
   ): EitherAsync<L2, R | R2> {
     return EitherAsync(async (helpers) => {
       try {
-        return await this.runPromise((helpers as any) as EitherAsyncHelpers<L>)
+        return await this.runPromise(helpers as any as EitherAsyncHelpers<L>)
       } catch (e) {
         return helpers.fromPromise(f(e))
       }

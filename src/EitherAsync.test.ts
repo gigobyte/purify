@@ -134,9 +134,9 @@ describe('EitherAsync', () => {
   })
 
   test('chainLeft', async () => {
-    const newEitherAsync = EitherAsync(() =>
-      Promise.resolve(5)
-    ).chainLeft((_) => EitherAsync(() => Promise.resolve(7)))
+    const newEitherAsync = EitherAsync(() => Promise.resolve(5)).chainLeft(
+      (_) => EitherAsync(() => Promise.resolve(7))
+    )
     const newEitherAsync2 = EitherAsync<number, number>(() =>
       Promise.reject(5)
     ).chainLeft((e) => EitherAsync(() => Promise.resolve(e + 1)))
@@ -146,9 +146,9 @@ describe('EitherAsync', () => {
   })
 
   test('chainLeft (with PromiseLike)', async () => {
-    const newEitherAsync = EitherAsync(() =>
-      Promise.resolve(5)
-    ).chainLeft((_) => Promise.resolve(Right(7)))
+    const newEitherAsync = EitherAsync(() => Promise.resolve(5)).chainLeft(
+      (_) => Promise.resolve(Right(7))
+    )
     const newEitherAsync2 = EitherAsync<number, number>(() =>
       Promise.reject(5)
     ).chainLeft((e) => Promise.resolve(Right(e + 1)))

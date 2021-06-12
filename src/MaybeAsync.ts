@@ -58,7 +58,9 @@ export interface MaybeAsync<T> extends PromiseLike<Maybe<T>> {
   'fantasy-land/ap'<U>(maybeF: MaybeAsync<(value: T) => U>): MaybeAsync<U>
   'fantasy-land/alt'(other: MaybeAsync<T>): MaybeAsync<T>
   'fantasy-land/extend'<U>(f: (value: MaybeAsync<T>) => U): MaybeAsync<U>
-  'fantasy-land/filter'<U extends T>(pred: (value: T) => value is U): MaybeAsync<U>
+  'fantasy-land/filter'<U extends T>(
+    pred: (value: T) => value is U
+  ): MaybeAsync<U>
   'fantasy-land/filter'(pred: (value: T) => boolean): MaybeAsync<T>
 
   /** WARNING: This is implemented only for Promise compatibility. Please use `chain` instead. */
@@ -144,15 +146,15 @@ class MaybeAsyncImpl<T> implements MaybeAsync<T> {
     return MaybeAsync(async (helpers) => {
       const maybe = await this.run()
       if (maybe.isJust()) {
-        const v = MaybeAsync.liftMaybe((maybe as any) as Maybe<T>)
+        const v = MaybeAsync.liftMaybe(maybe as any as Maybe<T>)
         return helpers.liftMaybe(Just(f(v)))
       }
-      return helpers.liftMaybe((Nothing as any) as Maybe<U>)
+      return helpers.liftMaybe(Nothing as any as Maybe<U>)
     })
   }
 
-  filter<U extends T>(pred: (value: T) => value is U): MaybeAsync<U>;
-  filter(pred: (value: T) => boolean): MaybeAsync<T>;
+  filter<U extends T>(pred: (value: T) => value is U): MaybeAsync<U>
+  filter(pred: (value: T) => boolean): MaybeAsync<T>
   filter(pred: (value: T) => boolean) {
     return MaybeAsync(async (helpers) => {
       const value = await this.run()

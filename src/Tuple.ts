@@ -161,8 +161,9 @@ export const Tuple: TupleTypeRef = Object.assign(
         case 2:
           return (value: T) => Tuple.fanout(f, g!, value)
         default:
-          return <S>(g: (value: T) => S) => (value: T) =>
-            Tuple.fanout(f, g, value)
+          return <S>(g: (value: T) => S) =>
+            (value: T) =>
+              Tuple.fanout(f, g, value)
       }
     }
   }

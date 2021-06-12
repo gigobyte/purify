@@ -12,7 +12,8 @@
     "build": "tsc && tsc -p tsconfig.es.json",
     "test": "jest --coverage",
     "coverage": "coveralls < coverage/lcov.info",
-    "test-watch": "jest --watch"
+    "test-watch": "jest --watch",
+    "pretty": "prettier --write \"**/*.ts\""
   },
   "jest": {
     "transform": {
