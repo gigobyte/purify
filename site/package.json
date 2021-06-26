@@ -28,6 +28,6 @@
     "deploy": "gatsby build --prefix-paths && gh-pages -d public"
   },
   "devDependencies": {
-    "prettier": "2.3.1"
+    "prettier": "2.3.2"
   }
 }
