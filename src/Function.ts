@@ -38,7 +38,7 @@ export const orderToNumber = (order: Order): number => {
 
 type TupleOfLength<T extends any[]> = Extract<{ [K in keyof T]: any }, any[]>
 
-type CurriedFn<TAllArgs extends any[], TReturn> = <
+export type CurriedFn<TAllArgs extends any[], TReturn> = <
   TProvidedArgs extends TAllArgs extends [infer TFirstArg, ...infer TRestOfArgs]
     ? [TFirstArg, ...Partial<TRestOfArgs>]
     : never
