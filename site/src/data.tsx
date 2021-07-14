@@ -1908,7 +1908,7 @@ randomEither().map(x => x)
                   output: 'Promise {<resolved>: Right(6)}'
                 },
                 {
-                  input: `EitherAsync(async () => 5).chain(async (x) => x + 1).run()`,
+                  input: `EitherAsync(async () => 5).chain(async (x) => Right(x + 1)).run()`,
                   output: 'Promise {<resolved>: Right(6)}'
                 }
               ]
