@@ -1222,7 +1222,7 @@ randomEither().map(x => x)
             {
               name: 'bimap',
               description:
-                'Given two functions, maps the value inside `this` using the first if `this` is `Left` or using the second one if `this` is `Right`. If both functions return the same type consider using `Either#either` instead.',
+                'Given two functions, maps the value inside `this` using the first if `this` is `Left` or using the second one if `this` is `Right`.',
               signatureML: 'Either a b ~> (a -> c) -> (b -> d) -> Either c d',
               signatureTS:
                 '<L2, R2>(f: (value: L) => L2, g: (value: R) => R2): Either<L2, R2>',
