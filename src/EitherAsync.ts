@@ -73,6 +73,8 @@ export interface EitherAsync<L, R> extends PromiseLike<Either<L, R>> {
   void(): EitherAsync<L, void>
   /** Structural pattern matching for `EitherAsync` in the form of a function */
   caseOf<T>(patterns: EitherPatterns<L, R, T>): Promise<T>
+  /* Similar to the Promise method of the same name, the provided function is called when the `EitherAsync` is executed regardless of whether the `Either` result is `Left` or `Right` */
+  finally(effect: () => any): EitherAsync<L, R>
 
   'fantasy-land/map'<R2>(f: (value: R) => R2): EitherAsync<L, R2>
   'fantasy-land/bimap'<L2, R2>(
@@ -277,6 +279,12 @@ class EitherAsyncImpl<L, R> implements EitherAsync<L, R> {
 
   caseOf<T>(patterns: EitherPatterns<L, R, T>): Promise<T> {
     return this.run().then((x) => x.caseOf(patterns))
+  }
+
+  finally(effect: () => any): EitherAsync<L, R> {
+    return EitherAsync(({ fromPromise }) =>
+      fromPromise(this.run().finally(effect))
+    )
   }
 
   'fantasy-land/map' = this.map

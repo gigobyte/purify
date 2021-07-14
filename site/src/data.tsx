@@ -607,8 +607,7 @@ const data: Data = {
         },
         {
           title: 'MaybeAsync used in an example repo',
-          link:
-            'https://github.com/gigobyte/ts-react-express-starter/tree/main/server/src'
+          link: 'https://github.com/gigobyte/ts-react-express-starter/tree/main/server/src'
         }
       ],
       description: (
@@ -1582,8 +1581,7 @@ randomEither().map(x => x)
         },
         {
           title: 'EitherAsync used in an example repo',
-          link:
-            'https://github.com/gigobyte/ts-react-express-starter/tree/main/server/src'
+          link: 'https://github.com/gigobyte/ts-react-express-starter/tree/main/server/src'
         }
       ],
       description: (
@@ -2027,6 +2025,23 @@ randomEither().map(x => x)
                 {
                   input: `EitherAsync.liftEither(Right(5)).ifRight((result) => console.log(result))`,
                   output: '// 5'
+                }
+              ]
+            },
+
+            {
+              name: 'finally',
+              description:
+                'Similar to the Promise method of the same name, the provided function is called when the `EitherAsync` is executed regardless of whether the `Either` result is `Left` or `Right`.',
+              signatureTS: '(effect: () => any): EitherAsync<L, R>',
+              examples: [
+                {
+                  input: `EitherAsync.liftEither(Left('Error')).finally(() => console.log('It runs!))`,
+                  output: `// It runs!`
+                },
+                {
+                  input: `EitherAsync.liftEither(Right(5)).finally(() => console.log('It runs!))`,
+                  output: '// It runs!'
                 }
               ]
             },
