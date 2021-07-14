@@ -60,6 +60,8 @@ const Changelog = (props) => (
           </a>
         </Description>
         <Date>July 2021</Date>
+      </VersionContainer>
+      <VersionContainer>
         <VersionStatic>0.16.3</VersionStatic>
         <Description>
           Check out the release on{' '}
