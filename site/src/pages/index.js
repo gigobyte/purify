@@ -217,6 +217,12 @@ const IndexPage = (props) => (
             src="https://user-images.githubusercontent.com/12597247/114862749-32cd6c00-9def-11eb-9af2-25424905557e.png"
           />
         </a>
+        <a href="https://aspirehealthcare.com/">
+          <img
+            alt="Aspire Health"
+            src="https://user-images.githubusercontent.com/7232302/125361920-a706a580-e333-11eb-9ab4-8f202bf1f4f2.png"
+          />
+        </a>
       </Footer>
     </Container>
   </Layout>
