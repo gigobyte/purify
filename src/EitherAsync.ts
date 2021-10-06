@@ -195,7 +195,7 @@ class EitherAsyncImpl<L, R> implements EitherAsync<L, R> {
   async run(): Promise<Either<L, R>> {
     try {
       return Right(await this.runPromise(helpers))
-    } catch (e) {
+    } catch (e: any) {
       return Left(e)
     }
   }
@@ -215,7 +215,7 @@ class EitherAsyncImpl<L, R> implements EitherAsync<L, R> {
     return EitherAsync(async (helpers) => {
       try {
         return await this.runPromise(helpers as any as EitherAsyncHelpers<L>)
-      } catch (e) {
+      } catch (e: any) {
         throw f(e)
       }
     })
@@ -236,7 +236,7 @@ class EitherAsyncImpl<L, R> implements EitherAsync<L, R> {
     return EitherAsync(async (helpers) => {
       try {
         return await this.runPromise(helpers as any as EitherAsyncHelpers<L>)
-      } catch (e) {
+      } catch (e: any) {
         return helpers.fromPromise(f(e))
       }
     })

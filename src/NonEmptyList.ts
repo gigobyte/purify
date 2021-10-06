@@ -10,6 +10,8 @@ export interface NonEmptyList<T> extends NonEmptyListCompliant<T> {
     thisArg?: any
   ): NonEmptyList<U>
   reverse(this: NonEmptyList<T>): NonEmptyList<T>
+  concat(...items: ConcatArray<T>[]): NonEmptyList<T>
+  concat(...items: (T | ConcatArray<T>)[]): NonEmptyList<T>
 }
 
 export interface NonEmptyListTypeRef {

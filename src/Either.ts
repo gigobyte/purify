@@ -126,7 +126,7 @@ export const Either: EitherTypeRef = {
   encase<L extends Error, R>(throwsF: () => R): Either<L, R> {
     try {
       return right(throwsF())
-    } catch (e) {
+    } catch (e: any) {
       return left(e)
     }
   },
