@@ -273,4 +273,39 @@ describe('MaybeAsync', () => {
 
     expect(await ea).toEqual(Just(undefined))
   })
+
+  test('caseOf', async () => {
+    expect(
+      await MaybeAsync.liftMaybe(Nothing).caseOf({
+        Nothing: () => 'Error',
+        Just: () => 'No error'
+      })
+    ).toEqual('Error')
+    expect(
+      await MaybeAsync.liftMaybe(Just(6)).caseOf({
+        Nothing: () => 0,
+        Just: (x) => x + 1
+      })
+    ).toEqual(7)
+    expect(await MaybeAsync.liftMaybe(Just(6)).caseOf({ _: () => 0 })).toEqual(
+      0
+    )
+    expect(await MaybeAsync.liftMaybe(Nothing).caseOf({ _: () => 0 })).toEqual(
+      0
+    )
+  })
+
+  test('finally', async () => {
+    let a = 0
+    await MaybeAsync.liftMaybe(Nothing).finally(() => {
+      a = 5
+    })
+    expect(a).toEqual(5)
+
+    let b = 0
+    await MaybeAsync.liftMaybe(Just(5)).finally(() => {
+      b = 5
+    })
+    expect(b).toEqual(5)
+  })
 })

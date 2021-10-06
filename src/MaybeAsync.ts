@@ -1,4 +1,4 @@
-import { Maybe, Just, Nothing } from './Maybe'
+import { Maybe, Just, Nothing, MaybePatterns } from './Maybe'
 import { EitherAsync } from './EitherAsync'
 
 export interface MaybeAsyncTypeRef {
@@ -53,6 +53,10 @@ export interface MaybeAsync<T> extends PromiseLike<Maybe<T>> {
   join<U>(this: MaybeAsync<MaybeAsync<U>>): MaybeAsync<U>
   /** Useful if you are not interested in the result of an operation */
   void(): MaybeAsync<void>
+  /** Structural pattern matching for `MaybeAsync` in the form of a function */
+  caseOf<U>(patterns: MaybePatterns<T, U>): Promise<U>
+  /* Similar to the Promise method of the same name, the provided function is called when the `MaybeAsync` is executed regardless of whether the `Maybe` result is `Nothing` or `Just` */
+  finally(effect: () => any): MaybeAsync<T>
 
   'fantasy-land/map'<U>(f: (value: T) => U): MaybeAsync<U>
   'fantasy-land/chain'<U>(f: (value: T) => PromiseLike<Maybe<U>>): MaybeAsync<U>
@@ -207,6 +211,16 @@ class MaybeAsyncImpl<T> implements MaybeAsync<T> {
 
   void(): MaybeAsync<void> {
     return this.map((_) => {})
+  }
+
+  caseOf<U>(patterns: MaybePatterns<T, U>): Promise<U> {
+    return this.run().then((x) => x.caseOf(patterns))
+  }
+
+  finally(effect: () => any): MaybeAsync<T> {
+    return MaybeAsync(({ fromPromise }) =>
+      fromPromise(this.run().finally(effect))
+    )
   }
 
   'fantasy-land/map' = this.map
