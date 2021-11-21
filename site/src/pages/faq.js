@@ -6,11 +6,6 @@ const FAQ = (props) => (
     <h1>FAQ</h1>
     <ul>
       <li>
-        <h3>Q: Is this library considered finished?</h3>
-        The library is still in early development, but over the last year the
-        API has been getting more stable and version 1.0 is not that far.
-      </li>
-      <li>
         <h3>Q: What are the future goals of the library?</h3>
         The library's overall goals are to continue bringing popular patterns
         from FP languages into TypeScript.
@@ -47,13 +42,12 @@ const FAQ = (props) => (
       <li>
         <h3>Q: What is the timeline for the new releases?</h3>
         There are no exact dates for upcoming versions of Purify.
-        <br />I try to release a new version every couple of months, but there's
-        no guarantee for that.
+        <br />
+        Now that the library is post-v1 you can expect a more irregular release
+        schedule.
       </li>
       <li>
         <h3>Q: Should I expect breaking changes?</h3>
-        The library is in pre-v1 stage, breaking changes are certainly possible.{' '}
-        <br />
         Situations in which you can definitely expect breaking changes are:{' '}
         <br />
         There is a new TypeScript release that allows for more type safety
