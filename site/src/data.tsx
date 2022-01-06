@@ -927,6 +927,34 @@ const data: Data = {
               description:
                 'Useful if you are not interested in the result of an operation.',
               examples: []
+            },
+            {
+              name: 'caseOf',
+              signatureTS:
+                '<U>(patterns: MaybePatterns<T, U>): Promise<U>',
+              description:
+                'Structural pattern matching for `MaybeAsync` in the form of a function.',
+              examples: [
+                {
+                  input: `MaybeAsync.liftMaybe(Nothing).caseOf({ Just: x => x, Nothing: () => 'failure' })`,
+                  output: `Promise {<resolved>: 'failure'}`
+                },
+                {
+                  input: `MaybeAsync.liftMaybe(Just(6)).caseOf({ Nothing: () => 0, Just: x => x + 1 })`,
+                  output: 'Promise {<resolved>: 7}'
+                },
+                {
+                  input: `MaybeAsync.liftMaybe(Nothing).caseOf({ _: () => 0 }) // wildcard`,
+                  output: 'Promise {<resolved>: 0}'
+                }
+              ]
+            },
+            {
+              name: 'finally',
+              signatureTS: '(effect: () => any): MaybeAsync<T>',
+              description:
+                'Similar to the Promise method of the same name, the provided function is called when the `MaybeAsync` is executed regardless of whether the `Maybe` result is `Nothing` or `Just`.',
+              examples: []
             }
           ]
         },
