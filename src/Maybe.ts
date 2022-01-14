@@ -65,6 +65,9 @@ export interface Maybe<T> {
   /** Takes a predicate function and returns `this` if the predicate returns true or Nothing if it returns false */
   filter(pred: (value: T) => boolean): Maybe<T>
 
+  /** Returns an iterator over the possibly contained value. */
+  [Symbol.iterator](): Iterator<T>
+
   'fantasy-land/equals'(other: Maybe<T>): boolean
   'fantasy-land/map'<U>(f: (value: T) => U): Maybe<U>
   'fantasy-land/ap'<U>(maybeF: Maybe<(value: T) => U>): Maybe<U>
@@ -303,6 +306,10 @@ class Just<T> implements Maybe<T> {
     return pred(this.__value) ? just(this.__value) : nothing
   }
 
+  *[Symbol.iterator]() {
+    yield this.__value
+  }
+
   'fantasy-land/equals' = this.equals
   'fantasy-land/map' = this.map
   'fantasy-land/ap' = this.ap
@@ -429,6 +436,8 @@ class Nothing implements Maybe<never> {
   filter(_: (value: never) => boolean): Maybe<never> {
     return nothing
   }
+
+  *[Symbol.iterator]() {}
 
   'fantasy-land/equals' = this.equals
   'fantasy-land/map' = this.map

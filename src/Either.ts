@@ -63,6 +63,9 @@ export interface Either<L, R> {
   /** Returns `Right` if `this` is `Left` and vice versa */
   swap(): Either<R, L>
 
+  /** Returns an iterator over the possibly contained value. The iterator yields one value if `this` is `Right`, otherwise none */
+  [Symbol.iterator](): Iterator<R>
+
   'fantasy-land/bimap'<L2, R2>(
     f: (value: L) => L2,
     g: (value: R) => R2
@@ -272,6 +275,10 @@ class Right<R, L = never> implements Either<L, R> {
     return left(this.__value)
   }
 
+  *[Symbol.iterator]() {
+    yield this.__value
+  }
+
   'fantasy-land/bimap' = this.bimap
   'fantasy-land/map' = this.map
   'fantasy-land/ap' = this.ap
@@ -408,6 +415,8 @@ class Left<L, R = never> implements Either<L, R> {
   swap(): Either<R, L> {
     return right(this.__value)
   }
+
+  *[Symbol.iterator]() {}
 
   'fantasy-land/bimap' = this.bimap
   'fantasy-land/map' = this.map

@@ -261,4 +261,28 @@ describe('Maybe', () => {
     expect(Just(5).filter((x) => x > 0)).toEqual(Just(5))
     expect(Nothing.filter((x) => x > 0)).toEqual(Nothing)
   })
+
+  test('iterator', () => {
+    let a = 0
+    let i = 0
+    for (const n of Just(5)) {
+      a = 5
+      i++
+    }
+    expect(a).toEqual(5)
+    expect(i).toEqual(1)
+
+    let b = 0
+    let j = 0
+    for (const n of Nothing) {
+      b = 5
+      j++
+    }
+    expect(b).toEqual(0)
+    expect(j).toEqual(0)
+
+    const arr = [...Just(5), ...Nothing, ...Just(7)]
+    expect(arr).toEqual([5, 7])
+
+  })
 })

@@ -277,4 +277,28 @@ describe('Either', () => {
     expect(Right(5).swap()).toEqual(Left(5))
     expect(Left(5).swap()).toEqual(Right(5))
   })
+
+  test('iterator', () => {
+    let a = 0
+    let i = 0
+    for (const n of Right(5)) {
+      a = 5
+      i++
+    }
+    expect(a).toEqual(5)
+    expect(i).toEqual(1)
+
+    let b = 0
+    let j = 0
+    for (const n of Left('Error')) {
+      b = 5
+      j++
+    }
+    expect(b).toEqual(0)
+    expect(j).toEqual(0)
+
+    const arr = [...Right(5), ...Left('Error'), ...Right(7)]
+    expect(arr).toEqual([5, 7])
+
+  })
 })
