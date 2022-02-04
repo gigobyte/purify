@@ -1744,12 +1744,12 @@ randomEither().map(x => x)
             {
               name: 'lefts',
               description:
-                'Takes a list of `EitherAsync`s and returns a Promise that will resolve with all `Right` values. Internally it uses `Promise.all` to wait for all results.',
+                'Takes a list of `EitherAsync`s and returns a Promise that will resolve with all `Left` values. Internally it uses `Promise.all` to wait for all results.',
               signatureML: '[EitherAsync a b] -> [IO a]',
               signatureTS: '<L, R>(list: EitherAsync<L, R>[]): Promise<L[]>',
               examples: [
                 {
-                  input: `EitherAsync.rights([
+                  input: `EitherAsync.lefts([
   EitherAsync.liftEither(Left('Server error')),
   EitherAsync.liftEither(Left('Wrong password')),
   EitherAsync(async () => 'foo@bar.com')
