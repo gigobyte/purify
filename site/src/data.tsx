@@ -930,8 +930,7 @@ const data: Data = {
             },
             {
               name: 'caseOf',
-              signatureTS:
-                '<U>(patterns: MaybePatterns<T, U>): Promise<U>',
+              signatureTS: '<U>(patterns: MaybePatterns<T, U>): Promise<U>',
               description:
                 'Structural pattern matching for `MaybeAsync` in the form of a function.',
               examples: [
@@ -1298,7 +1297,7 @@ randomEither().map(x => x)
                 'Applies a `Right` function over a `Right` value. Returns `Left` if either `this` or the function are `Left`.',
               signatureML: 'Either a b ~> Either a (b -> c) -> Either a c',
               signatureTS:
-                '<R2>(other: Either<L, (value: R) => R2>): Either<L, R2>',
+                '<L2, R2>(other: Either<L2, (value: R) => R2>): Either<L | L2, R2>',
               examples: [
                 { input: 'Right(5).ap(Right(x => x + 1))', output: 'Right(6)' },
                 {
@@ -1373,7 +1372,7 @@ randomEither().map(x => x)
                 'Flattens nested Eithers. `e.join()` is equivalent to `e.chain(x => x)`',
               signatureML: 'Either a (Either a b) ~> Either a b',
               signatureTS:
-                '<R2>(this: Either<L, Either<L, R2>>): Either<L, R2>',
+                '<L2, R2>(this: Either<L, Either<L2, R2>>): Either<L | L2, R2>',
               examples: [
                 { input: 'Right(Right(5)).join()', output: 'Right(5)' },
                 {
@@ -1919,7 +1918,7 @@ randomEither().map(x => x)
               description:
                 'Applies a `Right` function wrapped in `EitherAsync` over a future `Right` value. Returns `Left` if either the `this` resolves to a `Left` or the function is `Left`.',
               signatureTS:
-                '<R2>(other: PromiseLike<Either<L, (value: R) => R2>>): EitherAsync<L, R2>',
+                '<L2, R2>(other: PromiseLike<Either<L2, (value: R) => R2>>): EitherAsync<L | L2, R2>',
               examples: []
             },
             {
@@ -1960,7 +1959,7 @@ randomEither().map(x => x)
                 'Flattens nested `EitherAsync`s. `e.join()` is equivalent to `e.chain(x => x)`.',
               signatureML: 'EitherAsync a (EitherAsync a b) ~> EitherAsync a b',
               signatureTS:
-                '<R2>(this: EitherAsync<L, EitherAsync<L, R2>>): EitherAsync<L, R2>',
+                '<L2, R2>(this: EitherAsync<L, EitherAsync<L2, R2>>): EitherAsync<L | L2, R2>',
               examples: []
             },
             {

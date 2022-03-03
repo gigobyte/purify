@@ -50,7 +50,9 @@ export interface EitherAsync<L, R> extends PromiseLike<Either<L, R>> {
     f: (value: L) => PromiseLike<Either<L2, R2>>
   ): EitherAsync<L2, R | R2>
   /** Flattens nested `EitherAsync`s. `e.join()` is equivalent to `e.chain(x => x)` */
-  join<R2>(this: EitherAsync<L, EitherAsync<L, R2>>): EitherAsync<L, R2>
+  join<L2, R2>(
+    this: EitherAsync<L, EitherAsync<L2, R2>>
+  ): EitherAsync<L | L2, R2>
   /** Converts `this` to a MaybeAsync, discarding any error values */
   toMaybeAsync(): MaybeAsync<R>
   /** Returns `Right` if `this` is `Left` and vice versa */
@@ -60,7 +62,9 @@ export interface EitherAsync<L, R> extends PromiseLike<Either<L, R>> {
   /** Runs an effect if `this` is `Right`, returns `this` to make chaining other methods possible */
   ifRight(effect: (value: R) => any): EitherAsync<L, R>
   /** Applies a `Right` function wrapped in `EitherAsync` over a future `Right` value. Returns `Left` if either the `this` resolves to a `Left` or the function is `Left` */
-  ap<R2>(other: PromiseLike<Either<L, (value: R) => R2>>): EitherAsync<L, R2>
+  ap<L2, R2>(
+    other: PromiseLike<Either<L2, (value: R) => R2>>
+  ): EitherAsync<L | L2, R2>
   /** Returns the first `Right` between the future value of `this` and another `EitherAsync` or the `Left` in the argument if both `this` and the argument resolve to `Left` */
   alt(other: EitherAsync<L, R>): EitherAsync<L, R>
   /** Returns `this` if it resolves to a `Left`, otherwise it returns the result of applying the function argument to `this` and wrapping it in a `Right` */
@@ -137,7 +141,9 @@ class EitherAsyncImpl<L, R> implements EitherAsync<L, R> {
     return this.run().then((x) => x.orDefault(defaultValue))
   }
 
-  join<R2>(this: EitherAsync<L, EitherAsync<L, R2>>): EitherAsync<L, R2> {
+  join<L2, R2>(
+    this: EitherAsync<L, EitherAsync<L2, R2>>
+  ): EitherAsync<L | L2, R2> {
     return EitherAsync(async (helpers) => {
       const either = await this
       if (either.isRight()) {
@@ -148,9 +154,9 @@ class EitherAsyncImpl<L, R> implements EitherAsync<L, R> {
     })
   }
 
-  ap<R2>(
-    eitherF: PromiseLike<Either<L, (value: R) => R2>>
-  ): EitherAsync<L, R2> {
+  ap<L2, R2>(
+    eitherF: PromiseLike<Either<L2, (value: R) => R2>>
+  ): EitherAsync<L | L2, R2> {
     return EitherAsync(async (helpers) => {
       const otherValue = await eitherF
 

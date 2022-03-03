@@ -21,7 +21,7 @@ export interface Either<L, R> {
   /** Maps the `Left` value of `this`, acts like an identity if `this` is `Right` */
   mapLeft<L2>(f: (value: L) => L2): Either<L2, R>
   /** Applies a `Right` function over a `Right` value. Returns `Left` if either `this` or the function are `Left` */
-  ap<R2>(other: Either<L, (value: R) => R2>): Either<L, R2>
+  ap<L2, R2>(other: Either<L2, (value: R) => R2>): Either<L | L2, R2>
   /** Compares `this` to another `Either`, returns false if the constructors or the values inside are different, e.g. `Right(5).equals(Left(5))` is false */
   equals(other: Either<L, R>): boolean
   /** Transforms `this` with a function that returns an `Either`. Useful for chaining many computations that may fail */
@@ -29,7 +29,7 @@ export interface Either<L, R> {
   /** The same as Either#chain but executes the transformation function only if the value is Left. Useful for recovering from errors */
   chainLeft<L2, R2>(f: (value: L) => Either<L2, R2>): Either<L2, R | R2>
   /** Flattens nested Eithers. `e.join()` is equivalent to `e.chain(x => x)` */
-  join<R2>(this: Either<L, Either<L, R2>>): Either<L, R2>
+  join<L2, R2>(this: Either<L, Either<L2, R2>>): Either<L | L2, R2>
   /** Returns the first `Right` between `this` and another `Either` or the `Left` in the argument if both `this` and the argument are `Left` */
   alt(other: Either<L, R>): Either<L, R>
   /** Lazy version of `alt` */
@@ -188,7 +188,7 @@ class Right<R, L = never> implements Either<L, R> {
     return this as any
   }
 
-  ap<R2>(other: Either<L, (value: R) => R2>): Either<L, R2> {
+  ap<L2, R2>(other: Either<L2, (value: R) => R2>): Either<L | L2, R2> {
     return other.isRight() ? this.map(other.extract()) : (other as any)
   }
 
@@ -204,7 +204,7 @@ class Right<R, L = never> implements Either<L, R> {
     return this as any
   }
 
-  join<R2>(this: Right<Either<L, R2>, L>): Either<L, R2> {
+  join<L2, R2>(this: Right<Either<L2, R2>, L>): Either<L | L2, R2> {
     return this.__value as any
   }
 
@@ -321,7 +321,7 @@ class Left<L, R = never> implements Either<L, R> {
     return left(f(this.__value))
   }
 
-  ap<R2>(other: Either<L, (value: R) => R2>): Either<L, R2> {
+  ap<L2, R2>(other: Either<L2, (value: R) => R2>): Either<L | L2, R2> {
     return other.isLeft() ? other : (this as any)
   }
 
@@ -337,7 +337,7 @@ class Left<L, R = never> implements Either<L, R> {
     return f(this.__value)
   }
 
-  join<R2>(this: Either<L, Either<L, R2>>): Either<L, R2> {
+  join<L2, R2>(this: Either<L, Either<L2, R2>>): Either<L | L2, R2> {
     return this as any
   }
 
