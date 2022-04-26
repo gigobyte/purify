@@ -13,8 +13,8 @@
     "gatsby-plugin-styled-components": "4.14.0",
     "gatsby-plugin-typescript": "3.14.0",
     "gh-pages": "3.2.3",
-    "react": "17.0.2",
-    "react-dom": "17.0.2",
+    "react": "18.1.0",
+    "react-dom": "18.1.0",
     "react-helmet": "6.1.0",
     "react-syntax-highlighter": "15.5.0",
     "styled-components": "5.3.5"
