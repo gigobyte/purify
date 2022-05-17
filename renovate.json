@@ -1,6 +1,6 @@
 {
   "extends": ["config:base", ":pinAllExceptPeerDependencies"],
-  "ignorePaths": [],
+  "ignorePaths": ["./site"],
   "automerge": true,
   "major": {
     "automerge": false
