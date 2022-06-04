@@ -110,11 +110,9 @@ export const Codec = {
   /** Creates a codec for any JSON object */
   interface<T extends Record<string, Codec<any>>>(
     properties: T
-  ): Codec<
-    {
-      [k in keyof T]: GetType<T[k]>
-    }
-  > {
+  ): Codec<{
+    [k in keyof T]: GetType<T[k]>
+  }> {
     const keys = Object.keys(properties)
 
     const decode: Codec<any>['decode'] = (input: unknown) => {
@@ -503,11 +501,9 @@ export const nonEmptyList = <T>(codec: Codec<T>): Codec<NonEmptyList<T>> => {
 /** The same as the array decoder, but accepts a fixed amount of array elements and you can specify each element type, much like the tuple type */
 export const tuple = <TS extends [Codec<any>, ...Codec<any>[]]>(
   codecs: TS
-): Codec<
-  {
-    [i in keyof TS]: TS[i] extends Codec<infer U> ? U : never
-  }
-> =>
+): Codec<{
+  [i in keyof TS]: TS[i] extends Codec<infer U> ? U : never
+}> =>
   Codec.custom({
     decode: (input) => {
       if (!Array.isArray(input)) {
@@ -534,7 +530,7 @@ export const tuple = <TS extends [Codec<any>, ...Codec<any>[]]>(
         return Right(result)
       }
     },
-    encode: (input) => input.map((x, i) => codecs[i]!.encode(x)),
+    encode: (input) => input.map((x: any, i: number) => codecs[i]!.encode(x)),
     schema: () => ({
       type: 'array',
       items: codecs.map((x) => x.schema()),
