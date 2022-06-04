@@ -2,8 +2,6 @@
   "name": "purify-ts",
   "version": "1.2.0",
   "description": "Functional programming standard library for TypeScript ",
-  "main": "index.js",
-  "types": "index.d.ts",
   "repository": "https://github.com/gigobyte/purify.git",
   "author": "gigobyte <gigobest2@gmail.com>",
   "license": "ISC",
@@ -26,6 +24,30 @@
       "js"
     ],
     "collectCoverage": true
+  },
+  "main": "index.js",
+  "types": "index.d.ts",
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./es/index.d.ts",
+        "default": "./es/index.js"
+      },
+      "require": {
+        "types": "./index.d.ts",
+        "default": "./index.js"
+      }
+    },
+    "./*": {
+      "import": {
+        "types": "./es/*.d.ts",
+        "default": "./es/*.js"
+      },
+      "require": {
+        "types": "./*.d.ts",
+        "default": "./*.js"
+      }
+    }
   },
   "devDependencies": {
     "@types/jest": "27.5.2",
