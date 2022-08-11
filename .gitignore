@@ -3,3 +3,4 @@ lib
 coverage
 .cache
 dist
+.idea

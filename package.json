@@ -7,7 +7,7 @@
   "license": "ISC",
   "sideEffects": false,
   "scripts": {
-    "build": "tsc && tsc -p tsconfig.es.json",
+    "build": "tsc && tsc -p tsconfig.es.json && ttsc -p tsconfig.esm.json",
     "test": "jest --coverage",
     "coverage": "coveralls < coverage/lcov.info",
     "test-watch": "jest --watch",
@@ -29,6 +29,10 @@
   "types": "index.d.ts",
   "exports": {
     ".": {
+      "module": {
+        "types": "./esm/index.d.ts",
+        "default": "./esm/index.js"
+      },
       "import": {
         "types": "./es/index.d.ts",
         "default": "./es/index.js"
@@ -39,6 +43,10 @@
       }
     },
     "./*": {
+      "module": {
+        "types": "./esm/*.d.ts",
+        "default": "./esm/*.js"
+      },
       "import": {
         "types": "./es/*.d.ts",
         "default": "./es/*.js"
@@ -51,12 +59,14 @@
   },
   "devDependencies": {
     "@types/jest": "28.1.6",
+    "@zoltu/typescript-transformer-append-js-extension": "1.0.1",
     "ajv": "8.11.0",
     "ajv-formats": "2.1.1",
     "coveralls": "3.1.1",
     "jest": "28.1.3",
     "prettier": "2.7.1",
     "ts-jest": "28.0.7",
+    "ttypescript": "1.5.13",
     "typescript": "4.7.4"
   },
   "dependencies": {
