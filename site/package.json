@@ -6,7 +6,7 @@
   "dependencies": {
     "@types/react-syntax-highlighter": "13.5.2",
     "babel-plugin-styled-components": "2.0.7",
-    "gatsby": "4.21.0",
+    "gatsby": "4.21.1",
     "gatsby-link": "4.21.0",
     "gatsby-plugin-google-fonts": "1.0.1",
     "gatsby-plugin-react-helmet": "5.21.0",
