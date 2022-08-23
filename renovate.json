@@ -5,5 +5,14 @@
   "major": {
     "automerge": false
   },
-  "requiredStatusChecks": null
+  "requiredStatusChecks": null,
+  "schedule": ["after 9pm on sunday"],
+  "packageRules": [
+    {
+      "matchPackagePatterns": ["*"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "all non-major dependencies",
+      "groupSlug": "all-minor-patch"
+    }
+  ]
 }
