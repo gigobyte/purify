@@ -88,6 +88,14 @@ describe('Codec', () => {
       })
       expect(mockCodec.encode({} as any)).toEqual({})
     })
+
+    test('bigint error reporting', () => {
+      expect(Codec.interface({ n: string }).decode({ b: BigInt(1) })).toEqual(
+        Left(
+          'Problem with property "n": it does not exist in received object {"b":"1"}'
+        )
+      )
+    })
   })
 
   describe('custom', () => {

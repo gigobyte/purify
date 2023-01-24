@@ -129,7 +129,10 @@ export const Codec = {
         ) {
           return Left(
             `Problem with property "${key}": it does not exist in received object ${JSON.stringify(
-              input
+              input,
+              (_, value) => {
+                return typeof value === 'bigint' ? value.toString() : value
+              }
             )}`
           )
         }
