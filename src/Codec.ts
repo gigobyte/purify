@@ -24,6 +24,10 @@ export type FromType<T> = {
 /** You can use this to get a free type from any codec */
 export type GetType<T extends Codec<any>> = T extends Codec<infer U> ? U : never
 
+const serializeValue = (_: string, value: any) => {
+  return typeof value === 'bigint' ? value.toString() : value
+}
+
 const isEmptySchema = (schema: JSONSchema6): boolean =>
   Object.keys(schema).length === 0
 
@@ -43,8 +47,8 @@ const reportError = (expectedType: string, input: unknown): string => {
         input === null
           ? 'null'
           : Array.isArray(input)
-          ? 'an array with value ' + JSON.stringify(input)
-          : 'an object with value ' + JSON.stringify(input)
+          ? 'an array with value ' + JSON.stringify(input, serializeValue)
+          : 'an object with value ' + JSON.stringify(input, serializeValue)
       break
 
     case 'boolean':
@@ -64,7 +68,8 @@ const reportError = (expectedType: string, input: unknown): string => {
   }
 
   receivedString =
-    receivedString || `a ${typeof input} with value ${JSON.stringify(input)}`
+    receivedString ||
+    `a ${typeof input} with value ${JSON.stringify(input, serializeValue)}`
 
   return `Expected ${expectedType}, but received ${receivedString}`
 }
@@ -130,9 +135,7 @@ export const Codec = {
           return Left(
             `Problem with property "${key}": it does not exist in received object ${JSON.stringify(
               input,
-              (_, value) => {
-                return typeof value === 'bigint' ? value.toString() : value
-              }
+              serializeValue
             )}`
           )
         }
