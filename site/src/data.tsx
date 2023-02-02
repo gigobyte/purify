@@ -874,11 +874,10 @@ const data: Data = {
             },
             {
               name: 'join',
-              signatureTS:
-                '<U>(this: MaybeAsync<MaybeAsync<U>>): MaybeAsync<U>',
-              signatureML: 'MaybeAsync (MaybeAsync a) ~> MaybeAsync a',
+              signatureTS: '<U>(this: MaybeAsync<Maybe<U>>): MaybeAsync<U>',
+              signatureML: 'MaybeAsync (Maybe a) ~> MaybeAsync a',
               description:
-                'Flattens nested `MaybeAsync`s. `m.join()` is equivalent to `m.chain(x => x).',
+                'Flattens a `Maybe` nested inside a `MaybeAsync`. `m.join()` is equivalent to `m.chain(async x => x)`.',
               examples: []
             },
             {
@@ -1885,7 +1884,8 @@ randomEither().map(x => x)
               description:
                 "Transforms the `Right` value of `this` with a given function. If the EitherAsync that is being mapped resolves to a Left then the mapping function won't be called and `run` will resolve the whole thing to that Left, just like the regular Either#map.",
               signatureML: 'EitherAsync a b ~> (b -> c) -> EitherAsync a c',
-              signatureTS: '<R2>(f: (value: R) => R2): EitherAsync<L, R2>',
+              signatureTS:
+                '<R2>(f: (value: R) => R2): EitherAsync<L, Awaited<R2>>',
               examples: [
                 {
                   input:
@@ -1956,10 +1956,10 @@ randomEither().map(x => x)
             {
               name: 'join',
               description:
-                'Flattens nested `EitherAsync`s. `e.join()` is equivalent to `e.chain(x => x)`.',
-              signatureML: 'EitherAsync a (EitherAsync a b) ~> EitherAsync a b',
+                'Flattens an `Either` nested inside an `EitherAsync`. `e.join()` is equivalent to `e.chain(async x => x)`.',
+              signatureML: 'EitherAsync a (Either a b) ~> EitherAsync a b',
               signatureTS:
-                '<L2, R2>(this: EitherAsync<L, EitherAsync<L2, R2>>): EitherAsync<L | L2, R2>',
+                '<L2, R2>(this: EitherAsync<L, Either<L2, R2>>): EitherAsync<L | L2, R2>',
               examples: []
             },
             {

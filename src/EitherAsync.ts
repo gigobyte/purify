@@ -38,7 +38,7 @@ export interface EitherAsync<L, R> extends PromiseLike<Either<L, R>> {
   /** Given two functions, maps the value that the Promise inside `this` resolves to using the first if it is `Left` or using the second one if it is `Right` */
   bimap<L2, R2>(f: (value: L) => L2, g: (value: R) => R2): EitherAsync<L2, R2>
   /** Transforms the `Right` value of `this` with a given function. If the `EitherAsync` that is being mapped resolves to a Left then the mapping function won't be called and `run` will resolve the whole thing to that Left, just like the regular Either#map */
-  map<R2>(f: (value: R) => R2): EitherAsync<L, R2>
+  map<R2>(f: (value: R) => R2): EitherAsync<L, Awaited<R2>>
   /** Maps the `Left` value of `this`, acts like an identity if `this` is `Right` */
   mapLeft<L2>(f: (value: L) => L2): EitherAsync<L2, R>
   /** Transforms `this` with a function that returns a `EitherAsync`. Behaviour is the same as the regular Either#chain */
@@ -49,10 +49,8 @@ export interface EitherAsync<L, R> extends PromiseLike<Either<L, R>> {
   chainLeft<L2, R2>(
     f: (value: L) => PromiseLike<Either<L2, R2>>
   ): EitherAsync<L2, R | R2>
-  /** Flattens nested `EitherAsync`s. `e.join()` is equivalent to `e.chain(x => x)` */
-  join<L2, R2>(
-    this: EitherAsync<L, EitherAsync<L2, R2>>
-  ): EitherAsync<L | L2, R2>
+  /** Flattens an `Either` nested inside an `EitherAsync`. `e.join()` is equivalent to `e.chain(async x => x)` */
+  join<L2, R2>(this: EitherAsync<L, Either<L2, R2>>): EitherAsync<L | L2, R2>
   /** Converts `this` to a MaybeAsync, discarding any error values */
   toMaybeAsync(): MaybeAsync<R>
   /** Returns `Right` if `this` is `Left` and vice versa */
@@ -80,7 +78,7 @@ export interface EitherAsync<L, R> extends PromiseLike<Either<L, R>> {
   /* Similar to the Promise method of the same name, the provided function is called when the `EitherAsync` is executed regardless of whether the `Either` result is `Left` or `Right` */
   finally(effect: () => any): EitherAsync<L, R>
 
-  'fantasy-land/map'<R2>(f: (value: R) => R2): EitherAsync<L, R2>
+  'fantasy-land/map'<R2>(f: (value: R) => R2): EitherAsync<L, Awaited<R2>>
   'fantasy-land/bimap'<L2, R2>(
     f: (value: L) => L2,
     g: (value: R) => R2
@@ -141,9 +139,7 @@ class EitherAsyncImpl<L, R> implements EitherAsync<L, R> {
     return this.run().then((x) => x.orDefault(defaultValue))
   }
 
-  join<L2, R2>(
-    this: EitherAsync<L, EitherAsync<L2, R2>>
-  ): EitherAsync<L | L2, R2> {
+  join<L2, R2>(this: EitherAsync<L, Either<L2, R2>>): EitherAsync<L | L2, R2> {
     return EitherAsync(async (helpers) => {
       const either = await this
       if (either.isRight()) {
@@ -213,8 +209,8 @@ class EitherAsyncImpl<L, R> implements EitherAsync<L, R> {
     })
   }
 
-  map<R2>(f: (value: R) => R2): EitherAsync<L, R2> {
-    return EitherAsync((helpers) => this.runPromise(helpers).then(f))
+  map<R2>(f: (value: R) => R2): EitherAsync<L, Awaited<R2>> {
+    return EitherAsync((helpers) => this.runPromise(helpers).then(f as any))
   }
 
   mapLeft<L2>(f: (value: L) => L2): EitherAsync<L2, R> {

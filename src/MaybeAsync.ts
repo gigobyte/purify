@@ -28,7 +28,7 @@ export interface MaybeAsync<T> extends PromiseLike<Maybe<T>> {
    */
   run(): Promise<Maybe<T>>
   /** Transforms the value inside `this` with a given function. If the MaybeAsync that is being mapped resolves to Nothing then the mapping function won't be called and `run` will resolve the whole thing to Nothing, just like the regular Maybe#map */
-  map<U>(f: (value: T) => U): MaybeAsync<U>
+  map<U>(f: (value: T) => U): MaybeAsync<Awaited<U>>
   /** Transforms `this` with a function that returns a `MaybeAsync`. Behaviour is the same as the regular Maybe#chain */
   chain<U>(f: (value: T) => PromiseLike<Maybe<U>>): MaybeAsync<U>
   /** Converts `this` to a EitherAsync with a default error value */
@@ -49,8 +49,8 @@ export interface MaybeAsync<T> extends PromiseLike<Maybe<T>> {
   filter<U extends T>(pred: (value: T) => value is U): MaybeAsync<U>
   /** Takes a predicate function and returns `this` if the predicate, applied to the resolved value, is true or Nothing if it's false */
   filter(pred: (value: T) => boolean): MaybeAsync<T>
-  /** Flattens nested `MaybeAsync`s. `m.join()` is equivalent to `m.chain(x => x)` */
-  join<U>(this: MaybeAsync<MaybeAsync<U>>): MaybeAsync<U>
+  /** Flattens a `Maybe` nested inside a `MaybeAsync`. `m.join()` is equivalent to `m.chain(async x => x)` */
+  join<U>(this: MaybeAsync<Maybe<U>>): MaybeAsync<U>
   /** Useful if you are not interested in the result of an operation */
   void(): MaybeAsync<void>
   /** Structural pattern matching for `MaybeAsync` in the form of a function */
@@ -58,7 +58,7 @@ export interface MaybeAsync<T> extends PromiseLike<Maybe<T>> {
   /* Similar to the Promise method of the same name, the provided function is called when the `MaybeAsync` is executed regardless of whether the `Maybe` result is `Nothing` or `Just` */
   finally(effect: () => any): MaybeAsync<T>
 
-  'fantasy-land/map'<U>(f: (value: T) => U): MaybeAsync<U>
+  'fantasy-land/map'<U>(f: (value: T) => U): MaybeAsync<Awaited<U>>
   'fantasy-land/chain'<U>(f: (value: T) => PromiseLike<Maybe<U>>): MaybeAsync<U>
   'fantasy-land/ap'<U>(maybeF: MaybeAsync<(value: T) => U>): MaybeAsync<U>
   'fantasy-land/alt'(other: MaybeAsync<T>): MaybeAsync<T>
@@ -105,7 +105,7 @@ class MaybeAsyncImpl<T> implements MaybeAsync<T> {
     return this.run().then((x) => x.orDefault(defaultValue))
   }
 
-  join<U>(this: MaybeAsync<MaybeAsync<U>>): MaybeAsync<U> {
+  join<U>(this: MaybeAsync<Maybe<U>>): MaybeAsync<U> {
     return MaybeAsync(async (helpers) => {
       const maybe = await this.run()
       if (maybe.isJust()) {
@@ -175,8 +175,8 @@ class MaybeAsyncImpl<T> implements MaybeAsync<T> {
     }
   }
 
-  map<U>(f: (value: T) => U): MaybeAsync<U> {
-    return MaybeAsync((helpers) => this.runPromise(helpers).then(f))
+  map<U>(f: (value: T) => U): MaybeAsync<Awaited<U>> {
+    return MaybeAsync((helpers) => this.runPromise(helpers).then(f as any))
   }
 
   chain<U>(f: (value: T) => PromiseLike<Maybe<U>>): MaybeAsync<U> {
