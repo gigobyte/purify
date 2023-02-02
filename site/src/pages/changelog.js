@@ -10,7 +10,7 @@ const versionStyle = css`
   border-radius: 6px;
   text-decoration: none;
   color: #2877ad;
-  width: 42px;
+  min-width: 42px;
   text-align: center;
   height: 25px;
 `
@@ -52,64 +52,12 @@ const Changelog = (props) => (
     <div>
       <h1>Choose version:</h1>
       <VersionContainer>
-        <VersionStatic>1.3.1</VersionStatic>
+        <VersionStatic>1.0.0 - 1.3.2</VersionStatic>
         <Description>
-          Check out the release on{' '}
-          <a href="https://github.com/gigobyte/purify/releases/tag/v1.3.1">
-            GitHub
-          </a>
+          Since v1 purify follows semantic versioning, you can check out all
+          releases on{' '}
+          <a href="https://github.com/gigobyte/purify/releases">GitHub</a>
         </Description>
-        <Date>January 2023</Date>
-      </VersionContainer>
-      <VersionContainer>
-        <VersionStatic>1.3.0</VersionStatic>
-        <Description>
-          Check out the release on{' '}
-          <a href="https://github.com/gigobyte/purify/releases/tag/v1.3.0">
-            GitHub
-          </a>
-        </Description>
-        <Date>August 2022</Date>
-      </VersionContainer>
-      <VersionContainer>
-        <VersionStatic>1.2.2</VersionStatic>
-        <Description>
-          Check out the release on{' '}
-          <a href="https://github.com/gigobyte/purify/releases/tag/v1.2.2">
-            GitHub
-          </a>
-        </Description>
-        <Date>June 2022</Date>
-      </VersionContainer>
-      <VersionContainer>
-        <VersionStatic>1.2.0</VersionStatic>
-        <Description>
-          Check out the release on{' '}
-          <a href="https://github.com/gigobyte/purify/releases/tag/v1.2.0">
-            GitHub
-          </a>
-        </Description>
-        <Date>March 2022</Date>
-      </VersionContainer>
-      <VersionContainer>
-        <VersionStatic>1.1.0</VersionStatic>
-        <Description>
-          Check out the release on{' '}
-          <a href="https://github.com/gigobyte/purify/releases/tag/v1.1.0">
-            GitHub
-          </a>
-        </Description>
-        <Date>October 2021</Date>
-      </VersionContainer>
-      <VersionContainer>
-        <VersionStatic>1.0.0</VersionStatic>
-        <Description>
-          Check out the release on{' '}
-          <a href="https://github.com/gigobyte/purify/releases/tag/v1.0.0">
-            GitHub
-          </a>
-        </Description>
-        <Date>July 2021</Date>
       </VersionContainer>
       <VersionContainer>
         <VersionStatic>0.16.3</VersionStatic>
