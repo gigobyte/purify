@@ -6,18 +6,18 @@
   "dependencies": {
     "@types/react-syntax-highlighter": "13.5.2",
     "babel-plugin-styled-components": "2.0.7",
-    "gatsby": "4.21.1",
-    "gatsby-link": "4.21.0",
+    "gatsby": "4.25.4",
+    "gatsby-link": "4.25.0",
     "gatsby-plugin-google-fonts": "1.0.1",
-    "gatsby-plugin-react-helmet": "5.21.0",
-    "gatsby-plugin-styled-components": "5.21.0",
-    "gatsby-plugin-typescript": "4.21.0",
+    "gatsby-plugin-react-helmet": "5.25.0",
+    "gatsby-plugin-styled-components": "5.25.0",
+    "gatsby-plugin-typescript": "4.25.0",
     "gh-pages": "3.2.3",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-helmet": "6.1.0",
     "react-syntax-highlighter": "15.5.0",
-    "styled-components": "5.3.5"
+    "styled-components": "5.3.6"
   },
   "license": "MIT",
   "scripts": {
@@ -28,6 +28,6 @@
     "deploy": "gatsby build --prefix-paths && gh-pages -d public"
   },
   "devDependencies": {
-    "prettier": "2.7.1"
+    "prettier": "2.8.3"
   }
 }
