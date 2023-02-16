@@ -806,7 +806,7 @@ const data: Data = {
               description:
                 "Transforms the value inside `this` with a given function. If the MaybeAsync that is being mapped resolves to Nothing then the mapping function won't be called and `run` will resolve the whole thing to Nothing, just like the regular Maybe#map.",
               signatureML: 'MaybeAsync a ~> (a -> b) -> MaybeAsync b',
-              signatureTS: '<U>(f: (value: T) => U): MaybeAsync<U>',
+              signatureTS: '<U>(f: (value: T) => U): MaybeAsync<Awaited<U>>',
               examples: [
                 {
                   input:
