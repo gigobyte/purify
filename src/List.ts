@@ -3,27 +3,28 @@ import { Maybe, Just, Nothing } from './Maybe'
 import { Order, orderToNumber } from './Function'
 
 /** Returns Just the first element of an array or Nothing if there is none. If you don't want to work with a Maybe but still keep type safety, check out `NonEmptyList` */
-const head = <T>(list: T[]): Maybe<T> =>
+const head = <T>(list: readonly T[]): Maybe<T> =>
   list.length > 0 ? Just(list[0]!) : Nothing
 
 /** Returns Just the last element of an array or Nothing if there is none */
-const last = <T>(list: T[]): Maybe<T> =>
+const last = <T>(list: readonly T[]): Maybe<T> =>
   list.length > 0 ? Just(list[list.length - 1]!) : Nothing
 
 /** Returns all elements of an array except the first */
-const tail = <T>(list: T[]): Maybe<T[]> =>
+const tail = <T>(list: readonly T[]): Maybe<T[]> =>
   list.length > 0 ? Just(list.slice(1)) : Nothing
 
 /** Returns all elements of an array except the last */
-const init = <T>(list: T[]): Maybe<T[]> =>
+const init = <T>(list: readonly T[]): Maybe<T[]> =>
   list.length > 0 ? Just(list.slice(0, -1)) : Nothing
 
 /** Returns a tuple of an array's head and tail */
-const uncons = <T>(list: T[]): Maybe<Tuple<T, T[]>> =>
+const uncons = <T>(list: readonly T[]): Maybe<Tuple<T, T[]>> =>
   list.length > 0 ? Just(Tuple(list[0]!, list.slice(1))) : Nothing
 
 /* Returns the sum of all numbers inside an array */
-const sum = (list: number[]): number => list.reduce((acc, x) => acc + x, 0)
+const sum = (list: readonly number[]): number =>
+  list.reduce((acc, x) => acc + x, 0)
 
 /** Returns the first element which satisfies a predicate. A more typesafe version of the already existing List.prototype.find */
 function find<T>(
@@ -66,9 +67,9 @@ function findIndex<T>(
 }
 
 /** Returns the element at a given index of a list */
-function at<T>(index: number, list: T[]): Maybe<T>
-function at<T>(index: number): (list: T[]) => Maybe<T>
-function at<T>(index: number, list?: T[]): any {
+function at<T>(index: number, list: readonly T[]): Maybe<T>
+function at<T>(index: number): (list: readonly T[]) => Maybe<T>
+function at<T>(index: number, list?: readonly T[]): any {
   switch (arguments.length) {
     case 1:
       return (list: T[]) => at(index, list)
@@ -78,9 +79,9 @@ function at<T>(index: number, list?: T[]): any {
 }
 
 /** Sorts an array with the given comparison function */
-function sort<T>(compare: (a: T, b: T) => Order, list: T[]): T[]
-function sort<T>(compare: (a: T, b: T) => Order): (list: T[]) => T[]
-function sort<T>(compare: (a: T, b: T) => Order, list?: T[]): any {
+function sort<T>(compare: (a: T, b: T) => Order, list: readonly T[]): T[]
+function sort<T>(compare: (a: T, b: T) => Order): (list: readonly T[]) => T[]
+function sort<T>(compare: (a: T, b: T) => Order, list?: readonly T[]): any {
   switch (arguments.length) {
     case 1:
       return (list: T[]) => sort(compare, list)

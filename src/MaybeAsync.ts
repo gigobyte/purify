@@ -9,7 +9,7 @@ export interface MaybeAsyncTypeRef {
   /** Constructs an MaybeAsync object from a Maybe */
   liftMaybe<T>(maybe: Maybe<T>): MaybeAsync<T>
   /** Takes a list of `MaybeAsync`s and returns a Promise that will resolve with all `Just` values. Internally it uses `Promise.all` to wait for all results */
-  catMaybes<T>(list: MaybeAsync<T>[]): Promise<T[]>
+  catMaybes<T>(list: readonly MaybeAsync<T>[]): Promise<T[]>
 }
 
 export interface MaybeAsync<T> extends PromiseLike<Maybe<T>> {
@@ -121,7 +121,7 @@ class MaybeAsyncImpl<T> implements MaybeAsync<T> {
       const otherValue = await maybeF
 
       if (otherValue.isJust()) {
-        const thisValue = await this
+        const thisValue = await this.run()
 
         if (thisValue.isJust()) {
           return otherValue.extract()(thisValue.extract())
@@ -136,7 +136,7 @@ class MaybeAsyncImpl<T> implements MaybeAsync<T> {
 
   alt(other: MaybeAsync<T>): MaybeAsync<T> {
     return MaybeAsync(async (helpers) => {
-      const thisValue = await this
+      const thisValue = await this.run()
 
       if (thisValue.isJust()) {
         return thisValue.extract()
@@ -249,7 +249,7 @@ export const MaybeAsync: MaybeAsyncTypeRef = Object.assign(
     runPromise: (helpers: MaybeAsyncHelpers) => PromiseLike<T>
   ): MaybeAsync<T> => new MaybeAsyncImpl(runPromise),
   {
-    catMaybes: <T>(list: MaybeAsync<T>[]): Promise<T[]> =>
+    catMaybes: <T>(list: readonly MaybeAsync<T>[]): Promise<T[]> =>
       Promise.all(list).then(Maybe.catMaybes),
     fromPromise: <T>(f: () => Promise<Maybe<T>>): MaybeAsync<T> =>
       MaybeAsync(({ fromPromise: fP }) => fP(f())),

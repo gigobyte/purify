@@ -11,13 +11,13 @@ export interface EitherAsyncTypeRef {
   /** Constructs an `EitherAsync` object from an Either */
   liftEither<L, R>(either: Either<L, R>): EitherAsync<L, R>
   /** Takes a list of `EitherAsync`s and returns a Promise that will resolve with all `Left` values. Internally it uses `Promise.all` to wait for all results */
-  lefts<L, R>(list: EitherAsync<L, R>[]): Promise<L[]>
+  lefts<L, R>(list: readonly EitherAsync<L, R>[]): Promise<L[]>
   /** Takes a list of `EitherAsync`s and returns a Promise that will resolve with all `Right` values. Internally it uses `Promise.all` to wait for all results */
-  rights<L, R>(list: EitherAsync<L, R>[]): Promise<R[]>
+  rights<L, R>(list: readonly EitherAsync<L, R>[]): Promise<R[]>
   /** Turns a list of `EitherAsync`s into an `EitherAsync` of list. The returned `Promise` will be rejected as soon as a single `EitherAsync` resolves to a `Left`, it will not wait for all Promises to resolve and since `EitherAsync` is lazy, unlike `Promise`, the remaining async operations will not be executed at all */
-  sequence<L, R>(eas: EitherAsync<L, R>[]): EitherAsync<L, R[]>
+  sequence<L, R>(eas: readonly EitherAsync<L, R>[]): EitherAsync<L, R[]>
   /** The same as `EitherAsync.sequence`, but it will run all async operations at the same time rather than sequentially */
-  all<L, R>(eas: EitherAsync<L, R>[]): EitherAsync<L, R[]>
+  all<L, R>(eas: readonly EitherAsync<L, R>[]): EitherAsync<L, R[]>
 }
 
 export interface EitherAsync<L, R> extends PromiseLike<Either<L, R>> {
@@ -157,7 +157,7 @@ class EitherAsyncImpl<L, R> implements EitherAsync<L, R> {
       const otherValue = await eitherF
 
       if (otherValue.isRight()) {
-        const thisValue = await this
+        const thisValue = await this.run()
 
         if (thisValue.isRight()) {
           return otherValue.extract()(thisValue.extract())
@@ -172,7 +172,7 @@ class EitherAsyncImpl<L, R> implements EitherAsync<L, R> {
 
   alt(other: EitherAsync<L, R>): EitherAsync<L, R> {
     return EitherAsync(async (helpers) => {
-      const thisValue = await this
+      const thisValue = await this.run()
 
       if (thisValue.isRight()) {
         return thisValue.extract()
@@ -311,11 +311,11 @@ export const EitherAsync: EitherAsyncTypeRef = Object.assign(
     ): EitherAsync<L, R> => EitherAsync(({ fromPromise: fP }) => fP(f())),
     liftEither: <L, R>(either: Either<L, R>): EitherAsync<L, R> =>
       EitherAsync(({ liftEither }) => liftEither(either)),
-    lefts: <L, R>(list: EitherAsync<L, R>[]): Promise<L[]> =>
+    lefts: <L, R>(list: readonly EitherAsync<L, R>[]): Promise<L[]> =>
       Promise.all(list.map((x) => x.run())).then(Either.lefts),
-    rights: <L, R>(list: EitherAsync<L, R>[]): Promise<R[]> =>
+    rights: <L, R>(list: readonly EitherAsync<L, R>[]): Promise<R[]> =>
       Promise.all(list.map((x) => x.run())).then(Either.rights),
-    sequence: <L, R>(eas: EitherAsync<L, R>[]): EitherAsync<L, R[]> =>
+    sequence: <L, R>(eas: readonly EitherAsync<L, R>[]): EitherAsync<L, R[]> =>
       EitherAsync(async (helpers) => {
         let res: R[] = []
 
@@ -329,7 +329,7 @@ export const EitherAsync: EitherAsyncTypeRef = Object.assign(
 
         return helpers.liftEither(Right(res))
       }),
-    all: <L, R>(eas: EitherAsync<L, R>[]): EitherAsync<L, R[]> =>
+    all: <L, R>(eas: readonly EitherAsync<L, R>[]): EitherAsync<L, R[]> =>
       EitherAsync.fromPromise(async () =>
         Promise.all(eas).then(Either.sequence)
       )

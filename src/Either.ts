@@ -85,13 +85,13 @@ interface EitherTypeRef {
   /** Takes a value and wraps it in a `Right` */
   of<L, R>(value: R): Either<L, R>
   /** Takes a list of `Either`s and returns a list of all `Left` values */
-  lefts<L, R>(list: Either<L, R>[]): L[]
+  lefts<L, R>(list: readonly Either<L, R>[]): L[]
   /** Takes a list of `Either`s and returns a list of all `Right` values */
-  rights<L, R>(list: Either<L, R>[]): R[]
+  rights<L, R>(list: readonly Either<L, R>[]): R[]
   /** Calls a function and returns a `Right` with the return value or an exception wrapped in a `Left` in case of failure */
   encase<L extends Error, R>(throwsF: () => R): Either<L, R>
   /** Turns a list of `Either`s into an `Either` of list */
-  sequence<L, R>(eithers: Either<L, R>[]): Either<L, R[]>
+  sequence<L, R>(eithers: readonly Either<L, R>[]): Either<L, R[]>
   isEither<L, R>(x: unknown): x is Either<L, R>
 
   'fantasy-land/of'<L, R>(value: R): Either<L, R>
@@ -101,7 +101,7 @@ export const Either: EitherTypeRef = {
   of<L, R>(value: R): Either<L, R> {
     return right(value)
   },
-  lefts<L, R>(list: Either<L, R>[]): L[] {
+  lefts<L, R>(list: readonly Either<L, R>[]): L[] {
     let result = []
 
     for (const x of list) {
@@ -112,7 +112,7 @@ export const Either: EitherTypeRef = {
 
     return result
   },
-  rights<L, R>(list: Either<L, R>[]): R[] {
+  rights<L, R>(list: readonly Either<L, R>[]): R[] {
     let result = []
 
     for (const x of list) {
@@ -130,7 +130,7 @@ export const Either: EitherTypeRef = {
       return left(e)
     }
   },
-  sequence<L, R>(eithers: Either<L, R>[]): Either<L, R[]> {
+  sequence<L, R>(eithers: readonly Either<L, R>[]): Either<L, R[]> {
     let res: R[] = []
 
     for (const e of eithers) {

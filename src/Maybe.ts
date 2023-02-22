@@ -95,15 +95,15 @@ interface MaybeTypeRef {
   fromPredicate<T>(pred: (value: T) => boolean): (value: T) => Maybe<T>
   fromPredicate<T>(pred: (value: T) => boolean, value: T): Maybe<T>
   /** Returns only the `Just` values in a list */
-  catMaybes<T>(list: Maybe<T>[]): T[]
+  catMaybes<T>(list: readonly Maybe<T>[]): T[]
   /** Maps over a list of values and returns a list of all resulting `Just` values */
-  mapMaybe<T, U>(f: (value: T) => Maybe<U>): (list: T[]) => U[]
-  mapMaybe<T, U>(f: (value: T) => Maybe<U>, list: T[]): U[]
+  mapMaybe<T, U>(f: (value: T) => Maybe<U>): (list: readonly T[]) => U[]
+  mapMaybe<T, U>(f: (value: T) => Maybe<U>, list: readonly T[]): U[]
   /** Calls a function that may throw and wraps the result in a `Just` if successful or `Nothing` if an error is caught */
   encase<T>(thunk: () => T): Maybe<T>
   isMaybe<T>(x: unknown): x is Maybe<T>
   /** Turns a list of `Maybe`s into an `Maybe` of list if all items are `Just` */
-  sequence<T>(maybes: Maybe<T>[]): Maybe<T[]>
+  sequence<T>(maybes: readonly Maybe<T>[]): Maybe<T[]>
 
   'fantasy-land/of'<T>(value: T): Maybe<T>
   'fantasy-land/empty'(): Nothing
@@ -134,7 +134,7 @@ export const Maybe: MaybeTypeRef = {
         return pred(value!) ? just(value!) : nothing
     }
   },
-  mapMaybe<T, U>(f: (value: T) => Maybe<U>, list?: T[]): any {
+  mapMaybe<T, U>(f: (value: T) => Maybe<U>, list?: readonly T[]): any {
     switch (arguments.length) {
       case 1:
         return (list: T[]) => Maybe.mapMaybe(f, list)
@@ -142,7 +142,7 @@ export const Maybe: MaybeTypeRef = {
         return Maybe.catMaybes(list!.map(f))
     }
   },
-  catMaybes<T>(list: Maybe<T>[]): T[] {
+  catMaybes<T>(list: readonly Maybe<T>[]): T[] {
     let res: T[] = []
 
     for (const e of list) {
@@ -163,7 +163,7 @@ export const Maybe: MaybeTypeRef = {
   isMaybe<T>(x: unknown): x is Maybe<T> {
     return x instanceof Just || x instanceof Nothing
   },
-  sequence<T>(maybes: Maybe<T>[]): Maybe<T[]> {
+  sequence<T>(maybes: readonly Maybe<T>[]): Maybe<T[]> {
     let res: T[] = []
 
     for (const m of maybes) {
