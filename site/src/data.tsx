@@ -843,7 +843,7 @@ const data: Data = {
             {
               name: 'ap',
               signatureTS:
-                '<U>(maybeF: PromiseLike<Maybe<(value: T) => U>>): MaybeAsync<U>',
+                '<U>(maybeF: PromiseLike<Maybe<(value: T) => U>>): MaybeAsync<Awaited<U>>',
               description:
                 'Runs an effect if `this` is `Nothing`, returns `this` to make chaining other methods possible.',
               examples: []
@@ -858,7 +858,8 @@ const data: Data = {
             },
             {
               name: 'extend',
-              signatureTS: '<U>(f: (value: MaybeAsync<T>) => U): MaybeAsync<U>',
+              signatureTS:
+                '<U>(f: (value: MaybeAsync<T>) => U): MaybeAsync<Awaited<U>>',
               signatureML:
                 'MaybeAsync a ~> (MaybeAsync a -> b) -> MaybeAsync b',
               description:
@@ -1599,7 +1600,7 @@ randomEither().map(x => x)
     },
     {
       name: 'EitherAsync',
-      implements: ['Functor', 'Bifunctor', 'Chain', 'Apply', 'Alt', 'Extend'],
+      implements: [],
       guides: [
         {
           title: 'MaybeAsync and EitherAsync for Haskellers',
@@ -1865,7 +1866,7 @@ randomEither().map(x => x)
               signatureML:
                 'EitherAsync a b ~> (a -> c) -> (b -> d) -> EitherAsync c d',
               signatureTS:
-                '<L2, R2>(f: (value: L) => L2, g: (value: R) => R2): EitherAsync<L2, R2>',
+                '<L2, R2>(f: (value: L) => L2, g: (value: R) => R2): EitherAsync<Awaited<L2>, Awaited<R2>>',
               examples: [
                 {
                   input:
@@ -1899,7 +1900,8 @@ randomEither().map(x => x)
               description:
                 'Maps the `Left` value of `this`, acts like an identity if `this` is `Right`.',
               signatureML: 'EitherAsync a b ~> (a -> c) -> EitherAsync c b',
-              signatureTS: '<L2>(f: (value: L) => L2): EitherAsync<L2, R>',
+              signatureTS:
+                '<L2>(f: (value: L) => L2): EitherAsync<Awaited<L2>, R>',
               examples: [
                 {
                   input:
@@ -1918,7 +1920,7 @@ randomEither().map(x => x)
               description:
                 'Applies a `Right` function wrapped in `EitherAsync` over a future `Right` value. Returns `Left` if either the `this` resolves to a `Left` or the function is `Left`.',
               signatureTS:
-                '<L2, R2>(other: PromiseLike<Either<L2, (value: R) => R2>>): EitherAsync<L | L2, R2>',
+                '<L2, R2>(other: PromiseLike<Either<L2, (value: R) => R2>>): EitherAsync<L | L2, Awaited<R2>>',
               examples: []
             },
             {
@@ -1978,7 +1980,7 @@ randomEither().map(x => x)
               signatureML:
                 'EitherAsync a b ~> (EitherAsync a b -> c) -> EitherAsync a c',
               signatureTS:
-                '<R2>(f: (value: EitherAsync<L, R>) => R2): EitherAsync<L, R2>',
+                '<R2>(f: (value: EitherAsync<L, R>) => R2): EitherAsync<L, Awaited<R2>>',
               examples: []
             },
             {

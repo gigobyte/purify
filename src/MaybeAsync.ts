@@ -40,11 +40,11 @@ export interface MaybeAsync<T> extends PromiseLike<Maybe<T>> {
   /** Returns the default value if `this` is `Nothing`, otherwise it returns a Promise that will resolve to the value inside `this` */
   orDefault(defaultValue: T): Promise<T>
   /** Maps the future value of `this` with another future `Maybe` function */
-  ap<U>(maybeF: PromiseLike<Maybe<(value: T) => U>>): MaybeAsync<U>
+  ap<U>(maybeF: PromiseLike<Maybe<(value: T) => U>>): MaybeAsync<Awaited<U>>
   /** Returns the first `Just` between the future value of `this` and another future `Maybe` or future `Nothing` if both `this` and the argument are `Nothing` */
   alt(other: MaybeAsync<T>): MaybeAsync<T>
   /** Returns `this` if it resolves to `Nothing`, otherwise it returns the result of applying the function argument to the value of `this` and wrapping it in a `Just` */
-  extend<U>(f: (value: MaybeAsync<T>) => U): MaybeAsync<U>
+  extend<U>(f: (value: MaybeAsync<T>) => U): MaybeAsync<Awaited<U>>
   /** Takes a predicate function and returns `this` if the predicate, applied to the resolved value, is true or Nothing if it's false */
   filter<U extends T>(pred: (value: T) => value is U): MaybeAsync<U>
   /** Takes a predicate function and returns `this` if the predicate, applied to the resolved value, is true or Nothing if it's false */
@@ -60,9 +60,13 @@ export interface MaybeAsync<T> extends PromiseLike<Maybe<T>> {
 
   'fantasy-land/map'<U>(f: (value: T) => U): MaybeAsync<Awaited<U>>
   'fantasy-land/chain'<U>(f: (value: T) => PromiseLike<Maybe<U>>): MaybeAsync<U>
-  'fantasy-land/ap'<U>(maybeF: MaybeAsync<(value: T) => U>): MaybeAsync<U>
+  'fantasy-land/ap'<U>(
+    maybeF: MaybeAsync<(value: T) => U>
+  ): MaybeAsync<Awaited<U>>
   'fantasy-land/alt'(other: MaybeAsync<T>): MaybeAsync<T>
-  'fantasy-land/extend'<U>(f: (value: MaybeAsync<T>) => U): MaybeAsync<U>
+  'fantasy-land/extend'<U>(
+    f: (value: MaybeAsync<T>) => U
+  ): MaybeAsync<Awaited<U>>
   'fantasy-land/filter'<U extends T>(
     pred: (value: T) => value is U
   ): MaybeAsync<U>
@@ -116,7 +120,7 @@ class MaybeAsyncImpl<T> implements MaybeAsync<T> {
     })
   }
 
-  ap<U>(maybeF: MaybeAsync<(value: T) => U>): MaybeAsync<U> {
+  ap<U>(maybeF: MaybeAsync<(value: T) => U>): MaybeAsync<Awaited<U>> {
     return MaybeAsync(async (helpers) => {
       const otherValue = await maybeF
 
@@ -126,11 +130,11 @@ class MaybeAsyncImpl<T> implements MaybeAsync<T> {
         if (thisValue.isJust()) {
           return otherValue.extract()(thisValue.extract())
         } else {
-          return helpers.liftMaybe(Nothing as Maybe<U>)
+          return helpers.liftMaybe(Nothing) as any
         }
       }
 
-      return helpers.liftMaybe(Nothing as Maybe<U>)
+      return helpers.liftMaybe(Nothing)
     })
   }
 
@@ -147,14 +151,14 @@ class MaybeAsyncImpl<T> implements MaybeAsync<T> {
     })
   }
 
-  extend<U>(f: (value: MaybeAsync<T>) => U): MaybeAsync<U> {
+  extend<U>(f: (value: MaybeAsync<T>) => U): MaybeAsync<Awaited<U>> {
     return MaybeAsync(async (helpers) => {
       const maybe = await this.run()
       if (maybe.isJust()) {
-        const v = MaybeAsync.liftMaybe(maybe as any as Maybe<T>)
+        const v = MaybeAsync.liftMaybe(maybe as Maybe<T>)
         return helpers.liftMaybe(Just(f(v)))
       }
-      return helpers.liftMaybe(Nothing as any as Maybe<U>)
+      return helpers.liftMaybe(Nothing) as any
     })
   }
 
