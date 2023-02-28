@@ -343,13 +343,3 @@ export const EitherAsync: EitherAsyncTypeRef = Object.assign(
 )
 
 EitherAsyncImpl.prototype.constructor = EitherAsync
-
-declare const getUserId: () => EitherAsync<string, number>
-declare const fileRequest: Either<string, unknown>
-declare const processFile: (
-  userId: number
-) => (file: unknown) => EitherAsync<string, void>
-
-const workflow = getUserId().map(processFile)
-
-const result = EitherAsync.liftEither(fileRequest).ap(workflow).join()

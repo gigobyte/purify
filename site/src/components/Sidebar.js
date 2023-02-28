@@ -54,7 +54,7 @@ class Sidebar extends React.Component {
       <Container>
         <Header>
           <HeaderTitle to="/">Purify</HeaderTitle>
-          <HeaderTitleVersion>v1.3.4</HeaderTitleVersion>
+          <HeaderTitleVersion>v1.3.5</HeaderTitleVersion>
           <HamburgerMenu
             onClick={this.toggleMenu}
             opened={this.state.isMenuShown}
