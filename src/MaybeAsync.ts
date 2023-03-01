@@ -58,15 +58,8 @@ export interface MaybeAsync<T> extends PromiseLike<Maybe<T>> {
   /* Similar to the Promise method of the same name, the provided function is called when the `MaybeAsync` is executed regardless of whether the `Maybe` result is `Nothing` or `Just` */
   finally(effect: () => any): MaybeAsync<T>
 
-  'fantasy-land/map'<U>(f: (value: T) => U): MaybeAsync<Awaited<U>>
   'fantasy-land/chain'<U>(f: (value: T) => PromiseLike<Maybe<U>>): MaybeAsync<U>
-  'fantasy-land/ap'<U>(
-    maybeF: MaybeAsync<(value: T) => U>
-  ): MaybeAsync<Awaited<U>>
   'fantasy-land/alt'(other: MaybeAsync<T>): MaybeAsync<T>
-  'fantasy-land/extend'<U>(
-    f: (value: MaybeAsync<T>) => U
-  ): MaybeAsync<Awaited<U>>
   'fantasy-land/filter'<U extends T>(
     pred: (value: T) => value is U
   ): MaybeAsync<U>
@@ -227,11 +220,8 @@ class MaybeAsyncImpl<T> implements MaybeAsync<T> {
     )
   }
 
-  'fantasy-land/map' = this.map
   'fantasy-land/chain' = this.chain
-  'fantasy-land/ap' = this.ap
   'fantasy-land/filter' = this.filter
-  'fantasy-land/extend' = this.extend
   'fantasy-land/alt' = this.alt
 
   then<TResult1 = Maybe<T>, TResult2 = never>(

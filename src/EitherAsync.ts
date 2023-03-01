@@ -81,21 +81,10 @@ export interface EitherAsync<L, R> extends PromiseLike<Either<L, R>> {
   /* Similar to the Promise method of the same name, the provided function is called when the `EitherAsync` is executed regardless of whether the `Either` result is `Left` or `Right` */
   finally(effect: () => any): EitherAsync<L, R>
 
-  'fantasy-land/map'<R2>(f: (value: R) => R2): EitherAsync<L, Awaited<R2>>
-  'fantasy-land/bimap'<L2, R2>(
-    f: (value: L) => L2,
-    g: (value: R) => R2
-  ): EitherAsync<Awaited<L2>, Awaited<R2>>
   'fantasy-land/chain'<R2>(
     f: (value: R) => PromiseLike<Either<L, R2>>
   ): EitherAsync<L, R2>
-  'fantasy-land/ap'<R2>(
-    other: EitherAsync<L, (value: R) => R2>
-  ): EitherAsync<L, Awaited<R2>>
   'fantasy-land/alt'(other: EitherAsync<L, R>): EitherAsync<L, R>
-  'fantasy-land/extend'<R2>(
-    f: (value: EitherAsync<L, R>) => R2
-  ): EitherAsync<L, Awaited<R2>>
   /** WARNING: This is implemented only for Promise compatibility. Please use `chain` instead. */
   then: PromiseLike<Either<L, R>>['then']
 }
@@ -295,11 +284,7 @@ class EitherAsyncImpl<L, R> implements EitherAsync<L, R> {
     )
   }
 
-  'fantasy-land/map' = this.map
-  'fantasy-land/bimap' = this.bimap
   'fantasy-land/chain' = this.chain
-  'fantasy-land/ap' = this.ap
-  'fantasy-land/extend' = this.extend
   'fantasy-land/alt' = this.alt
 
   then: PromiseLike<Either<L, R>>['then'] = (onfulfilled, onrejected) => {

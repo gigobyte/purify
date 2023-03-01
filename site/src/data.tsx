@@ -599,7 +599,7 @@ const data: Data = {
     },
     {
       name: 'MaybeAsync',
-      implements: ['Functor', 'Chain', 'Apply', 'Alt', 'Extend', 'Filterable'],
+      implements: ['Chain', 'Alt', 'Filterable'],
       guides: [
         {
           title: 'MaybeAsync and EitherAsync for Haskellers',
@@ -1600,7 +1600,7 @@ randomEither().map(x => x)
     },
     {
       name: 'EitherAsync',
-      implements: [],
+      implements: ['Chain', 'Alt'],
       guides: [
         {
           title: 'MaybeAsync and EitherAsync for Haskellers',
