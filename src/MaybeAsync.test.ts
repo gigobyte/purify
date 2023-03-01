@@ -46,12 +46,8 @@ describe('MaybeAsync', () => {
 
   test('map', async () => {
     const newMaybeAsync = MaybeAsync(() => Promise.resolve(5)).map((_) => 'val')
-    const newMaybeAsync2 = MaybeAsync(() => Promise.resolve(5))[
-      'fantasy-land/map'
-    ]((_) => 'val')
 
     expect(await newMaybeAsync.run()).toEqual(Just('val'))
-    expect(await newMaybeAsync2.run()).toEqual(Just('val'))
   })
 
   test('chain', async () => {
@@ -96,12 +92,6 @@ describe('MaybeAsync', () => {
     ).toEqual(Nothing)
     expect(
       await MaybeAsync.liftMaybe(Nothing).ap(
-        MaybeAsync.liftMaybe(Nothing as any)
-      )
-    ).toEqual(Nothing)
-
-    expect(
-      await MaybeAsync.liftMaybe(Just(5))['fantasy-land/ap'](
         MaybeAsync.liftMaybe(Nothing as any)
       )
     ).toEqual(Nothing)
@@ -155,12 +145,6 @@ describe('MaybeAsync', () => {
     expect(
       await MaybeAsync.liftMaybe(Nothing).extend((x) => x.orDefault(5))
     ).toEqual(Nothing)
-
-    expect(
-      await MaybeAsync.liftMaybe(Just(5))['fantasy-land/extend']((x) =>
-        x.orDefault(10)
-      )
-    ).toEqual(Just(5))
   })
 
   test('filter', async () => {

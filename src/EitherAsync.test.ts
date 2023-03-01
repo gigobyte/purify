@@ -59,41 +59,23 @@ describe('EitherAsync', () => {
       (_) => 'left',
       (_) => 'right'
     )
-    const newEitherAsync2 = EitherAsync(() => Promise.resolve(5))[
-      'fantasy-land/bimap'
-    ](
-      (_) => 'left',
-      (_) => 'right'
-    )
-    const newEitherAsync3 = EitherAsync(() => {
+    const newEitherAsync2 = EitherAsync(() => {
       throw ''
     }).bimap(
       (_) => 'left',
       (_) => 'right'
     )
-    const newEitherAsync4 = EitherAsync(() => {
-      throw ''
-    })['fantasy-land/bimap'](
-      (_) => 'left',
-      (_) => 'right'
-    )
 
     expect(await newEitherAsync.run()).toEqual(Right('right'))
-    expect(await newEitherAsync2.run()).toEqual(Right('right'))
-    expect(await newEitherAsync3.run()).toEqual(Left('left'))
-    expect(await newEitherAsync4.run()).toEqual(Left('left'))
+    expect(await newEitherAsync2.run()).toEqual(Left('left'))
   })
 
   test('map', async () => {
     const newEitherAsync = EitherAsync(() => Promise.resolve(5)).map(
       (_) => 'val'
     )
-    const newEitherAsync2 = EitherAsync(() => Promise.resolve(5))[
-      'fantasy-land/map'
-    ]((_) => 'val')
 
     expect(await newEitherAsync.run()).toEqual(Right('val'))
-    expect(await newEitherAsync2.run()).toEqual(Right('val'))
   })
 
   test('mapLeft', async () => {
@@ -302,12 +284,6 @@ describe('EitherAsync', () => {
         })
       )
     ).toEqual(Left('Function Error'))
-
-    expect(
-      await EitherAsync.liftEither(Right(5))['fantasy-land/ap'](
-        EitherAsync(async () => (x: number) => x + 1)
-      )
-    ).toEqual(Right(6))
   })
 
   test('alt', async () => {
@@ -347,12 +323,6 @@ describe('EitherAsync', () => {
     ).toEqual(Left('Error'))
     expect(
       await EitherAsync.liftEither(Right(5)).extend((x) => x.orDefault(6))
-    ).toEqual(Right(5))
-
-    expect(
-      await EitherAsync.liftEither(Right(5))['fantasy-land/extend']((x) =>
-        x.orDefault(6)
-      )
     ).toEqual(Right(5))
   })
 

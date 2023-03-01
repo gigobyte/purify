@@ -87,8 +87,8 @@ const MaybeApiGuide = (props) => (
     value. <br />
     If you are already familiar with the{' '}
     <SmallMethodName to="/adts/Maybe/#chain">chain</SmallMethodName> method
-    (a.k.a. <HL>bind</HL>, <HL>flatMap</HL> or <HL>>>=</HL>) you may think of
-    using it in combination with any of the methods mentioned above: <br />
+    (a.k.a. <HL>bind</HL>, <HL>flatMap</HL> or <HL>{'>>='}</HL>) you may think
+    of using it in combination with any of the methods mentioned above: <br />
     <SyntaxHighlighter language="javascript" style={highlightStyle}>
       {`myMaybe.chain(x => Maybe.fromNullable(transform(x)))`}
     </SyntaxHighlighter>
