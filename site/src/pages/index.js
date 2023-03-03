@@ -188,23 +188,6 @@ const IndexPage = (props) => (
         <a href="https://www.scaleleap.com/">
           <ScaleLeap />
         </a>
-        <a href="https://www.askmarty.io/">
-          <img
-            alt="Ask Marty"
-            src="https://user-images.githubusercontent.com/145502/101811283-cfb28c80-3b11-11eb-8996-0277f9066c3a.png"
-          />
-        </a>
-        <a
-          href="https://dill.network/"
-          style={{
-            background: '#10b981',
-            paddingTop: 16,
-            paddingLeft: 5,
-            paddingRight: 3
-          }}
-        >
-          <Dill />
-        </a>
         <a href="https://www.cargosnap.com/">
           <img
             alt="CargoSnap"
@@ -227,12 +210,6 @@ const IndexPage = (props) => (
           <img
             alt="Schiphol"
             src="https://camo.githubusercontent.com/58b011beca65f361128e40d593a42990ca8dfd0695f2afe3246445563f275120/68747470733a2f2f75706c6f61642e77696b696d656469612e6f72672f77696b6970656469612f636f6d6d6f6e732f322f32662f416d7374657264616d5f416972706f72745f5363686970686f6c5f6c6f676f5f2532383230313825453225383025393370726573656e742532392e737667"
-          />
-        </a>
-        <a href="https://www.cognite.com/">
-          <img
-            alt="Cognite"
-            src="https://camo.githubusercontent.com/28756a4e58246ce442447a23029a8ccfaade6b5de64d3b2649cf9e6c7dd82e86/68747470733a2f2f696d616765732e73717561726573706163652d63646e2e636f6d2f636f6e74656e742f76312f3539653335383065343966633262346434346531313738372f313537353138333432343334382d514d51503553435230325a3035453734304e35342f636f676e6974652d6c6f676f2e706e67"
           />
         </a>
       </Footer>
