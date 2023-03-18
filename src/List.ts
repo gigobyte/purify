@@ -1,6 +1,6 @@
-import { Tuple } from './Tuple'
-import { Maybe, Just, Nothing } from './Maybe'
-import { Order, orderToNumber } from './Function'
+import { Tuple } from './Tuple.js'
+import { Maybe, Just, Nothing } from './Maybe.js'
+import { Order, orderToNumber } from './Function.js'
 
 /** Returns Just the first element of an array or Nothing if there is none. If you don't want to work with a Maybe but still keep type safety, check out `NonEmptyList` */
 const head = <T>(list: readonly T[]): Maybe<T> =>

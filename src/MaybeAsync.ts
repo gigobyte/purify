@@ -1,5 +1,5 @@
-import { Maybe, Just, Nothing, MaybePatterns } from './Maybe'
-import { EitherAsync } from './EitherAsync'
+import { Maybe, Just, Nothing, MaybePatterns } from './Maybe.js'
+import { EitherAsync } from './EitherAsync.js'
 
 export interface MaybeAsyncTypeRef {
   /** Constructs a MaybeAsync object from a function that takes an object full of helpers that let you lift things into the MaybeAsync context and returns a Promise */

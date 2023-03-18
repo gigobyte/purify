@@ -1,4 +1,4 @@
-import { List } from './List'
+import { List } from './List.js'
 import { Just, Nothing } from './Maybe'
 import { Tuple } from './Tuple'
 import { compare } from './Function'

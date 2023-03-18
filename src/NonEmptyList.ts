@@ -1,5 +1,5 @@
-import { Maybe, Just, Nothing } from './Maybe'
-import { Tuple } from './Tuple'
+import { Maybe, Just, Nothing } from './Maybe.js'
+import { Tuple } from './Tuple.js'
 
 export type NonEmptyListCompliant<T> = T[] & { 0: T }
 

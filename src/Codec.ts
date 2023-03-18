@@ -1,7 +1,7 @@
-import { Either, Right, Left } from './Either'
-import { identity } from './Function'
-import { Maybe, Just, Nothing } from './Maybe'
-import { NonEmptyList } from './NonEmptyList'
+import { Either, Right, Left } from './Either.js'
+import { identity } from './Function.js'
+import { Maybe, Just, Nothing } from './Maybe.js'
+import { NonEmptyList } from './NonEmptyList.js'
 import { JSONSchema6 } from 'json-schema'
 
 export interface Codec<T> {

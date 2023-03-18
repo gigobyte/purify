@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es2015",
     "module": "commonjs",
-    "lib": ["es2015", "es2016", "es2017", "dom"],
+    "lib": ["es2015", "es2016", "es2017", "es2018", "dom"],
     "declaration": true,
     "outDir": "./lib",
     "rootDir": "./src/",
@@ -13,9 +13,7 @@
     "alwaysStrict": true,
     "noFallthroughCasesInSwitch": true,
     "baseUrl": "./src/",
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "downlevelIteration": true,
+    "downlevelIteration": false,
     "strict": true,
     "isolatedModules": true,
     "noUncheckedIndexedAccess": true,

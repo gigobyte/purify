@@ -1,4 +1,4 @@
-import { Either, Left, Right } from './Either'
+import { Either, Left, Right } from './Either.js'
 
 export type MaybePatterns<T, U> =
   | { Just: (value: T) => U; Nothing: () => U }
