@@ -7,5 +7,6 @@
     "moduleResolution": "nodenext",
     "outDir": "lib/esm",
     "esModuleInterop": true
-  }
+  },
+  "exclude": ["site", "**/*.test.ts", "lib"]
 }
