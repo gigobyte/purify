@@ -9,7 +9,6 @@ if (Test-Path -Path lib) {
 
 Invoke-Expression "npm run build"
 Remove-Item -Recurse ./lib/*.test.*
-Remove-Item -Recurse ./lib/es/*.test.*
 Remove-Item -Recurse ./lib/esm/*.test.*
 
 foreach ($file in $files) {
