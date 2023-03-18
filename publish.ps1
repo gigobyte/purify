@@ -15,5 +15,9 @@ foreach ($file in $files) {
   Invoke-Expression "copy $($file) lib/$($file)"
 }
 
+Set-Content ./lib/esm/package.json '{ "type": "module" }'
+
+Invoke-Expression "npm test"
+
 Invoke-Expression "cd lib"
 Invoke-Expression "npm publish"

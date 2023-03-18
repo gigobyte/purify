@@ -1,6 +1,6 @@
 {
   "name": "purify-ts",
-  "version": "2.0.0-beta.1",
+  "version": "2.0.0",
   "description": "Functional programming standard library for TypeScript ",
   "repository": "https://github.com/gigobyte/purify.git",
   "author": "gigobyte <gigobest2@gmail.com>",
