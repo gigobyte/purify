@@ -27,6 +27,7 @@ import { NonEmptyList } from './NonEmptyList'
 import Ajv from 'ajv'
 import addFormats from 'ajv-formats'
 import { always, identity } from './Function'
+import { describe, it, expect, test } from 'vitest'
 
 describe('Codec', () => {
   describe('interface', () => {
@@ -724,7 +725,7 @@ describe('Codec', () => {
   })
 
   describe('JSON schema', () => {
-    describe('expectations', () => {
+    test('expectations', () => {
       enum E {
         E1 = 'E1',
         E2 = 'E2'
@@ -825,7 +826,7 @@ describe('Codec', () => {
       })
     })
 
-    describe('ajv compatibility', () => {
+    test('ajv compatibility', () => {
       const ajv = new Ajv({ strict: true, validateSchema: true })
       addFormats(ajv)
 

@@ -1,6 +1,7 @@
 import { EitherAsync } from './EitherAsync'
 import { Left, Right, Either } from './Either'
 import { Nothing, Just } from './Maybe'
+import { describe, expect, test, it, vi } from 'vitest'
 
 describe('EitherAsync', () => {
   test('fantasy-land', () => {
@@ -363,7 +364,7 @@ describe('EitherAsync', () => {
   test('sequence', async () => {
     expect(await EitherAsync.sequence([])).toEqual(Right([]))
 
-    const uncalledFn = jest.fn()
+    const uncalledFn = vi.fn()
 
     expect(
       await EitherAsync.sequence([
@@ -381,7 +382,7 @@ describe('EitherAsync', () => {
 
     expect(uncalledFn).toHaveBeenCalledTimes(0)
 
-    const calledFn = jest.fn()
+    const calledFn = vi.fn()
 
     expect(
       await EitherAsync.sequence([
@@ -399,7 +400,7 @@ describe('EitherAsync', () => {
   test('all', async () => {
     expect(await EitherAsync.all([])).toEqual(Right([]))
 
-    const fn1 = jest.fn()
+    const fn1 = vi.fn()
 
     expect(
       await EitherAsync.all([
@@ -420,7 +421,7 @@ describe('EitherAsync', () => {
 
     expect(fn1).toHaveBeenCalledTimes(1)
 
-    const fn2 = jest.fn()
+    const fn2 = vi.fn()
 
     expect(
       await EitherAsync.all([

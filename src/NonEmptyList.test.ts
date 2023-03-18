@@ -1,6 +1,7 @@
 import { Just, Nothing } from './Maybe'
 import { Tuple } from './Tuple'
 import { NonEmptyList } from './NonEmptyList'
+import { describe, expect, test, it } from 'vitest'
 
 describe('NonEmptyList', () => {
   test('NonEmptyList', () => {

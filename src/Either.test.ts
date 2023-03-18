@@ -1,5 +1,6 @@
 import { Nothing, Just } from './Maybe'
 import { Either, Left, Right } from './Either'
+import { describe, expect, test, vi } from 'vitest'
 
 const anything = Math.random()
 
@@ -166,8 +167,8 @@ describe('Either', () => {
   })
 
   test('altLazy', () => {
-    const fn = jest.fn(() => Left('Error!'))
-    const fn2 = jest.fn(() => Right(5))
+    const fn = vi.fn(() => Left('Error!'))
+    const fn2 = vi.fn(() => Right(5))
     expect(Left('Error').altLazy(fn)).toEqual(Left('Error!'))
     expect(Right(5).altLazy(fn2)).toEqual(Right(5))
 

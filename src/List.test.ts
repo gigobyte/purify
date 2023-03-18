@@ -2,6 +2,7 @@ import { List } from './List.js'
 import { Just, Nothing } from './Maybe'
 import { Tuple } from './Tuple'
 import { compare } from './Function'
+import { describe, expect, test } from 'vitest'
 
 describe('List', () => {
   test('at', () => {

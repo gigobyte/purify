@@ -1,6 +1,7 @@
 import { MaybeAsync } from './MaybeAsync'
 import { Just, Nothing, Maybe } from './Maybe'
 import { Left, Right } from './Either'
+import { describe, expect, test, it } from 'vitest'
 
 describe('MaybeAsync', () => {
   test('fantasy-land', () => {

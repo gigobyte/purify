@@ -1,4 +1,6 @@
 import { Tuple } from './Tuple'
+import { describe, expect, test, it } from 'vitest'
+
 describe('Tuple', () => {
   it('should be ArrayLike', () => {
     const [fst, snd] = Tuple(1, 'test')

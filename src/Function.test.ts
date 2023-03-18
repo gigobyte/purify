@@ -1,4 +1,5 @@
 import { curry } from './Function'
+import { describe, expect, test } from 'vitest'
 
 describe('Function', () => {
   test('curry', () => {

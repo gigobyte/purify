@@ -1,5 +1,6 @@
 import { Maybe, Just, Nothing } from './Maybe'
 import { Left, Right } from './Either'
+import { describe, expect, test, vi } from 'vitest'
 
 describe('Maybe', () => {
   test('fantasy-land', () => {
@@ -138,8 +139,8 @@ describe('Maybe', () => {
   })
 
   test('altLazy', () => {
-    const fn = jest.fn(() => Just(5))
-    const fn2 = jest.fn(() => Just(6))
+    const fn = vi.fn(() => Just(5))
+    const fn2 = vi.fn(() => Just(6))
     expect(Nothing.altLazy(fn)).toEqual(Just(5))
     expect(Just(5).altLazy(fn2)).toEqual(Just(5))
 
