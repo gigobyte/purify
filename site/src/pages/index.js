@@ -212,6 +212,13 @@ const IndexPage = (props) => (
             src="https://camo.githubusercontent.com/58b011beca65f361128e40d593a42990ca8dfd0695f2afe3246445563f275120/68747470733a2f2f75706c6f61642e77696b696d656469612e6f72672f77696b6970656469612f636f6d6d6f6e732f322f32662f416d7374657264616d5f416972706f72745f5363686970686f6c5f6c6f676f5f2532383230313825453225383025393370726573656e742532392e737667"
           />
         </a>
+        <a href="https://www.placemark.io/">
+          <img
+            style={{ height: 22, paddingBottom: 6 }}
+            alt="Placemark"
+            src="https://uploads-ssl.webflow.com/616710b6615e31b168d6e9b9/616711469d8fce3a2abfd02c_logo.svg"
+          />
+        </a>
       </Footer>
     </Container>
   </Layout>
