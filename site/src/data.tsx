@@ -618,7 +618,7 @@ const data: Data = {
             'that allows you to process asynchronous values while also having error handling via Maybe. MaybeAsync even implements'
           }
           <HL>PromiseLike</HL>
-          {', so you want await it just like a regular Promise.'}
+          {', so you can await it just like a regular Promise.'}
           <br />
           <br />
           {
