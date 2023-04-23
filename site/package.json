@@ -17,7 +17,7 @@
     "react-dom": "17.0.2",
     "react-helmet": "6.1.0",
     "react-syntax-highlighter": "15.5.0",
-    "styled-components": "5.3.9"
+    "styled-components": "5.3.10"
   },
   "license": "MIT",
   "scripts": {
@@ -28,6 +28,6 @@
     "deploy": "gatsby build --prefix-paths && gh-pages -d public"
   },
   "devDependencies": {
-    "prettier": "2.8.7"
+    "prettier": "2.8.8"
   }
 }
