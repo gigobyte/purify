@@ -213,7 +213,7 @@ class EitherAsyncImpl<L, R> implements EitherAsync<L, R> {
       try {
         return await this.runPromise(helpers as any as EitherAsyncHelpers<L>)
       } catch (e: any) {
-        throw f(e)
+        throw await f(e)
       }
     })
   }
