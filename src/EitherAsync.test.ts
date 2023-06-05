@@ -88,8 +88,13 @@ describe('EitherAsync', () => {
       Promise.resolve(0)
     ).mapLeft((x) => x + 1)
 
+    const newEitherAsync3 = EitherAsync.fromPromise(() =>
+      Promise.resolve(Left(2))
+    ).mapLeft(async (i) => i + 1)
+
     expect(await newEitherAsync.run()).toEqual(Left(1))
     expect(await newEitherAsync2.run()).toEqual(Right(0))
+    expect(await newEitherAsync3.run()).toEqual(Left(3))
   })
 
   test('chain', async () => {
