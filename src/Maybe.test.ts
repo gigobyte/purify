@@ -212,6 +212,9 @@ describe('Maybe', () => {
   test('mapOrDefault', () => {
     expect(Just(5).mapOrDefault((x) => x + 1, 0)).toEqual(6)
     expect(Nothing.mapOrDefault((x) => x + 1, 0)).toEqual(0)
+
+    expect(Just(5).mapOrDefault((x) => x + 1, "nothing")).toEqual(6)
+    expect(Nothing.mapOrDefault((x) => x + 1, "nothing")).toEqual("nothing")
   })
 
   test('extract', () => {

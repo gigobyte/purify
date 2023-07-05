@@ -49,7 +49,7 @@ export interface Maybe<T> {
   /** Returns empty list if the `Maybe` is `Nothing` or a list where the only element is the value of `Just` */
   toList(): T[]
   /** Maps over `this` and returns the resulting value or returns the default value if `this` is `Nothing` */
-  mapOrDefault<U>(f: (value: T) => U, defaultValue: U): U
+  mapOrDefault<U, V>(f: (value: T) => U, defaultValue: V): U | V
   /** Returns the value inside `this` or undefined if `this` is `Nothing`. Use `extractNullable` if you need a null returned instead */
   extract(): this extends AlwaysJust ? T : ExtractMaybe<T, undefined>
   /** Returns the value inside `this` or null if `this` is `Nothing`. Use `extract` if you need an undefined returned instead */
@@ -272,7 +272,7 @@ class Just<T> implements Maybe<T> {
     return [this.__value]
   }
 
-  mapOrDefault<U>(f: (value: T) => U, _: U): U {
+  mapOrDefault<U, V>(f: (value: T) => U, _: V): U {
     return f(this.__value)
   }
 
@@ -399,7 +399,7 @@ class Nothing implements Maybe<never> {
     return []
   }
 
-  mapOrDefault<U>(_: (value: never) => U, defaultValue: U): U {
+  mapOrDefault<U, V>(_: (value: never) => U, defaultValue: V): V {
     return defaultValue
   }
 
