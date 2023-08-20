@@ -42,9 +42,9 @@
     "ajv": "8.12.0",
     "ajv-formats": "2.1.1",
     "coveralls": "3.1.1",
-    "prettier": "3.0.1",
+    "prettier": "3.0.2",
     "typescript": "5.1.6",
-    "vitest": "0.34.1"
+    "vitest": "0.34.2"
   },
   "dependencies": {
     "@types/json-schema": "7.0.12"
