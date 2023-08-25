@@ -441,6 +441,11 @@ describe('EitherAsync', () => {
     expect(fn2).toHaveBeenCalledTimes(1)
   })
 
+  test('encase', async () => {
+    expect(await EitherAsync.encase(() => Promise.reject("failure"))).toEqual(Left("failure"));
+    expect(await EitherAsync.encase(() => Promise.resolve(123))).toEqual(Right(123));
+  })
+
   test('throwing in some method', async () => {
     const ea = EitherAsync(async () => 5).map(() => {
       throw 'AAA'

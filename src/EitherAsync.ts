@@ -18,6 +18,8 @@ export interface EitherAsyncTypeRef {
   sequence<L, R>(eas: readonly EitherAsync<L, R>[]): EitherAsync<L, R[]>
   /** The same as `EitherAsync.sequence`, but it will run all async operations at the same time rather than sequentially */
   all<L, R>(eas: readonly EitherAsync<L, R>[]): EitherAsync<L, R[]>
+  /** Calls an async function and returns a `Right` with the return value or an exception wrapped in a `Left` in case of failure */
+  encase<L extends Error, R>(throwsF: () => Promise<R>): EitherAsync<L, R>
 }
 
 export interface EitherAsync<L, R> extends PromiseLike<Either<L, R>> {
@@ -323,7 +325,9 @@ export const EitherAsync: EitherAsyncTypeRef = Object.assign(
     all: <L, R>(eas: readonly EitherAsync<L, R>[]): EitherAsync<L, R[]> =>
       EitherAsync.fromPromise(async () =>
         Promise.all(eas).then(Either.sequence)
-      )
+      ),
+    encase: <L extends Error, R>(throwsF: () => Promise<R>): EitherAsync<L, R> =>
+      EitherAsync((helpers) => helpers.fromPromise(throwsF().then(Right).catch(Left)))
   }
 )
 
