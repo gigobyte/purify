@@ -47,6 +47,6 @@
     "vitest": "0.34.6"
   },
   "dependencies": {
-    "@types/json-schema": "7.0.13"
+    "@types/json-schema": "7.0.14"
   }
 }
