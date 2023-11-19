@@ -12,7 +12,7 @@
     "gatsby-plugin-react-helmet": "5.25.0",
     "gatsby-plugin-styled-components": "5.25.0",
     "gatsby-plugin-typescript": "4.25.0",
-    "gh-pages": "6.0.0",
+    "gh-pages": "6.1.0",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-helmet": "6.1.0",
@@ -28,6 +28,6 @@
     "deploy": "gatsby build --prefix-paths && gh-pages -d public"
   },
   "devDependencies": {
-    "prettier": "3.0.3"
+    "prettier": "3.1.0"
   }
 }
