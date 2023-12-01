@@ -219,6 +219,12 @@ const IndexPage = (props) => (
             src="https://uploads-ssl.webflow.com/616710b6615e31b168d6e9b9/616711469d8fce3a2abfd02c_logo.svg"
           />
         </a>
+        <a href="https://robinpowered.com/">
+          <img
+            alt="Robin"
+            src="https://camo.githubusercontent.com/d6768ec494353d6af7e943c4bc12542385af81fe39ab7fe38cea30ee7af11742/68747470733a2f2f6173736574732d676c6f62616c2e776562736974652d66696c65732e636f6d2f3633326131633361383765653237363062393963356233632f3633326166613961353832346166393633653766613136355f726f62696e5f6c6f676f2e737667"
+          />
+        </a>
       </Footer>
     </Container>
   </Layout>
