@@ -71,6 +71,33 @@ describe('EitherAsync', () => {
     expect(await newEitherAsync2.run()).toEqual(Left('left'))
   })
 
+  test('async bimap', async () => {
+    const newEitherAsync = EitherAsync(() => Promise.resolve(5)).bimap(
+      async (_) => 'left',
+      async (_) => 'right'
+    )
+
+    const newEitherAsync2 = EitherAsync(() => {
+      throw ''
+    }).bimap(
+      async (_) => 'left',
+      async (_) => 'right'
+    )
+
+    const newEitherAsync3 = EitherAsync(() => {
+      throw ''
+    }).bimap(
+      async (_) => {
+        throw 'left'
+      },
+      async (_) => 'right'
+    )
+
+    expect(await newEitherAsync.run()).toEqual(Right('right'))
+    expect(await newEitherAsync2.run()).toEqual(Left('left'))
+    expect(await newEitherAsync3.run()).toEqual(Left('left'))
+  })
+
   test('map', async () => {
     const newEitherAsync = EitherAsync(() => Promise.resolve(5)).map(
       (_) => 'val'

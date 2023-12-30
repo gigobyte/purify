@@ -200,7 +200,11 @@ class EitherAsyncImpl<L, R> implements EitherAsync<L, R> {
   ): EitherAsync<Awaited<L2>, Awaited<R2>> {
     return EitherAsync(async (helpers) => {
       const either = await this.run()
-      return helpers.liftEither(either.bimap(f, g) as any) as any
+      try {
+        return (await helpers.liftEither(either.bimap(f, g) as any)) as any
+      } catch (e: any) {
+        throw await e
+      }
     })
   }
 
