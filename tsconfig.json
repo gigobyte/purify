@@ -19,5 +19,5 @@
     "noUncheckedIndexedAccess": true,
     "esModuleInterop": true
   },
-  "exclude": ["site", "lib"]
+  "exclude": ["site", "**/*.test.ts", "lib"]
 }
