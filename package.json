@@ -40,7 +40,7 @@
   "devDependencies": {
     "@vitest/coverage-v8": "1.6.0",
     "ajv": "8.14.0",
-    "ajv-formats": "2.1.1",
+    "ajv-formats": "3.0.1",
     "coveralls": "3.1.1",
     "prettier": "3.2.5",
     "typescript": "5.4.5",
