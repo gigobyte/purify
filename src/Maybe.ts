@@ -191,11 +191,11 @@ export const Maybe: MaybeTypeRef = {
 class Just<T> implements Maybe<T> {
   constructor(private __value: T) {}
 
-  isJust(): boolean {
+  isJust(): this is AlwaysJust {
     return true
   }
 
-  isNothing(): boolean {
+  isNothing(): this is Nothing {
     return false
   }
 
@@ -319,11 +319,11 @@ Just.prototype.constructor = Maybe as any
 class Nothing implements Maybe<never> {
   private __value!: never
 
-  isJust() {
+  isJust(): this is AlwaysJust {
     return false
   }
 
-  isNothing() {
+  isNothing(): this is Nothing {
     return true
   }
 
