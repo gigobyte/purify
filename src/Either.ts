@@ -156,11 +156,11 @@ class Right<R, L = never> implements Either<L, R> {
 
   constructor(private __value: R) {}
 
-  isLeft(): false {
+  isLeft(): this is Either<L, never> {
     return false
   }
 
-  isRight(): true {
+  isRight(): this is Either<never, R> {
     return true
   }
 
@@ -282,6 +282,7 @@ class Right<R, L = never> implements Either<L, R> {
   'fantasy-land/extend' = this.extend
 }
 
+
 Right.prototype.constructor = Either as any
 
 class Left<L, R = never> implements Either<L, R> {
@@ -289,11 +290,11 @@ class Left<L, R = never> implements Either<L, R> {
 
   constructor(private __value: L) {}
 
-  isLeft(): true {
+  isLeft(): this is Either<L, never> {
     return true
   }
 
-  isRight(): false {
+  isRight(): this is Either<never, R> {
     return false
   }
 
