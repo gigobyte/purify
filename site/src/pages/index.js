@@ -4,7 +4,8 @@ import styled from 'styled-components'
 import Meta from '../components/Meta'
 import Layout from '../components/Layout'
 import ScaleLeap from '../assets/scaleleap'
-import Dill from '../assets/dill'
+import SellMyCode from '../assets/sellmycode'
+import Schiphol from '../assets/schiphol'
 
 const Container = styled.div`
   display: flex;
@@ -207,10 +208,7 @@ const IndexPage = (props) => (
           />
         </a>
         <a href="https://www.schiphol.nl/">
-          <img
-            alt="Schiphol"
-            src="https://camo.githubusercontent.com/58b011beca65f361128e40d593a42990ca8dfd0695f2afe3246445563f275120/68747470733a2f2f75706c6f61642e77696b696d656469612e6f72672f77696b6970656469612f636f6d6d6f6e732f322f32662f416d7374657264616d5f416972706f72745f5363686970686f6c5f6c6f676f5f2532383230313825453225383025393370726573656e742532392e737667"
-          />
+          <Schiphol />
         </a>
         <a href="https://www.placemark.io/">
           <img
@@ -222,8 +220,11 @@ const IndexPage = (props) => (
         <a href="https://robinpowered.com/">
           <img
             alt="Robin"
-            src="https://camo.githubusercontent.com/d6768ec494353d6af7e943c4bc12542385af81fe39ab7fe38cea30ee7af11742/68747470733a2f2f6173736574732d676c6f62616c2e776562736974652d66696c65732e636f6d2f3633326131633361383765653237363062393963356233632f3633326166613961353832346166393633653766613136355f726f62696e5f6c6f676f2e737667"
+            src="https://cdn.prod.website-files.com/632a1c3a87ee2760b99c5b3c/632afa9a5824af963e7fa165_robin_logo.svg"
           />
+        </a>
+        <a href="https://sellmycode.io/">
+          <SellMyCode />
         </a>
       </Footer>
     </Container>
