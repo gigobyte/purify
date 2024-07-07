@@ -1,6 +1,9 @@
 import { Maybe, Just, Nothing, MaybePatterns } from './Maybe.js'
 import { EitherAsync } from './EitherAsync.js'
 
+/** You can use this to extract the type of the `Just` value out of an `MaybeAsync`. */
+export type ExtractJust<T> = T extends PromiseLike<Maybe<infer U>> ? U : never
+
 export interface MaybeAsyncTypeRef {
   /** Constructs a MaybeAsync object from a function that takes an object full of helpers that let you lift things into the MaybeAsync context and returns a Promise */
   <T>(runPromise: (helpers: MaybeAsyncHelpers) => PromiseLike<T>): MaybeAsync<T>
