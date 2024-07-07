@@ -282,7 +282,6 @@ class Right<R, L = never> implements Either<L, R> {
   'fantasy-land/extend' = this.extend
 }
 
-
 Right.prototype.constructor = Either as any
 
 class Left<L, R = never> implements Either<L, R> {
