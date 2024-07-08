@@ -1,13 +1,11 @@
 <div align="center">
   <img align="center" src="assets/logo.png" alt="Purify logo" width="112" />
 
-  <a href="https://travis-ci.org/gigobyte/purify">
-    <img src="https://travis-ci.org/gigobyte/purify.svg?branch=master" alt="Build Status">
-    <img src="https://coveralls.io/repos/github/gigobyte/purify/badge.svg?branch=master" alt="Coverage Status" />
-    <img src="https://camo.githubusercontent.com/41c68e9f29c6caccc084e5a147e0abd5f392d9bc/68747470733a2f2f62616467656e2e6e65742f62616467652f547970655363726970742f7374726963742532302546302539462539322541412f626c7565" alt="Built with Typescript">
-  </a>
-
-  >>> CONTINUE: https://github.com/gigobyte/purify/issues/709
+  [![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/dwyl/learn-nextjs/ci.yml?label=build&style=flat-square&branch=main)](https://github.com/dwyl/learn-nextjs/actions/workflows/ci.yml)
+  ![Coverage Status](https://coveralls.io/repos/github/gigobyte/purify/badge.svg?branch=master "Coverage Status Badge")
+  [![TypeScript Version](http://img.shields.io/badge/Built%20With-TypeScript-brightgreen.svg?style=flat-square "Latest Typescript")](https://www.typescriptlang.org/download/)
+  [![HitCount](https://hits.dwyl.com/gigobyte/purify.svg?style=flat-square)](http://hits.dwyl.com/gigobyte/purify)
+  
 </div>
 
 # What is purify?
