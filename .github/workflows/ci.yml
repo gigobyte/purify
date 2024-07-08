@@ -1,0 +1,22 @@
+name: Node.js CI
+
+on:
+    push:
+      branches: [ master ]
+    pull_request:
+      branches: [ master ]
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        node-version: [20.x]
+        os: [ubuntu-latest, macos-latest]
+    steps:
+    - uses: actions/checkout@v3
+    - uses: actions/setup-node@v3
+      with:
+        node-version: ${{ matrix.node-version }}
+    - run: npm i
+    - run: npm test
