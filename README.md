@@ -1,7 +1,7 @@
 <div align="center">
   <img src="assets/logo.png" alt="Purify logo" /> <br />
   
-  [![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/dwyl/learn-nextjs/ci.yml?label=build&style=flat-square&branch=main)](https://github.com/dwyl/learn-nextjs/actions/workflows/ci.yml)
+  [![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/gigobyte/purify/ci.yml?label=build&style=flat-square&branch=master)](https://github.com/gigobyte/purify/actions/workflows/ci.yml)
   ![Coveralls](https://img.shields.io/coverallsCoverage/github/gigobyte/purify?style=flat-square&color=brightGreen)
   [![TypeScript Version](http://img.shields.io/badge/built_with-TypeScript-brightgreen.svg?style=flat-square "Latest Typescript")](https://www.typescriptlang.org/download/)
   [![HitCount](https://hits.dwyl.com/gigobyte/purify.svg?style=flat-square)](http://hits.dwyl.com/gigobyte/purify)
