@@ -1,6 +1,14 @@
 import { Either, EitherPatterns, Left, Right } from './Either.js'
 import { MaybeAsync } from './MaybeAsync.js'
 
+/** You can use this to extract the type of the `Right` value out of an `EitherAsync`. */
+export type ExtractRight<T> =
+  T extends PromiseLike<Either<any, infer R>> ? R : never
+
+/** You can use this to extract the type of the `Left` value out of an `EitherAsync`. */
+export type ExtractLeft<T> =
+  T extends PromiseLike<Either<infer L, any>> ? L : never
+
 export interface EitherAsyncTypeRef {
   /** Constructs an `EitherAsync` object from a function that takes an object full of helpers that let you lift things into the `EitherAsync` context and returns a Promise */
   <L, R>(

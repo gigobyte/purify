@@ -7,11 +7,13 @@ export const always =
   () =>
     x
 
-export const enum Order {
-  LT = 'LT',
-  EQ = 'EQ',
-  GT = 'GT'
-}
+export const Order = {
+  LT: 'LT',
+  EQ: 'EQ',
+  GT: 'GT'
+} as const
+
+export type Order = 'LT' | 'EQ' | 'GT'
 
 /** Compares two values using the default "<" and ">" operators */
 export const compare = <T>(x: T, y: T): Order => {
@@ -47,8 +49,8 @@ export type CurriedFn<TAllArgs extends any[], TReturn> = <
 ) => TProvidedArgs extends TAllArgs
   ? TReturn
   : TAllArgs extends [...TupleOfLength<TProvidedArgs>, ...infer TRestOfArgs]
-  ? CurriedFn<TRestOfArgs, TReturn>
-  : never
+    ? CurriedFn<TRestOfArgs, TReturn>
+    : never
 
 /** Takes a function that receives multiple arguments and returns a "curried" version of that function that can take any number of those arguments and if they are less than needed a new function that takes the rest of them will be returned */
 export const curry = <TArgs extends any[], TReturn>(

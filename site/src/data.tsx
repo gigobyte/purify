@@ -749,6 +749,20 @@ const data: Data = {
           ]
         },
         {
+          title: 'Type helpers',
+          id: 'helper',
+          methods: [
+            {
+              name: 'ExtractJust',
+              signatureTS:
+                'ExtractJust<T> = T extends PromiseLike<Maybe<infer U>> ? U : never',
+              description:
+                'You can use this to extract the type of the `Just` value out of an `MaybeAsync`.',
+              examples: []
+            }
+          ]
+        },
+        {
           title: 'Instance methods',
           id: 'instance',
           methods: [
@@ -1801,6 +1815,28 @@ randomEither().map(x => x)
               signatureTS:
                 '<L, R>(eas: EitherAsync<L, R>[]): EitherAsync<L, R[]>',
               signatureML: '[EitherAsync a b] -> EitherAsync a [b]',
+              examples: []
+            }
+          ]
+        },
+        {
+          title: 'Type helpers',
+          id: 'helper',
+          methods: [
+            {
+              name: 'ExtractLeft',
+              signatureTS:
+                'ExtractLeft<T> = T extends PromiseLike<Either<infer L, any>> ? L : never',
+              description:
+                'You can use this to extract the type of the `Left` value out of an `EitherAsync`.',
+              examples: []
+            },
+            {
+              name: 'ExtractRight',
+              signatureTS:
+                'ExtractRight<T> = T extends PromiseLike<Either<any, infer R>> ? R : never',
+              description:
+                'You can use this to extract the type of the `Right` value out of an `EitherAsync`.',
               examples: []
             }
           ]

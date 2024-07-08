@@ -219,6 +219,15 @@ describe('Maybe', () => {
     expect(Nothing.extract()).toEqual(undefined)
   })
 
+  test('extract types', () => {
+    const j = Just(5)
+    if (j.isJust()) {
+      const value: number = j.extract()
+    }
+    // @ts-expect-error
+    const value2: number = j.extract()
+  })
+
   test('extractNullable', () => {
     expect(Just(5).extractNullable()).toEqual(5)
     expect(Nothing.extractNullable()).toEqual(null)
