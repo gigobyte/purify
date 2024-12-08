@@ -38,13 +38,13 @@
     }
   },
   "devDependencies": {
-    "@vitest/coverage-v8": "2.1.6",
+    "@vitest/coverage-v8": "2.1.8",
     "ajv": "8.17.1",
     "ajv-formats": "3.0.1",
     "coveralls": "3.1.1",
-    "prettier": "3.4.1",
+    "prettier": "3.4.2",
     "typescript": "5.7.2",
-    "vitest": "2.1.6"
+    "vitest": "2.1.8"
   },
   "dependencies": {
     "@types/json-schema": "7.0.15"
