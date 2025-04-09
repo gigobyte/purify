@@ -88,6 +88,14 @@ class TupleImpl<F, S> implements Tuple<F, S> {
     )})`
   }
 
+  [Symbol.for('nodejs.util.inspect.custom')](
+    _depth: number,
+    opts: unknown,
+    inspect: Function
+  ) {
+    return `Tuple(${inspect(this.first, opts)}, ${inspect(this.second, opts)})`
+  }
+
   toString(): string {
     return this.inspect()
   }

@@ -172,6 +172,14 @@ class Right<R, L = never> implements Either<L, R> {
     return `Right(${this.__value})`
   }
 
+  [Symbol.for('nodejs.util.inspect.custom')](
+    _depth: number,
+    opts: unknown,
+    inspect: Function
+  ) {
+    return `Right(${inspect(this.__value, opts)})`
+  }
+
   toString(): string {
     return this.inspect()
   }
@@ -311,6 +319,14 @@ class Left<L, R = never> implements Either<L, R> {
 
   inspect(): string {
     return `Left(${JSON.stringify(this.__value)})`
+  }
+
+  [Symbol.for('nodejs.util.inspect.custom')](
+    _depth: number,
+    opts: unknown,
+    inspect: Function
+  ) {
+    return `Left(${inspect(this.__value, opts)})`
   }
 
   toString(): string {

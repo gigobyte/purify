@@ -203,6 +203,14 @@ class Just<T> implements Maybe<T> {
     return `Just(${this.__value})`
   }
 
+  [Symbol.for('nodejs.util.inspect.custom')](
+    _depth: number,
+    opts: unknown,
+    inspect: Function
+  ) {
+    return `Just(${inspect(this.__value, opts)})`
+  }
+
   toString(): string {
     return this.inspect()
   }
@@ -336,6 +344,10 @@ class Nothing implements Maybe<never> {
   }
 
   inspect(): string {
+    return 'Nothing'
+  }
+
+  [Symbol.for('nodejs.util.inspect.custom')]() {
     return 'Nothing'
   }
 
