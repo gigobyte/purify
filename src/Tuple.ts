@@ -65,7 +65,10 @@ class TupleImpl<F, S> implements Tuple<F, S> {
   [index: number]: F | S
   length: 2 = 2
 
-  constructor(private first: F, private second: S) {
+  constructor(
+    private first: F,
+    private second: S
+  ) {
     this[0] = first
     this[1] = second
   }
@@ -137,12 +140,18 @@ class TupleImpl<F, S> implements Tuple<F, S> {
     return pred(this.first) || pred(this.second)
   }
 
-  'fantasy-land/equals' = this.equals
-  'fantasy-land/bimap' = this.bimap
-  'fantasy-land/map' = this.map
-  'fantasy-land/reduce' = this.reduce
-  'fantasy-land/ap' = this.ap
+  declare 'fantasy-land/equals': typeof this.equals
+  declare 'fantasy-land/bimap': typeof this.bimap
+  declare 'fantasy-land/map': typeof this.map
+  declare 'fantasy-land/reduce': typeof this.reduce
+  declare 'fantasy-land/ap': typeof this.ap
 }
+
+TupleImpl.prototype['fantasy-land/equals'] = TupleImpl.prototype.equals
+TupleImpl.prototype['fantasy-land/bimap'] = TupleImpl.prototype.bimap
+TupleImpl.prototype['fantasy-land/map'] = TupleImpl.prototype.map
+TupleImpl.prototype['fantasy-land/reduce'] = TupleImpl.prototype.reduce
+TupleImpl.prototype['fantasy-land/ap'] = TupleImpl.prototype.ap
 
 export const Tuple: TupleTypeRef = Object.assign(
   <F, S>(fst: F, snd: S) => new TupleImpl(fst, snd),

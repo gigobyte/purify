@@ -296,13 +296,17 @@ class EitherAsyncImpl<L, R> implements EitherAsync<L, R> {
     )
   }
 
-  'fantasy-land/chain' = this.chain
-  'fantasy-land/alt' = this.alt
+  declare 'fantasy-land/chain': typeof this.chain
+  declare 'fantasy-land/alt': typeof this.alt
 
   then: PromiseLike<Either<L, R>>['then'] = (onfulfilled, onrejected) => {
     return this.run().then(onfulfilled, onrejected)
   }
 }
+
+EitherAsyncImpl.prototype['fantasy-land/chain'] =
+  EitherAsyncImpl.prototype.chain
+EitherAsyncImpl.prototype['fantasy-land/alt'] = EitherAsyncImpl.prototype.alt
 
 export const EitherAsync: EitherAsyncTypeRef = Object.assign(
   <L, R>(
