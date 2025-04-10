@@ -203,6 +203,14 @@ class Just<T> implements Maybe<T> {
     return `Just(${this.__value})`
   }
 
+  [Symbol.for('nodejs.util.inspect.custom')](
+    _depth: number,
+    opts: unknown,
+    inspect: Function
+  ) {
+    return `Just(${inspect(this.__value, opts)})`
+  }
+
   toString(): string {
     return this.inspect()
   }
@@ -304,16 +312,24 @@ class Just<T> implements Maybe<T> {
     return pred(this.__value) ? just(this.__value) : nothing
   }
 
-  'fantasy-land/equals' = this.equals
-  'fantasy-land/map' = this.map
-  'fantasy-land/ap' = this.ap
-  'fantasy-land/alt' = this.alt
-  'fantasy-land/chain' = this.chain
-  'fantasy-land/reduce' = this.reduce
-  'fantasy-land/extend' = this.extend
-  'fantasy-land/filter' = this.filter
+  declare 'fantasy-land/equals': typeof this.equals
+  declare 'fantasy-land/map': typeof this.map
+  declare 'fantasy-land/ap': typeof this.ap
+  declare 'fantasy-land/alt': typeof this.alt
+  declare 'fantasy-land/chain': typeof this.chain
+  declare 'fantasy-land/reduce': typeof this.reduce
+  declare 'fantasy-land/extend': typeof this.extend
+  declare 'fantasy-land/filter': typeof this.filter
 }
 
+Just.prototype['fantasy-land/equals'] = Just.prototype.equals
+Just.prototype['fantasy-land/map'] = Just.prototype.map
+Just.prototype['fantasy-land/ap'] = Just.prototype.ap
+Just.prototype['fantasy-land/alt'] = Just.prototype.alt
+Just.prototype['fantasy-land/chain'] = Just.prototype.chain
+Just.prototype['fantasy-land/reduce'] = Just.prototype.reduce
+Just.prototype['fantasy-land/extend'] = Just.prototype.extend
+Just.prototype['fantasy-land/filter'] = Just.prototype.filter
 Just.prototype.constructor = Maybe as any
 
 class Nothing implements Maybe<never> {
@@ -328,6 +344,10 @@ class Nothing implements Maybe<never> {
   }
 
   inspect(): string {
+    return 'Nothing'
+  }
+
+  [Symbol.for('nodejs.util.inspect.custom')]() {
     return 'Nothing'
   }
 
@@ -431,16 +451,24 @@ class Nothing implements Maybe<never> {
     return nothing
   }
 
-  'fantasy-land/equals' = this.equals
-  'fantasy-land/map' = this.map
-  'fantasy-land/ap' = this.ap
-  'fantasy-land/alt' = this.alt
-  'fantasy-land/chain' = this.chain
-  'fantasy-land/reduce' = this.reduce
-  'fantasy-land/extend' = this.extend
-  'fantasy-land/filter' = this.filter
+  declare 'fantasy-land/equals': typeof this.equals
+  declare 'fantasy-land/map': typeof this.map
+  declare 'fantasy-land/ap': typeof this.ap
+  declare 'fantasy-land/alt': typeof this.alt
+  declare 'fantasy-land/chain': typeof this.chain
+  declare 'fantasy-land/reduce': typeof this.reduce
+  declare 'fantasy-land/extend': typeof this.extend
+  declare 'fantasy-land/filter': typeof this.filter
 }
 
+Nothing.prototype['fantasy-land/equals'] = Nothing.prototype.equals
+Nothing.prototype['fantasy-land/map'] = Nothing.prototype.map
+Nothing.prototype['fantasy-land/ap'] = Nothing.prototype.ap
+Nothing.prototype['fantasy-land/alt'] = Nothing.prototype.alt
+Nothing.prototype['fantasy-land/chain'] = Nothing.prototype.chain
+Nothing.prototype['fantasy-land/reduce'] = Nothing.prototype.reduce
+Nothing.prototype['fantasy-land/extend'] = Nothing.prototype.extend
+Nothing.prototype['fantasy-land/filter'] = Nothing.prototype.filter
 Nothing.prototype.constructor = Maybe as any
 
 /** Constructs a Just. Represents an optional value that exists */

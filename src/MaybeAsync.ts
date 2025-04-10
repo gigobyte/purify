@@ -223,10 +223,6 @@ class MaybeAsyncImpl<T> implements MaybeAsync<T> {
     )
   }
 
-  'fantasy-land/chain' = this.chain
-  'fantasy-land/filter' = this.filter
-  'fantasy-land/alt' = this.alt
-
   then<TResult1 = Maybe<T>, TResult2 = never>(
     onfulfilled?:
       | ((value: Maybe<T>) => TResult1 | PromiseLike<TResult1>)
@@ -239,7 +235,16 @@ class MaybeAsyncImpl<T> implements MaybeAsync<T> {
   ): PromiseLike<TResult1 | TResult2> {
     return this.run().then(onfulfilled, onrejected)
   }
+
+  declare 'fantasy-land/chain': typeof this.chain
+  declare 'fantasy-land/filter': typeof this.filter
+  declare 'fantasy-land/alt': typeof this.alt
 }
+
+MaybeAsyncImpl.prototype['fantasy-land/chain'] = MaybeAsyncImpl.prototype.chain
+MaybeAsyncImpl.prototype['fantasy-land/filter'] =
+  MaybeAsyncImpl.prototype.filter
+MaybeAsyncImpl.prototype['fantasy-land/alt'] = MaybeAsyncImpl.prototype.alt
 
 export const MaybeAsync: MaybeAsyncTypeRef = Object.assign(
   <T>(

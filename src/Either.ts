@@ -172,6 +172,14 @@ class Right<R, L = never> implements Either<L, R> {
     return `Right(${this.__value})`
   }
 
+  [Symbol.for('nodejs.util.inspect.custom')](
+    _depth: number,
+    opts: unknown,
+    inspect: Function
+  ) {
+    return `Right(${inspect(this.__value, opts)})`
+  }
+
   toString(): string {
     return this.inspect()
   }
@@ -272,16 +280,24 @@ class Right<R, L = never> implements Either<L, R> {
     return left(this.__value)
   }
 
-  'fantasy-land/bimap' = this.bimap
-  'fantasy-land/map' = this.map
-  'fantasy-land/ap' = this.ap
-  'fantasy-land/equals' = this.equals
-  'fantasy-land/chain' = this.chain
-  'fantasy-land/alt' = this.alt
-  'fantasy-land/reduce' = this.reduce
-  'fantasy-land/extend' = this.extend
+  declare 'fantasy-land/bimap': typeof this.bimap
+  declare 'fantasy-land/map': typeof this.map
+  declare 'fantasy-land/ap': typeof this.ap
+  declare 'fantasy-land/equals': typeof this.equals
+  declare 'fantasy-land/chain': typeof this.chain
+  declare 'fantasy-land/alt': typeof this.alt
+  declare 'fantasy-land/reduce': typeof this.reduce
+  declare 'fantasy-land/extend': typeof this.extend
 }
 
+Right.prototype['fantasy-land/bimap'] = Right.prototype.bimap
+Right.prototype['fantasy-land/map'] = Right.prototype.map
+Right.prototype['fantasy-land/ap'] = Right.prototype.ap
+Right.prototype['fantasy-land/equals'] = Right.prototype.equals
+Right.prototype['fantasy-land/chain'] = Right.prototype.chain
+Right.prototype['fantasy-land/alt'] = Right.prototype.alt
+Right.prototype['fantasy-land/reduce'] = Right.prototype.reduce
+Right.prototype['fantasy-land/extend'] = Right.prototype.extend
 Right.prototype.constructor = Either as any
 
 class Left<L, R = never> implements Either<L, R> {
@@ -303,6 +319,14 @@ class Left<L, R = never> implements Either<L, R> {
 
   inspect(): string {
     return `Left(${JSON.stringify(this.__value)})`
+  }
+
+  [Symbol.for('nodejs.util.inspect.custom')](
+    _depth: number,
+    opts: unknown,
+    inspect: Function
+  ) {
+    return `Left(${inspect(this.__value, opts)})`
   }
 
   toString(): string {
@@ -409,16 +433,24 @@ class Left<L, R = never> implements Either<L, R> {
     return right(this.__value)
   }
 
-  'fantasy-land/bimap' = this.bimap
-  'fantasy-land/map' = this.map
-  'fantasy-land/ap' = this.ap
-  'fantasy-land/equals' = this.equals
-  'fantasy-land/chain' = this.chain
-  'fantasy-land/alt' = this.alt
-  'fantasy-land/reduce' = this.reduce
-  'fantasy-land/extend' = this.extend
+  declare 'fantasy-land/bimap': typeof this.bimap
+  declare 'fantasy-land/map': typeof this.map
+  declare 'fantasy-land/ap': typeof this.ap
+  declare 'fantasy-land/equals': typeof this.equals
+  declare 'fantasy-land/chain': typeof this.chain
+  declare 'fantasy-land/alt': typeof this.alt
+  declare 'fantasy-land/reduce': typeof this.reduce
+  declare 'fantasy-land/extend': typeof this.extend
 }
 
+Left.prototype['fantasy-land/bimap'] = Left.prototype.bimap
+Left.prototype['fantasy-land/map'] = Left.prototype.map
+Left.prototype['fantasy-land/ap'] = Left.prototype.ap
+Left.prototype['fantasy-land/equals'] = Left.prototype.equals
+Left.prototype['fantasy-land/chain'] = Left.prototype.chain
+Left.prototype['fantasy-land/alt'] = Left.prototype.alt
+Left.prototype['fantasy-land/reduce'] = Left.prototype.reduce
+Left.prototype['fantasy-land/extend'] = Left.prototype.extend
 Left.prototype.constructor = Either as any
 
 const left = <L, R = never>(value: L): Either<L, R> => new Left(value)
