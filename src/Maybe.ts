@@ -217,7 +217,7 @@ class Just<T> implements Maybe<T> {
 
   toJSON(): T {
     const value: any = this.__value
-    return value instanceof Date ? value.toJSON() : value
+    return value instanceof Date ? (value.toJSON() as T) : value
   }
 
   equals(other: Maybe<T>): boolean {
