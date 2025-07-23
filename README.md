@@ -43,7 +43,6 @@ You can find the documentation on the [official site](https://gigobyte.github.io
 # Ecosystem
 
 - [purify-ts-extra-codec](https://github.com/airtoxin/purify-ts-extra-codec) - Extra utility codecs
-- [chai-purify](https://github.com/dave-inc/chai-purify) - Chai assert helpers
 - [purifree](https://github.com/nythrox/purifree) - A fork that allows you to program in a point-free style, and adds a few new capabilities
 
 # Inspired by
