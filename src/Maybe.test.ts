@@ -33,6 +33,16 @@ describe('Maybe', () => {
     expect(Maybe.fromNullable(5)).toEqual(Just(5))
   })
 
+  test('fromGuard', () => {
+    const isNotEmpty = <T>(value: T[] | null): value is [T, ...T[]] => Array.isArray(value) && value.length > 0
+    expect(Maybe.fromGuard(isNotEmpty, null as number[] | null)).toEqual(Nothing)
+    expect(Maybe.fromGuard(isNotEmpty, Array<number>()).map(([x]) => x)).toEqual(Nothing)
+    expect(Maybe.fromGuard(isNotEmpty, [1]).map(([x]) => x)).toEqual(Just(1))
+    const isString = (value: string|number): value is string => typeof value === 'string'
+    expect(Maybe.fromGuard(isString, 2)).toEqual(Nothing)
+    expect(Maybe.fromGuard(isString, 'a')).toEqual(Just("a"))
+  })
+
   test('fromFalsy', () => {
     expect(Maybe.fromFalsy(0)).toEqual(Nothing)
     expect(Maybe.fromFalsy('')).toEqual(Nothing)
