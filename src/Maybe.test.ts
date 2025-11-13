@@ -45,6 +45,16 @@ describe('Maybe', () => {
     expect(Maybe.fromPredicate<number>((x) => x > 0)(0)).toEqual(Nothing)
   })
 
+  test('fromPredicate with guards', () => {
+    const isNotEmpty = <T>(value: T[] | null): value is [T, ...T[]] => Array.isArray(value) && value.length > 0
+    expect(Maybe.fromPredicate(isNotEmpty, null as number[] | null)).toEqual(Nothing)
+    expect(Maybe.fromPredicate(isNotEmpty, Array<number>()).map(([x]) => x)).toEqual(Nothing)
+    expect(Maybe.fromPredicate(isNotEmpty, [1]).map(([x]) => x)).toEqual(Just(1))
+    const isString = (value: string|number): value is string => typeof value === 'string'
+    expect(Maybe.fromPredicate(isString, 2)).toEqual(Nothing)
+    expect(Maybe.fromPredicate(isString, 'a')).toEqual(Just("a"))
+  })
+
   test('empty', () => {
     expect(Maybe.empty()).toEqual(Nothing)
     expect(Maybe['fantasy-land/empty']()).toEqual(Nothing)

@@ -94,6 +94,8 @@ interface MaybeTypeRef {
   /** Takes a predicate and a value, passes the value to the predicate and returns a Just if it returns true, otherwise a Nothing is returned */
   fromPredicate<T>(pred: (value: T) => boolean): (value: T) => Maybe<T>
   fromPredicate<T>(pred: (value: T) => boolean, value: T): Maybe<T>
+  fromPredicate<T, P extends T>(pred: (value: T) => value is P, value: T): Maybe<P>
+  fromPredicate<T, P extends T>(pred: (value: T) => value is P): (value: T) => Maybe<P>
   /** Returns only the `Just` values in a list */
   catMaybes<T>(list: readonly Maybe<T>[]): T[]
   /** Maps over a list of values and returns a list of all resulting `Just` values */
