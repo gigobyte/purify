@@ -66,6 +66,16 @@ describe('Codec', () => {
       expect(mockCodec.decode({ a: 0, b: '', c: '' })).toEqual(
         Right({ a: 0, b: '', c: '' })
       )
+      expect(
+        mockCodec.decode(
+          (() => {
+            const res: any = Object.create(null)
+            res.a = 0
+            res.b = 'woo'
+            return res
+          })()
+        )
+      ).toEqual(Right({ a: 0, b: 'woo' }))
     })
 
     test('unsafeDecode', () => {
@@ -295,6 +305,16 @@ describe('Codec', () => {
       expect(numberRecord.decode({})).toEqual(Right({}))
       expect(numberRecord.decode({ a: 0 })).toEqual(Right({ a: 0 }))
       expect(numberRecord.decode({ a: 0, b: 1 })).toEqual(Right({ a: 0, b: 1 }))
+      expect(
+        numberRecord.decode(
+          (() => {
+            const res: any = Object.create(null)
+            res.a = 0
+            res.b = -50
+            return res
+          })()
+        )
+      ).toEqual(Right({ a: 0, b: -50 }))
     })
 
     test('decode with number key', () => {
@@ -323,6 +343,15 @@ describe('Codec', () => {
       expect(record(mockKeyCodec, mockValueCodec).encode({ a: 0 })).toEqual({
         haha: 1
       })
+      expect(
+        record(string, string).encode(
+          (() => {
+            const res: Record<string, string> = Object.create(null)
+            res.hi = 'bye'
+            return res
+          })()
+        )
+      ).toEqual({ hi: 'bye' })
     })
   })
 

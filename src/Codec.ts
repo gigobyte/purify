@@ -47,8 +47,8 @@ const reportError = (expectedType: string, input: unknown): string => {
         input === null
           ? 'null'
           : Array.isArray(input)
-          ? 'an array with value ' + JSON.stringify(input, serializeValue)
-          : 'an object with value ' + JSON.stringify(input, serializeValue)
+            ? 'an array with value ' + JSON.stringify(input, serializeValue)
+            : 'an object with value ' + JSON.stringify(input, serializeValue)
       break
 
     case 'boolean':
@@ -129,7 +129,7 @@ export const Codec = {
 
       for (const key of keys) {
         if (
-          !input.hasOwnProperty(key) &&
+          !Object.prototype.hasOwnProperty.call(input, key) &&
           !(properties[key] as any)._isOptional
         ) {
           return Left(
@@ -254,7 +254,7 @@ export const optional = <T>(codec: Codec<T>): Codec<T | undefined> =>
     ...oneOf([codec, undefinedType]),
     schema: codec.schema,
     _isOptional: true
-  } as any)
+  }) as any
 
 /** A codec for a value T or null. Keep in mind if you use `nullable` inside `Codec.interface` the property will still be required */
 export const nullable = <T>(codec: Codec<T>): Codec<T | null> =>
@@ -397,7 +397,7 @@ export const record = <K extends keyof any, V>(
       }
 
       for (const key of Object.keys(input)) {
-        if (input.hasOwnProperty(key)) {
+        if (Object.prototype.hasOwnProperty.call(input, key)) {
           const decodedKey = keyCodecOverride.decode(key)
           const decodedValue = valueCodec.decode((input as any)[key])
 
@@ -421,7 +421,7 @@ export const record = <K extends keyof any, V>(
       const result = {} as Record<K, V>
 
       for (const key in input) {
-        if (input.hasOwnProperty(key)) {
+        if (Object.prototype.hasOwnProperty.call(input, key)) {
           result[keyCodec.encode(key) as K] = valueCodec.encode(input[key]) as V
         }
       }
