@@ -52,7 +52,7 @@ const Changelog = (props) => (
     <div>
       <h1>Choose version:</h1>
       <VersionContainer>
-        <VersionStatic>1.0.0 - 2.1.2</VersionStatic>
+        <VersionStatic>1.0.0 - 2.1.3</VersionStatic>
         <Description>
           Since v1 purify follows semantic versioning, you can check out all
           releases on{' '}
